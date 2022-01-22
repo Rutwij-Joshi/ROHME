@@ -1,0 +1,1914 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"syscalls.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.findslot,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	findslot:
+  23              	.LFB17:
+  24              		.file 1 "../generate/os_abstraction/src/syscalls.c"
+   1:../generate/os_abstraction/src/syscalls.c **** /*******************************************************************************
+   2:../generate/os_abstraction/src/syscalls.c **** * DISCLAIMER
+   3:../generate/os_abstraction/src/syscalls.c **** * This software is supplied by Renesas Electronics Corporation and is only
+   4:../generate/os_abstraction/src/syscalls.c **** * intended for use with Renesas products. No other uses are authorized. This
+   5:../generate/os_abstraction/src/syscalls.c **** * software is owned by Renesas Electronics Corporation and is protected under
+   6:../generate/os_abstraction/src/syscalls.c **** * all applicable laws, including copyright laws.
+   7:../generate/os_abstraction/src/syscalls.c **** * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   8:../generate/os_abstraction/src/syscalls.c **** * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+   9:../generate/os_abstraction/src/syscalls.c **** * LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  10:../generate/os_abstraction/src/syscalls.c **** * AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.
+  11:../generate/os_abstraction/src/syscalls.c **** * TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS
+  12:../generate/os_abstraction/src/syscalls.c **** * ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE
+  13:../generate/os_abstraction/src/syscalls.c **** * FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR
+  14:../generate/os_abstraction/src/syscalls.c **** * ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE
+  15:../generate/os_abstraction/src/syscalls.c **** * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  16:../generate/os_abstraction/src/syscalls.c **** * Renesas reserves the right, without notice, to make changes to this software
+  17:../generate/os_abstraction/src/syscalls.c **** * and to discontinue the availability of this software. By using this software,
+  18:../generate/os_abstraction/src/syscalls.c **** * you agree to the additional terms and conditions found by accessing the
+  19:../generate/os_abstraction/src/syscalls.c **** * following link:
+  20:../generate/os_abstraction/src/syscalls.c **** * http://www.renesas.com/disclaimer
+  21:../generate/os_abstraction/src/syscalls.c **** * Copyright (C) 2018 Renesas Electronics Corporation. All rights reserved.
+  22:../generate/os_abstraction/src/syscalls.c **** *******************************************************************************/
+  23:../generate/os_abstraction/src/syscalls.c **** /*******************************************************************************
+  24:../generate/os_abstraction/src/syscalls.c **** * File Name : syscalls.c
+  25:../generate/os_abstraction/src/syscalls.c **** * Description :
+  26:../generate/os_abstraction/src/syscalls.c **** ******************************************************************************/
+  27:../generate/os_abstraction/src/syscalls.c **** /* Support files for GNU libc.  Files in the system namespace go here.
+  28:../generate/os_abstraction/src/syscalls.c ****    Files in the C namespace (ie those that do not start with an
+  29:../generate/os_abstraction/src/syscalls.c ****    underscore) go in .c.  */
+  30:../generate/os_abstraction/src/syscalls.c **** 
+  31:../generate/os_abstraction/src/syscalls.c **** #include <_ansi.h>
+  32:../generate/os_abstraction/src/syscalls.c **** #include <sys/types.h>
+  33:../generate/os_abstraction/src/syscalls.c **** #include <sys/stat.h>
+  34:../generate/os_abstraction/src/syscalls.c **** #include <sys/fcntl.h>
+  35:../generate/os_abstraction/src/syscalls.c **** #include <stdio.h>
+  36:../generate/os_abstraction/src/syscalls.c **** #include <time.h>
+  37:../generate/os_abstraction/src/syscalls.c **** #include <sys/time.h>
+  38:../generate/os_abstraction/src/syscalls.c **** #include <sys/times.h>
+  39:../generate/os_abstraction/src/syscalls.c **** #include <errno.h>
+  40:../generate/os_abstraction/src/syscalls.c **** #include <reent.h>
+  41:../generate/os_abstraction/src/syscalls.c **** #include <signal.h>
+  42:../generate/os_abstraction/src/syscalls.c **** #include <unistd.h>
+  43:../generate/os_abstraction/src/syscalls.c **** #include <sys/wait.h>
+  44:../generate/os_abstraction/src/syscalls.c **** #include "swi.h"
+  45:../generate/os_abstraction/src/syscalls.c **** 
+  46:../generate/os_abstraction/src/syscalls.c **** #include "r_typedefs.h"
+  47:../generate/os_abstraction/src/syscalls.c **** #include "r_devlink_wrapper.h"
+  48:../generate/os_abstraction/src/syscalls.c **** #include "r_os_abstraction_config.h"
+  49:../generate/os_abstraction/src/syscalls.c **** 
+  50:../generate/os_abstraction/src/syscalls.c **** /* Forward prototypes.  */
+  51:../generate/os_abstraction/src/syscalls.c **** int     _system     _PARAMS ((const char *));
+  52:../generate/os_abstraction/src/syscalls.c **** int     _rename     _PARAMS ((const char *, const char *));
+  53:../generate/os_abstraction/src/syscalls.c **** int     _isatty		_PARAMS ((int));
+  54:../generate/os_abstraction/src/syscalls.c **** clock_t _times		_PARAMS ((struct tms *));
+  55:../generate/os_abstraction/src/syscalls.c **** int     _gettimeofday	_PARAMS ((struct timeval *, void *));
+  56:../generate/os_abstraction/src/syscalls.c **** void    _raise 		_PARAMS ((void));
+  57:../generate/os_abstraction/src/syscalls.c **** int     _unlink		_PARAMS ((const char *));
+  58:../generate/os_abstraction/src/syscalls.c **** int     _link 		_PARAMS ((void));
+  59:../generate/os_abstraction/src/syscalls.c **** int     _stat 		_PARAMS ((const char *, struct stat *));
+  60:../generate/os_abstraction/src/syscalls.c **** int     _fstat 		_PARAMS ((int, struct stat *));
+  61:../generate/os_abstraction/src/syscalls.c **** caddr_t _sbrk		_PARAMS ((int));
+  62:../generate/os_abstraction/src/syscalls.c **** int     _getpid		_PARAMS ((int));
+  63:../generate/os_abstraction/src/syscalls.c **** int     _kill		_PARAMS ((int, int));
+  64:../generate/os_abstraction/src/syscalls.c **** void    _exit		_PARAMS ((int));
+  65:../generate/os_abstraction/src/syscalls.c **** int     _close		_PARAMS ((int));
+  66:../generate/os_abstraction/src/syscalls.c **** int     _swiclose	_PARAMS ((int));
+  67:../generate/os_abstraction/src/syscalls.c **** int     _open		_PARAMS ((const char *, int, ...));
+  68:../generate/os_abstraction/src/syscalls.c **** int     _swiopen	_PARAMS ((const char *, int));
+  69:../generate/os_abstraction/src/syscalls.c **** int     _write 		_PARAMS ((int, char *, int));
+  70:../generate/os_abstraction/src/syscalls.c **** int     _swiwrite	_PARAMS ((int, char *, int));
+  71:../generate/os_abstraction/src/syscalls.c **** int     _lseek		_PARAMS ((int, int, int));
+  72:../generate/os_abstraction/src/syscalls.c **** int     _swilseek	_PARAMS ((int, int, int));
+  73:../generate/os_abstraction/src/syscalls.c **** int     _read		_PARAMS ((int, char *, int));
+  74:../generate/os_abstraction/src/syscalls.c **** int     _swiread	_PARAMS ((int, char *, int));
+  75:../generate/os_abstraction/src/syscalls.c **** void    initialise_monitor_handles _PARAMS ((void));
+  76:../generate/os_abstraction/src/syscalls.c **** 
+  77:../generate/os_abstraction/src/syscalls.c **** static int	wrap		_PARAMS ((int));
+  78:../generate/os_abstraction/src/syscalls.c **** static int	error		_PARAMS ((int));
+  79:../generate/os_abstraction/src/syscalls.c **** static int	get_errno	_PARAMS ((void));
+  80:../generate/os_abstraction/src/syscalls.c **** static int	remap_handle	_PARAMS ((int));
+  81:../generate/os_abstraction/src/syscalls.c **** static int 	findslot	_PARAMS ((int));
+  82:../generate/os_abstraction/src/syscalls.c **** 
+  83:../generate/os_abstraction/src/syscalls.c **** /* Register name faking - works in collusion with the linker.  */
+  84:../generate/os_abstraction/src/syscalls.c **** register char * stack_ptr asm ("sp");
+  85:../generate/os_abstraction/src/syscalls.c **** 
+  86:../generate/os_abstraction/src/syscalls.c **** 
+  87:../generate/os_abstraction/src/syscalls.c **** /* following is copied from libc/stdio/local.h to check std streams */
+  88:../generate/os_abstraction/src/syscalls.c **** extern void   _EXFUN(__sinit,(struct _reent *));
+  89:../generate/os_abstraction/src/syscalls.c **** #define CHECK_INIT(ptr) \
+  90:../generate/os_abstraction/src/syscalls.c ****   do						\
+  91:../generate/os_abstraction/src/syscalls.c ****     {						\
+  92:../generate/os_abstraction/src/syscalls.c ****       if ((ptr) && !(ptr)->__sdidinit)		\
+  93:../generate/os_abstraction/src/syscalls.c **** 	__sinit (ptr);				\
+  94:../generate/os_abstraction/src/syscalls.c ****     }						\
+  95:../generate/os_abstraction/src/syscalls.c ****   while (0)
+  96:../generate/os_abstraction/src/syscalls.c **** 
+  97:../generate/os_abstraction/src/syscalls.c **** /* Adjust our internal handles to stay away from std* handles.  */
+  98:../generate/os_abstraction/src/syscalls.c **** #define FILE_HANDLE_OFFSET (0x00)
+  99:../generate/os_abstraction/src/syscalls.c **** 
+ 100:../generate/os_abstraction/src/syscalls.c **** 
+ 101:../generate/os_abstraction/src/syscalls.c **** static int monitor_stdin;
+ 102:../generate/os_abstraction/src/syscalls.c **** static int monitor_stdout;
+ 103:../generate/os_abstraction/src/syscalls.c **** static int monitor_stderr;
+ 104:../generate/os_abstraction/src/syscalls.c **** 
+ 105:../generate/os_abstraction/src/syscalls.c **** /* Struct used to keep track of the file position, just so we
+ 106:../generate/os_abstraction/src/syscalls.c ****    can implement fseek(fh,x,SEEK_CUR).  */
+ 107:../generate/os_abstraction/src/syscalls.c **** typedef struct
+ 108:../generate/os_abstraction/src/syscalls.c **** {
+ 109:../generate/os_abstraction/src/syscalls.c ****   int handle;
+ 110:../generate/os_abstraction/src/syscalls.c ****   int pos;
+ 111:../generate/os_abstraction/src/syscalls.c **** }
+ 112:../generate/os_abstraction/src/syscalls.c **** poslog;
+ 113:../generate/os_abstraction/src/syscalls.c **** 
+ 114:../generate/os_abstraction/src/syscalls.c **** #define MAX_OPEN_FILES 20
+ 115:../generate/os_abstraction/src/syscalls.c **** static poslog openfiles [MAX_OPEN_FILES];
+ 116:../generate/os_abstraction/src/syscalls.c **** 
+ 117:../generate/os_abstraction/src/syscalls.c **** static int
+ 118:../generate/os_abstraction/src/syscalls.c **** findslot (int fh)
+ 119:../generate/os_abstraction/src/syscalls.c **** {
+  25              		.loc 1 119 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              		@ link register save eliminated.
+  30              	.LVL0:
+ 120:../generate/os_abstraction/src/syscalls.c ****   int i;
+ 121:../generate/os_abstraction/src/syscalls.c ****   for (i = 0; i < MAX_OPEN_FILES; i ++)
+  31              		.loc 1 121 0
+  32 0000 0030A0E3 		mov	r3, #0
+  33              	.LVL1:
+  34              	.L2:
+  35              		.loc 1 121 0 is_stmt 0 discriminator 1
+  36 0004 130053E3 		cmp	r3, #19
+  37 0008 050000CA 		bgt	.L1
+ 122:../generate/os_abstraction/src/syscalls.c ****     if (openfiles[i].handle == fh)
+  38              		.loc 1 122 0 is_stmt 1
+  39 000c 002000E3 		movw	r2, #:lower16:.LANCHOR0
+  40 0010 002040E3 		movt	r2, #:upper16:.LANCHOR0
+  41 0014 832192E7 		ldr	r2, [r2, r3, lsl #3]
+  42 0018 000052E1 		cmp	r2, r0
+ 121:../generate/os_abstraction/src/syscalls.c ****     if (openfiles[i].handle == fh)
+  43              		.loc 1 121 0 discriminator 2
+  44 001c 01308312 		addne	r3, r3, #1
+  45              	.LVL2:
+  46 0020 F7FFFF1A 		bne	.L2
+  47              	.L1:
+ 123:../generate/os_abstraction/src/syscalls.c ****       break;
+ 124:../generate/os_abstraction/src/syscalls.c ****   return i;
+ 125:../generate/os_abstraction/src/syscalls.c **** }
+  48              		.loc 1 125 0
+  49 0024 0300A0E1 		mov	r0, r3
+  50              	.LVL3:
+  51 0028 1EFF2FE1 		bx	lr
+  52              		.cfi_endproc
+  53              	.LFE17:
+  55              		.section	.text.get_errno,"ax",%progbits
+  56              		.align	2
+  57              		.syntax unified
+  58              		.arm
+  59              		.fpu neon
+  61              	get_errno:
+  62              	.LFB20:
+ 126:../generate/os_abstraction/src/syscalls.c **** 
+ 127:../generate/os_abstraction/src/syscalls.c **** /* Function to convert std(in|out|err) handles to internal versions.  */
+ 128:../generate/os_abstraction/src/syscalls.c **** static int
+ 129:../generate/os_abstraction/src/syscalls.c **** remap_handle (int fh)
+ 130:../generate/os_abstraction/src/syscalls.c **** {
+ 131:../generate/os_abstraction/src/syscalls.c ****   CHECK_INIT(_REENT);
+ 132:../generate/os_abstraction/src/syscalls.c **** 
+ 133:../generate/os_abstraction/src/syscalls.c ****   if (fh == STDIN_FILENO)
+ 134:../generate/os_abstraction/src/syscalls.c ****     return monitor_stdin;
+ 135:../generate/os_abstraction/src/syscalls.c ****   if (fh == STDOUT_FILENO)
+ 136:../generate/os_abstraction/src/syscalls.c ****     return monitor_stdout;
+ 137:../generate/os_abstraction/src/syscalls.c ****   if (fh == STDERR_FILENO)
+ 138:../generate/os_abstraction/src/syscalls.c ****     return monitor_stderr;
+ 139:../generate/os_abstraction/src/syscalls.c **** 
+ 140:../generate/os_abstraction/src/syscalls.c ****   return fh - FILE_HANDLE_OFFSET;
+ 141:../generate/os_abstraction/src/syscalls.c **** }
+ 142:../generate/os_abstraction/src/syscalls.c **** 
+ 143:../generate/os_abstraction/src/syscalls.c **** void
+ 144:../generate/os_abstraction/src/syscalls.c **** initialise_monitor_handles (void)
+ 145:../generate/os_abstraction/src/syscalls.c **** {
+ 146:../generate/os_abstraction/src/syscalls.c ****   int i;
+ 147:../generate/os_abstraction/src/syscalls.c ****   int fh;
+ 148:../generate/os_abstraction/src/syscalls.c ****   char * name;
+ 149:../generate/os_abstraction/src/syscalls.c **** 
+ 150:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 151:../generate/os_abstraction/src/syscalls.c ****   int volatile block[3];
+ 152:../generate/os_abstraction/src/syscalls.c **** 
+ 153:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stdin";
+ 154:../generate/os_abstraction/src/syscalls.c ****   fh = low_open(name, O_RDWR);    /* Reserve file handle for devlink */  
+ 155:../generate/os_abstraction/src/syscalls.c ****   block[0] = (int) ":tt";
+ 156:../generate/os_abstraction/src/syscalls.c ****   block[2] = 3;     /* length of filename */
+ 157:../generate/os_abstraction/src/syscalls.c ****   block[1] = 0;     /* mode "r" */
+ 158:../generate/os_abstraction/src/syscalls.c ****   monitor_stdin = do_AngelSWI (AngelSWI_Reason_Open, (void *) block);
+ 159:../generate/os_abstraction/src/syscalls.c **** 
+ 160:../generate/os_abstraction/src/syscalls.c ****   block[0] = (int) ":tt";
+ 161:../generate/os_abstraction/src/syscalls.c ****   block[2] = 3;     /* length of filename */
+ 162:../generate/os_abstraction/src/syscalls.c ****   block[1] = 4;     /* mode "w" */
+ 163:../generate/os_abstraction/src/syscalls.c ****   monitor_stdout = monitor_stderr = do_AngelSWI (AngelSWI_Reason_Open, (void *) block);
+ 164:../generate/os_abstraction/src/syscalls.c **** 
+ 165:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stdin";
+ 166:../generate/os_abstraction/src/syscalls.c ****   fh = low_open(name, O_RDWR);    /* Reserve file handle for devlink */
+ 167:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stdout";
+ 168:../generate/os_abstraction/src/syscalls.c ****   fh = low_open(name, O_WRONLY);  /* Reserve file handle for devlink */
+ 169:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stderr";
+ 170:../generate/os_abstraction/src/syscalls.c ****   fh = low_open(name, O_WRONLY);  /* Reserve file handle for devlink */
+ 171:../generate/os_abstraction/src/syscalls.c **** #else
+ 172:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stdin";
+ 173:../generate/os_abstraction/src/syscalls.c ****   fh = low_open(name, O_RDWR);
+ 174:../generate/os_abstraction/src/syscalls.c ****   monitor_stdin = fh;
+ 175:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stdout";
+ 176:../generate/os_abstraction/src/syscalls.c ****   fh = low_open(name, O_WRONLY);
+ 177:../generate/os_abstraction/src/syscalls.c ****   monitor_stdout = fh;
+ 178:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stderr";
+ 179:../generate/os_abstraction/src/syscalls.c ****   fh = low_open(name, O_WRONLY);
+ 180:../generate/os_abstraction/src/syscalls.c **** #endif
+ 181:../generate/os_abstraction/src/syscalls.c **** 
+ 182:../generate/os_abstraction/src/syscalls.c ****   for (i = 0; i < MAX_OPEN_FILES; i ++)
+ 183:../generate/os_abstraction/src/syscalls.c ****     openfiles[i].handle = -1;
+ 184:../generate/os_abstraction/src/syscalls.c **** 
+ 185:../generate/os_abstraction/src/syscalls.c ****   openfiles[0].handle = monitor_stdin;
+ 186:../generate/os_abstraction/src/syscalls.c ****   openfiles[0].pos = 0;
+ 187:../generate/os_abstraction/src/syscalls.c ****   openfiles[1].handle = monitor_stdout;
+ 188:../generate/os_abstraction/src/syscalls.c ****   openfiles[1].pos = 0;
+ 189:../generate/os_abstraction/src/syscalls.c ****   openfiles[2].handle = monitor_stdout;
+ 190:../generate/os_abstraction/src/syscalls.c ****   openfiles[2].pos = 0;
+ 191:../generate/os_abstraction/src/syscalls.c **** }
+ 192:../generate/os_abstraction/src/syscalls.c **** 
+ 193:../generate/os_abstraction/src/syscalls.c **** static int
+ 194:../generate/os_abstraction/src/syscalls.c **** get_errno (void)
+ 195:../generate/os_abstraction/src/syscalls.c **** {
+  63              		.loc 1 195 0
+  64              		.cfi_startproc
+  65              		@ args = 0, pretend = 0, frame = 0
+  66              		@ frame_needed = 0, uses_anonymous_args = 0
+  67              		@ link register save eliminated.
+ 196:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 197:../generate/os_abstraction/src/syscalls.c ****   return do_AngelSWI (AngelSWI_Reason_Errno, NULL);
+ 198:../generate/os_abstraction/src/syscalls.c **** #endif
+ 199:../generate/os_abstraction/src/syscalls.c **** }
+  68              		.loc 1 199 0
+  69 0000 1EFF2FE1 		bx	lr
+  70              		.cfi_endproc
+  71              	.LFE20:
+  73              		.section	.text.error,"ax",%progbits
+  74              		.align	2
+  75              		.syntax unified
+  76              		.arm
+  77              		.fpu neon
+  79              	error:
+  80              	.LFB21:
+ 200:../generate/os_abstraction/src/syscalls.c **** 
+ 201:../generate/os_abstraction/src/syscalls.c **** static int
+ 202:../generate/os_abstraction/src/syscalls.c **** error (int result)
+ 203:../generate/os_abstraction/src/syscalls.c **** {
+  81              		.loc 1 203 0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 0
+  84              		@ frame_needed = 0, uses_anonymous_args = 0
+  85              	.LVL4:
+  86 0000 70402DE9 		push	{r4, r5, r6, lr}
+  87              		.cfi_def_cfa_offset 16
+  88              		.cfi_offset 4, -16
+  89              		.cfi_offset 5, -12
+  90              		.cfi_offset 6, -8
+  91              		.cfi_offset 14, -4
+  92 0004 0040A0E1 		mov	r4, r0
+ 204:../generate/os_abstraction/src/syscalls.c ****   errno = get_errno ();
+  93              		.loc 1 204 0
+  94 0008 FEFFFFEB 		bl	__errno
+  95              	.LVL5:
+  96 000c 0050A0E1 		mov	r5, r0
+  97 0010 FEFFFFEB 		bl	get_errno
+  98              	.LVL6:
+  99 0014 000085E5 		str	r0, [r5]
+ 205:../generate/os_abstraction/src/syscalls.c ****   return result;
+ 206:../generate/os_abstraction/src/syscalls.c **** }
+ 100              		.loc 1 206 0
+ 101 0018 0400A0E1 		mov	r0, r4
+ 102 001c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 103              		.cfi_endproc
+ 104              	.LFE21:
+ 106              		.section	.text.wrap,"ax",%progbits
+ 107              		.align	2
+ 108              		.syntax unified
+ 109              		.arm
+ 110              		.fpu neon
+ 112              	wrap:
+ 113              	.LFB22:
+ 207:../generate/os_abstraction/src/syscalls.c **** 
+ 208:../generate/os_abstraction/src/syscalls.c **** static int
+ 209:../generate/os_abstraction/src/syscalls.c **** wrap (int result)
+ 210:../generate/os_abstraction/src/syscalls.c **** {
+ 114              		.loc 1 210 0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+ 118              	.LVL7:
+ 211:../generate/os_abstraction/src/syscalls.c ****   if (result == -1)
+ 119              		.loc 1 211 0
+ 120 0000 010070E3 		cmn	r0, #1
+ 121 0004 1EFF2F11 		bxne	lr
+ 210:../generate/os_abstraction/src/syscalls.c ****   if (result == -1)
+ 122              		.loc 1 210 0
+ 123 0008 10402DE9 		push	{r4, lr}
+ 124              		.cfi_def_cfa_offset 8
+ 125              		.cfi_offset 4, -8
+ 126              		.cfi_offset 14, -4
+ 212:../generate/os_abstraction/src/syscalls.c ****     return error (-1);
+ 127              		.loc 1 212 0
+ 128 000c FEFFFFEB 		bl	error
+ 129              	.LVL8:
+ 213:../generate/os_abstraction/src/syscalls.c ****   return result;
+ 214:../generate/os_abstraction/src/syscalls.c **** }
+ 130              		.loc 1 214 0
+ 131 0010 1080BDE8 		pop	{r4, pc}
+ 132              		.cfi_endproc
+ 133              	.LFE22:
+ 135              		.section	.text.remap_handle,"ax",%progbits
+ 136              		.align	2
+ 137              		.syntax unified
+ 138              		.arm
+ 139              		.fpu neon
+ 141              	remap_handle:
+ 142              	.LFB18:
+ 130:../generate/os_abstraction/src/syscalls.c ****   CHECK_INIT(_REENT);
+ 143              		.loc 1 130 0
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 0
+ 146              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147              	.LVL9:
+ 148 0000 10402DE9 		push	{r4, lr}
+ 149              		.cfi_def_cfa_offset 8
+ 150              		.cfi_offset 4, -8
+ 151              		.cfi_offset 14, -4
+ 152 0004 0040A0E1 		mov	r4, r0
+ 131:../generate/os_abstraction/src/syscalls.c **** 
+ 153              		.loc 1 131 0
+ 154 0008 003000E3 		movw	r3, #:lower16:_impure_ptr
+ 155 000c 003040E3 		movt	r3, #:upper16:_impure_ptr
+ 156 0010 000093E5 		ldr	r0, [r3]
+ 157              	.LVL10:
+ 158 0014 000050E3 		cmp	r0, #0
+ 159 0018 0200000A 		beq	.L15
+ 131:../generate/os_abstraction/src/syscalls.c **** 
+ 160              		.loc 1 131 0 is_stmt 0 discriminator 1
+ 161 001c 383090E5 		ldr	r3, [r0, #56]
+ 162 0020 000053E3 		cmp	r3, #0
+ 163 0024 0700000A 		beq	.L21
+ 164              	.L15:
+ 133:../generate/os_abstraction/src/syscalls.c ****     return monitor_stdin;
+ 165              		.loc 1 133 0 is_stmt 1
+ 166 0028 000054E3 		cmp	r4, #0
+ 167 002c 0700000A 		beq	.L22
+ 135:../generate/os_abstraction/src/syscalls.c ****     return monitor_stdout;
+ 168              		.loc 1 135 0
+ 169 0030 010054E3 		cmp	r4, #1
+ 170 0034 0900000A 		beq	.L23
+ 137:../generate/os_abstraction/src/syscalls.c ****     return monitor_stderr;
+ 171              		.loc 1 137 0
+ 172 0038 020054E3 		cmp	r4, #2
+ 173 003c 0B00000A 		beq	.L19
+ 140:../generate/os_abstraction/src/syscalls.c **** }
+ 174              		.loc 1 140 0
+ 175 0040 0400A0E1 		mov	r0, r4
+ 176 0044 1080BDE8 		pop	{r4, pc}
+ 177              	.L21:
+ 131:../generate/os_abstraction/src/syscalls.c **** 
+ 178              		.loc 1 131 0 discriminator 2
+ 179 0048 FEFFFFEB 		bl	__sinit
+ 180              	.LVL11:
+ 181 004c F5FFFFEA 		b	.L15
+ 182              	.L22:
+ 134:../generate/os_abstraction/src/syscalls.c ****   if (fh == STDOUT_FILENO)
+ 183              		.loc 1 134 0
+ 184 0050 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 185 0054 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 186 0058 000093E5 		ldr	r0, [r3]
+ 187 005c 1080BDE8 		pop	{r4, pc}
+ 188              	.L23:
+ 136:../generate/os_abstraction/src/syscalls.c ****   if (fh == STDERR_FILENO)
+ 189              		.loc 1 136 0
+ 190 0060 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 191 0064 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 192 0068 000093E5 		ldr	r0, [r3]
+ 193 006c 1080BDE8 		pop	{r4, pc}
+ 194              	.L19:
+ 138:../generate/os_abstraction/src/syscalls.c **** 
+ 195              		.loc 1 138 0
+ 196 0070 0000A0E3 		mov	r0, #0
+ 141:../generate/os_abstraction/src/syscalls.c **** 
+ 197              		.loc 1 141 0
+ 198 0074 1080BDE8 		pop	{r4, pc}
+ 199              		.cfi_endproc
+ 200              	.LFE18:
+ 202              		.section	.text.initialise_monitor_handles,"ax",%progbits
+ 203              		.align	2
+ 204              		.global	initialise_monitor_handles
+ 205              		.syntax unified
+ 206              		.arm
+ 207              		.fpu neon
+ 209              	initialise_monitor_handles:
+ 210              	.LFB19:
+ 145:../generate/os_abstraction/src/syscalls.c ****   int i;
+ 211              		.loc 1 145 0
+ 212              		.cfi_startproc
+ 213              		@ args = 0, pretend = 0, frame = 0
+ 214              		@ frame_needed = 0, uses_anonymous_args = 0
+ 215 0000 10402DE9 		push	{r4, lr}
+ 216              		.cfi_def_cfa_offset 8
+ 217              		.cfi_offset 4, -8
+ 218              		.cfi_offset 14, -4
+ 219              	.LVL12:
+ 173:../generate/os_abstraction/src/syscalls.c ****   monitor_stdin = fh;
+ 220              		.loc 1 173 0
+ 221 0004 0210A0E3 		mov	r1, #2
+ 222 0008 000000E3 		movw	r0, #:lower16:.LC0
+ 223 000c 000040E3 		movt	r0, #:upper16:.LC0
+ 224 0010 FEFFFFEB 		bl	low_open
+ 225              	.LVL13:
+ 174:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stdout";
+ 226              		.loc 1 174 0
+ 227 0014 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 228 0018 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 229 001c 000083E5 		str	r0, [r3]
+ 230              	.LVL14:
+ 176:../generate/os_abstraction/src/syscalls.c ****   monitor_stdout = fh;
+ 231              		.loc 1 176 0
+ 232 0020 0110A0E3 		mov	r1, #1
+ 233 0024 000000E3 		movw	r0, #:lower16:.LC1
+ 234              	.LVL15:
+ 235 0028 000040E3 		movt	r0, #:upper16:.LC1
+ 236 002c FEFFFFEB 		bl	low_open
+ 237              	.LVL16:
+ 177:../generate/os_abstraction/src/syscalls.c ****   name = "\\\\.\\stderr";
+ 238              		.loc 1 177 0
+ 239 0030 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 240 0034 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 241 0038 000083E5 		str	r0, [r3]
+ 242              	.LVL17:
+ 179:../generate/os_abstraction/src/syscalls.c **** #endif
+ 243              		.loc 1 179 0
+ 244 003c 0110A0E3 		mov	r1, #1
+ 245 0040 000000E3 		movw	r0, #:lower16:.LC2
+ 246              	.LVL18:
+ 247 0044 000040E3 		movt	r0, #:upper16:.LC2
+ 248 0048 FEFFFFEB 		bl	low_open
+ 249              	.LVL19:
+ 182:../generate/os_abstraction/src/syscalls.c ****     openfiles[i].handle = -1;
+ 250              		.loc 1 182 0
+ 251 004c 0030A0E3 		mov	r3, #0
+ 252 0050 040000EA 		b	.L25
+ 253              	.LVL20:
+ 254              	.L26:
+ 183:../generate/os_abstraction/src/syscalls.c **** 
+ 255              		.loc 1 183 0 discriminator 3
+ 256 0054 002000E3 		movw	r2, #:lower16:.LANCHOR0
+ 257 0058 002040E3 		movt	r2, #:upper16:.LANCHOR0
+ 258 005c 0010E0E3 		mvn	r1, #0
+ 259 0060 831182E7 		str	r1, [r2, r3, lsl #3]
+ 182:../generate/os_abstraction/src/syscalls.c ****     openfiles[i].handle = -1;
+ 260              		.loc 1 182 0 discriminator 3
+ 261 0064 013083E2 		add	r3, r3, #1
+ 262              	.LVL21:
+ 263              	.L25:
+ 182:../generate/os_abstraction/src/syscalls.c ****     openfiles[i].handle = -1;
+ 264              		.loc 1 182 0 is_stmt 0 discriminator 1
+ 265 0068 130053E3 		cmp	r3, #19
+ 266 006c F8FFFFDA 		ble	.L26
+ 185:../generate/os_abstraction/src/syscalls.c ****   openfiles[0].pos = 0;
+ 267              		.loc 1 185 0 is_stmt 1
+ 268 0070 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 269              	.LVL22:
+ 270 0074 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 271 0078 002000E3 		movw	r2, #:lower16:.LANCHOR1
+ 272 007c 002040E3 		movt	r2, #:upper16:.LANCHOR1
+ 273 0080 002092E5 		ldr	r2, [r2]
+ 274 0084 002083E5 		str	r2, [r3]
+ 186:../generate/os_abstraction/src/syscalls.c ****   openfiles[1].handle = monitor_stdout;
+ 275              		.loc 1 186 0
+ 276 0088 0020A0E3 		mov	r2, #0
+ 277 008c 042083E5 		str	r2, [r3, #4]
+ 187:../generate/os_abstraction/src/syscalls.c ****   openfiles[1].pos = 0;
+ 278              		.loc 1 187 0
+ 279 0090 001000E3 		movw	r1, #:lower16:.LANCHOR2
+ 280 0094 001040E3 		movt	r1, #:upper16:.LANCHOR2
+ 281 0098 001091E5 		ldr	r1, [r1]
+ 282 009c 081083E5 		str	r1, [r3, #8]
+ 188:../generate/os_abstraction/src/syscalls.c ****   openfiles[2].handle = monitor_stdout;
+ 283              		.loc 1 188 0
+ 284 00a0 0C2083E5 		str	r2, [r3, #12]
+ 189:../generate/os_abstraction/src/syscalls.c ****   openfiles[2].pos = 0;
+ 285              		.loc 1 189 0
+ 286 00a4 101083E5 		str	r1, [r3, #16]
+ 190:../generate/os_abstraction/src/syscalls.c **** }
+ 287              		.loc 1 190 0
+ 288 00a8 142083E5 		str	r2, [r3, #20]
+ 289 00ac 1080BDE8 		pop	{r4, pc}
+ 290              		.cfi_endproc
+ 291              	.LFE19:
+ 293              		.section	.text._swiread,"ax",%progbits
+ 294              		.align	2
+ 295              		.global	_swiread
+ 296              		.syntax unified
+ 297              		.arm
+ 298              		.fpu neon
+ 300              	_swiread:
+ 301              	.LFB23:
+ 215:../generate/os_abstraction/src/syscalls.c **** 
+ 216:../generate/os_abstraction/src/syscalls.c **** /* Returns # chars not! written.  */
+ 217:../generate/os_abstraction/src/syscalls.c **** int
+ 218:../generate/os_abstraction/src/syscalls.c **** _swiread (int file,
+ 219:../generate/os_abstraction/src/syscalls.c **** 	  char * ptr,
+ 220:../generate/os_abstraction/src/syscalls.c **** 	  int len)
+ 221:../generate/os_abstraction/src/syscalls.c **** {
+ 302              		.loc 1 221 0
+ 303              		.cfi_startproc
+ 304              		@ args = 0, pretend = 0, frame = 0
+ 305              		@ frame_needed = 0, uses_anonymous_args = 0
+ 306              		@ link register save eliminated.
+ 307              	.LVL23:
+ 308              	.LVL24:
+ 222:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 223:../generate/os_abstraction/src/syscalls.c ****   int fh = remap_handle (file);
+ 224:../generate/os_abstraction/src/syscalls.c ****   int block[3];
+ 225:../generate/os_abstraction/src/syscalls.c ****   
+ 226:../generate/os_abstraction/src/syscalls.c ****   block[0] = fh;
+ 227:../generate/os_abstraction/src/syscalls.c ****   block[1] = (int) ptr;
+ 228:../generate/os_abstraction/src/syscalls.c ****   block[2] = len;
+ 229:../generate/os_abstraction/src/syscalls.c ****   
+ 230:../generate/os_abstraction/src/syscalls.c ****   return do_AngelSWI (AngelSWI_Reason_Read, block);
+ 231:../generate/os_abstraction/src/syscalls.c **** #endif
+ 232:../generate/os_abstraction/src/syscalls.c **** }
+ 309              		.loc 1 232 0
+ 310 0000 1EFF2FE1 		bx	lr
+ 311              		.cfi_endproc
+ 312              	.LFE23:
+ 314              		.section	.text._read,"ax",%progbits
+ 315              		.align	2
+ 316              		.weak	_read
+ 317              		.syntax unified
+ 318              		.arm
+ 319              		.fpu neon
+ 321              	_read:
+ 322              	.LFB24:
+ 233:../generate/os_abstraction/src/syscalls.c **** 
+ 234:../generate/os_abstraction/src/syscalls.c **** int __attribute__((weak))
+ 235:../generate/os_abstraction/src/syscalls.c **** _read (int file,
+ 236:../generate/os_abstraction/src/syscalls.c ****        char * ptr,
+ 237:../generate/os_abstraction/src/syscalls.c ****        int len)
+ 238:../generate/os_abstraction/src/syscalls.c **** {
+ 323              		.loc 1 238 0
+ 324              		.cfi_startproc
+ 325              		@ args = 0, pretend = 0, frame = 0
+ 326              		@ frame_needed = 0, uses_anonymous_args = 0
+ 327              	.LVL25:
+ 328 0000 10402DE9 		push	{r4, lr}
+ 329              		.cfi_def_cfa_offset 8
+ 330              		.cfi_offset 4, -8
+ 331              		.cfi_offset 14, -4
+ 239:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 240:../generate/os_abstraction/src/syscalls.c ****   if ((file == STDIN_FILENO) || (file == STDOUT_FILENO) || (file == STDERR_FILENO))
+ 241:../generate/os_abstraction/src/syscalls.c ****   {
+ 242:../generate/os_abstraction/src/syscalls.c ****     int slot = findslot (remap_handle (file));
+ 243:../generate/os_abstraction/src/syscalls.c ****     int x = _swiread (file, ptr, len);
+ 244:../generate/os_abstraction/src/syscalls.c **** 
+ 245:../generate/os_abstraction/src/syscalls.c ****     if (x < 0)
+ 246:../generate/os_abstraction/src/syscalls.c ****       return error (-1);
+ 247:../generate/os_abstraction/src/syscalls.c **** 
+ 248:../generate/os_abstraction/src/syscalls.c ****     if (slot != MAX_OPEN_FILES)
+ 249:../generate/os_abstraction/src/syscalls.c ****       openfiles [slot].pos += len - x;
+ 250:../generate/os_abstraction/src/syscalls.c **** 
+ 251:../generate/os_abstraction/src/syscalls.c ****     /* x == len is not an error, at least if we want feof() to work.  */
+ 252:../generate/os_abstraction/src/syscalls.c ****     return len - x;
+ 253:../generate/os_abstraction/src/syscalls.c ****   }
+ 254:../generate/os_abstraction/src/syscalls.c ****   else
+ 255:../generate/os_abstraction/src/syscalls.c ****   {
+ 256:../generate/os_abstraction/src/syscalls.c ****     int_t   i = low_read(file, (uint8_t*)ptr, (uint32_t)len);
+ 257:../generate/os_abstraction/src/syscalls.c ****     return wrap(i);
+ 258:../generate/os_abstraction/src/syscalls.c ****   }
+ 259:../generate/os_abstraction/src/syscalls.c **** #else
+ 260:../generate/os_abstraction/src/syscalls.c ****   int_t   i = low_read(file, (uint8_t*)ptr, (uint32_t)len);
+ 332              		.loc 1 260 0
+ 333 0004 FEFFFFEB 		bl	low_read
+ 334              	.LVL26:
+ 261:../generate/os_abstraction/src/syscalls.c ****   return wrap(i);
+ 335              		.loc 1 261 0
+ 336 0008 FEFFFFEB 		bl	wrap
+ 337              	.LVL27:
+ 262:../generate/os_abstraction/src/syscalls.c **** #endif
+ 263:../generate/os_abstraction/src/syscalls.c **** }
+ 338              		.loc 1 263 0
+ 339 000c 1080BDE8 		pop	{r4, pc}
+ 340              		.cfi_endproc
+ 341              	.LFE24:
+ 343              		.section	.text._swilseek,"ax",%progbits
+ 344              		.align	2
+ 345              		.global	_swilseek
+ 346              		.syntax unified
+ 347              		.arm
+ 348              		.fpu neon
+ 350              	_swilseek:
+ 351              	.LFB25:
+ 264:../generate/os_abstraction/src/syscalls.c **** 
+ 265:../generate/os_abstraction/src/syscalls.c **** int
+ 266:../generate/os_abstraction/src/syscalls.c **** _swilseek (int file,
+ 267:../generate/os_abstraction/src/syscalls.c **** 	   int ptr,
+ 268:../generate/os_abstraction/src/syscalls.c **** 	   int dir)
+ 269:../generate/os_abstraction/src/syscalls.c **** {
+ 352              		.loc 1 269 0
+ 353              		.cfi_startproc
+ 354              		@ args = 0, pretend = 0, frame = 0
+ 355              		@ frame_needed = 0, uses_anonymous_args = 0
+ 356              	.LVL28:
+ 357 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 358              		.cfi_def_cfa_offset 16
+ 359              		.cfi_offset 4, -16
+ 360              		.cfi_offset 5, -12
+ 361              		.cfi_offset 6, -8
+ 362              		.cfi_offset 14, -4
+ 363 0004 0140A0E1 		mov	r4, r1
+ 364 0008 0250A0E1 		mov	r5, r2
+ 365              	.LVL29:
+ 270:../generate/os_abstraction/src/syscalls.c ****   int res = 0;
+ 271:../generate/os_abstraction/src/syscalls.c ****   int fh = remap_handle (file);
+ 366              		.loc 1 271 0
+ 367 000c FEFFFFEB 		bl	remap_handle
+ 368              	.LVL30:
+ 272:../generate/os_abstraction/src/syscalls.c ****   int slot = findslot (fh);
+ 369              		.loc 1 272 0
+ 370 0010 FEFFFFEB 		bl	findslot
+ 371              	.LVL31:
+ 273:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 274:../generate/os_abstraction/src/syscalls.c ****   int block[2];
+ 275:../generate/os_abstraction/src/syscalls.c **** #endif
+ 276:../generate/os_abstraction/src/syscalls.c **** 
+ 277:../generate/os_abstraction/src/syscalls.c ****   if (dir == SEEK_CUR)
+ 372              		.loc 1 277 0
+ 373 0014 010055E3 		cmp	r5, #1
+ 374 0018 0600000A 		beq	.L36
+ 375              	.LVL32:
+ 376              	.L32:
+ 278:../generate/os_abstraction/src/syscalls.c ****     {
+ 279:../generate/os_abstraction/src/syscalls.c ****       if (slot == MAX_OPEN_FILES)
+ 280:../generate/os_abstraction/src/syscalls.c **** 	return -1;
+ 281:../generate/os_abstraction/src/syscalls.c ****       ptr = openfiles[slot].pos + ptr;
+ 282:../generate/os_abstraction/src/syscalls.c ****       dir = SEEK_SET;
+ 283:../generate/os_abstraction/src/syscalls.c ****     }
+ 284:../generate/os_abstraction/src/syscalls.c ****   
+ 285:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 286:../generate/os_abstraction/src/syscalls.c ****   if (dir == SEEK_END)
+ 287:../generate/os_abstraction/src/syscalls.c ****     {
+ 288:../generate/os_abstraction/src/syscalls.c ****       block[0] = fh;
+ 289:../generate/os_abstraction/src/syscalls.c ****       ptr += do_AngelSWI (AngelSWI_Reason_FLen, block);
+ 290:../generate/os_abstraction/src/syscalls.c ****     }
+ 291:../generate/os_abstraction/src/syscalls.c ****   
+ 292:../generate/os_abstraction/src/syscalls.c ****   /* This code only does absolute seeks.  */
+ 293:../generate/os_abstraction/src/syscalls.c ****   block[0] = remap_handle (file);
+ 294:../generate/os_abstraction/src/syscalls.c ****   block[1] = ptr;
+ 295:../generate/os_abstraction/src/syscalls.c ****   res = do_AngelSWI (AngelSWI_Reason_Seek, block);
+ 296:../generate/os_abstraction/src/syscalls.c **** #endif
+ 297:../generate/os_abstraction/src/syscalls.c **** 
+ 298:../generate/os_abstraction/src/syscalls.c ****   if (slot != MAX_OPEN_FILES && res == 0)
+ 377              		.loc 1 298 0
+ 378 001c 140050E3 		cmp	r0, #20
+ 299:../generate/os_abstraction/src/syscalls.c ****     openfiles[slot].pos = ptr;
+ 379              		.loc 1 299 0
+ 380 0020 00300013 		movwne	r3, #:lower16:.LANCHOR0
+ 381 0024 00304013 		movtne	r3, #:upper16:.LANCHOR0
+ 382 0028 80318310 		addne	r3, r3, r0, lsl #3
+ 383 002c 04408315 		strne	r4, [r3, #4]
+ 384              	.LVL33:
+ 385              	.L33:
+ 300:../generate/os_abstraction/src/syscalls.c **** 
+ 301:../generate/os_abstraction/src/syscalls.c ****   /* This is expected to return the position in the file.  */
+ 302:../generate/os_abstraction/src/syscalls.c ****   return res == 0 ? ptr : -1;
+ 303:../generate/os_abstraction/src/syscalls.c **** }
+ 386              		.loc 1 303 0
+ 387 0030 0400A0E1 		mov	r0, r4
+ 388              	.LVL34:
+ 389 0034 7080BDE8 		pop	{r4, r5, r6, pc}
+ 390              	.LVL35:
+ 391              	.L36:
+ 279:../generate/os_abstraction/src/syscalls.c **** 	return -1;
+ 392              		.loc 1 279 0
+ 393 0038 140050E3 		cmp	r0, #20
+ 394 003c 0500000A 		beq	.L34
+ 281:../generate/os_abstraction/src/syscalls.c ****       dir = SEEK_SET;
+ 395              		.loc 1 281 0
+ 396 0040 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 397 0044 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 398 0048 803183E0 		add	r3, r3, r0, lsl #3
+ 399 004c 043093E5 		ldr	r3, [r3, #4]
+ 400 0050 034084E0 		add	r4, r4, r3
+ 401              	.LVL36:
+ 402 0054 F0FFFFEA 		b	.L32
+ 403              	.LVL37:
+ 404              	.L34:
+ 280:../generate/os_abstraction/src/syscalls.c ****       ptr = openfiles[slot].pos + ptr;
+ 405              		.loc 1 280 0
+ 406 0058 0040E0E3 		mvn	r4, #0
+ 407              	.LVL38:
+ 408 005c F3FFFFEA 		b	.L33
+ 409              		.cfi_endproc
+ 410              	.LFE25:
+ 412              		.section	.text._lseek,"ax",%progbits
+ 413              		.align	2
+ 414              		.global	_lseek
+ 415              		.syntax unified
+ 416              		.arm
+ 417              		.fpu neon
+ 419              	_lseek:
+ 420              	.LFB26:
+ 304:../generate/os_abstraction/src/syscalls.c **** 
+ 305:../generate/os_abstraction/src/syscalls.c **** int
+ 306:../generate/os_abstraction/src/syscalls.c **** _lseek (int file,
+ 307:../generate/os_abstraction/src/syscalls.c **** 	int ptr,
+ 308:../generate/os_abstraction/src/syscalls.c **** 	int dir)
+ 309:../generate/os_abstraction/src/syscalls.c **** {
+ 421              		.loc 1 309 0
+ 422              		.cfi_startproc
+ 423              		@ args = 0, pretend = 0, frame = 0
+ 424              		@ frame_needed = 0, uses_anonymous_args = 0
+ 425              	.LVL39:
+ 426 0000 10402DE9 		push	{r4, lr}
+ 427              		.cfi_def_cfa_offset 8
+ 428              		.cfi_offset 4, -8
+ 429              		.cfi_offset 14, -4
+ 310:../generate/os_abstraction/src/syscalls.c ****   return wrap (_swilseek (file, ptr, dir));
+ 430              		.loc 1 310 0
+ 431 0004 FEFFFFEB 		bl	_swilseek
+ 432              	.LVL40:
+ 433 0008 FEFFFFEB 		bl	wrap
+ 434              	.LVL41:
+ 311:../generate/os_abstraction/src/syscalls.c **** }
+ 435              		.loc 1 311 0
+ 436 000c 1080BDE8 		pop	{r4, pc}
+ 437              		.cfi_endproc
+ 438              	.LFE26:
+ 440              		.section	.text._swiwrite,"ax",%progbits
+ 441              		.align	2
+ 442              		.global	_swiwrite
+ 443              		.syntax unified
+ 444              		.arm
+ 445              		.fpu neon
+ 447              	_swiwrite:
+ 448              	.LFB27:
+ 312:../generate/os_abstraction/src/syscalls.c **** 
+ 313:../generate/os_abstraction/src/syscalls.c **** /* Returns #chars not! written.  */
+ 314:../generate/os_abstraction/src/syscalls.c **** int
+ 315:../generate/os_abstraction/src/syscalls.c **** _swiwrite (
+ 316:../generate/os_abstraction/src/syscalls.c **** 	   int    file,
+ 317:../generate/os_abstraction/src/syscalls.c **** 	   char * ptr,
+ 318:../generate/os_abstraction/src/syscalls.c **** 	   int    len)
+ 319:../generate/os_abstraction/src/syscalls.c **** {
+ 449              		.loc 1 319 0
+ 450              		.cfi_startproc
+ 451              		@ args = 0, pretend = 0, frame = 0
+ 452              		@ frame_needed = 0, uses_anonymous_args = 0
+ 453              		@ link register save eliminated.
+ 454              	.LVL42:
+ 455              	.LVL43:
+ 320:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 321:../generate/os_abstraction/src/syscalls.c ****   int fh = remap_handle (file);
+ 322:../generate/os_abstraction/src/syscalls.c **** 
+ 323:../generate/os_abstraction/src/syscalls.c ****   int block[3];
+ 324:../generate/os_abstraction/src/syscalls.c ****   
+ 325:../generate/os_abstraction/src/syscalls.c ****   block[0] = fh;
+ 326:../generate/os_abstraction/src/syscalls.c ****   block[1] = (int) ptr;
+ 327:../generate/os_abstraction/src/syscalls.c ****   block[2] = len;
+ 328:../generate/os_abstraction/src/syscalls.c ****   
+ 329:../generate/os_abstraction/src/syscalls.c ****   return do_AngelSWI (AngelSWI_Reason_Write, block);
+ 330:../generate/os_abstraction/src/syscalls.c **** 
+ 331:../generate/os_abstraction/src/syscalls.c **** 
+ 332:../generate/os_abstraction/src/syscalls.c **** 
+ 333:../generate/os_abstraction/src/syscalls.c **** #endif
+ 334:../generate/os_abstraction/src/syscalls.c **** }
+ 456              		.loc 1 334 0
+ 457 0000 1EFF2FE1 		bx	lr
+ 458              		.cfi_endproc
+ 459              	.LFE27:
+ 461              		.section	.text._write,"ax",%progbits
+ 462              		.align	2
+ 463              		.weak	_write
+ 464              		.syntax unified
+ 465              		.arm
+ 466              		.fpu neon
+ 468              	_write:
+ 469              	.LFB28:
+ 335:../generate/os_abstraction/src/syscalls.c **** 
+ 336:../generate/os_abstraction/src/syscalls.c **** int __attribute__((weak))
+ 337:../generate/os_abstraction/src/syscalls.c **** _write (int    file,
+ 338:../generate/os_abstraction/src/syscalls.c **** 	char * ptr,
+ 339:../generate/os_abstraction/src/syscalls.c **** 	int    len)
+ 340:../generate/os_abstraction/src/syscalls.c **** {
+ 470              		.loc 1 340 0
+ 471              		.cfi_startproc
+ 472              		@ args = 0, pretend = 0, frame = 0
+ 473              		@ frame_needed = 0, uses_anonymous_args = 0
+ 474              	.LVL44:
+ 475 0000 10402DE9 		push	{r4, lr}
+ 476              		.cfi_def_cfa_offset 8
+ 477              		.cfi_offset 4, -8
+ 478              		.cfi_offset 14, -4
+ 341:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 342:../generate/os_abstraction/src/syscalls.c ****   if ((file == STDIN_FILENO) || (file == STDOUT_FILENO) || (file == STDERR_FILENO))
+ 343:../generate/os_abstraction/src/syscalls.c ****   {
+ 344:../generate/os_abstraction/src/syscalls.c ****     int slot = findslot (remap_handle (file));
+ 345:../generate/os_abstraction/src/syscalls.c ****     int x = _swiwrite (file, ptr,len);
+ 346:../generate/os_abstraction/src/syscalls.c **** 
+ 347:../generate/os_abstraction/src/syscalls.c ****     if (x == -1 || x == len)
+ 348:../generate/os_abstraction/src/syscalls.c ****       return error (-1);
+ 349:../generate/os_abstraction/src/syscalls.c ****     
+ 350:../generate/os_abstraction/src/syscalls.c ****     if (slot != MAX_OPEN_FILES)
+ 351:../generate/os_abstraction/src/syscalls.c ****       openfiles[slot].pos += len - x;
+ 352:../generate/os_abstraction/src/syscalls.c ****     
+ 353:../generate/os_abstraction/src/syscalls.c ****     return len - x;
+ 354:../generate/os_abstraction/src/syscalls.c ****   }
+ 355:../generate/os_abstraction/src/syscalls.c ****   else
+ 356:../generate/os_abstraction/src/syscalls.c ****   {
+ 357:../generate/os_abstraction/src/syscalls.c ****     int_t i;
+ 358:../generate/os_abstraction/src/syscalls.c **** 
+ 359:../generate/os_abstraction/src/syscalls.c ****     i = low_write(file, (uint8_t*)ptr, (uint32_t)len);
+ 360:../generate/os_abstraction/src/syscalls.c **** 
+ 361:../generate/os_abstraction/src/syscalls.c ****     return wrap(i);
+ 362:../generate/os_abstraction/src/syscalls.c ****   }
+ 363:../generate/os_abstraction/src/syscalls.c **** #else
+ 364:../generate/os_abstraction/src/syscalls.c ****   int_t i;
+ 365:../generate/os_abstraction/src/syscalls.c **** 
+ 366:../generate/os_abstraction/src/syscalls.c ****   i = low_write(file, (uint8_t*)ptr, (uint32_t)len);
+ 479              		.loc 1 366 0
+ 480 0004 FEFFFFEB 		bl	low_write
+ 481              	.LVL45:
+ 367:../generate/os_abstraction/src/syscalls.c **** 
+ 368:../generate/os_abstraction/src/syscalls.c ****   return wrap(i);
+ 482              		.loc 1 368 0
+ 483 0008 FEFFFFEB 		bl	wrap
+ 484              	.LVL46:
+ 369:../generate/os_abstraction/src/syscalls.c **** #endif
+ 370:../generate/os_abstraction/src/syscalls.c **** }
+ 485              		.loc 1 370 0
+ 486 000c 1080BDE8 		pop	{r4, pc}
+ 487              		.cfi_endproc
+ 488              	.LFE28:
+ 490              		.section	.text._swiopen,"ax",%progbits
+ 491              		.align	2
+ 492              		.global	_swiopen
+ 493              		.syntax unified
+ 494              		.arm
+ 495              		.fpu neon
+ 497              	_swiopen:
+ 498              	.LFB29:
+ 371:../generate/os_abstraction/src/syscalls.c **** 
+ 372:../generate/os_abstraction/src/syscalls.c **** extern int strlen (const char *);
+ 373:../generate/os_abstraction/src/syscalls.c **** 
+ 374:../generate/os_abstraction/src/syscalls.c **** int
+ 375:../generate/os_abstraction/src/syscalls.c **** _swiopen (const char * path,
+ 376:../generate/os_abstraction/src/syscalls.c **** 	  int          flags)
+ 377:../generate/os_abstraction/src/syscalls.c **** {
+ 499              		.loc 1 377 0
+ 500              		.cfi_startproc
+ 501              		@ args = 0, pretend = 0, frame = 0
+ 502              		@ frame_needed = 0, uses_anonymous_args = 0
+ 503              	.LVL47:
+ 504 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 505              		.cfi_def_cfa_offset 16
+ 506              		.cfi_offset 4, -16
+ 507              		.cfi_offset 5, -12
+ 508              		.cfi_offset 6, -8
+ 509              		.cfi_offset 14, -4
+ 510 0004 0050A0E1 		mov	r5, r0
+ 511 0008 0160A0E1 		mov	r6, r1
+ 378:../generate/os_abstraction/src/syscalls.c ****   int fh;
+ 379:../generate/os_abstraction/src/syscalls.c **** 
+ 380:../generate/os_abstraction/src/syscalls.c ****   int i = findslot (-1);
+ 512              		.loc 1 380 0
+ 513 000c 0000E0E3 		mvn	r0, #0
+ 514              	.LVL48:
+ 515 0010 FEFFFFEB 		bl	findslot
+ 516              	.LVL49:
+ 381:../generate/os_abstraction/src/syscalls.c ****   
+ 382:../generate/os_abstraction/src/syscalls.c ****   if (i == MAX_OPEN_FILES)
+ 517              		.loc 1 382 0
+ 518 0014 140050E3 		cmp	r0, #20
+ 519 0018 0F00000A 		beq	.L45
+ 520 001c 0040A0E1 		mov	r4, r0
+ 383:../generate/os_abstraction/src/syscalls.c ****     return -1;
+ 384:../generate/os_abstraction/src/syscalls.c **** 
+ 385:../generate/os_abstraction/src/syscalls.c **** 
+ 386:../generate/os_abstraction/src/syscalls.c ****   fh = low_open((char *)path, flags);
+ 521              		.loc 1 386 0
+ 522 0020 0610A0E1 		mov	r1, r6
+ 523 0024 0500A0E1 		mov	r0, r5
+ 524              	.LVL50:
+ 525 0028 FEFFFFEB 		bl	low_open
+ 526              	.LVL51:
+ 387:../generate/os_abstraction/src/syscalls.c **** 
+ 388:../generate/os_abstraction/src/syscalls.c ****   if (fh >= 0)
+ 527              		.loc 1 388 0
+ 528 002c 000050E3 		cmp	r0, #0
+ 529 0030 050000BA 		blt	.L44
+ 389:../generate/os_abstraction/src/syscalls.c ****     {
+ 390:../generate/os_abstraction/src/syscalls.c ****       openfiles[i].handle = fh;
+ 530              		.loc 1 390 0
+ 531 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 532 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 533 003c 840183E7 		str	r0, [r3, r4, lsl #3]
+ 391:../generate/os_abstraction/src/syscalls.c ****       openfiles[i].pos = 0;
+ 534              		.loc 1 391 0
+ 535 0040 843183E0 		add	r3, r3, r4, lsl #3
+ 536 0044 0020A0E3 		mov	r2, #0
+ 537 0048 042083E5 		str	r2, [r3, #4]
+ 538              	.L44:
+ 392:../generate/os_abstraction/src/syscalls.c ****     }
+ 393:../generate/os_abstraction/src/syscalls.c **** 
+ 394:../generate/os_abstraction/src/syscalls.c ****   return fh >= 0 ? fh + FILE_HANDLE_OFFSET : error (fh);
+ 539              		.loc 1 394 0
+ 540 004c 000050E3 		cmp	r0, #0
+ 541 0050 7080BDA8 		popge	{r4, r5, r6, pc}
+ 542              		.loc 1 394 0 is_stmt 0 discriminator 1
+ 543 0054 FEFFFFEB 		bl	error
+ 544              	.LVL52:
+ 545 0058 7080BDE8 		pop	{r4, r5, r6, pc}
+ 546              	.LVL53:
+ 547              	.L45:
+ 383:../generate/os_abstraction/src/syscalls.c **** 
+ 548              		.loc 1 383 0 is_stmt 1
+ 549 005c 0000E0E3 		mvn	r0, #0
+ 550              	.LVL54:
+ 395:../generate/os_abstraction/src/syscalls.c **** }
+ 551              		.loc 1 395 0
+ 552 0060 7080BDE8 		pop	{r4, r5, r6, pc}
+ 553              		.cfi_endproc
+ 554              	.LFE29:
+ 556              		.section	.text._open,"ax",%progbits
+ 557              		.align	2
+ 558              		.global	_open
+ 559              		.syntax unified
+ 560              		.arm
+ 561              		.fpu neon
+ 563              	_open:
+ 564              	.LFB30:
+ 396:../generate/os_abstraction/src/syscalls.c **** 
+ 397:../generate/os_abstraction/src/syscalls.c **** int
+ 398:../generate/os_abstraction/src/syscalls.c **** _open (const char * path,
+ 399:../generate/os_abstraction/src/syscalls.c ****        int          flags,
+ 400:../generate/os_abstraction/src/syscalls.c ****        ...)
+ 401:../generate/os_abstraction/src/syscalls.c **** {
+ 565              		.loc 1 401 0
+ 566              		.cfi_startproc
+ 567              		@ args = 4, pretend = 12, frame = 0
+ 568              		@ frame_needed = 0, uses_anonymous_args = 1
+ 569              	.LVL55:
+ 570 0000 0E002DE9 		push	{r1, r2, r3}
+ 571              		.cfi_def_cfa_offset 12
+ 572              		.cfi_offset 1, -12
+ 573              		.cfi_offset 2, -8
+ 574              		.cfi_offset 3, -4
+ 575 0004 04E02DE5 		str	lr, [sp, #-4]!
+ 576              		.cfi_def_cfa_offset 16
+ 577              		.cfi_offset 14, -16
+ 402:../generate/os_abstraction/src/syscalls.c ****   return wrap (_swiopen (path, flags));
+ 578              		.loc 1 402 0
+ 579 0008 04109DE5 		ldr	r1, [sp, #4]
+ 580 000c FEFFFFEB 		bl	_swiopen
+ 581              	.LVL56:
+ 582 0010 FEFFFFEB 		bl	wrap
+ 583              	.LVL57:
+ 403:../generate/os_abstraction/src/syscalls.c **** }
+ 584              		.loc 1 403 0
+ 585 0014 04E09DE4 		ldr	lr, [sp], #4
+ 586              		.cfi_restore 14
+ 587              		.cfi_def_cfa_offset 12
+ 588 0018 0CD08DE2 		add	sp, sp, #12
+ 589              		.cfi_restore 3
+ 590              		.cfi_restore 2
+ 591              		.cfi_restore 1
+ 592              		.cfi_def_cfa_offset 0
+ 593 001c 1EFF2FE1 		bx	lr
+ 594              		.cfi_endproc
+ 595              	.LFE30:
+ 597              		.section	.text._swiclose,"ax",%progbits
+ 598              		.align	2
+ 599              		.global	_swiclose
+ 600              		.syntax unified
+ 601              		.arm
+ 602              		.fpu neon
+ 604              	_swiclose:
+ 605              	.LFB31:
+ 404:../generate/os_abstraction/src/syscalls.c **** 
+ 405:../generate/os_abstraction/src/syscalls.c **** int
+ 406:../generate/os_abstraction/src/syscalls.c **** _swiclose (int file)
+ 407:../generate/os_abstraction/src/syscalls.c **** {
+ 606              		.loc 1 407 0
+ 607              		.cfi_startproc
+ 608              		@ args = 0, pretend = 0, frame = 0
+ 609              		@ frame_needed = 0, uses_anonymous_args = 0
+ 610              	.LVL58:
+ 611 0000 10402DE9 		push	{r4, lr}
+ 612              		.cfi_def_cfa_offset 8
+ 613              		.cfi_offset 4, -8
+ 614              		.cfi_offset 14, -4
+ 615 0004 0040A0E1 		mov	r4, r0
+ 408:../generate/os_abstraction/src/syscalls.c ****   int res;
+ 409:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 410:../generate/os_abstraction/src/syscalls.c ****   int myhan = remap_handle (file);
+ 411:../generate/os_abstraction/src/syscalls.c ****   int slot = findslot (myhan);
+ 412:../generate/os_abstraction/src/syscalls.c **** 
+ 413:../generate/os_abstraction/src/syscalls.c ****   
+ 414:../generate/os_abstraction/src/syscalls.c ****   if (slot != MAX_OPEN_FILES)
+ 415:../generate/os_abstraction/src/syscalls.c ****     openfiles[slot].handle = -1;
+ 416:../generate/os_abstraction/src/syscalls.c **** 
+ 417:../generate/os_abstraction/src/syscalls.c ****   res = low_close(myhan);
+ 418:../generate/os_abstraction/src/syscalls.c **** #else
+ 419:../generate/os_abstraction/src/syscalls.c ****   int slot = findslot (file);
+ 616              		.loc 1 419 0
+ 617 0008 FEFFFFEB 		bl	findslot
+ 618              	.LVL59:
+ 420:../generate/os_abstraction/src/syscalls.c **** 
+ 421:../generate/os_abstraction/src/syscalls.c ****   if (slot != MAX_OPEN_FILES)
+ 619              		.loc 1 421 0
+ 620 000c 140050E3 		cmp	r0, #20
+ 422:../generate/os_abstraction/src/syscalls.c ****     openfiles[slot].handle = -1;
+ 621              		.loc 1 422 0
+ 622 0010 00300013 		movwne	r3, #:lower16:.LANCHOR0
+ 623 0014 00304013 		movtne	r3, #:upper16:.LANCHOR0
+ 624 0018 0020E013 		mvnne	r2, #0
+ 625 001c 80218317 		strne	r2, [r3, r0, lsl #3]
+ 626              	.L50:
+ 423:../generate/os_abstraction/src/syscalls.c **** 
+ 424:../generate/os_abstraction/src/syscalls.c ****   res = low_close(file);
+ 627              		.loc 1 424 0
+ 628 0020 0400A0E1 		mov	r0, r4
+ 629              	.LVL60:
+ 630 0024 FEFFFFEB 		bl	low_close
+ 631              	.LVL61:
+ 425:../generate/os_abstraction/src/syscalls.c **** #endif
+ 426:../generate/os_abstraction/src/syscalls.c ****   return res;
+ 427:../generate/os_abstraction/src/syscalls.c **** }
+ 632              		.loc 1 427 0
+ 633 0028 1080BDE8 		pop	{r4, pc}
+ 634              		.cfi_endproc
+ 635              	.LFE31:
+ 637              		.section	.text._close,"ax",%progbits
+ 638              		.align	2
+ 639              		.global	_close
+ 640              		.syntax unified
+ 641              		.arm
+ 642              		.fpu neon
+ 644              	_close:
+ 645              	.LFB32:
+ 428:../generate/os_abstraction/src/syscalls.c **** 
+ 429:../generate/os_abstraction/src/syscalls.c **** int
+ 430:../generate/os_abstraction/src/syscalls.c **** _close (int file)
+ 431:../generate/os_abstraction/src/syscalls.c **** {
+ 646              		.loc 1 431 0
+ 647              		.cfi_startproc
+ 648              		@ args = 0, pretend = 0, frame = 0
+ 649              		@ frame_needed = 0, uses_anonymous_args = 0
+ 650              	.LVL62:
+ 651 0000 10402DE9 		push	{r4, lr}
+ 652              		.cfi_def_cfa_offset 8
+ 653              		.cfi_offset 4, -8
+ 654              		.cfi_offset 14, -4
+ 432:../generate/os_abstraction/src/syscalls.c ****   return wrap (_swiclose (file));
+ 655              		.loc 1 432 0
+ 656 0004 FEFFFFEB 		bl	_swiclose
+ 657              	.LVL63:
+ 658 0008 FEFFFFEB 		bl	wrap
+ 659              	.LVL64:
+ 433:../generate/os_abstraction/src/syscalls.c **** }
+ 660              		.loc 1 433 0
+ 661 000c 1080BDE8 		pop	{r4, pc}
+ 662              		.cfi_endproc
+ 663              	.LFE32:
+ 665              		.section	.text._kill,"ax",%progbits
+ 666              		.align	2
+ 667              		.global	_kill
+ 668              		.syntax unified
+ 669              		.arm
+ 670              		.fpu neon
+ 672              	_kill:
+ 673              	.LFB33:
+ 434:../generate/os_abstraction/src/syscalls.c **** 
+ 435:../generate/os_abstraction/src/syscalls.c **** int
+ 436:../generate/os_abstraction/src/syscalls.c **** _kill (int pid, int sig)
+ 437:../generate/os_abstraction/src/syscalls.c **** {
+ 674              		.loc 1 437 0
+ 675              		.cfi_startproc
+ 676              		@ args = 0, pretend = 0, frame = 0
+ 677              		@ frame_needed = 0, uses_anonymous_args = 0
+ 678              		@ link register save eliminated.
+ 679              	.LVL65:
+ 680              	.LVL66:
+ 438:../generate/os_abstraction/src/syscalls.c ****   (void)pid; (void)sig;
+ 439:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 440:../generate/os_abstraction/src/syscalls.c ****   /* Note: The pid argument is thrown away.  */
+ 441:../generate/os_abstraction/src/syscalls.c ****   switch (sig) {
+ 442:../generate/os_abstraction/src/syscalls.c **** 	  case SIGABRT:
+ 443:../generate/os_abstraction/src/syscalls.c **** 		  return do_AngelSWI (AngelSWI_Reason_ReportException,
+ 444:../generate/os_abstraction/src/syscalls.c **** 				  (void *) ADP_Stopped_RunTimeError);
+ 445:../generate/os_abstraction/src/syscalls.c **** 	  default:
+ 446:../generate/os_abstraction/src/syscalls.c **** 		  return do_AngelSWI (AngelSWI_Reason_ReportException,
+ 447:../generate/os_abstraction/src/syscalls.c **** 				  (void *) ADP_Stopped_ApplicationExit);
+ 448:../generate/os_abstraction/src/syscalls.c ****   }
+ 449:../generate/os_abstraction/src/syscalls.c **** #endif
+ 450:../generate/os_abstraction/src/syscalls.c **** }
+ 681              		.loc 1 450 0
+ 682 0000 1EFF2FE1 		bx	lr
+ 683              		.cfi_endproc
+ 684              	.LFE33:
+ 686              		.section	.text._exit,"ax",%progbits
+ 687              		.align	2
+ 688              		.global	_exit
+ 689              		.syntax unified
+ 690              		.arm
+ 691              		.fpu neon
+ 693              	_exit:
+ 694              	.LFB34:
+ 451:../generate/os_abstraction/src/syscalls.c **** 
+ 452:../generate/os_abstraction/src/syscalls.c **** void
+ 453:../generate/os_abstraction/src/syscalls.c **** _exit (int status)
+ 454:../generate/os_abstraction/src/syscalls.c **** {
+ 695              		.loc 1 454 0
+ 696              		.cfi_startproc
+ 697              		@ Volatile: function does not return.
+ 698              		@ args = 0, pretend = 0, frame = 0
+ 699              		@ frame_needed = 0, uses_anonymous_args = 0
+ 700              		@ link register save eliminated.
+ 701              	.LVL67:
+ 455:../generate/os_abstraction/src/syscalls.c ****   /* There is only one SWI for both _exit and _kill. For _exit, call
+ 456:../generate/os_abstraction/src/syscalls.c ****      the SWI with the second argument set to -1, an invalid value for
+ 457:../generate/os_abstraction/src/syscalls.c ****      signum, so that the SWI handler can distinguish the two calls.
+ 458:../generate/os_abstraction/src/syscalls.c ****      Note: The RDI implementation of _kill throws away both its
+ 459:../generate/os_abstraction/src/syscalls.c ****      arguments.  */
+ 460:../generate/os_abstraction/src/syscalls.c ****   _kill(status, -1);
+ 461:../generate/os_abstraction/src/syscalls.c **** }
+ 702              		.loc 1 461 0
+ 703 0000 1EFF2FE1 		bx	lr
+ 704              		.cfi_endproc
+ 705              	.LFE34:
+ 707              		.section	.text._getpid,"ax",%progbits
+ 708              		.align	2
+ 709              		.global	_getpid
+ 710              		.syntax unified
+ 711              		.arm
+ 712              		.fpu neon
+ 714              	_getpid:
+ 715              	.LFB35:
+ 462:../generate/os_abstraction/src/syscalls.c **** 
+ 463:../generate/os_abstraction/src/syscalls.c **** int
+ 464:../generate/os_abstraction/src/syscalls.c **** _getpid (int n)
+ 465:../generate/os_abstraction/src/syscalls.c **** {
+ 716              		.loc 1 465 0
+ 717              		.cfi_startproc
+ 718              		@ args = 0, pretend = 0, frame = 0
+ 719              		@ frame_needed = 0, uses_anonymous_args = 0
+ 720              		@ link register save eliminated.
+ 721              	.LVL68:
+ 466:../generate/os_abstraction/src/syscalls.c ****   return 1;
+ 467:../generate/os_abstraction/src/syscalls.c ****   n = n;
+ 468:../generate/os_abstraction/src/syscalls.c **** }
+ 722              		.loc 1 468 0
+ 723 0000 0100A0E3 		mov	r0, #1
+ 724              	.LVL69:
+ 725 0004 1EFF2FE1 		bx	lr
+ 726              		.cfi_endproc
+ 727              	.LFE35:
+ 729              		.section	.text._sbrk,"ax",%progbits
+ 730              		.align	2
+ 731              		.weak	_sbrk
+ 732              		.syntax unified
+ 733              		.arm
+ 734              		.fpu neon
+ 736              	_sbrk:
+ 737              	.LFB36:
+ 469:../generate/os_abstraction/src/syscalls.c **** 
+ 470:../generate/os_abstraction/src/syscalls.c **** caddr_t __attribute__((weak))
+ 471:../generate/os_abstraction/src/syscalls.c **** _sbrk (int incr)
+ 472:../generate/os_abstraction/src/syscalls.c **** {
+ 738              		.loc 1 472 0
+ 739              		.cfi_startproc
+ 740              		@ args = 0, pretend = 0, frame = 0
+ 741              		@ frame_needed = 0, uses_anonymous_args = 0
+ 742              		@ link register save eliminated.
+ 743              	.LVL70:
+ 744 0000 0020A0E1 		mov	r2, r0
+ 473:../generate/os_abstraction/src/syscalls.c ****   extern char   end asm ("__heap_start");           /* Defined by the linker.  */
+ 474:../generate/os_abstraction/src/syscalls.c ****   extern char   heap_limit __asm ("__heap_end");    /* Defined by the linker.  */
+ 475:../generate/os_abstraction/src/syscalls.c ****   static char * heap_end = NULL;
+ 476:../generate/os_abstraction/src/syscalls.c ****   char *        prev_heap_end;
+ 477:../generate/os_abstraction/src/syscalls.c **** 
+ 478:../generate/os_abstraction/src/syscalls.c ****   if (heap_end == NULL)
+ 745              		.loc 1 478 0
+ 746 0004 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 747 0008 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 748 000c 003093E5 		ldr	r3, [r3]
+ 749 0010 000053E3 		cmp	r3, #0
+ 750 0014 0500000A 		beq	.L59
+ 751              	.L58:
+ 479:../generate/os_abstraction/src/syscalls.c ****     heap_end = & end;
+ 480:../generate/os_abstraction/src/syscalls.c ****   
+ 481:../generate/os_abstraction/src/syscalls.c ****   prev_heap_end = heap_end;
+ 752              		.loc 1 481 0
+ 753 0018 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 754 001c 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 755 0020 000093E5 		ldr	r0, [r3]
+ 756              	.LVL71:
+ 482:../generate/os_abstraction/src/syscalls.c ****   
+ 483:../generate/os_abstraction/src/syscalls.c ****   if (heap_end + incr > &heap_limit)
+ 757              		.loc 1 483 0
+ 758 0024 022080E0 		add	r2, r0, r2
+ 759              	.LVL72:
+ 484:../generate/os_abstraction/src/syscalls.c ****     {
+ 485:../generate/os_abstraction/src/syscalls.c ****       /* Some of the libstdc++-v3 tests rely upon detecting
+ 486:../generate/os_abstraction/src/syscalls.c **** 	 out of memory errors, so do not abort here.  */
+ 487:../generate/os_abstraction/src/syscalls.c **** #if 0
+ 488:../generate/os_abstraction/src/syscalls.c ****       extern void abort (void);
+ 489:../generate/os_abstraction/src/syscalls.c **** 
+ 490:../generate/os_abstraction/src/syscalls.c ****       _write (1, "_sbrk: Heap and stack collision\n", 32);
+ 491:../generate/os_abstraction/src/syscalls.c ****       
+ 492:../generate/os_abstraction/src/syscalls.c ****       abort ();
+ 493:../generate/os_abstraction/src/syscalls.c **** #endif
+ 494:../generate/os_abstraction/src/syscalls.c ****     }
+ 495:../generate/os_abstraction/src/syscalls.c ****   
+ 496:../generate/os_abstraction/src/syscalls.c ****   heap_end += incr;
+ 760              		.loc 1 496 0
+ 761 0028 002083E5 		str	r2, [r3]
+ 497:../generate/os_abstraction/src/syscalls.c **** 
+ 498:../generate/os_abstraction/src/syscalls.c ****   return (caddr_t) prev_heap_end;
+ 499:../generate/os_abstraction/src/syscalls.c **** }
+ 762              		.loc 1 499 0
+ 763 002c 1EFF2FE1 		bx	lr
+ 764              	.LVL73:
+ 765              	.L59:
+ 479:../generate/os_abstraction/src/syscalls.c ****   
+ 766              		.loc 1 479 0
+ 767 0030 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 768 0034 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 769 0038 001000E3 		movw	r1, #:lower16:__heap_start
+ 770 003c 001040E3 		movt	r1, #:upper16:__heap_start
+ 771 0040 001083E5 		str	r1, [r3]
+ 772 0044 F3FFFFEA 		b	.L58
+ 773              		.cfi_endproc
+ 774              	.LFE36:
+ 776              		.section	.text._fstat,"ax",%progbits
+ 777              		.align	2
+ 778              		.global	_fstat
+ 779              		.syntax unified
+ 780              		.arm
+ 781              		.fpu neon
+ 783              	_fstat:
+ 784              	.LFB37:
+ 500:../generate/os_abstraction/src/syscalls.c **** 
+ 501:../generate/os_abstraction/src/syscalls.c **** extern void memset (struct stat *, int, unsigned int);
+ 502:../generate/os_abstraction/src/syscalls.c **** 
+ 503:../generate/os_abstraction/src/syscalls.c **** int
+ 504:../generate/os_abstraction/src/syscalls.c **** _fstat (int file, struct stat * st)
+ 505:../generate/os_abstraction/src/syscalls.c **** {
+ 785              		.loc 1 505 0
+ 786              		.cfi_startproc
+ 787              		@ args = 0, pretend = 0, frame = 0
+ 788              		@ frame_needed = 0, uses_anonymous_args = 0
+ 789              	.LVL74:
+ 790 0000 10402DE9 		push	{r4, lr}
+ 791              		.cfi_def_cfa_offset 8
+ 792              		.cfi_offset 4, -8
+ 793              		.cfi_offset 14, -4
+ 794 0004 0140A0E1 		mov	r4, r1
+ 506:../generate/os_abstraction/src/syscalls.c ****   memset (st, 0, sizeof (* st));
+ 795              		.loc 1 506 0
+ 796 0008 3C20A0E3 		mov	r2, #60
+ 797 000c 0010A0E3 		mov	r1, #0
+ 798              	.LVL75:
+ 799 0010 0400A0E1 		mov	r0, r4
+ 800              	.LVL76:
+ 801 0014 FEFFFFEB 		bl	memset
+ 802              	.LVL77:
+ 507:../generate/os_abstraction/src/syscalls.c ****   st->st_mode = S_IFCHR;
+ 803              		.loc 1 507 0
+ 804 0018 023AA0E3 		mov	r3, #8192
+ 805 001c 043084E5 		str	r3, [r4, #4]
+ 508:../generate/os_abstraction/src/syscalls.c ****   st->st_blksize = 1024;
+ 806              		.loc 1 508 0
+ 807 0020 013BA0E3 		mov	r3, #1024
+ 808 0024 2C3084E5 		str	r3, [r4, #44]
+ 509:../generate/os_abstraction/src/syscalls.c ****   return 0;
+ 510:../generate/os_abstraction/src/syscalls.c ****   file = file;
+ 511:../generate/os_abstraction/src/syscalls.c **** }
+ 809              		.loc 1 511 0
+ 810 0028 0000A0E3 		mov	r0, #0
+ 811 002c 1080BDE8 		pop	{r4, pc}
+ 812              		.cfi_endproc
+ 813              	.LFE37:
+ 815              		.section	.text._stat,"ax",%progbits
+ 816              		.align	2
+ 817              		.global	_stat
+ 818              		.syntax unified
+ 819              		.arm
+ 820              		.fpu neon
+ 822              	_stat:
+ 823              	.LFB38:
+ 512:../generate/os_abstraction/src/syscalls.c **** 
+ 513:../generate/os_abstraction/src/syscalls.c **** int _stat (const char *fname, struct stat *st)
+ 514:../generate/os_abstraction/src/syscalls.c **** {
+ 824              		.loc 1 514 0
+ 825              		.cfi_startproc
+ 826              		@ args = 0, pretend = 0, frame = 0
+ 827              		@ frame_needed = 0, uses_anonymous_args = 0
+ 828              	.LVL78:
+ 829 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 830              		.cfi_def_cfa_offset 16
+ 831              		.cfi_offset 4, -16
+ 832              		.cfi_offset 5, -12
+ 833              		.cfi_offset 6, -8
+ 834              		.cfi_offset 14, -4
+ 835 0004 0140A0E1 		mov	r4, r1
+ 515:../generate/os_abstraction/src/syscalls.c ****   int file;
+ 516:../generate/os_abstraction/src/syscalls.c **** 
+ 517:../generate/os_abstraction/src/syscalls.c ****   /* The best we can do is try to open the file readonly.  If it exists,
+ 518:../generate/os_abstraction/src/syscalls.c ****      then we can guess a few things about it.  */
+ 519:../generate/os_abstraction/src/syscalls.c ****   if ((file = _open (fname, O_RDONLY)) < 0)
+ 836              		.loc 1 519 0
+ 837 0008 0010A0E3 		mov	r1, #0
+ 838              	.LVL79:
+ 839 000c FEFFFFEB 		bl	_open
+ 840              	.LVL80:
+ 841 0010 005050E2 		subs	r5, r0, #0
+ 842 0014 0B0000BA 		blt	.L64
+ 520:../generate/os_abstraction/src/syscalls.c ****     return -1;
+ 521:../generate/os_abstraction/src/syscalls.c **** 
+ 522:../generate/os_abstraction/src/syscalls.c ****   memset (st, 0, sizeof (* st));
+ 843              		.loc 1 522 0
+ 844 0018 3C20A0E3 		mov	r2, #60
+ 845 001c 0010A0E3 		mov	r1, #0
+ 846 0020 0400A0E1 		mov	r0, r4
+ 847              	.LVL81:
+ 848 0024 FEFFFFEB 		bl	memset
+ 849              	.LVL82:
+ 523:../generate/os_abstraction/src/syscalls.c ****   st->st_mode = S_IFREG | S_IREAD;
+ 850              		.loc 1 523 0
+ 851 0028 813CA0E3 		mov	r3, #33024
+ 852 002c 043084E5 		str	r3, [r4, #4]
+ 524:../generate/os_abstraction/src/syscalls.c ****   st->st_blksize = 1024;
+ 853              		.loc 1 524 0
+ 854 0030 013BA0E3 		mov	r3, #1024
+ 855 0034 2C3084E5 		str	r3, [r4, #44]
+ 525:../generate/os_abstraction/src/syscalls.c ****   _swiclose (file); /* Not interested in the error.  */
+ 856              		.loc 1 525 0
+ 857 0038 0500A0E1 		mov	r0, r5
+ 858 003c FEFFFFEB 		bl	_swiclose
+ 859              	.LVL83:
+ 526:../generate/os_abstraction/src/syscalls.c ****   return 0;
+ 860              		.loc 1 526 0
+ 861 0040 0000A0E3 		mov	r0, #0
+ 862 0044 7080BDE8 		pop	{r4, r5, r6, pc}
+ 863              	.LVL84:
+ 864              	.L64:
+ 520:../generate/os_abstraction/src/syscalls.c **** 
+ 865              		.loc 1 520 0
+ 866 0048 0000E0E3 		mvn	r0, #0
+ 867              	.LVL85:
+ 527:../generate/os_abstraction/src/syscalls.c **** }
+ 868              		.loc 1 527 0
+ 869 004c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 870              		.cfi_endproc
+ 871              	.LFE38:
+ 873              		.section	.text._link,"ax",%progbits
+ 874              		.align	2
+ 875              		.global	_link
+ 876              		.syntax unified
+ 877              		.arm
+ 878              		.fpu neon
+ 880              	_link:
+ 881              	.LFB39:
+ 528:../generate/os_abstraction/src/syscalls.c **** 
+ 529:../generate/os_abstraction/src/syscalls.c **** int
+ 530:../generate/os_abstraction/src/syscalls.c **** _link (void)
+ 531:../generate/os_abstraction/src/syscalls.c **** {
+ 882              		.loc 1 531 0
+ 883              		.cfi_startproc
+ 884              		@ args = 0, pretend = 0, frame = 0
+ 885              		@ frame_needed = 0, uses_anonymous_args = 0
+ 886              		@ link register save eliminated.
+ 532:../generate/os_abstraction/src/syscalls.c ****   return -1;
+ 533:../generate/os_abstraction/src/syscalls.c **** }
+ 887              		.loc 1 533 0
+ 888 0000 0000E0E3 		mvn	r0, #0
+ 889 0004 1EFF2FE1 		bx	lr
+ 890              		.cfi_endproc
+ 891              	.LFE39:
+ 893              		.section	.text._unlink,"ax",%progbits
+ 894              		.align	2
+ 895              		.global	_unlink
+ 896              		.syntax unified
+ 897              		.arm
+ 898              		.fpu neon
+ 900              	_unlink:
+ 901              	.LFB40:
+ 534:../generate/os_abstraction/src/syscalls.c **** 
+ 535:../generate/os_abstraction/src/syscalls.c **** int
+ 536:../generate/os_abstraction/src/syscalls.c **** _unlink (const char *path)
+ 537:../generate/os_abstraction/src/syscalls.c **** {
+ 902              		.loc 1 537 0
+ 903              		.cfi_startproc
+ 904              		@ args = 0, pretend = 0, frame = 0
+ 905              		@ frame_needed = 0, uses_anonymous_args = 0
+ 906              		@ link register save eliminated.
+ 907              	.LVL86:
+ 908              	.LVL87:
+ 538:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 539:../generate/os_abstraction/src/syscalls.c ****   int block[2];
+ 540:../generate/os_abstraction/src/syscalls.c ****   block[0] = path;
+ 541:../generate/os_abstraction/src/syscalls.c ****   block[1] = strlen(path);
+ 542:../generate/os_abstraction/src/syscalls.c ****   return wrap (do_AngelSWI (AngelSWI_Reason_Remove, block)) ? -1 : 0;
+ 543:../generate/os_abstraction/src/syscalls.c **** #endif
+ 544:../generate/os_abstraction/src/syscalls.c **** }
+ 909              		.loc 1 544 0
+ 910 0000 1EFF2FE1 		bx	lr
+ 911              		.cfi_endproc
+ 912              	.LFE40:
+ 914              		.section	.text._raise,"ax",%progbits
+ 915              		.align	2
+ 916              		.global	_raise
+ 917              		.syntax unified
+ 918              		.arm
+ 919              		.fpu neon
+ 921              	_raise:
+ 922              	.LFB41:
+ 545:../generate/os_abstraction/src/syscalls.c **** 
+ 546:../generate/os_abstraction/src/syscalls.c **** void
+ 547:../generate/os_abstraction/src/syscalls.c **** _raise (void)
+ 548:../generate/os_abstraction/src/syscalls.c **** {
+ 923              		.loc 1 548 0
+ 924              		.cfi_startproc
+ 925              		@ args = 0, pretend = 0, frame = 0
+ 926              		@ frame_needed = 0, uses_anonymous_args = 0
+ 927              		@ link register save eliminated.
+ 928 0000 1EFF2FE1 		bx	lr
+ 929              		.cfi_endproc
+ 930              	.LFE41:
+ 932              		.section	.text._gettimeofday,"ax",%progbits
+ 933              		.align	2
+ 934              		.global	_gettimeofday
+ 935              		.syntax unified
+ 936              		.arm
+ 937              		.fpu neon
+ 939              	_gettimeofday:
+ 940              	.LFB42:
+ 549:../generate/os_abstraction/src/syscalls.c ****   return;
+ 550:../generate/os_abstraction/src/syscalls.c **** }
+ 551:../generate/os_abstraction/src/syscalls.c **** 
+ 552:../generate/os_abstraction/src/syscalls.c **** int
+ 553:../generate/os_abstraction/src/syscalls.c **** _gettimeofday (struct timeval * tp, void * tzvp)
+ 554:../generate/os_abstraction/src/syscalls.c **** {
+ 941              		.loc 1 554 0
+ 942              		.cfi_startproc
+ 943              		@ args = 0, pretend = 0, frame = 0
+ 944              		@ frame_needed = 0, uses_anonymous_args = 0
+ 945              		@ link register save eliminated.
+ 946              	.LVL88:
+ 555:../generate/os_abstraction/src/syscalls.c ****   struct timezone *tzp = tzvp;
+ 556:../generate/os_abstraction/src/syscalls.c ****   if (tp)
+ 947              		.loc 1 556 0
+ 948 0000 000050E3 		cmp	r0, #0
+ 557:../generate/os_abstraction/src/syscalls.c ****     {
+ 558:../generate/os_abstraction/src/syscalls.c ****     /* Ask the host for the seconds since the Unix epoch.  */
+ 559:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 560:../generate/os_abstraction/src/syscalls.c ****       tp->tv_sec = do_AngelSWI (AngelSWI_Reason_Time,NULL);
+ 561:../generate/os_abstraction/src/syscalls.c **** #endif
+ 562:../generate/os_abstraction/src/syscalls.c ****       tp->tv_usec = 0;
+ 949              		.loc 1 562 0
+ 950 0004 0030A013 		movne	r3, #0
+ 951 0008 04308015 		strne	r3, [r0, #4]
+ 952              	.L70:
+ 563:../generate/os_abstraction/src/syscalls.c ****     }
+ 564:../generate/os_abstraction/src/syscalls.c **** 
+ 565:../generate/os_abstraction/src/syscalls.c ****   /* Return fixed data for the timezone.  */
+ 566:../generate/os_abstraction/src/syscalls.c ****   if (tzp)
+ 953              		.loc 1 566 0
+ 954 000c 000051E3 		cmp	r1, #0
+ 567:../generate/os_abstraction/src/syscalls.c ****     {
+ 568:../generate/os_abstraction/src/syscalls.c ****       tzp->tz_minuteswest = 0;
+ 955              		.loc 1 568 0
+ 956 0010 0030A013 		movne	r3, #0
+ 957 0014 00308115 		strne	r3, [r1]
+ 569:../generate/os_abstraction/src/syscalls.c ****       tzp->tz_dsttime = 0;
+ 958              		.loc 1 569 0
+ 959 0018 04308115 		strne	r3, [r1, #4]
+ 960              	.L71:
+ 570:../generate/os_abstraction/src/syscalls.c ****     }
+ 571:../generate/os_abstraction/src/syscalls.c **** 
+ 572:../generate/os_abstraction/src/syscalls.c ****   return 0;
+ 573:../generate/os_abstraction/src/syscalls.c **** }
+ 961              		.loc 1 573 0
+ 962 001c 0000A0E3 		mov	r0, #0
+ 963              	.LVL89:
+ 964 0020 1EFF2FE1 		bx	lr
+ 965              		.cfi_endproc
+ 966              	.LFE42:
+ 968              		.section	.text._times,"ax",%progbits
+ 969              		.align	2
+ 970              		.global	_times
+ 971              		.syntax unified
+ 972              		.arm
+ 973              		.fpu neon
+ 975              	_times:
+ 976              	.LFB43:
+ 574:../generate/os_abstraction/src/syscalls.c **** 
+ 575:../generate/os_abstraction/src/syscalls.c **** /* Return a clock that ticks at 100Hz.  */
+ 576:../generate/os_abstraction/src/syscalls.c **** clock_t 
+ 577:../generate/os_abstraction/src/syscalls.c **** _times (struct tms * tp)
+ 578:../generate/os_abstraction/src/syscalls.c **** {
+ 977              		.loc 1 578 0
+ 978              		.cfi_startproc
+ 979              		@ args = 0, pretend = 0, frame = 0
+ 980              		@ frame_needed = 0, uses_anonymous_args = 0
+ 981              		@ link register save eliminated.
+ 982              	.LVL90:
+ 579:../generate/os_abstraction/src/syscalls.c ****   clock_t timeval = 0;
+ 580:../generate/os_abstraction/src/syscalls.c **** 
+ 581:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 582:../generate/os_abstraction/src/syscalls.c ****   timeval = do_AngelSWI (AngelSWI_Reason_Clock,NULL);
+ 583:../generate/os_abstraction/src/syscalls.c **** #endif
+ 584:../generate/os_abstraction/src/syscalls.c **** 
+ 585:../generate/os_abstraction/src/syscalls.c ****   if (tp)
+ 983              		.loc 1 585 0
+ 984 0000 000050E3 		cmp	r0, #0
+ 985 0004 0400000A 		beq	.L73
+ 586:../generate/os_abstraction/src/syscalls.c ****     {
+ 587:../generate/os_abstraction/src/syscalls.c ****       tp->tms_utime  = timeval;	/* user time */
+ 986              		.loc 1 587 0
+ 987 0008 0030A0E3 		mov	r3, #0
+ 988 000c 003080E5 		str	r3, [r0]
+ 588:../generate/os_abstraction/src/syscalls.c ****       tp->tms_stime  = 0;	/* system time */
+ 989              		.loc 1 588 0
+ 990 0010 043080E5 		str	r3, [r0, #4]
+ 589:../generate/os_abstraction/src/syscalls.c ****       tp->tms_cutime = 0;	/* user time, children */
+ 991              		.loc 1 589 0
+ 992 0014 083080E5 		str	r3, [r0, #8]
+ 590:../generate/os_abstraction/src/syscalls.c ****       tp->tms_cstime = 0;	/* system time, children */
+ 993              		.loc 1 590 0
+ 994 0018 0C3080E5 		str	r3, [r0, #12]
+ 995              	.L73:
+ 591:../generate/os_abstraction/src/syscalls.c ****     }
+ 592:../generate/os_abstraction/src/syscalls.c ****   
+ 593:../generate/os_abstraction/src/syscalls.c ****   return timeval;
+ 594:../generate/os_abstraction/src/syscalls.c **** };
+ 996              		.loc 1 594 0
+ 997 001c 0000A0E3 		mov	r0, #0
+ 998              	.LVL91:
+ 999 0020 1EFF2FE1 		bx	lr
+ 1000              		.cfi_endproc
+ 1001              	.LFE43:
+ 1003              		.section	.text._isatty,"ax",%progbits
+ 1004              		.align	2
+ 1005              		.global	_isatty
+ 1006              		.syntax unified
+ 1007              		.arm
+ 1008              		.fpu neon
+ 1010              	_isatty:
+ 1011              	.LFB44:
+ 595:../generate/os_abstraction/src/syscalls.c **** 
+ 596:../generate/os_abstraction/src/syscalls.c **** 
+ 597:../generate/os_abstraction/src/syscalls.c **** int
+ 598:../generate/os_abstraction/src/syscalls.c **** _isatty (int fd)
+ 599:../generate/os_abstraction/src/syscalls.c **** {
+ 1012              		.loc 1 599 0
+ 1013              		.cfi_startproc
+ 1014              		@ args = 0, pretend = 0, frame = 0
+ 1015              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1016              		@ link register save eliminated.
+ 1017              	.LVL92:
+ 600:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 601:../generate/os_abstraction/src/syscalls.c ****   int fh = remap_handle (fd);
+ 602:../generate/os_abstraction/src/syscalls.c ****   return wrap (do_AngelSWI (AngelSWI_Reason_IsTTY, &fh));
+ 603:../generate/os_abstraction/src/syscalls.c **** #else
+ 604:../generate/os_abstraction/src/syscalls.c ****   if ((fd == STDIN_FILENO) || (fd == STDOUT_FILENO))
+ 1018              		.loc 1 604 0
+ 1019 0000 010050E3 		cmp	r0, #1
+ 1020 0004 0100009A 		bls	.L77
+ 605:../generate/os_abstraction/src/syscalls.c ****   {
+ 606:../generate/os_abstraction/src/syscalls.c ****     return 1;
+ 607:../generate/os_abstraction/src/syscalls.c ****   }
+ 608:../generate/os_abstraction/src/syscalls.c ****   else
+ 609:../generate/os_abstraction/src/syscalls.c ****   {
+ 610:../generate/os_abstraction/src/syscalls.c ****     return 0;
+ 1021              		.loc 1 610 0
+ 1022 0008 0000A0E3 		mov	r0, #0
+ 1023              	.LVL93:
+ 611:../generate/os_abstraction/src/syscalls.c ****   }
+ 612:../generate/os_abstraction/src/syscalls.c **** #endif
+ 613:../generate/os_abstraction/src/syscalls.c **** }
+ 1024              		.loc 1 613 0
+ 1025 000c 1EFF2FE1 		bx	lr
+ 1026              	.LVL94:
+ 1027              	.L77:
+ 606:../generate/os_abstraction/src/syscalls.c ****   }
+ 1028              		.loc 1 606 0
+ 1029 0010 0100A0E3 		mov	r0, #1
+ 1030              	.LVL95:
+ 1031 0014 1EFF2FE1 		bx	lr
+ 1032              		.cfi_endproc
+ 1033              	.LFE44:
+ 1035              		.section	.text._system,"ax",%progbits
+ 1036              		.align	2
+ 1037              		.global	_system
+ 1038              		.syntax unified
+ 1039              		.arm
+ 1040              		.fpu neon
+ 1042              	_system:
+ 1043              	.LFB45:
+ 614:../generate/os_abstraction/src/syscalls.c **** 
+ 615:../generate/os_abstraction/src/syscalls.c **** int
+ 616:../generate/os_abstraction/src/syscalls.c **** _system (const char *s)
+ 617:../generate/os_abstraction/src/syscalls.c **** {
+ 1044              		.loc 1 617 0
+ 1045              		.cfi_startproc
+ 1046              		@ args = 0, pretend = 0, frame = 0
+ 1047              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1048              		@ link register save eliminated.
+ 1049              	.LVL96:
+ 1050              	.LVL97:
+ 618:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 619:../generate/os_abstraction/src/syscalls.c ****   int block[2];
+ 620:../generate/os_abstraction/src/syscalls.c ****   int e;
+ 621:../generate/os_abstraction/src/syscalls.c **** 
+ 622:../generate/os_abstraction/src/syscalls.c ****   /* Hmmm.  The ARM debug interface specification doesn't say whether
+ 623:../generate/os_abstraction/src/syscalls.c ****      SYS_SYSTEM does the right thing with a null argument, or assign any
+ 624:../generate/os_abstraction/src/syscalls.c ****      meaning to its return value.  Try to do something reasonable....  */
+ 625:../generate/os_abstraction/src/syscalls.c ****   if (!s)
+ 626:../generate/os_abstraction/src/syscalls.c ****     return 1;  /* maybe there is a shell available? we can hope. :-P */
+ 627:../generate/os_abstraction/src/syscalls.c ****   block[0] = s;
+ 628:../generate/os_abstraction/src/syscalls.c ****   block[1] = strlen (s);
+ 629:../generate/os_abstraction/src/syscalls.c ****   e = wrap (do_AngelSWI (AngelSWI_Reason_System, block));
+ 630:../generate/os_abstraction/src/syscalls.c ****   if ((e >= 0) && (e < 256))
+ 631:../generate/os_abstraction/src/syscalls.c ****     {
+ 632:../generate/os_abstraction/src/syscalls.c ****       /* We have to convert e, an exit status to the encoded status of
+ 633:../generate/os_abstraction/src/syscalls.c ****          the command.  To avoid hard coding the exit status, we simply
+ 634:../generate/os_abstraction/src/syscalls.c **** 	 loop until we find the right position.  */
+ 635:../generate/os_abstraction/src/syscalls.c ****       int exit_code;
+ 636:../generate/os_abstraction/src/syscalls.c **** 
+ 637:../generate/os_abstraction/src/syscalls.c ****       for (exit_code = e; e && WEXITSTATUS (e) != exit_code; e <<= 1)
+ 638:../generate/os_abstraction/src/syscalls.c **** 	continue;
+ 639:../generate/os_abstraction/src/syscalls.c ****     }
+ 640:../generate/os_abstraction/src/syscalls.c ****   return e;
+ 641:../generate/os_abstraction/src/syscalls.c **** #endif
+ 642:../generate/os_abstraction/src/syscalls.c **** }
+ 1051              		.loc 1 642 0
+ 1052 0000 1EFF2FE1 		bx	lr
+ 1053              		.cfi_endproc
+ 1054              	.LFE45:
+ 1056              		.section	.text._rename,"ax",%progbits
+ 1057              		.align	2
+ 1058              		.global	_rename
+ 1059              		.syntax unified
+ 1060              		.arm
+ 1061              		.fpu neon
+ 1063              	_rename:
+ 1064              	.LFB46:
+ 643:../generate/os_abstraction/src/syscalls.c **** 
+ 644:../generate/os_abstraction/src/syscalls.c **** int
+ 645:../generate/os_abstraction/src/syscalls.c **** _rename (const char * oldpath, const char * newpath)
+ 646:../generate/os_abstraction/src/syscalls.c **** {
+ 1065              		.loc 1 646 0
+ 1066              		.cfi_startproc
+ 1067              		@ args = 0, pretend = 0, frame = 0
+ 1068              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1069              		@ link register save eliminated.
+ 1070              	.LVL98:
+ 1071              	.LVL99:
+ 647:../generate/os_abstraction/src/syscalls.c **** #if R_OS_ENABLE_VIRTUAL_CONSOLE
+ 648:../generate/os_abstraction/src/syscalls.c ****   int block[4];
+ 649:../generate/os_abstraction/src/syscalls.c ****   block[0] = oldpath;
+ 650:../generate/os_abstraction/src/syscalls.c ****   block[1] = strlen(oldpath);
+ 651:../generate/os_abstraction/src/syscalls.c ****   block[2] = newpath;
+ 652:../generate/os_abstraction/src/syscalls.c ****   block[3] = strlen(newpath);
+ 653:../generate/os_abstraction/src/syscalls.c ****   return wrap (do_AngelSWI (AngelSWI_Reason_Rename, block)) ? -1 : 0;
+ 654:../generate/os_abstraction/src/syscalls.c **** #endif
+ 655:../generate/os_abstraction/src/syscalls.c **** }
+ 1072              		.loc 1 655 0
+ 1073 0000 1EFF2FE1 		bx	lr
+ 1074              		.cfi_endproc
+ 1075              	.LFE46:
+ 1077              		.section	.bss.heap_end.8341,"aw",%nobits
+ 1078              		.align	2
+ 1079              		.set	.LANCHOR3,. + 0
+ 1082              	heap_end.8341:
+ 1083 0000 00000000 		.space	4
+ 1084              		.section	.bss.monitor_stdin,"aw",%nobits
+ 1085              		.align	2
+ 1086              		.set	.LANCHOR1,. + 0
+ 1089              	monitor_stdin:
+ 1090 0000 00000000 		.space	4
+ 1091              		.section	.bss.monitor_stdout,"aw",%nobits
+ 1092              		.align	2
+ 1093              		.set	.LANCHOR2,. + 0
+ 1096              	monitor_stdout:
+ 1097 0000 00000000 		.space	4
+ 1098              		.section	.bss.openfiles,"aw",%nobits
+ 1099              		.align	2
+ 1100              		.set	.LANCHOR0,. + 0
+ 1103              	openfiles:
+ 1104 0000 00000000 		.space	160
+ 1104      00000000 
+ 1104      00000000 
+ 1104      00000000 
+ 1104      00000000 
+ 1105              		.section	.rodata.initialise_monitor_handles.str1.4,"aMS",%progbits,1
+ 1106              		.align	2
+ 1107              	.LC0:
+ 1108 0000 5C5C2E5C 		.ascii	"\\\\.\\stdin\000"
+ 1108      73746469 
+ 1108      6E00
+ 1109 000a 0000     		.space	2
+ 1110              	.LC1:
+ 1111 000c 5C5C2E5C 		.ascii	"\\\\.\\stdout\000"
+ 1111      7374646F 
+ 1111      757400
+ 1112 0017 00       		.space	1
+ 1113              	.LC2:
+ 1114 0018 5C5C2E5C 		.ascii	"\\\\.\\stderr\000"
+ 1114      73746465 
+ 1114      727200
+ 1115              		.text
+ 1116              	.Letext0:
+ 1117              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1118              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1119              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1120              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 1121              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1122              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1123              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1124              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1125              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1126              		.file 11 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1127              		.file 12 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1128              		.file 13 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1129              		.file 14 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1130              		.file 15 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1131              		.file 16 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1132              		.file 17 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 1133              		.file 18 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 1134              		.file 19 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+ 1135              		.file 20 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1136              		.file 21 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+DEFINED SYMBOLS
+                            *ABS*:00000000 syscalls.c
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:17     .text.findslot:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:22     .text.findslot:00000000 findslot
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1100   .bss.openfiles:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:56     .text.get_errno:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:61     .text.get_errno:00000000 get_errno
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:74     .text.error:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:79     .text.error:00000000 error
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:107    .text.wrap:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:112    .text.wrap:00000000 wrap
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:136    .text.remap_handle:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:141    .text.remap_handle:00000000 remap_handle
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1086   .bss.monitor_stdin:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1093   .bss.monitor_stdout:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:203    .text.initialise_monitor_handles:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:209    .text.initialise_monitor_handles:00000000 initialise_monitor_handles
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1107   .rodata.initialise_monitor_handles.str1.4:00000000 .LC0
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1110   .rodata.initialise_monitor_handles.str1.4:0000000c .LC1
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1113   .rodata.initialise_monitor_handles.str1.4:00000018 .LC2
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:294    .text._swiread:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:300    .text._swiread:00000000 _swiread
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:315    .text._read:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:321    .text._read:00000000 _read
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:344    .text._swilseek:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:350    .text._swilseek:00000000 _swilseek
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:413    .text._lseek:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:419    .text._lseek:00000000 _lseek
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:441    .text._swiwrite:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:447    .text._swiwrite:00000000 _swiwrite
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:462    .text._write:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:468    .text._write:00000000 _write
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:491    .text._swiopen:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:497    .text._swiopen:00000000 _swiopen
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:557    .text._open:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:563    .text._open:00000000 _open
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:598    .text._swiclose:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:604    .text._swiclose:00000000 _swiclose
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:638    .text._close:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:644    .text._close:00000000 _close
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:666    .text._kill:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:672    .text._kill:00000000 _kill
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:687    .text._exit:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:693    .text._exit:00000000 _exit
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:708    .text._getpid:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:714    .text._getpid:00000000 _getpid
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:730    .text._sbrk:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:736    .text._sbrk:00000000 _sbrk
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1079   .bss.heap_end.8341:00000000 .LANCHOR3
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:777    .text._fstat:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:783    .text._fstat:00000000 _fstat
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:816    .text._stat:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:822    .text._stat:00000000 _stat
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:874    .text._link:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:880    .text._link:00000000 _link
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:894    .text._unlink:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:900    .text._unlink:00000000 _unlink
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:915    .text._raise:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:921    .text._raise:00000000 _raise
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:933    .text._gettimeofday:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:939    .text._gettimeofday:00000000 _gettimeofday
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:969    .text._times:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:975    .text._times:00000000 _times
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1004   .text._isatty:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1010   .text._isatty:00000000 _isatty
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1036   .text._system:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1042   .text._system:00000000 _system
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1057   .text._rename:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1063   .text._rename:00000000 _rename
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1078   .bss.heap_end.8341:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1082   .bss.heap_end.8341:00000000 heap_end.8341
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1085   .bss.monitor_stdin:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1089   .bss.monitor_stdin:00000000 monitor_stdin
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1092   .bss.monitor_stdout:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1096   .bss.monitor_stdout:00000000 monitor_stdout
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1099   .bss.openfiles:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1103   .bss.openfiles:00000000 openfiles
+C:\Users\rj7356s\AppData\Local\Temp\ccT79ycm.s:1106   .rodata.initialise_monitor_handles.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.30.bbece7fa40993a78092dcc5805132560
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.time.h.14.849270cc7997ccc4e05edd146e568a9f
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4.time.h.2.4581ce0ffb6627cfc02162c94bf846c9
+                           .group:00000000 wm4.time.h.25.0e6a0fdbc9955f5707ed54246ed2e089
+                           .group:00000000 wm4.time.h.162.d096f2f5887c52e271c4dc33d795dc64
+                           .group:00000000 wm4.stat.h.71.d65ac61ff88c651e198008cfb38bda9c
+                           .group:00000000 wm4._default_fcntl.h.6.b13d56891b95175b639f824a0fd1ed77
+                           .group:00000000 wm4.fcntl.h.9.9336f33d7f5028f694c75e6e224e0cf7
+                           .group:00000000 wm4.stdio.h.27.3fc80220048df77954e38daec3bb9670
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.stdio.h.47.1f5845210bb9053bbca9ed76fc4018da
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.8188691c2279eac7a223caa50f6694b9
+                           .group:00000000 wm4.time.h.38.20beed93add9f31905d3a626e4660be9
+                           .group:00000000 wm4.errno.h.2.ba016d646105af6cad23be83630b6a3f
+                           .group:00000000 wm4.errno.h.9.1ecd7b1049497a0ab61da0f6cbd4b0c6
+                           .group:00000000 wm4.reent.h.91.b3ea049ebc5486622b61409b78486f84
+                           .group:00000000 wm4.signal.h.4.eb405a82fedf74f85948b2185285e5fe
+                           .group:00000000 wm4.signal.h.18.14c8d0c03fc1e06775633fad7399cfc7
+                           .group:00000000 wm4.unistd.h.2.39165d5b7784d1815ef4b0c4be6df560
+                           .group:00000000 wm4.unistd.h.156.614f0202926a9fae83688cfc56e25f59
+                           .group:00000000 wm4.wait.h.2.c6881838e675605d6b0b25538f5f97e0
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.swi.h.5.3071fe36168f050379549cb8fc05f162
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.r_devlink_wrapper.h.72.ad1de4c851513efa3aed0532ebca7ca2
+
+UNDEFINED SYMBOLS
+__errno
+_impure_ptr
+__sinit
+low_open
+low_read
+low_write
+low_close
+__heap_start
+memset

@@ -1,0 +1,850 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_gpio_drv_api.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.gpio_get_version,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	gpio_get_version:
+  23              	.LFB4:
+  24              		.file 1 "../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c"
+   1:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /*******************************************************************************
+   2:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * DISCLAIMER
+   3:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * This software is supplied by Renesas Electronics Corporation and is only
+   4:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * intended for use with Renesas products. No other uses are authorized. This
+   5:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * software is owned by Renesas Electronics Corporation and is protected under
+   6:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * all applicable laws, including copyright laws.
+   7:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   8:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+   9:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  10:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.
+  11:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS
+  12:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE
+  13:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR
+  14:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE
+  15:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  16:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * Renesas reserves the right, without notice, to make changes to this software
+  17:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * and to discontinue the availability of this software. By using this software,
+  18:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * you agree to the additional terms and conditions found by accessing the
+  19:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * following link:
+  20:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * http://www.renesas.com/disclaimer
+  21:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * Copyright (C) 2012 - 2014 Renesas Electronics Corporation. All rights reserved.
+  22:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  *******************************************************************************/
+  23:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /*******************************************************************************
+  24:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * File Name   : r_gpio_drv_api.c
+  25:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * Description : GPIO high layer driver
+  26:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  *******************************************************************************/
+  27:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  28:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+  29:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Includes   <System Includes> , "Project Includes"
+  30:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  31:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** #include "r_gpio_drv_link.h"
+  32:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** #include "r_gpio_drv_api.h"
+  33:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  34:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+  35:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Typedef definitions
+  36:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  37:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  38:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+  39:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Macro definitions
+  40:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  41:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  42:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+  43:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Enumerated Types
+  44:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  45:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  46:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+  47:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Typedefs
+  48:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  49:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** #define NOT_USED(p)                     ((void)(p))
+  50:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  51:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /*****************************************************************************
+  52:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Function Prototypes
+  53:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  54:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static int_t gpio_open (st_stream_ptr_t stream_ptr);
+  55:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static void gpio_close (st_stream_ptr_t stream_ptr);
+  56:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static int_t gpio_control (st_stream_ptr_t stream_ptr, uint32_t ctrl_code, void *ctrl_ptr);
+  57:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static int_t gpio_get_version (st_stream_ptr_t stream_ptr, st_ver_info_t *pVerInfo);
+  58:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  59:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /*****************************************************************************
+  60:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Constant Data
+  61:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  62:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  63:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+  64:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Private global variables and functions
+  65:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  66:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /*! Version Information */
+  67:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static const st_drv_info_t gs_hld_info =
+  68:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** {
+  69:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     {
+  70:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         ((GPIO_HLD_VERSION_MAJOR << 16) + GPIO_HLD_VERSION_MINOR)
+  71:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     },
+  72:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     GPIO_HLD_BUILD_NUM,
+  73:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     GPIO_HLD_DRV_NAME
+  74:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** };
+  75:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  76:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /* Define the driver function table for this implementation */
+  77:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /* GSCE Warning (global variable 'g_gpio_Driver' not declared static [9.3a])
+  78:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * can be safely ignored */
+  79:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** const st_r_driver_t g_gpio_driver =
+  80:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** {
+  81:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* st_r_driver_t p_device */
+  82:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     "GPIO Driver",
+  83:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     gpio_open,
+  84:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     gpio_close,
+  85:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     no_dev_read,
+  86:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     no_dev_write,
+  87:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     gpio_control,
+  88:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     gpio_get_version
+  89:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** };
+  90:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+  91:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+  92:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Function Name: gpio_open
+  93:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Description:   Function to open the GPIO device driver
+  94:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Arguments:     IN  stream_ptr - Pointer to the file stream
+  95:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Return value:  DRV_SUCCESS : Success when attempting to initialise GPIO
+  96:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  *              DRV_ERROR   : Failure to initialise GPIO
+  97:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+  98:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static int_t gpio_open (st_stream_ptr_t stream_ptr)
+  99:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** {
+ 100:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* initialise GPIO */
+ 101:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     return (R_GPIO_HWInitialise((int16_t) stream_ptr->file_number));
+ 102:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** }
+ 103:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+ 104:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  End of function  gpio_open
+ 105:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+ 106:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 107:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+ 108:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Function Name: gpio_close
+ 109:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Description:   Function to close the GPIO driver. All open devices
+ 110:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  connected to the led are closed.
+ 111:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Arguments:     IN  stream_ptr - Pointer to the file stream
+ 112:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Return value:  none
+ 113:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+ 114:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static void gpio_close (st_stream_ptr_t stream_ptr)
+ 115:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** {
+ 116:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* mark all pins allocated by this handle as not allocated */
+ 117:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     R_GPIO_DeallocateAllPins((int16_t) stream_ptr->file_number);
+ 118:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** }
+ 119:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+ 120:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  End of function  gpio_close
+ 121:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+ 122:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 123:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+ 124:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Function Name: gpio_control
+ 125:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Description:   Function to handle custom controls for the GPIO device
+ 126:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Arguments:     IN  stream_ptr - Pointer to the file stream
+ 127:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  IN  ctrl_code - The custom control code
+ 128:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  IN  ctrl_ptr - Pointer to the custom control structure
+ 129:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  Return value:  0 for success -1 on error
+ 130:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+ 131:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static int_t gpio_control (st_stream_ptr_t stream_ptr, uint32_t ctrl_code, void *ctrl_ptr)
+ 132:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** {
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     int_t retval = DRV_ERROR;
+ 134:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 135:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_pin_list_t *p_pin_list;
+ 136:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_pin_init_table_t *p_pin_table;
+ 137:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_pin_rw_t *p_pin_rw;
+ 138:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_port_rw_t *p_port_rw;
+ 139:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 140:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* control code is of type e_ctrl_code_gpio_t */
+ 141:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     switch ((e_ctrl_code_gpio_t)ctrl_code)
+ 142:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     {
+ 143:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_SET_CONFIGURATION: /*!< Set pin configuration function */
+ 144:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 145:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to configuration struct type */
+ 146:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_config_rw = (st_r_drv_gpio_config_t *) ctrl_ptr;
+ 147:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_config_rw->err = R_GPIO_PinSetConfiguration((int16_t) stream_ptr->file_number, &p_con
+ 148:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_config_rw->err)
+ 149:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 150:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 151:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 152:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 153:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 154:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 155:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_GET_CONFIGURATION: /*!< Get pin configuration function */
+ 156:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 157:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to configuration struct type */
+ 158:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_config_rw = (st_r_drv_gpio_config_t *) ctrl_ptr;
+ 159:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_config_rw->err = R_GPIO_PinGetConfiguration(&p_config_rw->config);
+ 160:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_config_rw->err)
+ 161:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 162:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 163:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 164:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 165:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 166:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 167:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_INIT_BY_PIN_LIST: /*!< Set pin configuration from a pin list function */
+ 168:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 169:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to pin list struct type */
+ 170:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_list = (st_r_drv_gpio_pin_list_t *) ctrl_ptr;
+ 171:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_list->err = R_GPIO_InitByPinList((int16_t) stream_ptr->file_number, p_pin_list->p
+ 172:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_list->err)
+ 173:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 174:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 175:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 176:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 177:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 178:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 179:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_CLEAR_BY_PIN_LIST: /*!< Resets (deallocates) pins from a pin list function */
+ 180:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 181:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to pin list struct type */
+ 182:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_list = (st_r_drv_gpio_pin_list_t *) ctrl_ptr;
+ 183:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_list->err = R_GPIO_ClearByPinList(p_pin_list->p_pin_list, p_pin_list->count);
+ 184:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_list->err)
+ 185:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 186:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 187:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 188:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 189:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 190:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 191:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_INIT_BY_TABLE: /*!< Set pin configuration from a pin table function */
+ 192:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 193:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to table struct type */
+ 194:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_table = (st_r_drv_gpio_pin_init_table_t *) ctrl_ptr;
+ 195:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_table->err = R_GPIO_InitByTable((int16_t) stream_ptr->file_number, p_pin_table->p
+ 196:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_table->err)
+ 197:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 198:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 199:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 200:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 201:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 202:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 203:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_CLEAR_BY_TABLE: /*!< Resets (deallocates) pin configuration from a pin table 
+ 204:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 205:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to table struct type */
+ 206:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_table = (st_r_drv_gpio_pin_init_table_t *) ctrl_ptr;
+ 207:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_table->err = R_GPIO_ClearByTable(p_pin_table->p_config_table, p_pin_table->count)
+ 208:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_table->err)
+ 209:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 210:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 211:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 212:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 213:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 214:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 215:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_PORT_WRITE: /*!< Write port value function */
+ 216:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 217:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to port read/write struct type */
+ 218:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_port_rw = (st_r_drv_gpio_port_rw_t *) ctrl_ptr;
+ 219:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_port_rw->err = R_GPIO_PortWrite(p_port_rw->port, p_port_rw->value);
+ 220:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_port_rw->err)
+ 221:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 222:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 223:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 224:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 225:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 226:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 227:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_PORT_READ: /*!< Read port value function */
+ 228:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 229:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to port read/write struct type */
+ 230:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_port_rw = (st_r_drv_gpio_port_rw_t *) ctrl_ptr;
+ 231:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_port_rw->err = R_GPIO_PortRead(p_port_rw->port, &p_port_rw->value);
+ 232:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_port_rw->err)
+ 233:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 234:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 235:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 236:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 237:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 238:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 239:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_PIN_WRITE: /*!< Write pin level function */
+ 240:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 241:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to port read/write struct type */
+ 242:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_rw = (st_r_drv_gpio_pin_rw_t *) ctrl_ptr;
+ 243:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_rw->err = R_GPIO_PinWrite(p_pin_rw->pin, p_pin_rw->level);
+ 244:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_rw->err)
+ 245:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 246:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 247:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 248:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 249:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 250:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 251:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         case CTL_GPIO_PIN_READ: /*!< Read pin level function */
+ 252:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 253:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             /* cast pointer to port read/write struct type */
+ 254:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_rw = (st_r_drv_gpio_pin_rw_t *) ctrl_ptr;
+ 255:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             p_pin_rw->err = R_GPIO_PinRead(p_pin_rw->pin, &p_pin_rw->level);
+ 256:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_rw->err)
+ 257:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 258:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****                 retval = DRV_SUCCESS;
+ 259:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 260:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 261:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 262:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 263:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         default:
+ 264:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         {
+ 265:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             retval = DRV_ERROR;
+ 266:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 267:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****         }
+ 268:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     }
+ 269:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 270:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     return (retval);
+ 271:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** }
+ 272:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+ 273:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  End of function  gpio_control
+ 274:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+ 275:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 276:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /*******************************************************************************
+ 277:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * Function Name: gpio_get_version
+ 278:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * Description  : Provides build information even if driver fails to open
+ 279:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  *                version information is updated by developer
+ 280:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * Arguments    : none
+ 281:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  * Return Value : DRV_SUCCESS for success DRV_ERROR on error
+ 282:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****  ******************************************************************************/
+ 283:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** static int_t gpio_get_version (st_stream_ptr_t stream_ptr, st_ver_info_t *pVerInfo)
+ 284:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** {
+  25              		.loc 1 284 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              	.LVL0:
+  30 0000 10402DE9 		push	{r4, lr}
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 4, -8
+  33              		.cfi_offset 14, -4
+ 285:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* get version */
+ 286:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     NOT_USED(stream_ptr);
+ 287:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 288:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     pVerInfo->hld.version.sub.major = gs_hld_info.version.sub.major;
+  34              		.loc 1 288 0
+  35 0004 0130A0E3 		mov	r3, #1
+  36 0008 B230C1E1 		strh	r3, [r1, #2]	@ movhi
+ 289:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     pVerInfo->hld.version.sub.minor = gs_hld_info.version.sub.minor;
+  37              		.loc 1 289 0
+  38 000c 0430A0E3 		mov	r3, #4
+  39 0010 B030C1E1 		strh	r3, [r1]	@ movhi
+ 290:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     pVerInfo->hld.build = gs_hld_info.build;
+  40              		.loc 1 290 0
+  41 0014 0030A0E3 		mov	r3, #0
+  42 0018 043081E5 		str	r3, [r1, #4]
+ 291:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     pVerInfo->hld.p_szdriver_name = gs_hld_info.p_szdriver_name;
+  43              		.loc 1 291 0
+  44 001c 003000E3 		movw	r3, #:lower16:.LC0
+  45 0020 003040E3 		movt	r3, #:upper16:.LC0
+  46 0024 083081E5 		str	r3, [r1, #8]
+ 292:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** 
+ 293:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* Obtain version information from Low layer Driver */
+ 294:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     return R_GPIO_GetVersion(pVerInfo);
+  47              		.loc 1 294 0
+  48 0028 0100A0E1 		mov	r0, r1
+  49              	.LVL1:
+  50 002c FEFFFFEB 		bl	R_GPIO_GetVersion
+  51              	.LVL2:
+ 295:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** }
+  52              		.loc 1 295 0
+  53 0030 1080BDE8 		pop	{r4, pc}
+  54              		.cfi_endproc
+  55              	.LFE4:
+  57              		.section	.text.gpio_control,"ax",%progbits
+  58              		.align	2
+  59              		.syntax unified
+  60              		.arm
+  61              		.fpu neon
+  63              	gpio_control:
+  64              	.LFB3:
+ 132:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     int_t retval = DRV_ERROR;
+  65              		.loc 1 132 0
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 0, uses_anonymous_args = 0
+  69              	.LVL3:
+  70 0000 10402DE9 		push	{r4, lr}
+  71              		.cfi_def_cfa_offset 8
+  72              		.cfi_offset 4, -8
+  73              		.cfi_offset 14, -4
+  74 0004 0240A0E1 		mov	r4, r2
+  75              	.LVL4:
+ 141:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     {
+  76              		.loc 1 141 0
+  77 0008 7110EFE6 		uxtb	r1, r1
+  78              	.LVL5:
+  79 000c 090051E3 		cmp	r1, #9
+  80 0010 01F19F97 		ldrls	pc, [pc, r1, asl #2]
+  81 0014 6E0000EA 		b	.L16
+  82              	.L6:
+  83 0018 40000000 		.word	.L5
+  84 001c 68000000 		.word	.L7
+  85 0020 8C000000 		.word	.L8
+  86 0024 B8000000 		.word	.L9
+  87 0028 E0000000 		.word	.L10
+  88 002c 0C010000 		.word	.L11
+  89 0030 34010000 		.word	.L12
+  90 0034 5C010000 		.word	.L13
+  91 0038 84010000 		.word	.L14
+  92 003c AC010000 		.word	.L15
+  93              	.L5:
+  94              	.LVL6:
+ 147:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_config_rw->err)
+  95              		.loc 1 147 0
+  96 0040 0210A0E1 		mov	r1, r2
+  97 0044 F001D0E1 		ldrsh	r0, [r0, #16]
+  98              	.LVL7:
+  99 0048 FEFFFFEB 		bl	R_GPIO_PinSetConfiguration
+ 100              	.LVL8:
+ 101 004c 0600C4E5 		strb	r0, [r4, #6]
+ 148:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 102              		.loc 1 148 0
+ 103 0050 000050E3 		cmp	r0, #0
+ 104 0054 0100001A 		bne	.L28
+ 150:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 105              		.loc 1 150 0
+ 106 0058 0000A0E3 		mov	r0, #0
+ 107 005c 1080BDE8 		pop	{r4, pc}
+ 108              	.L28:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 109              		.loc 1 133 0
+ 110 0060 0000E0E3 		mvn	r0, #0
+ 111 0064 1080BDE8 		pop	{r4, pc}
+ 112              	.LVL9:
+ 113              	.L7:
+ 159:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_config_rw->err)
+ 114              		.loc 1 159 0
+ 115 0068 0200A0E1 		mov	r0, r2
+ 116              	.LVL10:
+ 117 006c FEFFFFEB 		bl	R_GPIO_PinGetConfiguration
+ 118              	.LVL11:
+ 119 0070 0600C4E5 		strb	r0, [r4, #6]
+ 160:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 120              		.loc 1 160 0
+ 121 0074 000050E3 		cmp	r0, #0
+ 122 0078 0100001A 		bne	.L29
+ 162:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 123              		.loc 1 162 0
+ 124 007c 0000A0E3 		mov	r0, #0
+ 125 0080 1080BDE8 		pop	{r4, pc}
+ 126              	.L29:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 127              		.loc 1 133 0
+ 128 0084 0000E0E3 		mvn	r0, #0
+ 129 0088 1080BDE8 		pop	{r4, pc}
+ 130              	.LVL12:
+ 131              	.L8:
+ 171:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_list->err)
+ 132              		.loc 1 171 0
+ 133 008c 042092E5 		ldr	r2, [r2, #4]
+ 134              	.LVL13:
+ 135 0090 001094E5 		ldr	r1, [r4]
+ 136 0094 F001D0E1 		ldrsh	r0, [r0, #16]
+ 137              	.LVL14:
+ 138 0098 FEFFFFEB 		bl	R_GPIO_InitByPinList
+ 139              	.LVL15:
+ 140 009c 0800C4E5 		strb	r0, [r4, #8]
+ 172:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 141              		.loc 1 172 0
+ 142 00a0 000050E3 		cmp	r0, #0
+ 143 00a4 0100001A 		bne	.L30
+ 174:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 144              		.loc 1 174 0
+ 145 00a8 0000A0E3 		mov	r0, #0
+ 146 00ac 1080BDE8 		pop	{r4, pc}
+ 147              	.L30:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 148              		.loc 1 133 0
+ 149 00b0 0000E0E3 		mvn	r0, #0
+ 150 00b4 1080BDE8 		pop	{r4, pc}
+ 151              	.LVL16:
+ 152              	.L9:
+ 183:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_list->err)
+ 153              		.loc 1 183 0
+ 154 00b8 041092E5 		ldr	r1, [r2, #4]
+ 155 00bc 000092E5 		ldr	r0, [r2]
+ 156              	.LVL17:
+ 157 00c0 FEFFFFEB 		bl	R_GPIO_ClearByPinList
+ 158              	.LVL18:
+ 159 00c4 0800C4E5 		strb	r0, [r4, #8]
+ 184:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 160              		.loc 1 184 0
+ 161 00c8 000050E3 		cmp	r0, #0
+ 162 00cc 0100001A 		bne	.L31
+ 186:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 163              		.loc 1 186 0
+ 164 00d0 0000A0E3 		mov	r0, #0
+ 165 00d4 1080BDE8 		pop	{r4, pc}
+ 166              	.L31:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 167              		.loc 1 133 0
+ 168 00d8 0000E0E3 		mvn	r0, #0
+ 169 00dc 1080BDE8 		pop	{r4, pc}
+ 170              	.LVL19:
+ 171              	.L10:
+ 195:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_table->err)
+ 172              		.loc 1 195 0
+ 173 00e0 042092E5 		ldr	r2, [r2, #4]
+ 174              	.LVL20:
+ 175 00e4 001094E5 		ldr	r1, [r4]
+ 176 00e8 F001D0E1 		ldrsh	r0, [r0, #16]
+ 177              	.LVL21:
+ 178 00ec FEFFFFEB 		bl	R_GPIO_InitByTable
+ 179              	.LVL22:
+ 180 00f0 0800C4E5 		strb	r0, [r4, #8]
+ 196:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 181              		.loc 1 196 0
+ 182 00f4 000050E3 		cmp	r0, #0
+ 183 00f8 0100001A 		bne	.L32
+ 198:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 184              		.loc 1 198 0
+ 185 00fc 0000A0E3 		mov	r0, #0
+ 186 0100 1080BDE8 		pop	{r4, pc}
+ 187              	.L32:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 188              		.loc 1 133 0
+ 189 0104 0000E0E3 		mvn	r0, #0
+ 190 0108 1080BDE8 		pop	{r4, pc}
+ 191              	.LVL23:
+ 192              	.L11:
+ 207:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_table->err)
+ 193              		.loc 1 207 0
+ 194 010c 041092E5 		ldr	r1, [r2, #4]
+ 195 0110 000092E5 		ldr	r0, [r2]
+ 196              	.LVL24:
+ 197 0114 FEFFFFEB 		bl	R_GPIO_ClearByTable
+ 198              	.LVL25:
+ 199 0118 0800C4E5 		strb	r0, [r4, #8]
+ 208:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 200              		.loc 1 208 0
+ 201 011c 000050E3 		cmp	r0, #0
+ 202 0120 0100001A 		bne	.L33
+ 210:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 203              		.loc 1 210 0
+ 204 0124 0000A0E3 		mov	r0, #0
+ 205 0128 1080BDE8 		pop	{r4, pc}
+ 206              	.L33:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 207              		.loc 1 133 0
+ 208 012c 0000E0E3 		mvn	r0, #0
+ 209 0130 1080BDE8 		pop	{r4, pc}
+ 210              	.LVL26:
+ 211              	.L12:
+ 219:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_port_rw->err)
+ 212              		.loc 1 219 0
+ 213 0134 0210D2E5 		ldrb	r1, [r2, #2]	@ zero_extendqisi2
+ 214 0138 B000D2E1 		ldrh	r0, [r2]
+ 215              	.LVL27:
+ 216 013c FEFFFFEB 		bl	R_GPIO_PortWrite
+ 217              	.LVL28:
+ 218 0140 0300C4E5 		strb	r0, [r4, #3]
+ 220:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 219              		.loc 1 220 0
+ 220 0144 000050E3 		cmp	r0, #0
+ 221 0148 0100001A 		bne	.L34
+ 222:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 222              		.loc 1 222 0
+ 223 014c 0000A0E3 		mov	r0, #0
+ 224 0150 1080BDE8 		pop	{r4, pc}
+ 225              	.L34:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 226              		.loc 1 133 0
+ 227 0154 0000E0E3 		mvn	r0, #0
+ 228 0158 1080BDE8 		pop	{r4, pc}
+ 229              	.LVL29:
+ 230              	.L13:
+ 231:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_port_rw->err)
+ 231              		.loc 1 231 0
+ 232 015c 021082E2 		add	r1, r2, #2
+ 233 0160 B000D2E1 		ldrh	r0, [r2]
+ 234              	.LVL30:
+ 235 0164 FEFFFFEB 		bl	R_GPIO_PortRead
+ 236              	.LVL31:
+ 237 0168 0300C4E5 		strb	r0, [r4, #3]
+ 232:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 238              		.loc 1 232 0
+ 239 016c 000050E3 		cmp	r0, #0
+ 240 0170 0100001A 		bne	.L35
+ 234:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 241              		.loc 1 234 0
+ 242 0174 0000A0E3 		mov	r0, #0
+ 243 0178 1080BDE8 		pop	{r4, pc}
+ 244              	.L35:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 245              		.loc 1 133 0
+ 246 017c 0000E0E3 		mvn	r0, #0
+ 247 0180 1080BDE8 		pop	{r4, pc}
+ 248              	.LVL32:
+ 249              	.L14:
+ 243:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_rw->err)
+ 250              		.loc 1 243 0
+ 251 0184 0210D2E5 		ldrb	r1, [r2, #2]	@ zero_extendqisi2
+ 252 0188 B000D2E1 		ldrh	r0, [r2]
+ 253              	.LVL33:
+ 254 018c FEFFFFEB 		bl	R_GPIO_PinWrite
+ 255              	.LVL34:
+ 256 0190 0300C4E5 		strb	r0, [r4, #3]
+ 244:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 257              		.loc 1 244 0
+ 258 0194 000050E3 		cmp	r0, #0
+ 259 0198 0100001A 		bne	.L36
+ 246:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 260              		.loc 1 246 0
+ 261 019c 0000A0E3 		mov	r0, #0
+ 262 01a0 1080BDE8 		pop	{r4, pc}
+ 263              	.L36:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 264              		.loc 1 133 0
+ 265 01a4 0000E0E3 		mvn	r0, #0
+ 266 01a8 1080BDE8 		pop	{r4, pc}
+ 267              	.LVL35:
+ 268              	.L15:
+ 255:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             if (GPIO_SUCCESS == p_pin_rw->err)
+ 269              		.loc 1 255 0
+ 270 01ac 021082E2 		add	r1, r2, #2
+ 271 01b0 B000D2E1 		ldrh	r0, [r2]
+ 272              	.LVL36:
+ 273 01b4 FEFFFFEB 		bl	R_GPIO_PinRead
+ 274              	.LVL37:
+ 275 01b8 0300C4E5 		strb	r0, [r4, #3]
+ 256:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             {
+ 276              		.loc 1 256 0
+ 277 01bc 000050E3 		cmp	r0, #0
+ 278 01c0 0100001A 		bne	.L37
+ 258:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             }
+ 279              		.loc 1 258 0
+ 280 01c4 0000A0E3 		mov	r0, #0
+ 281              	.LVL38:
+ 271:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+ 282              		.loc 1 271 0
+ 283 01c8 1080BDE8 		pop	{r4, pc}
+ 284              	.LVL39:
+ 285              	.L37:
+ 133:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     st_r_drv_gpio_config_t *p_config_rw;
+ 286              		.loc 1 133 0
+ 287 01cc 0000E0E3 		mvn	r0, #0
+ 288 01d0 1080BDE8 		pop	{r4, pc}
+ 289              	.LVL40:
+ 290              	.L16:
+ 265:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****             break;
+ 291              		.loc 1 265 0
+ 292 01d4 0000E0E3 		mvn	r0, #0
+ 293              	.LVL41:
+ 294 01d8 1080BDE8 		pop	{r4, pc}
+ 295              		.cfi_endproc
+ 296              	.LFE3:
+ 298              		.section	.text.gpio_close,"ax",%progbits
+ 299              		.align	2
+ 300              		.syntax unified
+ 301              		.arm
+ 302              		.fpu neon
+ 304              	gpio_close:
+ 305              	.LFB2:
+ 115:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* mark all pins allocated by this handle as not allocated */
+ 306              		.loc 1 115 0
+ 307              		.cfi_startproc
+ 308              		@ args = 0, pretend = 0, frame = 0
+ 309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310              	.LVL42:
+ 311 0000 10402DE9 		push	{r4, lr}
+ 312              		.cfi_def_cfa_offset 8
+ 313              		.cfi_offset 4, -8
+ 314              		.cfi_offset 14, -4
+ 117:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** }
+ 315              		.loc 1 117 0
+ 316 0004 F001D0E1 		ldrsh	r0, [r0, #16]
+ 317              	.LVL43:
+ 318 0008 FEFFFFEB 		bl	R_GPIO_DeallocateAllPins
+ 319              	.LVL44:
+ 320 000c 1080BDE8 		pop	{r4, pc}
+ 321              		.cfi_endproc
+ 322              	.LFE2:
+ 324              		.section	.text.gpio_open,"ax",%progbits
+ 325              		.align	2
+ 326              		.syntax unified
+ 327              		.arm
+ 328              		.fpu neon
+ 330              	gpio_open:
+ 331              	.LFB1:
+  99:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c ****     /* initialise GPIO */
+ 332              		.loc 1 99 0
+ 333              		.cfi_startproc
+ 334              		@ args = 0, pretend = 0, frame = 0
+ 335              		@ frame_needed = 0, uses_anonymous_args = 0
+ 336              	.LVL45:
+ 337 0000 10402DE9 		push	{r4, lr}
+ 338              		.cfi_def_cfa_offset 8
+ 339              		.cfi_offset 4, -8
+ 340              		.cfi_offset 14, -4
+ 101:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** }
+ 341              		.loc 1 101 0
+ 342 0004 F001D0E1 		ldrsh	r0, [r0, #16]
+ 343              	.LVL46:
+ 344 0008 FEFFFFEB 		bl	R_GPIO_HWInitialise
+ 345              	.LVL47:
+ 102:../generate/drivers/r_gpio/src/hld/r_gpio_drv_api.c **** /******************************************************************************
+ 346              		.loc 1 102 0
+ 347 000c 1080BDE8 		pop	{r4, pc}
+ 348              		.cfi_endproc
+ 349              	.LFE1:
+ 351              		.global	g_gpio_driver
+ 352              		.section	.rodata.g_gpio_driver,"a",%progbits
+ 353              		.align	2
+ 356              	g_gpio_driver:
+ 357 0000 00000000 		.word	.LC1
+ 358 0004 00000000 		.word	gpio_open
+ 359 0008 00000000 		.word	gpio_close
+ 360 000c 00000000 		.word	no_dev_read
+ 361 0010 00000000 		.word	no_dev_write
+ 362 0014 00000000 		.word	gpio_control
+ 363 0018 00000000 		.word	gpio_get_version
+ 364              		.section	.rodata.gpio_get_version.str1.4,"aMS",%progbits,1
+ 365              		.align	2
+ 366              	.LC0:
+ 367 0000 484C4420 		.ascii	"HLD GPIO\000"
+ 367      4750494F 
+ 367      00
+ 368              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 369              		.align	2
+ 370              	.LC1:
+ 371 0000 4750494F 		.ascii	"GPIO Driver\000"
+ 371      20447269 
+ 371      76657200 
+ 372              		.text
+ 373              	.Letext0:
+ 374              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 375              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 376              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 377              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 378              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 379              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 380              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 381              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 382              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 383              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 384              		.file 12 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 385              		.file 13 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 386              		.file 14 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_gpio_drv_api.c
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:17     .text.gpio_get_version:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:22     .text.gpio_get_version:00000000 gpio_get_version
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:366    .rodata.gpio_get_version.str1.4:00000000 .LC0
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:58     .text.gpio_control:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:63     .text.gpio_control:00000000 gpio_control
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:83     .text.gpio_control:00000018 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:96     .text.gpio_control:00000040 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:299    .text.gpio_close:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:304    .text.gpio_close:00000000 gpio_close
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:325    .text.gpio_open:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:330    .text.gpio_open:00000000 gpio_open
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:356    .rodata.g_gpio_driver:00000000 g_gpio_driver
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:353    .rodata.g_gpio_driver:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:365    .rodata.gpio_get_version.str1.4:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccXFMw6f.s:369    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_gpio_lld_rza2m.h.35.fd76d0816769697a06dd6f4a61c03021
+                           .group:00000000 wm4.stdio.h.27.3fc80220048df77954e38daec3bb9670
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.30.bbece7fa40993a78092dcc5805132560
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.8188691c2279eac7a223caa50f6694b9
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.reent.h.91.b3ea049ebc5486622b61409b78486f84
+                           .group:00000000 wm4._default_fcntl.h.6.b13d56891b95175b639f824a0fd1ed77
+                           .group:00000000 wm4.time.h.8.db4619001f026d0b4874c029fef0e91f
+                           .group:00000000 wm4.time.h.2.4581ce0ffb6627cfc02162c94bf846c9
+                           .group:00000000 wm4.time.h.25.0e6a0fdbc9955f5707ed54246ed2e089
+                           .group:00000000 wm4.time.h.162.d096f2f5887c52e271c4dc33d795dc64
+                           .group:00000000 wm4.stat.h.71.d65ac61ff88c651e198008cfb38bda9c
+                           .group:00000000 wm4.fcntl.h.9.9336f33d7f5028f694c75e6e224e0cf7
+                           .group:00000000 wm4.r_devlink_wrapper.h.72.ad1de4c851513efa3aed0532ebca7ca2
+                           .group:00000000 wm4.r_gpio_drv_api.h.82.9514441e942567d0eb0b23efaff62239
+
+UNDEFINED SYMBOLS
+R_GPIO_GetVersion
+R_GPIO_PinSetConfiguration
+R_GPIO_PinGetConfiguration
+R_GPIO_InitByPinList
+R_GPIO_ClearByPinList
+R_GPIO_InitByTable
+R_GPIO_ClearByTable
+R_GPIO_PortWrite
+R_GPIO_PortRead
+R_GPIO_PinWrite
+R_GPIO_PinRead
+R_GPIO_DeallocateAllPins
+R_GPIO_HWInitialise
+no_dev_read
+no_dev_write

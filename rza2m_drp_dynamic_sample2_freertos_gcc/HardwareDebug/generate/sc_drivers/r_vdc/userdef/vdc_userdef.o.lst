@@ -1,0 +1,619 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"vdc_userdef.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.SetInterrupt,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	SetInterrupt:
+  23              	.LFB3:
+  24              		.file 1 "../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c"
+   1:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * following link:
+  15:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  *
+  17:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /**************************************************************************//**
+  20:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * File Name :   vdc_userdef.c
+  21:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @file         vdc_userdef.c
+  22:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @version      1.12
+  23:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @brief        RZ/A2M VDC driver user function
+  24:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  ******************************************************************************/
+  25:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  26:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /******************************************************************************
+  27:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** Includes   <System Includes> , "Project Includes"
+  28:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** ******************************************************************************/
+  29:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #include     "r_typedefs.h"
+  30:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #include     "iodefine.h"
+  31:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #include     "r_intc_drv_api.h"
+  32:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #include     "r_mmu_drv_api.h"
+  33:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #include     "r_rvapi_vdc.h"
+  34:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #include     "r_vdc.h"
+  35:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #include     "r_vdc_user.h"
+  36:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  37:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /******************************************************************************
+  38:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** Macro definitions
+  39:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** ******************************************************************************/
+  40:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #define STP81_BIT               (0x02u)
+  41:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #define STBRQ25_BIT             (0x20u)
+  42:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** #define STBAK25_BIT             (0x20u)
+  43:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  44:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /******************************************************************************
+  45:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** Typedef definitions
+  46:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** ******************************************************************************/
+  47:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  48:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /******************************************************************************
+  49:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** Private global variables and functions
+  50:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** ******************************************************************************/
+  51:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** static const uint16_t interrupt_id_table[VDC_INT_TYPE_NUM] =
+  52:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** {
+  53:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  54:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_S0_VI_VSYNC0,
+  55:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  56:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  57:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_S0_LO_VSYNC0,
+  58:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  59:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  60:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_S0_VSYNCERR0,
+  61:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  62:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  63:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_GR3_VLINE0,
+  64:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  65:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  66:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_S0_VFIELD0,
+  67:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  68:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  69:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_IV1_VBUFERR0,
+  70:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  71:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  72:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_IV3_VBUFERR0,
+  73:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  74:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  75:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_IV5_VBUFERR0,
+  76:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  77:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  78:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_IV6_VBUFERR0,
+  79:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  80:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+  81:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     (uint16_t)INTC_ID_VDC6_S0_WLINE0,
+  82:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** };
+  83:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  84:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** static void SetInterrupt (const uint32_t user_num);
+  85:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+  86:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /**************************************************************************//**
+  87:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @fn          R_VDC_CPUVAddrToSysPAddr
+  88:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @brief       Physical address translation
+  89:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  *
+  90:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  *              Description:<br>
+  91:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  *              This function performs the following processing:
+  92:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  *              - Get the System Physical address of the given virtual memory address.
+  93:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @param[in]   vaddr               : virtual address
+  94:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @retval      physical address
+  95:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  *****************************************************************************/
+  96:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** uint32_t R_VDC_CPUVAddrToSysPAddr(uint32_t vaddr) 
+  97:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** {
+  98:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     e_mmu_err_t ret;
+  99:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     uint32_t  paddress = 0;
+ 100:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 101:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     ret = R_MMU_VAtoPA(vaddr, &paddress);
+ 102:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     if( MMU_SUCCESS != ret)
+ 103:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+ 104:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         paddress = 0;
+ 105:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     }
+ 106:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     return paddress;
+ 107:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** }   /* End of function R_VDC_CPUVAddrToSysPAddr() */
+ 108:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 109:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /**************************************************************************//**
+ 110:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @fn          R_VDC_OnInitialize
+ 111:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @brief       VDC User difinistion part Init
+ 112:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @param[in]   user_num          :User defined number
+ 113:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @retval      none
+ 114:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  *****************************************************************************/
+ 115:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** void R_VDC_OnInitialize (const uint32_t user_num)   
+ 116:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** {
+ 117:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     uint32_t            reg_data;
+ 118:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     volatile uint8_t    dummy_read;
+ 119:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 120:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+ 121:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     if ((vdc_channel_t)user_num == VDC_CHANNEL_0)
+ 122:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+ 123:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Standby control register 8 (STBCR8)
+ 124:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             b1      ------0-;  MSTP81 : 0 : Video display controller channel 0 & LVDS enable */
+ 125:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         reg_data    = (uint32_t)CPG.STBCR8.BYTE & (uint32_t)~STP81_BIT;
+ 126:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 127:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Cast to an appropriate type */
+ 128:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         CPG.STBCR8.BYTE  = (uint8_t)reg_data;
+ 129:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 130:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* In order to reflect the change, a dummy read should be done. */
+ 131:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         dummy_read = CPG.STBCR8.BYTE;
+ 132:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 133:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Standby Request Register 2 (STBREQ2)
+ 134:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             b5      --0-----;  STBRQ25 : The standby request to VDC channel 0 is invalid. */
+ 135:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         reg_data    = (uint32_t)CPG.STBREQ2.BYTE & (uint32_t)~STBRQ25_BIT;
+ 136:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 137:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Cast to an appropriate type */
+ 138:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         CPG.STBREQ2.BYTE = (uint8_t)reg_data;
+ 139:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 140:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Standby Acknowledge Register 2 (STBACK2)
+ 141:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             b5      --*-----;  STBAK25 : Standby acknowledgment from VDC channel 0. */
+ 142:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         while (((uint32_t)CPG.STBACK2.BYTE & (uint32_t)STBAK25_BIT) != 0u)
+ 143:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         {
+ 144:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             /* Wait for the STBAK25 to be cleared to 0. */
+ 145:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             ;
+ 146:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         }
+ 147:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     }
+ 148:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     SetInterrupt(user_num);
+ 149:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 150:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** }   /* End of function R_VDC_OnInitialize() */
+ 151:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 152:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /**************************************************************************//**
+ 153:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * Function Name: R_VDC_OnFinalize
+ 154:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @brief       VDC User difinistion part final
+ 155:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @param[in]   user_num          :User defined number
+ 156:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @retval      none
+ 157:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** ******************************************************************************/
+ 158:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** void R_VDC_OnFinalize( const uint32_t user_num )   
+ 159:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** {
+ 160:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     uint32_t            reg_data;
+ 161:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     volatile uint8_t    dummy_read;
+ 162:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 163:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+ 164:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     if ((vdc_channel_t)user_num == VDC_CHANNEL_0)
+ 165:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+ 166:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Standby Request Register 2 (STBREQ2)
+ 167:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             b5      --1-----;  STBRQ25 : The standby request to VDC channel 0 is valid. */
+ 168:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         reg_data    = (uint32_t)CPG.STBREQ2.BYTE | (uint32_t)STBRQ25_BIT;
+ 169:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 170:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Cast to an appropriate type */
+ 171:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         CPG.STBREQ2.BYTE = (uint8_t)reg_data;
+ 172:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 173:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Standby Acknowledge Register 2 (STBACK2)
+ 174:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             b5      --*-----;  STBAK25 : Standby acknowledgment from VDC channel 0. */
+ 175:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         while (((uint32_t)CPG.STBACK2.BYTE & (uint32_t)STBAK25_BIT) == 0u)
+ 176:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         {
+ 177:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             /* Wait for the STBAK25 to be set to 1. */
+ 178:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             ;
+ 179:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         }
+ 180:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 181:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Standby control register 8 (STBCR8)
+ 182:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             b1      ------1-;  MSTP81 : 1 : Video display controller channel 0 & LVDS disable */
+ 183:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         reg_data    = (uint32_t)CPG.STBCR8.BYTE | (uint32_t)STP81_BIT;
+ 184:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 185:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         /* Cast to an appropriate type */
+ 186:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         CPG.STBCR8.BYTE  = (uint8_t)reg_data;
+ 187:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     }
+ 188:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 189:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* In order to reflect the change, a dummy read should be done. */
+ 190:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     dummy_read = CPG.STBCR8.BYTE;
+ 191:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 192:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** }   /* End of function R_VDC_OnFinalize() */
+ 193:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 194:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** /**************************************************************************//**
+ 195:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @fn          SetInterrupt
+ 196:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @brief       Setup VDC interrupt
+ 197:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @param[in]   user_num          :User defined number
+ 198:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****  * @retval      None
+ 199:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** ******************************************************************************/
+ 200:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** static void SetInterrupt (const uint32_t user_num) 
+ 201:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** {
+  25              		.loc 1 201 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              	.LVL0:
+  30 0000 70402DE9 		push	{r4, r5, r6, lr}
+  31              		.cfi_def_cfa_offset 16
+  32              		.cfi_offset 4, -16
+  33              		.cfi_offset 5, -12
+  34              		.cfi_offset 6, -8
+  35              		.cfi_offset 14, -4
+  36              	.LVL1:
+ 202:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     void         (* func)(uint32_t int_sense);
+ 203:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     int32_t         ret_code;
+ 204:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     uint16_t        int_id;
+ 205:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     vdc_int_type_t  int_type;
+ 206:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 207:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     /* Cast to an appropriate type */
+ 208:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     for (int_type = (vdc_int_type_t)0; int_type < VDC_INT_TYPE_NUM; int_type++)
+  37              		.loc 1 208 0
+  38 0004 0040A0E3 		mov	r4, #0
+  39              	.LVL2:
+  40              	.L2:
+  41              		.loc 1 208 0 is_stmt 0 discriminator 1
+  42 0008 090054E3 		cmp	r4, #9
+  43 000c 1700008A 		bhi	.L6
+ 209:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+ 210:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         int_id  = interrupt_id_table[int_type];
+  44              		.loc 1 210 0 is_stmt 1
+  45 0010 003000E3 		movw	r3, #:lower16:.LANCHOR0
+  46 0014 003040E3 		movt	r3, #:upper16:.LANCHOR0
+  47 0018 8420A0E1 		lsl	r2, r4, #1
+  48 001c B25093E1 		ldrh	r5, [r3, r2]
+  49              	.LVL3:
+ 211:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         func    = R_VDC_GetISR(VDC_CHANNEL_0, int_type);
+  50              		.loc 1 211 0
+  51 0020 0410A0E1 		mov	r1, r4
+  52 0024 0000A0E3 		mov	r0, #0
+  53 0028 FEFFFFEB 		bl	R_VDC_GetISR
+  54              	.LVL4:
+ 212:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 213:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         ret_code = R_INTC_RegistIntFunc(int_id, func);
+  55              		.loc 1 213 0
+  56 002c 0010A0E1 		mov	r1, r0
+  57 0030 0500A0E1 		mov	r0, r5
+  58              	.LVL5:
+  59 0034 FEFFFFEB 		bl	R_INTC_RegistIntFunc
+  60              	.LVL6:
+ 214:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         if (ret_code != INTC_SUCCESS)
+  61              		.loc 1 214 0
+  62 0038 000050E3 		cmp	r0, #0
+  63 003c 7080BD18 		popne	{r4, r5, r6, pc}
+ 215:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         {
+ 216:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             break;
+ 217:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         }
+ 218:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         ret_code = R_INTC_SetPriority(int_id, VDC_INTERRUPT_PRIORITY);
+  64              		.loc 1 218 0
+  65 0040 0510A0E3 		mov	r1, #5
+  66 0044 0500A0E1 		mov	r0, r5
+  67              	.LVL7:
+  68 0048 FEFFFFEB 		bl	R_INTC_SetPriority
+  69              	.LVL8:
+ 219:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         if (ret_code != INTC_SUCCESS)
+  70              		.loc 1 219 0
+  71 004c 000050E3 		cmp	r0, #0
+  72 0050 7080BD18 		popne	{r4, r5, r6, pc}
+ 220:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         {
+ 221:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****             break;
+ 222:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         }
+ 223:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         ret_code = R_INTC_Enable(int_id);
+  73              		.loc 1 223 0
+  74 0054 0500A0E1 		mov	r0, r5
+  75              	.LVL9:
+  76 0058 FEFFFFEB 		bl	R_INTC_Enable
+  77              	.LVL10:
+ 224:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         if (ret_code != INTC_SUCCESS)
+  78              		.loc 1 224 0
+  79 005c 000050E3 		cmp	r0, #0
+  80 0060 7080BD18 		popne	{r4, r5, r6, pc}
+ 208:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+  81              		.loc 1 208 0 discriminator 2
+  82 0064 014084E2 		add	r4, r4, #1
+  83              	.LVL11:
+  84 0068 7440EFE6 		uxtb	r4, r4
+  85              	.LVL12:
+  86 006c E5FFFFEA 		b	.L2
+  87              	.LVL13:
+  88              	.L6:
+  89 0070 7080BDE8 		pop	{r4, r5, r6, pc}
+  90              		.cfi_endproc
+  91              	.LFE3:
+  93              		.section	.text.R_VDC_CPUVAddrToSysPAddr,"ax",%progbits
+  94              		.align	2
+  95              		.global	R_VDC_CPUVAddrToSysPAddr
+  96              		.syntax unified
+  97              		.arm
+  98              		.fpu neon
+ 100              	R_VDC_CPUVAddrToSysPAddr:
+ 101              	.LFB0:
+  97:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     e_mmu_err_t ret;
+ 102              		.loc 1 97 0
+ 103              		.cfi_startproc
+ 104              		@ args = 0, pretend = 0, frame = 8
+ 105              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106              	.LVL14:
+ 107 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 108              		.cfi_def_cfa_offset 4
+ 109              		.cfi_offset 14, -4
+ 110 0004 0CD04DE2 		sub	sp, sp, #12
+ 111              		.cfi_def_cfa_offset 16
+  99:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 112              		.loc 1 99 0
+ 113 0008 08108DE2 		add	r1, sp, #8
+ 114 000c 0030A0E3 		mov	r3, #0
+ 115 0010 043021E5 		str	r3, [r1, #-4]!
+ 101:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     if( MMU_SUCCESS != ret)
+ 116              		.loc 1 101 0
+ 117 0014 FEFFFFEB 		bl	R_MMU_VAtoPA
+ 118              	.LVL15:
+ 102:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+ 119              		.loc 1 102 0
+ 120 0018 000050E3 		cmp	r0, #0
+ 104:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     }
+ 121              		.loc 1 104 0
+ 122 001c 0030A013 		movne	r3, #0
+ 123 0020 04308D15 		strne	r3, [sp, #4]
+ 124              	.L8:
+ 107:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 125              		.loc 1 107 0
+ 126 0024 04009DE5 		ldr	r0, [sp, #4]
+ 127              	.LVL16:
+ 128 0028 0CD08DE2 		add	sp, sp, #12
+ 129              		.cfi_def_cfa_offset 4
+ 130              		@ sp needed
+ 131 002c 04F09DE4 		ldr	pc, [sp], #4
+ 132              		.cfi_endproc
+ 133              	.LFE0:
+ 135              		.section	.text.R_VDC_OnInitialize,"ax",%progbits
+ 136              		.align	2
+ 137              		.global	R_VDC_OnInitialize
+ 138              		.syntax unified
+ 139              		.arm
+ 140              		.fpu neon
+ 142              	R_VDC_OnInitialize:
+ 143              	.LFB1:
+ 116:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     uint32_t            reg_data;
+ 144              		.loc 1 116 0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 8
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              	.LVL17:
+ 149 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 150              		.cfi_def_cfa_offset 4
+ 151              		.cfi_offset 14, -4
+ 152 0004 0CD04DE2 		sub	sp, sp, #12
+ 153              		.cfi_def_cfa_offset 16
+ 121:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+ 154              		.loc 1 121 0
+ 155 0008 FF0010E3 		tst	r0, #255
+ 156 000c 0F00001A 		bne	.L11
+ 125:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 157              		.loc 1 125 0
+ 158 0010 FF30A0E3 		mov	r3, #255
+ 159 0014 FE3C4FE3 		movt	r3, 64766
+ 160 0018 3523D3E5 		ldrb	r2, [r3, #821]	@ zero_extendqisi2
+ 161              	.LVL18:
+ 128:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 162              		.loc 1 128 0
+ 163 001c FD2002E2 		and	r2, r2, #253
+ 164              	.LVL19:
+ 165 0020 3523C3E5 		strb	r2, [r3, #821]
+ 131:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 166              		.loc 1 131 0
+ 167 0024 3523D3E5 		ldrb	r2, [r3, #821]	@ zero_extendqisi2
+ 168              	.LVL20:
+ 169 0028 7220EFE6 		uxtb	r2, r2
+ 170 002c 0720CDE5 		strb	r2, [sp, #7]
+ 135:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 171              		.loc 1 135 0
+ 172 0030 CB2053E5 		ldrb	r2, [r3, #-203]	@ zero_extendqisi2
+ 173              	.LVL21:
+ 138:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 174              		.loc 1 138 0
+ 175 0034 DF2002E2 		and	r2, r2, #223
+ 176              	.LVL22:
+ 177 0038 CB2043E5 		strb	r2, [r3, #-203]
+ 178              	.L12:
+ 142:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         {
+ 179              		.loc 1 142 0 discriminator 1
+ 180 003c FF30A0E3 		mov	r3, #255
+ 181 0040 FE3C4FE3 		movt	r3, 64766
+ 182 0044 BB3053E5 		ldrb	r3, [r3, #-187]	@ zero_extendqisi2
+ 183 0048 200013E3 		tst	r3, #32
+ 184 004c FAFFFF1A 		bne	.L12
+ 185              	.LVL23:
+ 186              	.L11:
+ 148:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 187              		.loc 1 148 0
+ 188 0050 FEFFFFEB 		bl	SetInterrupt
+ 189              	.LVL24:
+ 150:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 190              		.loc 1 150 0
+ 191 0054 0CD08DE2 		add	sp, sp, #12
+ 192              		.cfi_def_cfa_offset 4
+ 193              		@ sp needed
+ 194 0058 04F09DE4 		ldr	pc, [sp], #4
+ 195              		.cfi_endproc
+ 196              	.LFE1:
+ 198              		.section	.text.R_VDC_OnFinalize,"ax",%progbits
+ 199              		.align	2
+ 200              		.global	R_VDC_OnFinalize
+ 201              		.syntax unified
+ 202              		.arm
+ 203              		.fpu neon
+ 205              	R_VDC_OnFinalize:
+ 206              	.LFB2:
+ 159:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     uint32_t            reg_data;
+ 207              		.loc 1 159 0
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 8
+ 210              		@ frame_needed = 0, uses_anonymous_args = 0
+ 211              		@ link register save eliminated.
+ 212              	.LVL25:
+ 213 0000 08D04DE2 		sub	sp, sp, #8
+ 214              		.cfi_def_cfa_offset 8
+ 164:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     {
+ 215              		.loc 1 164 0
+ 216 0004 7000EFE6 		uxtb	r0, r0
+ 217              	.LVL26:
+ 218 0008 000050E3 		cmp	r0, #0
+ 219 000c 0E00001A 		bne	.L15
+ 168:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 220              		.loc 1 168 0
+ 221 0010 FF30A0E3 		mov	r3, #255
+ 222 0014 FE3C4FE3 		movt	r3, 64766
+ 223 0018 CB2053E5 		ldrb	r2, [r3, #-203]	@ zero_extendqisi2
+ 224 001c 202082E3 		orr	r2, r2, #32
+ 225              	.LVL27:
+ 171:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 226              		.loc 1 171 0
+ 227 0020 CB2043E5 		strb	r2, [r3, #-203]
+ 228              	.L16:
+ 175:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****         {
+ 229              		.loc 1 175 0 discriminator 1
+ 230 0024 FF30A0E3 		mov	r3, #255
+ 231 0028 FE3C4FE3 		movt	r3, 64766
+ 232 002c BB3053E5 		ldrb	r3, [r3, #-187]	@ zero_extendqisi2
+ 233 0030 200013E3 		tst	r3, #32
+ 234 0034 FAFFFF0A 		beq	.L16
+ 183:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 235              		.loc 1 183 0
+ 236 0038 FF30A0E3 		mov	r3, #255
+ 237 003c FE3C4FE3 		movt	r3, 64766
+ 238 0040 3523D3E5 		ldrb	r2, [r3, #821]	@ zero_extendqisi2
+ 239              	.LVL28:
+ 240 0044 022082E3 		orr	r2, r2, #2
+ 241              	.LVL29:
+ 186:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c ****     }
+ 242              		.loc 1 186 0
+ 243 0048 3523C3E5 		strb	r2, [r3, #821]
+ 244              	.LVL30:
+ 245              	.L15:
+ 190:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 246              		.loc 1 190 0
+ 247 004c FF30A0E3 		mov	r3, #255
+ 248 0050 FE3C4FE3 		movt	r3, 64766
+ 249 0054 3533D3E5 		ldrb	r3, [r3, #821]	@ zero_extendqisi2
+ 250 0058 7330EFE6 		uxtb	r3, r3
+ 251 005c 0730CDE5 		strb	r3, [sp, #7]
+ 192:../generate/sc_drivers/r_vdc/userdef/vdc_userdef.c **** 
+ 252              		.loc 1 192 0
+ 253 0060 08D08DE2 		add	sp, sp, #8
+ 254              		.cfi_def_cfa_offset 0
+ 255              		@ sp needed
+ 256 0064 1EFF2FE1 		bx	lr
+ 257              		.cfi_endproc
+ 258              	.LFE2:
+ 260              		.section	.rodata.interrupt_id_table,"a",%progbits
+ 261              		.align	2
+ 262              		.set	.LANCHOR0,. + 0
+ 265              	interrupt_id_table:
+ 266 0000 4900     		.short	73
+ 267 0002 4A00     		.short	74
+ 268 0004 4B00     		.short	75
+ 269 0006 4C00     		.short	76
+ 270 0008 4D00     		.short	77
+ 271 000a 4E00     		.short	78
+ 272 000c 4F00     		.short	79
+ 273 000e 5000     		.short	80
+ 274 0010 5100     		.short	81
+ 275 0012 5200     		.short	82
+ 276              		.text
+ 277              	.Letext0:
+ 278              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 279              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 280              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 281              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 282              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 283              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 284              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 285              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 286              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 287              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 288              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+DEFINED SYMBOLS
+                            *ABS*:00000000 vdc_userdef.c
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:17     .text.SetInterrupt:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:22     .text.SetInterrupt:00000000 SetInterrupt
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:262    .rodata.interrupt_id_table:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:94     .text.R_VDC_CPUVAddrToSysPAddr:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:100    .text.R_VDC_CPUVAddrToSysPAddr:00000000 R_VDC_CPUVAddrToSysPAddr
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:136    .text.R_VDC_OnInitialize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:142    .text.R_VDC_OnInitialize:00000000 R_VDC_OnInitialize
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:199    .text.R_VDC_OnFinalize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:205    .text.R_VDC_OnFinalize:00000000 R_VDC_OnFinalize
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:261    .rodata.interrupt_id_table:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccGq1DB7.s:265    .rodata.interrupt_id_table:00000000 interrupt_id_table
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_intc_lld_rza2m.h.35.148dee33e6a963828fdce2545668b517
+                           .group:00000000 wm4.r_mmu_lld_rza2m.h.39.be55e997d8665d00d9f529dbd893c422
+                           .group:00000000 wm4.r_vdc_user.h.32.3f3db05b07a24f5c3abdea3809348418
+                           .group:00000000 wm4.r_vdc.h.31.7a8e28d4a80bfb6c6b4be0ab3890da8f
+                           .group:00000000 wm4.r_rvapi_vdc.h.56.5c61db780dd0e78fd0dc60ae6029256c
+
+UNDEFINED SYMBOLS
+R_VDC_GetISR
+R_INTC_RegistIntFunc
+R_INTC_SetPriority
+R_INTC_Enable
+R_MMU_VAtoPA

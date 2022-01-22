@@ -1,0 +1,1882 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_cbuffer.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.cbAdjustOutIndex,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	cbAdjustOutIndex:
+  23              	.LFB16:
+  24              		.file 1 "../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c"
+   1:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * This software is supplied by Renesas Electronics Corporation and is only
+   4:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * intended for use with Renesas products. No other uses are authorized. This
+   5:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * software is owned by Renesas Electronics Corporation and is protected under
+   6:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * all applicable laws, including copyright laws.
+   7:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   8:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+   9:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  10:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.
+  11:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS
+  12:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE
+  13:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR
+  14:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE
+  15:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  16:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Renesas reserves the right, without notice, to make changes to this software
+  17:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * and to discontinue the availability of this software. By using this software,
+  18:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * you agree to the additional terms and conditions found by accessing the
+  19:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * following link:
+  20:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * http://www.renesas.com/disclaimer
+  21:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  22:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  23:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+  24:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * File Name    : r_cbuffer.c
+  25:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Version      : 1.03
+  26:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Circular Buffering Routines
+  27:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  28:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+  29:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * History      : DD.MM.YYYY Version Description
+  30:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *              : 04.02.2010 1.00    First Release
+  31:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *              : 10.06.2010 1.01    Updated type definitions
+  32:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *              : 07.03.2011 1.02    Added Memory Type Parameter
+  33:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *              : 02.05.2019 1.03    Added buffer pointer validation
+  34:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  35:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  36:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+  37:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  Includes   <System Includes> , "Project Includes"
+  38:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  39:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  40:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** #include <stdlib.h>
+  41:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** #include <string.h>
+  42:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  43:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** #include "r_cbuffer.h"
+  44:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** #include "r_typedefs.h"
+  45:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  46:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /* OS abstraction specific API header */
+  47:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** #include "r_os_abstraction_api.h"
+  48:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  49:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+  50:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  Typedef definitions
+  51:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  52:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  53:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /* Define the structure of a buffer */
+  54:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** typedef struct _cbuff_t
+  55:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+  56:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* a pointer to the base of the memory */
+  57:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint8_t *p_base;
+  58:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  59:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* The input index */
+  60:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t  input_index;
+  61:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  62:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* The output index */
+  63:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t  output_index;
+  64:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  65:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* The length of the circular buffer */
+  66:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t  length;
+  67:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** } st_cbuff_t;
+  68:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  69:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /* Define the structure of a buffer including alignment */
+  70:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** typedef struct _cobject_t
+  71:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+  72:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     st_cbuff_t cbuffer;
+  73:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint32_t   ulalign;
+  74:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** } st_cobject_t;
+  75:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  76:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** typedef struct _cobject_t *st_pcobject_t;
+  77:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  78:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+  79:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  Function Prototypes
+  80:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  81:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  82:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** static void cbAdjustOutIndex (st_pcbuff_t pcBuffer, size_t length);
+  83:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** static void cbAdjustInIndex (st_pcbuff_t pcBuffer, size_t length);
+  84:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  85:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+  86:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  Exported global variables and functions (to be accessed by other files)
+  87:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  88:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  89:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+  90:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbCreate
+  91:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to create a circular buffer
+  92:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  stBufferSize - The size of the circular buffer required
+  93:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : Pointer to the circular buffer or NULL on failure
+  94:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+  95:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** st_pcbuff_t cbCreate (size_t stBufferSize)
+  96:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+  97:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     st_pcbuff_t cbuffer;
+  98:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+  99:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* prevent allocation of zero size buffer or buffer that would overflow max capacity of int32_t
+ 100:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if ((0 == stBufferSize) || (0 != (stBufferSize & 0x80000000ul)))
+ 101:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 102:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return NULL;
+ 103:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 104:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 105:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Allocate the buffer with enough memory for alignment and extra byte for signalling */
+ 106:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     cbuffer = (st_pcbuff_t) R_OS_Malloc(stBufferSize + sizeof(st_cobject_t) + sizeof(uint8_t), R_ME
+ 107:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 108:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (cbuffer)
+ 109:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 110:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Initialise the buffer variables */
+ 111:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbuffer->p_base = (uint8_t *) &((st_pcobject_t) cbuffer)->ulalign;
+ 112:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbuffer->length = (size_t) (stBufferSize + sizeof(uint8_t));
+ 113:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbuffer->input_index = 0;
+ 114:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbuffer->output_index = 0;
+ 115:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 116:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 117:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return cbuffer;
+ 118:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 119:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 120:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbCreate
+ 121:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 122:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 123:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 124:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbDestroy
+ 125:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to destroy a circular buffer
+ 126:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer to destroy
+ 127:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : DRV_SUCCESS on success
+ 128:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 129:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 130:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbDestroy (st_pcbuff_t pcBuffer)
+ 131:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 132:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 133:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 134:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 135:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 136:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 137:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     R_OS_Free((void **) &pcBuffer);
+ 138:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 139:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return DRV_SUCCESS;
+ 140:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 141:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 142:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbDestroy
+ 143:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 144:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 145:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 146:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbPut
+ 147:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description:   Put a uint8_t in the Buffer
+ 148:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments:     IN  pcBuffer - pointer to the circular buffer
+ 149:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  byData - The data to put
+ 150:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return value:  true if the byte was entered into the buffer
+ 151:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                false if the byte was not entered because the buffer was full
+ 152:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 153:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 154:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbPut (st_pcbuff_t pcBuffer, uint8_t byData)
+ 155:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 156:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 157:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 158:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 159:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 160:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 161:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t l_input_index = (pcBuffer->input_index + sizeof(uint8_t));
+ 162:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 163:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check for top of Buffer */
+ 164:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (l_input_index >= pcBuffer->length)
+ 165:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 166:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_input_index = 0;
+ 167:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 168:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 169:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* If there is room */
+ 170:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (l_input_index != pcBuffer->output_index)
+ 171:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 172:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Put the byte in the buffer */
+ 173:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         *(pcBuffer->p_base + pcBuffer->input_index) = byData;
+ 174:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 175:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Update the index */
+ 176:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         pcBuffer->input_index = l_input_index;
+ 177:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return true;
+ 178:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 179:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 180:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return false;
+ 181:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 182:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 183:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbPut
+ 184:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 185:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 186:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 187:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbGet
+ 188:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description:   Get a byte from the Buffer
+ 189:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments:     IN  pcBuffer - pointer to the circular buffer
+ 190:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                OUT pbyData - pointer to the destination byte of data
+ 191:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return value:  true if a byte was retrieved
+ 192:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                false if the buffer was empty
+ 193:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 194:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 195:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbGet (st_pcbuff_t pcBuffer, uint8_t *pbyData)
+ 196:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 197:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 198:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 199:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 200:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 201:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 202:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check that the buffer is not empty */
+ 203:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (pcBuffer->input_index != pcBuffer->output_index)
+ 204:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 205:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         size_t l_output_index;
+ 206:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 207:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Get Data from Buffer, bump in index */
+ 208:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_output_index = pcBuffer->output_index;
+ 209:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         *pbyData = *(pcBuffer->p_base + l_output_index);
+ 210:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_output_index++;
+ 211:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 212:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Check for top of Buffer */
+ 213:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         if (l_output_index >= pcBuffer->length)
+ 214:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 215:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             l_output_index = 0;
+ 216:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 217:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 218:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Update the index */
+ 219:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         pcBuffer->output_index = l_output_index;
+ 220:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return true;
+ 221:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 222:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 223:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return false;
+ 224:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 225:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 226:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbGet
+ 227:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 228:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 229:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 230:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbUsed
+ 231:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description:   Function to return the number of bytes in the buffer
+ 232:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments:     IN  pcBuffer - Pointer to the buffer
+ 233:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return value:  The number of bytes in the buffer
+ 234:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 235:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 236:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int32_t cbUsed (st_pcbuff_t pcBuffer)
+ 237:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 238:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t l_input_index;
+ 239:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t l_output_index;
+ 240:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t used;
+ 241:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 242:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 243:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 244:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 245:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 246:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 247:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     l_input_index = pcBuffer->input_index;
+ 248:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     l_output_index = pcBuffer->output_index;
+ 249:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 250:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (l_input_index < l_output_index)
+ 251:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 252:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         used = (pcBuffer->length - (l_output_index - l_input_index));
+ 253:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 254:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     else
+ 255:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 256:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         used = (l_input_index - l_output_index);
+ 257:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 258:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 259:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return (int32_t) used;
+ 260:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 261:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 262:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function  cbUsed
+ 263:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 264:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 265:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 266:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbFree
+ 267:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to return the number of free space in the buffer
+ 268:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 269:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : The number of bytes that can be put in the buffer
+ 270:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 271:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 272:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int32_t cbFree (st_pcbuff_t pcBuffer)
+ 273:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 274:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 275:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 276:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 277:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 278:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 279:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return (int32_t) (pcBuffer->length - ((size_t) cbUsed(pcBuffer) + sizeof(uint8_t)));
+ 280:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 281:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 282:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbFree
+ 283:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 284:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 285:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 286:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbFull
+ 287:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to return true when the buffer is full
+ 288:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 289:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : true if the buffer is full
+ 290:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                false if it is not full
+ 291:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 292:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 293:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbFull (st_pcbuff_t pcBuffer)
+ 294:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 295:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 296:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 297:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 298:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 299:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 300:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t l_input_index = (pcBuffer->input_index + sizeof(uint8_t));
+ 301:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 302:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check for top of Buffer */
+ 303:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (l_input_index >= pcBuffer->length)
+ 304:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 305:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_input_index = 0;
+ 306:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 307:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 308:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Now test for full */
+ 309:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (l_input_index == pcBuffer->output_index)
+ 310:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 311:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return true;
+ 312:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 313:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     else
+ 314:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 315:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return false;
+ 316:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 317:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 318:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 319:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbFull
+ 320:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 321:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 322:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 323:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbClear
+ 324:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to clear the buffer
+ 325:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer to clear
+ 326:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : DRV_SUCCESS on success
+ 327:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 328:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 329:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbClear (st_pcbuff_t pcBuffer)
+ 330:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 331:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 332:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 333:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 334:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 335:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 336:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     pcBuffer->input_index = pcBuffer->output_index = 0;
+ 337:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 338:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return DRV_SUCCESS;
+ 339:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 340:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 341:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function  cbClear
+ 342:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 343:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 344:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 345:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbGetPacket
+ 346:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to get data from the buffer but not check it out
+ 347:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                cbUsed should be called before calls to this function to
+ 348:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                ensure that there is sufficient data in the buffer
+ 349:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - pointer to the IO buffer to get the data from
+ 350:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  stPacketLength - the length of data to read from the
+ 351:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                                     buffer
+ 352:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  pDest - the destination buffer address
+ 353:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : DRV_SUCCESS on success
+ 354:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 355:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 356:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbGetPacket (st_pcbuff_t pcBuffer, size_t stPacketLength, void *pDest)
+ 357:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 358:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint8_t *p_data;
+ 359:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint8_t *p_temp;
+ 360:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t block_length;
+ 361:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 362:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 363:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 364:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 365:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 366:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 367:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Get the pointer to the data */
+ 368:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     p_data = (pcBuffer->p_base + pcBuffer->output_index);
+ 369:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 370:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Get the length of the linear chunk */
+ 371:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     block_length = (size_t) cbLinOut(pcBuffer);
+ 372:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 373:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check to see if this can be done in one hit */
+ 374:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (block_length >= stPacketLength)
+ 375:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 376:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* All in one block */
+ 377:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         memcpy(pDest, p_data, stPacketLength);
+ 378:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 379:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     else
+ 380:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 381:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Splits into two blocks */
+ 382:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         memcpy(pDest, p_data, block_length);
+ 383:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         p_data = pcBuffer->p_base;
+ 384:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 385:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* re-calculate the address */
+ 386:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         p_temp = ((uint8_t *) pDest) + block_length;
+ 387:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 388:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* calculate size of second block */
+ 389:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         block_length = (stPacketLength - block_length);
+ 390:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         memcpy(p_temp, p_data, block_length);
+ 391:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 392:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 393:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return DRV_SUCCESS;
+ 394:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 395:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 396:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbGetPacket
+ 397:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 398:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 399:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 400:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbCheckOut
+ 401:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to check the data out of the data following a call to
+ 402:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                cbGetPacket
+ 403:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 404:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  stPacketLength - the size of the data to check out
+ 405:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : DRV_SUCCESS on success
+ 406:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 407:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 408:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbCheckOut (st_pcbuff_t pcBuffer, size_t stPacketLength)
+ 409:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 410:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t block_length;
+ 411:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 412:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 413:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 414:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 415:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 416:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 417:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Get the length of the linear chunk */
+ 418:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     block_length = (size_t) cbLinOut(pcBuffer);
+ 419:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 420:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check to see if this can be done in one hit */
+ 421:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (block_length >= stPacketLength)
+ 422:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 423:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* All in one block */
+ 424:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbAdjustOutIndex(pcBuffer, stPacketLength);
+ 425:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 426:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     else
+ 427:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 428:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Two blocks */
+ 429:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbAdjustOutIndex(pcBuffer, block_length);
+ 430:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 431:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Calculate size of second block */
+ 432:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         block_length = (stPacketLength - block_length);
+ 433:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbAdjustOutIndex(pcBuffer, block_length);
+ 434:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 435:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 436:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return DRV_SUCCESS;
+ 437:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 438:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 439:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbCheckOut
+ 440:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 441:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 442:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 443:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbPutPacket
+ 444:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to put a packet of data into the buffer
+ 445:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 446:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  stPacketLength - The length of the packet to put
+ 447:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  pSrc - Pointer to the data to put
+ 448:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : DRV_SUCCESS on success
+ 449:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 450:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 451:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbPutPacket (st_pcbuff_t pcBuffer, size_t stPacketLength, void *pSrc)
+ 452:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 453:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint8_t *p_data;
+ 454:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint8_t *p_temp;
+ 455:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t block_length;
+ 456:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 457:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 458:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 459:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 460:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 461:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 462:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* How much linear space is there */
+ 463:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     block_length = (size_t) cbLinIn(pcBuffer);
+ 464:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     p_data = (pcBuffer->p_base + pcBuffer->input_index);
+ 465:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 466:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check for one or two blocks */
+ 467:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (block_length >= stPacketLength)
+ 468:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 469:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* All in one block */
+ 470:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         memcpy(p_data, pSrc, stPacketLength);
+ 471:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 472:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     else
+ 473:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 474:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Splits into two blocks */
+ 475:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         memcpy(p_data, pSrc, block_length);
+ 476:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         p_data = pcBuffer->p_base;
+ 477:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 478:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Re-calculate the address */
+ 479:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         p_temp = ((uint8_t *) pSrc) + block_length;
+ 480:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 481:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Calculate size of second block */
+ 482:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         block_length = (stPacketLength - block_length);
+ 483:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         memcpy(p_data, p_temp, block_length);
+ 484:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 485:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 486:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return DRV_SUCCESS;
+ 487:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 488:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 489:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbPutPacket
+ 490:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 491:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 492:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 493:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbCheckIn
+ 494:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to check a packet into the buffer
+ 495:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 496:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  stPacketLength - The length of data to check in
+ 497:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : DRV_SUCCESS on success
+ 498:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 499:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 500:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int_t cbCheckIn (st_pcbuff_t pcBuffer, size_t stPacketLength)
+ 501:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 502:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t block_length;
+ 503:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 504:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 505:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 506:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 507:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 508:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 509:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Find out the free linear space there is in the buffer */
+ 510:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     block_length = (size_t) cbLinIn(pcBuffer);
+ 511:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 512:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Test to see if it fits or if it splits */
+ 513:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (block_length >= stPacketLength)
+ 514:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 515:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* All in one block */
+ 516:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbAdjustInIndex(pcBuffer, stPacketLength);
+ 517:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 518:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     else
+ 519:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 520:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Two blocks */
+ 521:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbAdjustInIndex(pcBuffer, block_length);
+ 522:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 523:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Calculate size of second block */
+ 524:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         block_length = (stPacketLength - block_length);
+ 525:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbAdjustInIndex(pcBuffer, block_length);
+ 526:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 527:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 528:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return DRV_SUCCESS;
+ 529:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 530:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 531:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbCheckIn
+ 532:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 533:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 534:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 535:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbLinOut
+ 536:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to calculate how much can be delivered in one hit
+ 537:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 538:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : The number of bytes until the end of the data or the buffer
+ 539:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 540:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 541:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int32_t cbLinOut (st_pcbuff_t pcBuffer)
+ 542:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 543:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 544:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 545:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 546:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 547:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 548:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (pcBuffer->input_index == pcBuffer->output_index)
+ 549:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 550:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* When empty nothing to take out */
+ 551:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return 0;
+ 552:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 553:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     else
+ 554:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 555:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         size_t l_input_index;
+ 556:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         size_t l_output_index;
+ 557:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 558:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Snap shot of Buffer controls as  ISR may be updating in background */
+ 559:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_input_index = pcBuffer->input_index;
+ 560:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_output_index = pcBuffer->output_index;
+ 561:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 562:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Test for buffer wrap */
+ 563:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         if (l_output_index > l_input_index)
+ 564:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 565:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             /* Until the end (wrapped) */
+ 566:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             return (int32_t) (pcBuffer->length - l_output_index);
+ 567:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 568:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         else
+ 569:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 570:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             /* Until the in index */
+ 571:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             return (int32_t) (l_input_index - l_output_index);
+ 572:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 573:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 574:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 575:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 576:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbLinOut
+ 577:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 578:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 579:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 580:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbLinIn
+ 581:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to return how much data can be placed in the buffer
+ 582:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 583:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : The length of data until the end of the data or the buffer
+ 584:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                DRV_ERROR if the pcBuffer pointer is invalid
+ 585:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 586:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** int32_t cbLinIn (st_pcbuff_t pcBuffer)
+ 587:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 588:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 589:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 590:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return DRV_ERROR;
+ 591:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 592:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 593:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (cbFull(pcBuffer) == false)
+ 594:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 595:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         size_t l_input_index;
+ 596:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         size_t l_output_index;
+ 597:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 598:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Snap shot of Buffer controls as */
+ 599:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* ISR may be updating in background */
+ 600:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_input_index = pcBuffer->input_index;
+ 601:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_output_index = pcBuffer->output_index;
+ 602:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 603:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         /* Test for buffer wrap */
+ 604:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         if (l_input_index < l_output_index)
+ 605:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 606:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             /* Lin in is between out and in */
+ 607:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             return (int32_t) ((l_output_index - sizeof(uint8_t)) - l_input_index);
+ 608:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 609:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         else if (l_output_index)
+ 610:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 611:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             /* Lin in until top but room at bottom */
+ 612:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             return (int32_t) (pcBuffer->length - l_input_index);
+ 613:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 614:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         else
+ 615:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 616:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             /* lin in to the end - 1 */
+ 617:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****             return (int32_t) ((pcBuffer->length - sizeof(uint8_t)) - l_input_index);
+ 618:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 619:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 620:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 621:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return 0;
+ 622:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 623:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 624:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbLinIn
+ 625:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 626:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 627:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 628:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbInPointer
+ 629:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to return a pointer to the input of the buffer
+ 630:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 631:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : Pointer to the buffer input
+ 632:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                NULL if the pcBuffer pointer is invalid
+ 633:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 634:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** void *cbInPointer (st_pcbuff_t pcBuffer)
+ 635:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 636:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 637:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 638:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return NULL;
+ 639:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 640:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 641:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return (pcBuffer->p_base + pcBuffer->input_index);
+ 642:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 643:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 644:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbInPointer
+ 645:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 646:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 647:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 648:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbOutPointer
+ 649:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to return a pointer to the output of the buffer
+ 650:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 651:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : Pointer to the buffer input
+ 652:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                NULL if the pcBuffer pointer is invalid
+ 653:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 654:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** void *cbOutPointer (st_pcbuff_t pcBuffer)
+ 655:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+ 656:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 657:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 658:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return NULL;
+ 659:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 660:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 661:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     return (pcBuffer->p_base + pcBuffer->output_index);
+ 662:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 663:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /******************************************************************************
+ 664:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbOutPointer
+ 665:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  ******************************************************************************/
+ 666:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 667:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 668:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  Static Functions
+ 669:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 670:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 671:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 672:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbAdjustOutIndex
+ 673:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to adjust the out index of the buffer
+ 674:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 675:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  length - The length of data to adjust for
+ 676:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : none
+ 677:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 678:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** static void cbAdjustOutIndex (st_pcbuff_t pcBuffer, size_t length)
+ 679:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+  25              		.loc 1 679 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              		@ link register save eliminated.
+  30              	.LVL0:
+ 680:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t l_output_index = (pcBuffer->output_index + length);
+  31              		.loc 1 680 0
+  32 0000 083090E5 		ldr	r3, [r0, #8]
+  33 0004 011083E0 		add	r1, r3, r1
+  34              	.LVL1:
+ 681:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 682:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check for top of Buffer */
+ 683:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (l_output_index >= pcBuffer->length)
+  35              		.loc 1 683 0
+  36 0008 0C3090E5 		ldr	r3, [r0, #12]
+  37 000c 030051E1 		cmp	r1, r3
+ 684:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 685:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_output_index = (l_output_index - pcBuffer->length);
+  38              		.loc 1 685 0
+  39 0010 03104120 		subcs	r1, r1, r3
+  40              	.LVL2:
+  41              	.L2:
+ 686:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 687:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 688:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     pcBuffer->output_index = l_output_index;
+  42              		.loc 1 688 0
+  43 0014 081080E5 		str	r1, [r0, #8]
+  44 0018 1EFF2FE1 		bx	lr
+  45              		.cfi_endproc
+  46              	.LFE16:
+  48              		.section	.text.cbAdjustInIndex,"ax",%progbits
+  49              		.align	2
+  50              		.syntax unified
+  51              		.arm
+  52              		.fpu neon
+  54              	cbAdjustInIndex:
+  55              	.LFB17:
+ 689:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 690:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 691:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  End of function cbAdjustOutIndex
+ 692:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 693:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 694:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 695:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Function Name: cbAdjustInIndex
+ 696:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Description  : Function to adjust the in index of the buffer
+ 697:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Arguments    : IN  pcBuffer - Pointer to the buffer
+ 698:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  *                IN  length - The length of data to adjust for
+ 699:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  * Return Value : none
+ 700:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****  **************************************************************************************************
+ 701:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** static void cbAdjustInIndex (st_pcbuff_t pcBuffer, size_t length)
+ 702:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** {
+  56              		.loc 1 702 0
+  57              		.cfi_startproc
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  60              		@ link register save eliminated.
+  61              	.LVL3:
+ 703:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t l_input_index = (pcBuffer->input_index + length);
+  62              		.loc 1 703 0
+  63 0000 043090E5 		ldr	r3, [r0, #4]
+  64 0004 011083E0 		add	r1, r3, r1
+  65              	.LVL4:
+ 704:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 705:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     /* Check for top of Buffer */
+ 706:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (l_input_index >= pcBuffer->length)
+  66              		.loc 1 706 0
+  67 0008 0C3090E5 		ldr	r3, [r0, #12]
+  68 000c 030051E1 		cmp	r1, r3
+ 707:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 708:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_input_index = (l_input_index - pcBuffer->length);
+  69              		.loc 1 708 0
+  70 0010 03104120 		subcs	r1, r1, r3
+  71              	.LVL5:
+  72              	.L4:
+ 709:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 710:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 711:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     pcBuffer->input_index = l_input_index;
+  73              		.loc 1 711 0
+  74 0014 041080E5 		str	r1, [r0, #4]
+  75 0018 1EFF2FE1 		bx	lr
+  76              		.cfi_endproc
+  77              	.LFE17:
+  79              		.section	.text.cbCreate,"ax",%progbits
+  80              		.align	2
+  81              		.global	cbCreate
+  82              		.syntax unified
+  83              		.arm
+  84              		.fpu neon
+  86              	cbCreate:
+  87              	.LFB0:
+  96:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     st_pcbuff_t cbuffer;
+  88              		.loc 1 96 0
+  89              		.cfi_startproc
+  90              		@ args = 0, pretend = 0, frame = 0
+  91              		@ frame_needed = 0, uses_anonymous_args = 0
+  92              	.LVL6:
+  93 0000 10402DE9 		push	{r4, lr}
+  94              		.cfi_def_cfa_offset 8
+  95              		.cfi_offset 4, -8
+  96              		.cfi_offset 14, -4
+ 100:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+  97              		.loc 1 100 0
+  98 0004 004050E2 		subs	r4, r0, #0
+  99 0008 0C0000DA 		ble	.L7
+ 106:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 100              		.loc 1 106 0
+ 101 000c 0010A0E3 		mov	r1, #0
+ 102 0010 150084E2 		add	r0, r4, #21
+ 103              	.LVL7:
+ 104 0014 FEFFFFEB 		bl	R_OS_Malloc
+ 105              	.LVL8:
+ 108:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 106              		.loc 1 108 0
+ 107 0018 000050E3 		cmp	r0, #0
+ 108 001c 1080BD08 		popeq	{r4, pc}
+ 111:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbuffer->length = (size_t) (stBufferSize + sizeof(uint8_t));
+ 109              		.loc 1 111 0
+ 110 0020 103080E2 		add	r3, r0, #16
+ 111 0024 003080E5 		str	r3, [r0]
+ 112:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbuffer->input_index = 0;
+ 112              		.loc 1 112 0
+ 113 0028 014084E2 		add	r4, r4, #1
+ 114              	.LVL9:
+ 115 002c 0C4080E5 		str	r4, [r0, #12]
+ 113:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         cbuffer->output_index = 0;
+ 116              		.loc 1 113 0
+ 117 0030 0030A0E3 		mov	r3, #0
+ 118 0034 043080E5 		str	r3, [r0, #4]
+ 114:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 119              		.loc 1 114 0
+ 120 0038 083080E5 		str	r3, [r0, #8]
+ 121 003c 1080BDE8 		pop	{r4, pc}
+ 122              	.LVL10:
+ 123              	.L7:
+ 102:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 124              		.loc 1 102 0
+ 125 0040 0000A0E3 		mov	r0, #0
+ 126              	.LVL11:
+ 118:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 127              		.loc 1 118 0
+ 128 0044 1080BDE8 		pop	{r4, pc}
+ 129              		.cfi_endproc
+ 130              	.LFE0:
+ 132              		.section	.text.cbDestroy,"ax",%progbits
+ 133              		.align	2
+ 134              		.global	cbDestroy
+ 135              		.syntax unified
+ 136              		.arm
+ 137              		.fpu neon
+ 139              	cbDestroy:
+ 140              	.LFB1:
+ 131:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 141              		.loc 1 131 0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 8
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              	.LVL12:
+ 146 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 147              		.cfi_def_cfa_offset 4
+ 148              		.cfi_offset 14, -4
+ 149 0004 0CD04DE2 		sub	sp, sp, #12
+ 150              		.cfi_def_cfa_offset 16
+ 151 0008 04008DE5 		str	r0, [sp, #4]
+ 132:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 152              		.loc 1 132 0
+ 153 000c 000050E3 		cmp	r0, #0
+ 154 0010 0400000A 		beq	.L11
+ 137:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 155              		.loc 1 137 0
+ 156 0014 04008DE2 		add	r0, sp, #4
+ 157              	.LVL13:
+ 158 0018 FEFFFFEB 		bl	R_OS_Free
+ 159              	.LVL14:
+ 139:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 160              		.loc 1 139 0
+ 161 001c 0000A0E3 		mov	r0, #0
+ 162              	.L9:
+ 140:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 163              		.loc 1 140 0
+ 164 0020 0CD08DE2 		add	sp, sp, #12
+ 165              		.cfi_remember_state
+ 166              		.cfi_def_cfa_offset 4
+ 167              		@ sp needed
+ 168 0024 04F09DE4 		ldr	pc, [sp], #4
+ 169              	.LVL15:
+ 170              	.L11:
+ 171              		.cfi_restore_state
+ 134:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 172              		.loc 1 134 0
+ 173 0028 0000E0E3 		mvn	r0, #0
+ 174              	.LVL16:
+ 175 002c FBFFFFEA 		b	.L9
+ 176              		.cfi_endproc
+ 177              	.LFE1:
+ 179              		.section	.text.cbPut,"ax",%progbits
+ 180              		.align	2
+ 181              		.global	cbPut
+ 182              		.syntax unified
+ 183              		.arm
+ 184              		.fpu neon
+ 186              	cbPut:
+ 187              	.LFB2:
+ 155:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 188              		.loc 1 155 0
+ 189              		.cfi_startproc
+ 190              		@ args = 0, pretend = 0, frame = 0
+ 191              		@ frame_needed = 0, uses_anonymous_args = 0
+ 192              		@ link register save eliminated.
+ 193              	.LVL17:
+ 156:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 194              		.loc 1 156 0
+ 195 0000 000050E3 		cmp	r0, #0
+ 196 0004 0C00000A 		beq	.L16
+ 161:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 197              		.loc 1 161 0
+ 198 0008 042090E5 		ldr	r2, [r0, #4]
+ 199 000c 013082E2 		add	r3, r2, #1
+ 200              	.LVL18:
+ 164:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 201              		.loc 1 164 0
+ 202 0010 0CC090E5 		ldr	ip, [r0, #12]
+ 203 0014 0C0053E1 		cmp	r3, ip
+ 166:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 204              		.loc 1 166 0
+ 205 0018 0030A023 		movcs	r3, #0
+ 206              	.LVL19:
+ 207              	.L15:
+ 170:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 208              		.loc 1 170 0
+ 209 001c 08C090E5 		ldr	ip, [r0, #8]
+ 210 0020 0C0053E1 		cmp	r3, ip
+ 211 0024 0600000A 		beq	.L18
+ 173:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 212              		.loc 1 173 0
+ 213 0028 00C090E5 		ldr	ip, [r0]
+ 214 002c 0210CCE7 		strb	r1, [ip, r2]
+ 176:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return true;
+ 215              		.loc 1 176 0
+ 216 0030 043080E5 		str	r3, [r0, #4]
+ 177:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 217              		.loc 1 177 0
+ 218 0034 0100A0E3 		mov	r0, #1
+ 219              	.LVL20:
+ 220 0038 1EFF2FE1 		bx	lr
+ 221              	.LVL21:
+ 222              	.L16:
+ 158:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 223              		.loc 1 158 0
+ 224 003c 0000E0E3 		mvn	r0, #0
+ 225              	.LVL22:
+ 226 0040 1EFF2FE1 		bx	lr
+ 227              	.LVL23:
+ 228              	.L18:
+ 180:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 229              		.loc 1 180 0
+ 230 0044 0000A0E3 		mov	r0, #0
+ 231              	.LVL24:
+ 181:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 232              		.loc 1 181 0
+ 233 0048 1EFF2FE1 		bx	lr
+ 234              		.cfi_endproc
+ 235              	.LFE2:
+ 237              		.section	.text.cbGet,"ax",%progbits
+ 238              		.align	2
+ 239              		.global	cbGet
+ 240              		.syntax unified
+ 241              		.arm
+ 242              		.fpu neon
+ 244              	cbGet:
+ 245              	.LFB3:
+ 196:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 246              		.loc 1 196 0
+ 247              		.cfi_startproc
+ 248              		@ args = 0, pretend = 0, frame = 0
+ 249              		@ frame_needed = 0, uses_anonymous_args = 0
+ 250              		@ link register save eliminated.
+ 251              	.LVL25:
+ 197:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 252              		.loc 1 197 0
+ 253 0000 000050E3 		cmp	r0, #0
+ 254 0004 0D00000A 		beq	.L22
+ 203:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 255              		.loc 1 203 0
+ 256 0008 042090E5 		ldr	r2, [r0, #4]
+ 257 000c 083090E5 		ldr	r3, [r0, #8]
+ 258 0010 030052E1 		cmp	r2, r3
+ 259 0014 0B00000A 		beq	.L23
+ 260              	.LVL26:
+ 261              	.LBB2:
+ 209:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_output_index++;
+ 262              		.loc 1 209 0
+ 263 0018 002090E5 		ldr	r2, [r0]
+ 264 001c 0320D2E7 		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 265 0020 0020C1E5 		strb	r2, [r1]
+ 210:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 266              		.loc 1 210 0
+ 267 0024 013083E2 		add	r3, r3, #1
+ 268              	.LVL27:
+ 213:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 269              		.loc 1 213 0
+ 270 0028 0C2090E5 		ldr	r2, [r0, #12]
+ 271 002c 020053E1 		cmp	r3, r2
+ 215:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 272              		.loc 1 215 0
+ 273 0030 0030A023 		movcs	r3, #0
+ 274              	.LVL28:
+ 275              	.L21:
+ 219:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         return true;
+ 276              		.loc 1 219 0
+ 277 0034 083080E5 		str	r3, [r0, #8]
+ 220:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 278              		.loc 1 220 0
+ 279 0038 0100A0E3 		mov	r0, #1
+ 280              	.LVL29:
+ 281 003c 1EFF2FE1 		bx	lr
+ 282              	.LVL30:
+ 283              	.L22:
+ 284              	.LBE2:
+ 199:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 285              		.loc 1 199 0
+ 286 0040 0000E0E3 		mvn	r0, #0
+ 287              	.LVL31:
+ 288 0044 1EFF2FE1 		bx	lr
+ 289              	.LVL32:
+ 290              	.L23:
+ 223:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 291              		.loc 1 223 0
+ 292 0048 0000A0E3 		mov	r0, #0
+ 293              	.LVL33:
+ 224:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 294              		.loc 1 224 0
+ 295 004c 1EFF2FE1 		bx	lr
+ 296              		.cfi_endproc
+ 297              	.LFE3:
+ 299              		.section	.text.cbUsed,"ax",%progbits
+ 300              		.align	2
+ 301              		.global	cbUsed
+ 302              		.syntax unified
+ 303              		.arm
+ 304              		.fpu neon
+ 306              	cbUsed:
+ 307              	.LFB4:
+ 237:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t l_input_index;
+ 308              		.loc 1 237 0
+ 309              		.cfi_startproc
+ 310              		@ args = 0, pretend = 0, frame = 0
+ 311              		@ frame_needed = 0, uses_anonymous_args = 0
+ 312              		@ link register save eliminated.
+ 313              	.LVL34:
+ 242:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 314              		.loc 1 242 0
+ 315 0000 000050E3 		cmp	r0, #0
+ 316 0004 0900000A 		beq	.L29
+ 247:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     l_output_index = pcBuffer->output_index;
+ 317              		.loc 1 247 0
+ 318 0008 043090E5 		ldr	r3, [r0, #4]
+ 319              	.LVL35:
+ 248:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 320              		.loc 1 248 0
+ 321 000c 082090E5 		ldr	r2, [r0, #8]
+ 322              	.LVL36:
+ 250:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 323              		.loc 1 250 0
+ 324 0010 020053E1 		cmp	r3, r2
+ 325 0014 0300002A 		bcs	.L27
+ 252:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 326              		.loc 1 252 0
+ 327 0018 0C1090E5 		ldr	r1, [r0, #12]
+ 328 001c 020043E0 		sub	r0, r3, r2
+ 329              	.LVL37:
+ 330 0020 000081E0 		add	r0, r1, r0
+ 331              	.LVL38:
+ 332 0024 1EFF2FE1 		bx	lr
+ 333              	.LVL39:
+ 334              	.L27:
+ 256:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 335              		.loc 1 256 0
+ 336 0028 020043E0 		sub	r0, r3, r2
+ 337              	.LVL40:
+ 259:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 338              		.loc 1 259 0
+ 339 002c 1EFF2FE1 		bx	lr
+ 340              	.LVL41:
+ 341              	.L29:
+ 244:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 342              		.loc 1 244 0
+ 343 0030 0000E0E3 		mvn	r0, #0
+ 344              	.LVL42:
+ 260:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 345              		.loc 1 260 0
+ 346 0034 1EFF2FE1 		bx	lr
+ 347              		.cfi_endproc
+ 348              	.LFE4:
+ 350              		.section	.text.cbFree,"ax",%progbits
+ 351              		.align	2
+ 352              		.global	cbFree
+ 353              		.syntax unified
+ 354              		.arm
+ 355              		.fpu neon
+ 357              	cbFree:
+ 358              	.LFB5:
+ 273:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 359              		.loc 1 273 0
+ 360              		.cfi_startproc
+ 361              		@ args = 0, pretend = 0, frame = 0
+ 362              		@ frame_needed = 0, uses_anonymous_args = 0
+ 363              	.LVL43:
+ 274:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 364              		.loc 1 274 0
+ 365 0000 000050E3 		cmp	r0, #0
+ 366 0004 0500000A 		beq	.L32
+ 273:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 367              		.loc 1 273 0
+ 368 0008 10402DE9 		push	{r4, lr}
+ 369              		.cfi_def_cfa_offset 8
+ 370              		.cfi_offset 4, -8
+ 371              		.cfi_offset 14, -4
+ 279:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 372              		.loc 1 279 0
+ 373 000c 0C4090E5 		ldr	r4, [r0, #12]
+ 374 0010 FEFFFFEB 		bl	cbUsed
+ 375              	.LVL44:
+ 376 0014 000044E0 		sub	r0, r4, r0
+ 377 0018 010040E2 		sub	r0, r0, #1
+ 378 001c 1080BDE8 		pop	{r4, pc}
+ 379              	.LVL45:
+ 380              	.L32:
+ 381              		.cfi_def_cfa_offset 0
+ 382              		.cfi_restore 4
+ 383              		.cfi_restore 14
+ 276:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 384              		.loc 1 276 0
+ 385 0020 0000E0E3 		mvn	r0, #0
+ 386              	.LVL46:
+ 387 0024 1EFF2FE1 		bx	lr
+ 388              		.cfi_endproc
+ 389              	.LFE5:
+ 391              		.section	.text.cbFull,"ax",%progbits
+ 392              		.align	2
+ 393              		.global	cbFull
+ 394              		.syntax unified
+ 395              		.arm
+ 396              		.fpu neon
+ 398              	cbFull:
+ 399              	.LFB6:
+ 294:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 400              		.loc 1 294 0
+ 401              		.cfi_startproc
+ 402              		@ args = 0, pretend = 0, frame = 0
+ 403              		@ frame_needed = 0, uses_anonymous_args = 0
+ 404              		@ link register save eliminated.
+ 405              	.LVL47:
+ 295:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 406              		.loc 1 295 0
+ 407 0000 000050E3 		cmp	r0, #0
+ 408 0004 0B00000A 		beq	.L40
+ 300:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 409              		.loc 1 300 0
+ 410 0008 043090E5 		ldr	r3, [r0, #4]
+ 411 000c 013083E2 		add	r3, r3, #1
+ 412              	.LVL48:
+ 303:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 413              		.loc 1 303 0
+ 414 0010 0C2090E5 		ldr	r2, [r0, #12]
+ 415 0014 020053E1 		cmp	r3, r2
+ 305:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 416              		.loc 1 305 0
+ 417 0018 0030A023 		movcs	r3, #0
+ 418              	.LVL49:
+ 419              	.L39:
+ 309:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 420              		.loc 1 309 0
+ 421 001c 082090E5 		ldr	r2, [r0, #8]
+ 422 0020 020053E1 		cmp	r3, r2
+ 423 0024 0100000A 		beq	.L43
+ 315:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 424              		.loc 1 315 0
+ 425 0028 0000A0E3 		mov	r0, #0
+ 426              	.LVL50:
+ 317:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 427              		.loc 1 317 0
+ 428 002c 1EFF2FE1 		bx	lr
+ 429              	.LVL51:
+ 430              	.L43:
+ 311:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 431              		.loc 1 311 0
+ 432 0030 0100A0E3 		mov	r0, #1
+ 433              	.LVL52:
+ 434 0034 1EFF2FE1 		bx	lr
+ 435              	.LVL53:
+ 436              	.L40:
+ 297:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 437              		.loc 1 297 0
+ 438 0038 0000E0E3 		mvn	r0, #0
+ 439              	.LVL54:
+ 440 003c 1EFF2FE1 		bx	lr
+ 441              		.cfi_endproc
+ 442              	.LFE6:
+ 444              		.section	.text.cbClear,"ax",%progbits
+ 445              		.align	2
+ 446              		.global	cbClear
+ 447              		.syntax unified
+ 448              		.arm
+ 449              		.fpu neon
+ 451              	cbClear:
+ 452              	.LFB7:
+ 330:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 453              		.loc 1 330 0
+ 454              		.cfi_startproc
+ 455              		@ args = 0, pretend = 0, frame = 0
+ 456              		@ frame_needed = 0, uses_anonymous_args = 0
+ 457              		@ link register save eliminated.
+ 458              	.LVL55:
+ 331:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 459              		.loc 1 331 0
+ 460 0000 003050E2 		subs	r3, r0, #0
+ 461 0004 0300000A 		beq	.L46
+ 336:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 462              		.loc 1 336 0
+ 463 0008 0000A0E3 		mov	r0, #0
+ 464              	.LVL56:
+ 465 000c 080083E5 		str	r0, [r3, #8]
+ 466 0010 040083E5 		str	r0, [r3, #4]
+ 338:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 467              		.loc 1 338 0
+ 468 0014 1EFF2FE1 		bx	lr
+ 469              	.LVL57:
+ 470              	.L46:
+ 333:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 471              		.loc 1 333 0
+ 472 0018 0000E0E3 		mvn	r0, #0
+ 473              	.LVL58:
+ 339:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 474              		.loc 1 339 0
+ 475 001c 1EFF2FE1 		bx	lr
+ 476              		.cfi_endproc
+ 477              	.LFE7:
+ 479              		.section	.text.cbLinOut,"ax",%progbits
+ 480              		.align	2
+ 481              		.global	cbLinOut
+ 482              		.syntax unified
+ 483              		.arm
+ 484              		.fpu neon
+ 486              	cbLinOut:
+ 487              	.LFB12:
+ 542:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 488              		.loc 1 542 0
+ 489              		.cfi_startproc
+ 490              		@ args = 0, pretend = 0, frame = 0
+ 491              		@ frame_needed = 0, uses_anonymous_args = 0
+ 492              		@ link register save eliminated.
+ 493              	.LVL59:
+ 543:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 494              		.loc 1 543 0
+ 495 0000 000050E3 		cmp	r0, #0
+ 496 0004 0900000A 		beq	.L50
+ 548:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 497              		.loc 1 548 0
+ 498 0008 042090E5 		ldr	r2, [r0, #4]
+ 499 000c 083090E5 		ldr	r3, [r0, #8]
+ 500 0010 030052E1 		cmp	r2, r3
+ 501 0014 0700000A 		beq	.L51
+ 502              	.LVL60:
+ 503              	.LBB3:
+ 563:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 504              		.loc 1 563 0
+ 505 0018 0100003A 		bcc	.L52
+ 571:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 506              		.loc 1 571 0
+ 507 001c 030042E0 		sub	r0, r2, r3
+ 508              	.LVL61:
+ 509 0020 1EFF2FE1 		bx	lr
+ 510              	.LVL62:
+ 511              	.L52:
+ 566:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 512              		.loc 1 566 0
+ 513 0024 0C0090E5 		ldr	r0, [r0, #12]
+ 514              	.LVL63:
+ 515 0028 030040E0 		sub	r0, r0, r3
+ 516 002c 1EFF2FE1 		bx	lr
+ 517              	.LVL64:
+ 518              	.L50:
+ 519              	.LBE3:
+ 545:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 520              		.loc 1 545 0
+ 521 0030 0000E0E3 		mvn	r0, #0
+ 522              	.LVL65:
+ 523 0034 1EFF2FE1 		bx	lr
+ 524              	.LVL66:
+ 525              	.L51:
+ 551:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 526              		.loc 1 551 0
+ 527 0038 0000A0E3 		mov	r0, #0
+ 528              	.LVL67:
+ 574:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 529              		.loc 1 574 0
+ 530 003c 1EFF2FE1 		bx	lr
+ 531              		.cfi_endproc
+ 532              	.LFE12:
+ 534              		.section	.text.cbGetPacket,"ax",%progbits
+ 535              		.align	2
+ 536              		.global	cbGetPacket
+ 537              		.syntax unified
+ 538              		.arm
+ 539              		.fpu neon
+ 541              	cbGetPacket:
+ 542              	.LFB8:
+ 357:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint8_t *p_data;
+ 543              		.loc 1 357 0
+ 544              		.cfi_startproc
+ 545              		@ args = 0, pretend = 0, frame = 0
+ 546              		@ frame_needed = 0, uses_anonymous_args = 0
+ 547              	.LVL68:
+ 548 0000 F0412DE9 		push	{r4, r5, r6, r7, r8, lr}
+ 549              		.cfi_def_cfa_offset 24
+ 550              		.cfi_offset 4, -24
+ 551              		.cfi_offset 5, -20
+ 552              		.cfi_offset 6, -16
+ 553              		.cfi_offset 7, -12
+ 554              		.cfi_offset 8, -8
+ 555              		.cfi_offset 14, -4
+ 362:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 556              		.loc 1 362 0
+ 557 0004 004050E2 		subs	r4, r0, #0
+ 558 0008 1900000A 		beq	.L56
+ 559 000c 0260A0E1 		mov	r6, r2
+ 560 0010 0150A0E1 		mov	r5, r1
+ 368:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 561              		.loc 1 368 0
+ 562 0014 007094E5 		ldr	r7, [r4]
+ 563 0018 083094E5 		ldr	r3, [r4, #8]
+ 564 001c 037087E0 		add	r7, r7, r3
+ 565              	.LVL69:
+ 371:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 566              		.loc 1 371 0
+ 567 0020 0400A0E1 		mov	r0, r4
+ 568 0024 FEFFFFEB 		bl	cbLinOut
+ 569              	.LVL70:
+ 570 0028 0080A0E1 		mov	r8, r0
+ 571              	.LVL71:
+ 374:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 572              		.loc 1 374 0
+ 573 002c 050050E1 		cmp	r0, r5
+ 574 0030 0900002A 		bcs	.L58
+ 382:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         p_data = pcBuffer->p_base;
+ 575              		.loc 1 382 0
+ 576 0034 0020A0E1 		mov	r2, r0
+ 577 0038 0710A0E1 		mov	r1, r7
+ 578 003c 0600A0E1 		mov	r0, r6
+ 579              	.LVL72:
+ 580 0040 FEFFFFEB 		bl	memcpy
+ 581              	.LVL73:
+ 390:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 582              		.loc 1 390 0
+ 583 0044 082045E0 		sub	r2, r5, r8
+ 584              	.LVL74:
+ 585 0048 001094E5 		ldr	r1, [r4]
+ 586 004c 080086E0 		add	r0, r6, r8
+ 587              	.LVL75:
+ 588 0050 FEFFFFEB 		bl	memcpy
+ 589              	.LVL76:
+ 393:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 590              		.loc 1 393 0
+ 591 0054 0000A0E3 		mov	r0, #0
+ 592 0058 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 593              	.LVL77:
+ 594              	.L58:
+ 377:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 595              		.loc 1 377 0
+ 596 005c 0520A0E1 		mov	r2, r5
+ 597 0060 0710A0E1 		mov	r1, r7
+ 598 0064 0600A0E1 		mov	r0, r6
+ 599              	.LVL78:
+ 600 0068 FEFFFFEB 		bl	memcpy
+ 601              	.LVL79:
+ 393:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 602              		.loc 1 393 0
+ 603 006c 0000A0E3 		mov	r0, #0
+ 604 0070 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 605              	.LVL80:
+ 606              	.L56:
+ 364:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 607              		.loc 1 364 0
+ 608 0074 0000E0E3 		mvn	r0, #0
+ 609              	.LVL81:
+ 394:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 610              		.loc 1 394 0
+ 611 0078 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 612              		.cfi_endproc
+ 613              	.LFE8:
+ 615              		.section	.text.cbCheckOut,"ax",%progbits
+ 616              		.align	2
+ 617              		.global	cbCheckOut
+ 618              		.syntax unified
+ 619              		.arm
+ 620              		.fpu neon
+ 622              	cbCheckOut:
+ 623              	.LFB9:
+ 409:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t block_length;
+ 624              		.loc 1 409 0
+ 625              		.cfi_startproc
+ 626              		@ args = 0, pretend = 0, frame = 0
+ 627              		@ frame_needed = 0, uses_anonymous_args = 0
+ 628              	.LVL82:
+ 629 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 630              		.cfi_def_cfa_offset 16
+ 631              		.cfi_offset 4, -16
+ 632              		.cfi_offset 5, -12
+ 633              		.cfi_offset 6, -8
+ 634              		.cfi_offset 14, -4
+ 412:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 635              		.loc 1 412 0
+ 636 0004 004050E2 		subs	r4, r0, #0
+ 637 0008 1200000A 		beq	.L62
+ 638 000c 0150A0E1 		mov	r5, r1
+ 418:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 639              		.loc 1 418 0
+ 640 0010 0400A0E1 		mov	r0, r4
+ 641 0014 FEFFFFEB 		bl	cbLinOut
+ 642              	.LVL83:
+ 643 0018 0060A0E1 		mov	r6, r0
+ 644              	.LVL84:
+ 421:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 645              		.loc 1 421 0
+ 646 001c 050050E1 		cmp	r0, r5
+ 647 0020 0700002A 		bcs	.L64
+ 429:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 648              		.loc 1 429 0
+ 649 0024 0010A0E1 		mov	r1, r0
+ 650 0028 0400A0E1 		mov	r0, r4
+ 651              	.LVL85:
+ 652 002c FEFFFFEB 		bl	cbAdjustOutIndex
+ 653              	.LVL86:
+ 433:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 654              		.loc 1 433 0
+ 655 0030 061045E0 		sub	r1, r5, r6
+ 656              	.LVL87:
+ 657 0034 0400A0E1 		mov	r0, r4
+ 658 0038 FEFFFFEB 		bl	cbAdjustOutIndex
+ 659              	.LVL88:
+ 436:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 660              		.loc 1 436 0
+ 661 003c 0000A0E3 		mov	r0, #0
+ 662 0040 7080BDE8 		pop	{r4, r5, r6, pc}
+ 663              	.LVL89:
+ 664              	.L64:
+ 424:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 665              		.loc 1 424 0
+ 666 0044 0510A0E1 		mov	r1, r5
+ 667 0048 0400A0E1 		mov	r0, r4
+ 668              	.LVL90:
+ 669 004c FEFFFFEB 		bl	cbAdjustOutIndex
+ 670              	.LVL91:
+ 436:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 671              		.loc 1 436 0
+ 672 0050 0000A0E3 		mov	r0, #0
+ 673 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 674              	.LVL92:
+ 675              	.L62:
+ 414:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 676              		.loc 1 414 0
+ 677 0058 0000E0E3 		mvn	r0, #0
+ 678              	.LVL93:
+ 437:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 679              		.loc 1 437 0
+ 680 005c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 681              		.cfi_endproc
+ 682              	.LFE9:
+ 684              		.section	.text.cbLinIn,"ax",%progbits
+ 685              		.align	2
+ 686              		.global	cbLinIn
+ 687              		.syntax unified
+ 688              		.arm
+ 689              		.fpu neon
+ 691              	cbLinIn:
+ 692              	.LFB13:
+ 587:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 693              		.loc 1 587 0
+ 694              		.cfi_startproc
+ 695              		@ args = 0, pretend = 0, frame = 0
+ 696              		@ frame_needed = 0, uses_anonymous_args = 0
+ 697              	.LVL94:
+ 698 0000 10402DE9 		push	{r4, lr}
+ 699              		.cfi_def_cfa_offset 8
+ 700              		.cfi_offset 4, -8
+ 701              		.cfi_offset 14, -4
+ 588:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 702              		.loc 1 588 0
+ 703 0004 004050E2 		subs	r4, r0, #0
+ 704 0008 1300000A 		beq	.L69
+ 593:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 705              		.loc 1 593 0
+ 706 000c 0400A0E1 		mov	r0, r4
+ 707 0010 FEFFFFEB 		bl	cbFull
+ 708              	.LVL95:
+ 709 0014 000050E3 		cmp	r0, #0
+ 710 0018 1100001A 		bne	.L70
+ 711              	.LBB4:
+ 600:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         l_output_index = pcBuffer->output_index;
+ 712              		.loc 1 600 0
+ 713 001c 041094E5 		ldr	r1, [r4, #4]
+ 714              	.LVL96:
+ 601:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 715              		.loc 1 601 0
+ 716 0020 083094E5 		ldr	r3, [r4, #8]
+ 717              	.LVL97:
+ 604:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 718              		.loc 1 604 0
+ 719 0024 030051E1 		cmp	r1, r3
+ 720 0028 0500003A 		bcc	.L72
+ 609:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         {
+ 721              		.loc 1 609 0
+ 722 002c 000053E3 		cmp	r3, #0
+ 723 0030 0600001A 		bne	.L73
+ 617:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 724              		.loc 1 617 0
+ 725 0034 0C0094E5 		ldr	r0, [r4, #12]
+ 726 0038 010040E0 		sub	r0, r0, r1
+ 727 003c 010040E2 		sub	r0, r0, #1
+ 728 0040 1080BDE8 		pop	{r4, pc}
+ 729              	.L72:
+ 607:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 730              		.loc 1 607 0
+ 731 0044 010043E0 		sub	r0, r3, r1
+ 732 0048 010040E2 		sub	r0, r0, #1
+ 733 004c 1080BDE8 		pop	{r4, pc}
+ 734              	.L73:
+ 612:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         }
+ 735              		.loc 1 612 0
+ 736 0050 0C2094E5 		ldr	r2, [r4, #12]
+ 737 0054 010042E0 		sub	r0, r2, r1
+ 738 0058 1080BDE8 		pop	{r4, pc}
+ 739              	.LVL98:
+ 740              	.L69:
+ 741              	.LBE4:
+ 590:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 742              		.loc 1 590 0
+ 743 005c 0000E0E3 		mvn	r0, #0
+ 744              	.LVL99:
+ 745 0060 1080BDE8 		pop	{r4, pc}
+ 746              	.L70:
+ 621:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 747              		.loc 1 621 0
+ 748 0064 0000A0E3 		mov	r0, #0
+ 622:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 749              		.loc 1 622 0
+ 750 0068 1080BDE8 		pop	{r4, pc}
+ 751              		.cfi_endproc
+ 752              	.LFE13:
+ 754              		.section	.text.cbPutPacket,"ax",%progbits
+ 755              		.align	2
+ 756              		.global	cbPutPacket
+ 757              		.syntax unified
+ 758              		.arm
+ 759              		.fpu neon
+ 761              	cbPutPacket:
+ 762              	.LFB10:
+ 452:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     uint8_t *p_data;
+ 763              		.loc 1 452 0
+ 764              		.cfi_startproc
+ 765              		@ args = 0, pretend = 0, frame = 0
+ 766              		@ frame_needed = 0, uses_anonymous_args = 0
+ 767              	.LVL100:
+ 768 0000 F0412DE9 		push	{r4, r5, r6, r7, r8, lr}
+ 769              		.cfi_def_cfa_offset 24
+ 770              		.cfi_offset 4, -24
+ 771              		.cfi_offset 5, -20
+ 772              		.cfi_offset 6, -16
+ 773              		.cfi_offset 7, -12
+ 774              		.cfi_offset 8, -8
+ 775              		.cfi_offset 14, -4
+ 457:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 776              		.loc 1 457 0
+ 777 0004 004050E2 		subs	r4, r0, #0
+ 778 0008 1700000A 		beq	.L77
+ 779 000c 0260A0E1 		mov	r6, r2
+ 780 0010 0150A0E1 		mov	r5, r1
+ 463:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     p_data = (pcBuffer->p_base + pcBuffer->input_index);
+ 781              		.loc 1 463 0
+ 782 0014 0400A0E1 		mov	r0, r4
+ 783 0018 FEFFFFEB 		bl	cbLinIn
+ 784              	.LVL101:
+ 785 001c 0070A0E1 		mov	r7, r0
+ 786              	.LVL102:
+ 464:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 787              		.loc 1 464 0
+ 788 0020 000094E5 		ldr	r0, [r4]
+ 789              	.LVL103:
+ 790 0024 043094E5 		ldr	r3, [r4, #4]
+ 791 0028 030080E0 		add	r0, r0, r3
+ 792              	.LVL104:
+ 467:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 793              		.loc 1 467 0
+ 794 002c 050057E1 		cmp	r7, r5
+ 795 0030 0800002A 		bcs	.L79
+ 475:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****         p_data = pcBuffer->p_base;
+ 796              		.loc 1 475 0
+ 797 0034 0720A0E1 		mov	r2, r7
+ 798 0038 0610A0E1 		mov	r1, r6
+ 799 003c FEFFFFEB 		bl	memcpy
+ 800              	.LVL105:
+ 483:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 801              		.loc 1 483 0
+ 802 0040 072045E0 		sub	r2, r5, r7
+ 803              	.LVL106:
+ 804 0044 071086E0 		add	r1, r6, r7
+ 805              	.LVL107:
+ 806 0048 000094E5 		ldr	r0, [r4]
+ 807 004c FEFFFFEB 		bl	memcpy
+ 808              	.LVL108:
+ 486:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 809              		.loc 1 486 0
+ 810 0050 0000A0E3 		mov	r0, #0
+ 811 0054 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 812              	.LVL109:
+ 813              	.L79:
+ 470:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 814              		.loc 1 470 0
+ 815 0058 0520A0E1 		mov	r2, r5
+ 816 005c 0610A0E1 		mov	r1, r6
+ 817 0060 FEFFFFEB 		bl	memcpy
+ 818              	.LVL110:
+ 486:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 819              		.loc 1 486 0
+ 820 0064 0000A0E3 		mov	r0, #0
+ 821 0068 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 822              	.LVL111:
+ 823              	.L77:
+ 459:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 824              		.loc 1 459 0
+ 825 006c 0000E0E3 		mvn	r0, #0
+ 826              	.LVL112:
+ 487:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 827              		.loc 1 487 0
+ 828 0070 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 829              		.cfi_endproc
+ 830              	.LFE10:
+ 832              		.section	.text.cbCheckIn,"ax",%progbits
+ 833              		.align	2
+ 834              		.global	cbCheckIn
+ 835              		.syntax unified
+ 836              		.arm
+ 837              		.fpu neon
+ 839              	cbCheckIn:
+ 840              	.LFB11:
+ 501:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     size_t block_length;
+ 841              		.loc 1 501 0
+ 842              		.cfi_startproc
+ 843              		@ args = 0, pretend = 0, frame = 0
+ 844              		@ frame_needed = 0, uses_anonymous_args = 0
+ 845              	.LVL113:
+ 846 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 847              		.cfi_def_cfa_offset 16
+ 848              		.cfi_offset 4, -16
+ 849              		.cfi_offset 5, -12
+ 850              		.cfi_offset 6, -8
+ 851              		.cfi_offset 14, -4
+ 504:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 852              		.loc 1 504 0
+ 853 0004 004050E2 		subs	r4, r0, #0
+ 854 0008 1200000A 		beq	.L83
+ 855 000c 0150A0E1 		mov	r5, r1
+ 510:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 856              		.loc 1 510 0
+ 857 0010 0400A0E1 		mov	r0, r4
+ 858 0014 FEFFFFEB 		bl	cbLinIn
+ 859              	.LVL114:
+ 860 0018 0060A0E1 		mov	r6, r0
+ 861              	.LVL115:
+ 513:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 862              		.loc 1 513 0
+ 863 001c 050050E1 		cmp	r0, r5
+ 864 0020 0700002A 		bcs	.L85
+ 521:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** 
+ 865              		.loc 1 521 0
+ 866 0024 0010A0E1 		mov	r1, r0
+ 867 0028 0400A0E1 		mov	r0, r4
+ 868              	.LVL116:
+ 869 002c FEFFFFEB 		bl	cbAdjustInIndex
+ 870              	.LVL117:
+ 525:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 871              		.loc 1 525 0
+ 872 0030 061045E0 		sub	r1, r5, r6
+ 873              	.LVL118:
+ 874 0034 0400A0E1 		mov	r0, r4
+ 875 0038 FEFFFFEB 		bl	cbAdjustInIndex
+ 876              	.LVL119:
+ 528:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 877              		.loc 1 528 0
+ 878 003c 0000A0E3 		mov	r0, #0
+ 879 0040 7080BDE8 		pop	{r4, r5, r6, pc}
+ 880              	.LVL120:
+ 881              	.L85:
+ 516:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 882              		.loc 1 516 0
+ 883 0044 0510A0E1 		mov	r1, r5
+ 884 0048 0400A0E1 		mov	r0, r4
+ 885              	.LVL121:
+ 886 004c FEFFFFEB 		bl	cbAdjustInIndex
+ 887              	.LVL122:
+ 528:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 888              		.loc 1 528 0
+ 889 0050 0000A0E3 		mov	r0, #0
+ 890 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 891              	.LVL123:
+ 892              	.L83:
+ 506:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 893              		.loc 1 506 0
+ 894 0058 0000E0E3 		mvn	r0, #0
+ 895              	.LVL124:
+ 529:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 896              		.loc 1 529 0
+ 897 005c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 898              		.cfi_endproc
+ 899              	.LFE11:
+ 901              		.section	.text.cbInPointer,"ax",%progbits
+ 902              		.align	2
+ 903              		.global	cbInPointer
+ 904              		.syntax unified
+ 905              		.arm
+ 906              		.fpu neon
+ 908              	cbInPointer:
+ 909              	.LFB14:
+ 635:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 910              		.loc 1 635 0
+ 911              		.cfi_startproc
+ 912              		@ args = 0, pretend = 0, frame = 0
+ 913              		@ frame_needed = 0, uses_anonymous_args = 0
+ 914              		@ link register save eliminated.
+ 915              	.LVL125:
+ 636:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 916              		.loc 1 636 0
+ 917 0000 000050E3 		cmp	r0, #0
+ 918 0004 0300000A 		beq	.L88
+ 641:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 919              		.loc 1 641 0
+ 920 0008 003090E5 		ldr	r3, [r0]
+ 921 000c 040090E5 		ldr	r0, [r0, #4]
+ 922              	.LVL126:
+ 923 0010 000083E0 		add	r0, r3, r0
+ 924 0014 1EFF2FE1 		bx	lr
+ 925              	.LVL127:
+ 926              	.L88:
+ 638:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 927              		.loc 1 638 0
+ 928 0018 0000A0E3 		mov	r0, #0
+ 929              	.LVL128:
+ 642:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /**************************************************************************************************
+ 930              		.loc 1 642 0
+ 931 001c 1EFF2FE1 		bx	lr
+ 932              		.cfi_endproc
+ 933              	.LFE14:
+ 935              		.section	.text.cbOutPointer,"ax",%progbits
+ 936              		.align	2
+ 937              		.global	cbOutPointer
+ 938              		.syntax unified
+ 939              		.arm
+ 940              		.fpu neon
+ 942              	cbOutPointer:
+ 943              	.LFB15:
+ 655:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     if (NULL == pcBuffer)
+ 944              		.loc 1 655 0
+ 945              		.cfi_startproc
+ 946              		@ args = 0, pretend = 0, frame = 0
+ 947              		@ frame_needed = 0, uses_anonymous_args = 0
+ 948              		@ link register save eliminated.
+ 949              	.LVL129:
+ 656:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     {
+ 950              		.loc 1 656 0
+ 951 0000 000050E3 		cmp	r0, #0
+ 952 0004 0300000A 		beq	.L91
+ 661:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** }
+ 953              		.loc 1 661 0
+ 954 0008 003090E5 		ldr	r3, [r0]
+ 955 000c 080090E5 		ldr	r0, [r0, #8]
+ 956              	.LVL130:
+ 957 0010 000083E0 		add	r0, r3, r0
+ 958 0014 1EFF2FE1 		bx	lr
+ 959              	.LVL131:
+ 960              	.L91:
+ 658:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c ****     }
+ 961              		.loc 1 658 0
+ 962 0018 0000A0E3 		mov	r0, #0
+ 963              	.LVL132:
+ 662:../generate/sc_drivers/r_cbuffer/src/r_cbuffer.c **** /******************************************************************************
+ 964              		.loc 1 662 0
+ 965 001c 1EFF2FE1 		bx	lr
+ 966              		.cfi_endproc
+ 967              	.LFE15:
+ 969              		.text
+ 970              	.Letext0:
+ 971              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 972              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 973              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 974              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 975              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 976              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 977              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 978              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 979              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 980              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 981              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+ 982              		.file 13 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 983              		.file 14 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+ 984              		.file 15 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_cbuffer.c
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:17     .text.cbAdjustOutIndex:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:22     .text.cbAdjustOutIndex:00000000 cbAdjustOutIndex
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:49     .text.cbAdjustInIndex:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:54     .text.cbAdjustInIndex:00000000 cbAdjustInIndex
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:80     .text.cbCreate:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:86     .text.cbCreate:00000000 cbCreate
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:133    .text.cbDestroy:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:139    .text.cbDestroy:00000000 cbDestroy
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:180    .text.cbPut:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:186    .text.cbPut:00000000 cbPut
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:238    .text.cbGet:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:244    .text.cbGet:00000000 cbGet
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:300    .text.cbUsed:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:306    .text.cbUsed:00000000 cbUsed
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:351    .text.cbFree:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:357    .text.cbFree:00000000 cbFree
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:392    .text.cbFull:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:398    .text.cbFull:00000000 cbFull
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:445    .text.cbClear:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:451    .text.cbClear:00000000 cbClear
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:480    .text.cbLinOut:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:486    .text.cbLinOut:00000000 cbLinOut
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:535    .text.cbGetPacket:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:541    .text.cbGetPacket:00000000 cbGetPacket
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:616    .text.cbCheckOut:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:622    .text.cbCheckOut:00000000 cbCheckOut
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:685    .text.cbLinIn:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:691    .text.cbLinIn:00000000 cbLinIn
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:755    .text.cbPutPacket:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:761    .text.cbPutPacket:00000000 cbPutPacket
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:833    .text.cbCheckIn:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:839    .text.cbCheckIn:00000000 cbCheckIn
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:902    .text.cbInPointer:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:908    .text.cbInPointer:00000000 cbInPointer
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:936    .text.cbOutPointer:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccIUIQKO.s:942    .text.cbOutPointer:00000000 cbOutPointer
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.stddef.h.187.e1c83cba2098ce92b68f6311de19e6b1
+                           .group:00000000 wm4.stddef.h.39.57db33e786ccd422e31be63a26e19309
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.malloc.h.4.62bd13b8107d5245f60bd92bb5994838
+                           .group:00000000 wm4.malloc.h.148.73b7de3bd065dafbd594b04197a9466e
+                           .group:00000000 wm4.r_cbuffer.h.45.eba5925b086e55c992722345e5e299f3
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_os_abstraction_api.h.53.c40489f97d2474c70b40d43822d1406c
+
+UNDEFINED SYMBOLS
+R_OS_Malloc
+R_OS_Free
+memcpy

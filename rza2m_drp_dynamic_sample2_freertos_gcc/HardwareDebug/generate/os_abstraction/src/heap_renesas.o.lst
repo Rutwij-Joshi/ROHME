@@ -1,0 +1,1420 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"heap_renesas.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.prvInsertBlockIntoFreeList,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	prvInsertBlockIntoFreeList:
+  23              	.LFB5:
+  24              		.file 1 "../generate/os_abstraction/src/heap_renesas.c"
+   1:../generate/os_abstraction/src/heap_renesas.c **** /*
+   2:../generate/os_abstraction/src/heap_renesas.c ****  * FreeRTOS Kernel V10.0.0
+   3:../generate/os_abstraction/src/heap_renesas.c ****  * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:../generate/os_abstraction/src/heap_renesas.c ****  *
+   5:../generate/os_abstraction/src/heap_renesas.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   6:../generate/os_abstraction/src/heap_renesas.c ****  * this software and associated documentation files (the "Software"), to deal in
+   7:../generate/os_abstraction/src/heap_renesas.c ****  * the Software without restriction, including without limitation the rights to
+   8:../generate/os_abstraction/src/heap_renesas.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+   9:../generate/os_abstraction/src/heap_renesas.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  10:../generate/os_abstraction/src/heap_renesas.c ****  * subject to the following conditions:
+  11:../generate/os_abstraction/src/heap_renesas.c ****  *
+  12:../generate/os_abstraction/src/heap_renesas.c ****  * The above copyright notice and this permission notice shall be included in all
+  13:../generate/os_abstraction/src/heap_renesas.c ****  * copies or substantial portions of the Software. If you wish to use our Amazon
+  14:../generate/os_abstraction/src/heap_renesas.c ****  * FreeRTOS name, please do so in a fair use way that does not cause confusion.
+  15:../generate/os_abstraction/src/heap_renesas.c ****  *
+  16:../generate/os_abstraction/src/heap_renesas.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  17:../generate/os_abstraction/src/heap_renesas.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  18:../generate/os_abstraction/src/heap_renesas.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  19:../generate/os_abstraction/src/heap_renesas.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  20:../generate/os_abstraction/src/heap_renesas.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  21:../generate/os_abstraction/src/heap_renesas.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  22:../generate/os_abstraction/src/heap_renesas.c ****  *
+  23:../generate/os_abstraction/src/heap_renesas.c ****  * http://www.FreeRTOS.org
+  24:../generate/os_abstraction/src/heap_renesas.c ****  * http://aws.amazon.com/freertos
+  25:../generate/os_abstraction/src/heap_renesas.c ****  *
+  26:../generate/os_abstraction/src/heap_renesas.c ****  * 1 tab == 4 spaces!
+  27:../generate/os_abstraction/src/heap_renesas.c ****  */
+  28:../generate/os_abstraction/src/heap_renesas.c **** /*
+  29:../generate/os_abstraction/src/heap_renesas.c ****  * A sample implementation of pvPortMalloc() that allows the heap to be defined
+  30:../generate/os_abstraction/src/heap_renesas.c ****  * across multiple non-contigous blocks and combines (coalescences) adjacent
+  31:../generate/os_abstraction/src/heap_renesas.c ****  * memory blocks as they are freed.
+  32:../generate/os_abstraction/src/heap_renesas.c ****  *
+  33:../generate/os_abstraction/src/heap_renesas.c ****  * See heap_1.c, heap_2.c, heap_3.c and heap_4.c for alternative
+  34:../generate/os_abstraction/src/heap_renesas.c ****  * implementations, and the memory management pages of http://www.FreeRTOS.org
+  35:../generate/os_abstraction/src/heap_renesas.c ****  * for more information.
+  36:../generate/os_abstraction/src/heap_renesas.c ****  *
+  37:../generate/os_abstraction/src/heap_renesas.c ****  * Usage notes:
+  38:../generate/os_abstraction/src/heap_renesas.c ****  *
+  39:../generate/os_abstraction/src/heap_renesas.c ****  * vPortDefineHeapRegions() ***must*** be called before pvPortMalloc().
+  40:../generate/os_abstraction/src/heap_renesas.c ****  * pvPortMalloc() will be called if any task objects (tasks, queues, event
+  41:../generate/os_abstraction/src/heap_renesas.c ****  * groups, etc.) are created, therefore vPortDefineHeapRegions() ***must*** be
+  42:../generate/os_abstraction/src/heap_renesas.c ****  * called before any other objects are defined.
+  43:../generate/os_abstraction/src/heap_renesas.c ****  *
+  44:../generate/os_abstraction/src/heap_renesas.c ****  * vPortDefineHeapRegions() takes a single parameter.  The parameter is an array
+  45:../generate/os_abstraction/src/heap_renesas.c ****  * of HeapRegion_t structures.  HeapRegion_t is defined in portable.h as
+  46:../generate/os_abstraction/src/heap_renesas.c ****  *
+  47:../generate/os_abstraction/src/heap_renesas.c ****  * typedef struct HeapRegion
+  48:../generate/os_abstraction/src/heap_renesas.c ****  * {
+  49:../generate/os_abstraction/src/heap_renesas.c ****  *    uint8_t *pucStartAddress; << Start address of a block of memory that will be part of the heap
+  50:../generate/os_abstraction/src/heap_renesas.c ****  *    size_t xSizeInBytes;      << Size of the block of memory.
+  51:../generate/os_abstraction/src/heap_renesas.c ****  * } HeapRegion_t;
+  52:../generate/os_abstraction/src/heap_renesas.c ****  *
+  53:../generate/os_abstraction/src/heap_renesas.c ****  * The array is terminated using a NULL zero sized region definition, and the
+  54:../generate/os_abstraction/src/heap_renesas.c ****  * memory regions defined in the array ***must*** appear in address order from
+  55:../generate/os_abstraction/src/heap_renesas.c ****  * low address to high address.  So the following is a valid example of how
+  56:../generate/os_abstraction/src/heap_renesas.c ****  * to use the function.
+  57:../generate/os_abstraction/src/heap_renesas.c ****  *
+  58:../generate/os_abstraction/src/heap_renesas.c ****  * HeapRegion_t xHeapRegions[] =
+  59:../generate/os_abstraction/src/heap_renesas.c ****  * {
+  60:../generate/os_abstraction/src/heap_renesas.c ****  *     { ( uint8_t * ) 0x80000000UL, 0x10000 }, << Defines a block of 0x10000 bytes starting at add
+  61:../generate/os_abstraction/src/heap_renesas.c ****  *     { ( uint8_t * ) 0x90000000UL, 0xa0000 }, << Defines a block of 0xa0000 bytes starting at add
+  62:../generate/os_abstraction/src/heap_renesas.c ****  *     { NULL, 0 }                << Terminates the array.
+  63:../generate/os_abstraction/src/heap_renesas.c ****  * };
+  64:../generate/os_abstraction/src/heap_renesas.c ****  *
+  65:../generate/os_abstraction/src/heap_renesas.c ****  * vPortDefineHeapRegions( xHeapRegions ); << Pass the array into vPortDefineHeapRegions().
+  66:../generate/os_abstraction/src/heap_renesas.c ****  *
+  67:../generate/os_abstraction/src/heap_renesas.c ****  * Note 0x80000000 is the lower address so appears in the array first.
+  68:../generate/os_abstraction/src/heap_renesas.c ****  *
+  69:../generate/os_abstraction/src/heap_renesas.c ****  */
+  70:../generate/os_abstraction/src/heap_renesas.c ****  /*************************************************************************************************
+  71:../generate/os_abstraction/src/heap_renesas.c ****  * History      : DD.MM.YYYY Version Description
+  72:../generate/os_abstraction/src/heap_renesas.c ****  *              : 03.09.2019 3.05    Fixed bug in pvPortMalloc() so function now  correctly sets xD
+  73:../generate/os_abstraction/src/heap_renesas.c ****  **************************************************************************************************
+  74:../generate/os_abstraction/src/heap_renesas.c **** #if !defined(__AWS_FREERTOS_STRUCTURE__)
+  75:../generate/os_abstraction/src/heap_renesas.c **** 
+  76:../generate/os_abstraction/src/heap_renesas.c **** #include <stdlib.h>
+  77:../generate/os_abstraction/src/heap_renesas.c **** 
+  78:../generate/os_abstraction/src/heap_renesas.c **** /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
+  79:../generate/os_abstraction/src/heap_renesas.c **** all the API functions to use the MPU wrappers.  That should only be done when
+  80:../generate/os_abstraction/src/heap_renesas.c **** task.h is included from an application file. */
+  81:../generate/os_abstraction/src/heap_renesas.c **** #define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  82:../generate/os_abstraction/src/heap_renesas.c **** 
+  83:../generate/os_abstraction/src/heap_renesas.c **** #include "FreeRTOS.h"
+  84:../generate/os_abstraction/src/heap_renesas.c **** #include "task.h"
+  85:../generate/os_abstraction/src/heap_renesas.c **** 
+  86:../generate/os_abstraction/src/heap_renesas.c **** #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  87:../generate/os_abstraction/src/heap_renesas.c **** 
+  88:../generate/os_abstraction/src/heap_renesas.c **** #if( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
+  89:../generate/os_abstraction/src/heap_renesas.c ****     #error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
+  90:../generate/os_abstraction/src/heap_renesas.c **** #endif
+  91:../generate/os_abstraction/src/heap_renesas.c **** 
+  92:../generate/os_abstraction/src/heap_renesas.c **** /* Block sizes must not get too small. */
+  93:../generate/os_abstraction/src/heap_renesas.c **** #define heapMINIMUM_BLOCK_SIZE    ( ( size_t ) ( xHeapStructSize << 1 ) )
+  94:../generate/os_abstraction/src/heap_renesas.c **** 
+  95:../generate/os_abstraction/src/heap_renesas.c **** /* Assumes 8bit bytes! */
+  96:../generate/os_abstraction/src/heap_renesas.c **** #define heapBITS_PER_BYTE        ( ( size_t ) 8 )
+  97:../generate/os_abstraction/src/heap_renesas.c **** 
+  98:../generate/os_abstraction/src/heap_renesas.c **** /* Allocate the memory for the heap. */
+  99:../generate/os_abstraction/src/heap_renesas.c **** #if( configAPPLICATION_ALLOCATED_HEAP == 1 )
+ 100:../generate/os_abstraction/src/heap_renesas.c ****     /* The application writer has already defined the array used for the RTOS
+ 101:../generate/os_abstraction/src/heap_renesas.c ****     heap - probably so it can be placed in a special segment or address. */
+ 102:../generate/os_abstraction/src/heap_renesas.c ****     extern volatile uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+ 103:../generate/os_abstraction/src/heap_renesas.c **** #else
+ 104:../generate/os_abstraction/src/heap_renesas.c ****     static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+ 105:../generate/os_abstraction/src/heap_renesas.c **** #endif /* configAPPLICATION_ALLOCATED_HEAP */
+ 106:../generate/os_abstraction/src/heap_renesas.c **** 
+ 107:../generate/os_abstraction/src/heap_renesas.c **** /* Define the linked list structure.  This is used to link free blocks in order
+ 108:../generate/os_abstraction/src/heap_renesas.c **** of their memory address. */
+ 109:../generate/os_abstraction/src/heap_renesas.c **** typedef struct A_BLOCK_LINK
+ 110:../generate/os_abstraction/src/heap_renesas.c **** {
+ 111:../generate/os_abstraction/src/heap_renesas.c ****     struct A_BLOCK_LINK *pxNextFreeBlock;    /*<< The next free block in the list. */
+ 112:../generate/os_abstraction/src/heap_renesas.c ****     size_t xBlockSize;                        /*<< The size of the free block. */
+ 113:../generate/os_abstraction/src/heap_renesas.c **** } BlockLink_t;
+ 114:../generate/os_abstraction/src/heap_renesas.c **** 
+ 115:../generate/os_abstraction/src/heap_renesas.c **** void pvPortsetDesiredBlockForMalloc( size_t xWantedBlock );
+ 116:../generate/os_abstraction/src/heap_renesas.c **** 
+ 117:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 118:../generate/os_abstraction/src/heap_renesas.c **** 
+ 119:../generate/os_abstraction/src/heap_renesas.c **** /*
+ 120:../generate/os_abstraction/src/heap_renesas.c ****  * Inserts a block of memory that is being freed into the correct position in
+ 121:../generate/os_abstraction/src/heap_renesas.c ****  * the list of free memory blocks.  The block being freed will be merged with
+ 122:../generate/os_abstraction/src/heap_renesas.c ****  * the block in front it and/or the block behind it if the memory blocks are
+ 123:../generate/os_abstraction/src/heap_renesas.c ****  * adjacent to each other.
+ 124:../generate/os_abstraction/src/heap_renesas.c ****  */
+ 125:../generate/os_abstraction/src/heap_renesas.c **** static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert );
+ 126:../generate/os_abstraction/src/heap_renesas.c **** 
+ 127:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 128:../generate/os_abstraction/src/heap_renesas.c **** 
+ 129:../generate/os_abstraction/src/heap_renesas.c **** /* The size of the structure placed at the beginning of each allocated memory
+ 130:../generate/os_abstraction/src/heap_renesas.c **** block must by correctly byte aligned. */
+ 131:../generate/os_abstraction/src/heap_renesas.c **** static const size_t xHeapStructSize    = ( sizeof( BlockLink_t ) + ( ( size_t ) ( portBYTE_ALIGNMEN
+ 132:../generate/os_abstraction/src/heap_renesas.c **** 
+ 133:../generate/os_abstraction/src/heap_renesas.c **** /* Create a couple of list links to mark the start and end of the list. */
+ 134:../generate/os_abstraction/src/heap_renesas.c **** static BlockLink_t xStart, *pxEnd = NULL;
+ 135:../generate/os_abstraction/src/heap_renesas.c **** 
+ 136:../generate/os_abstraction/src/heap_renesas.c **** /* Keeps track of the number of free bytes remaining, but says nothing about
+ 137:../generate/os_abstraction/src/heap_renesas.c **** fragmentation. */
+ 138:../generate/os_abstraction/src/heap_renesas.c **** static size_t xFreeBytesRemaining = 0U;
+ 139:../generate/os_abstraction/src/heap_renesas.c **** static size_t xMinimumEverFreeBytesRemaining = 0U;
+ 140:../generate/os_abstraction/src/heap_renesas.c **** 
+ 141:../generate/os_abstraction/src/heap_renesas.c **** /* Gets set to the top bit of an size_t type.  When this bit in the xBlockSize
+ 142:../generate/os_abstraction/src/heap_renesas.c **** member of an BlockLink_t structure is set then the block belongs to the
+ 143:../generate/os_abstraction/src/heap_renesas.c **** application.  When the bit is free the block is still part of the free heap
+ 144:../generate/os_abstraction/src/heap_renesas.c **** space. */
+ 145:../generate/os_abstraction/src/heap_renesas.c **** static size_t xBlockAllocatedBit = 0;
+ 146:../generate/os_abstraction/src/heap_renesas.c **** static size_t xDesiredBlock = 0;
+ 147:../generate/os_abstraction/src/heap_renesas.c **** static size_t xDefaultBlock = 0;
+ 148:../generate/os_abstraction/src/heap_renesas.c **** 
+ 149:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 150:../generate/os_abstraction/src/heap_renesas.c **** 
+ 151:../generate/os_abstraction/src/heap_renesas.c **** void pvPortsetDesiredBlockForMalloc( size_t xWantedBlock )
+ 152:../generate/os_abstraction/src/heap_renesas.c **** {
+ 153:../generate/os_abstraction/src/heap_renesas.c ****     xDesiredBlock = xWantedBlock;
+ 154:../generate/os_abstraction/src/heap_renesas.c **** }
+ 155:../generate/os_abstraction/src/heap_renesas.c **** 
+ 156:../generate/os_abstraction/src/heap_renesas.c **** void *pvPortMalloc( size_t xWantedSize )
+ 157:../generate/os_abstraction/src/heap_renesas.c **** {
+ 158:../generate/os_abstraction/src/heap_renesas.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
+ 159:../generate/os_abstraction/src/heap_renesas.c **** void *pvReturn = NULL;
+ 160:../generate/os_abstraction/src/heap_renesas.c **** 
+ 161:../generate/os_abstraction/src/heap_renesas.c ****     /* The heap must be initialised before the first call to
+ 162:../generate/os_abstraction/src/heap_renesas.c ****     prvPortMalloc(). */
+ 163:../generate/os_abstraction/src/heap_renesas.c ****     configASSERT( pxEnd );
+ 164:../generate/os_abstraction/src/heap_renesas.c **** 
+ 165:../generate/os_abstraction/src/heap_renesas.c ****     vTaskSuspendAll();
+ 166:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 167:../generate/os_abstraction/src/heap_renesas.c ****         /* Check the requested block size is not so large that the top bit is
+ 168:../generate/os_abstraction/src/heap_renesas.c ****         set.  The top bit of the block size member of the BlockLink_t structure
+ 169:../generate/os_abstraction/src/heap_renesas.c ****         is used to determine who owns the block - the application or the
+ 170:../generate/os_abstraction/src/heap_renesas.c ****         kernel, so it must be free. */
+ 171:../generate/os_abstraction/src/heap_renesas.c ****         if( ( xWantedSize & xBlockAllocatedBit ) == 0 )
+ 172:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 173:../generate/os_abstraction/src/heap_renesas.c ****             /* The wanted size is increased so it can contain a BlockLink_t
+ 174:../generate/os_abstraction/src/heap_renesas.c ****             structure in addition to the requested amount of bytes. */
+ 175:../generate/os_abstraction/src/heap_renesas.c ****             if( xWantedSize > 0 )
+ 176:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 177:../generate/os_abstraction/src/heap_renesas.c ****                 xWantedSize += xHeapStructSize;
+ 178:../generate/os_abstraction/src/heap_renesas.c **** 
+ 179:../generate/os_abstraction/src/heap_renesas.c ****                 /* Ensure that blocks are always aligned to the required number
+ 180:../generate/os_abstraction/src/heap_renesas.c ****                 of bytes. */
+ 181:../generate/os_abstraction/src/heap_renesas.c ****                 if( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) != 0x00 )
+ 182:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 183:../generate/os_abstraction/src/heap_renesas.c ****                     /* Byte alignment required. */
+ 184:../generate/os_abstraction/src/heap_renesas.c ****                     xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK )
+ 185:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 186:../generate/os_abstraction/src/heap_renesas.c ****                 else
+ 187:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 188:../generate/os_abstraction/src/heap_renesas.c ****                     mtCOVERAGE_TEST_MARKER();
+ 189:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 190:../generate/os_abstraction/src/heap_renesas.c ****             }
+ 191:../generate/os_abstraction/src/heap_renesas.c ****             else
+ 192:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 193:../generate/os_abstraction/src/heap_renesas.c ****                 mtCOVERAGE_TEST_MARKER();
+ 194:../generate/os_abstraction/src/heap_renesas.c ****             }
+ 195:../generate/os_abstraction/src/heap_renesas.c **** 
+ 196:../generate/os_abstraction/src/heap_renesas.c ****             if( ( xWantedSize > 0 ) && ( xWantedSize <= xFreeBytesRemaining ) )
+ 197:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 198:../generate/os_abstraction/src/heap_renesas.c ****                 /* Traverse the list from the start    (lowest address) block until
+ 199:../generate/os_abstraction/src/heap_renesas.c ****                 one    of adequate size is found. */
+ 200:../generate/os_abstraction/src/heap_renesas.c ****                 pxPreviousBlock = &xStart;
+ 201:../generate/os_abstraction/src/heap_renesas.c ****                 pxBlock = xStart.pxNextFreeBlock;
+ 202:../generate/os_abstraction/src/heap_renesas.c **** 
+ 203:../generate/os_abstraction/src/heap_renesas.c ****                 while((xDesiredBlock > (uint32_t)pxBlock) && ( pxBlock->pxNextFreeBlock != NULL ))
+ 204:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 205:../generate/os_abstraction/src/heap_renesas.c ****                     pxPreviousBlock = pxBlock;
+ 206:../generate/os_abstraction/src/heap_renesas.c ****                     pxBlock = pxBlock->pxNextFreeBlock;
+ 207:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 208:../generate/os_abstraction/src/heap_renesas.c **** 
+ 209:../generate/os_abstraction/src/heap_renesas.c ****                 while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL 
+ 210:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 211:../generate/os_abstraction/src/heap_renesas.c ****                     pxPreviousBlock = pxBlock;
+ 212:../generate/os_abstraction/src/heap_renesas.c ****                     pxBlock = pxBlock->pxNextFreeBlock;
+ 213:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 214:../generate/os_abstraction/src/heap_renesas.c **** 
+ 215:../generate/os_abstraction/src/heap_renesas.c ****                 /* reset block information */
+ 216:../generate/os_abstraction/src/heap_renesas.c ****                 xDesiredBlock = xDefaultBlock;
+ 217:../generate/os_abstraction/src/heap_renesas.c **** 
+ 218:../generate/os_abstraction/src/heap_renesas.c ****                 /* If the end marker was reached then a block of adequate size
+ 219:../generate/os_abstraction/src/heap_renesas.c ****                 was    not found. */
+ 220:../generate/os_abstraction/src/heap_renesas.c ****                 if( pxBlock != pxEnd )
+ 221:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 222:../generate/os_abstraction/src/heap_renesas.c ****                     /* Return the memory space pointed to - jumping over the
+ 223:../generate/os_abstraction/src/heap_renesas.c ****                     BlockLink_t structure at its start. */
+ 224:../generate/os_abstraction/src/heap_renesas.c ****                     pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->pxNextFreeBlock ) + xH
+ 225:../generate/os_abstraction/src/heap_renesas.c **** 
+ 226:../generate/os_abstraction/src/heap_renesas.c ****                     /* This block is being returned for use so must be taken out
+ 227:../generate/os_abstraction/src/heap_renesas.c ****                     of the list of free blocks. */
+ 228:../generate/os_abstraction/src/heap_renesas.c ****                     pxPreviousBlock->pxNextFreeBlock = pxBlock->pxNextFreeBlock;
+ 229:../generate/os_abstraction/src/heap_renesas.c **** 
+ 230:../generate/os_abstraction/src/heap_renesas.c ****                     /* If the block is larger than required it can be split into
+ 231:../generate/os_abstraction/src/heap_renesas.c ****                     two. */
+ 232:../generate/os_abstraction/src/heap_renesas.c ****                     if( ( pxBlock->xBlockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
+ 233:../generate/os_abstraction/src/heap_renesas.c ****                     {
+ 234:../generate/os_abstraction/src/heap_renesas.c ****                         /* This block is to be split into two.  Create a new
+ 235:../generate/os_abstraction/src/heap_renesas.c ****                         block following the number of bytes requested. The void
+ 236:../generate/os_abstraction/src/heap_renesas.c ****                         cast is used to prevent byte alignment warnings from the
+ 237:../generate/os_abstraction/src/heap_renesas.c ****                         compiler. */
+ 238:../generate/os_abstraction/src/heap_renesas.c ****                         pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );
+ 239:../generate/os_abstraction/src/heap_renesas.c **** 
+ 240:../generate/os_abstraction/src/heap_renesas.c ****                         /* Calculate the sizes of two blocks split from the
+ 241:../generate/os_abstraction/src/heap_renesas.c ****                         single block. */
+ 242:../generate/os_abstraction/src/heap_renesas.c ****                         pxNewBlockLink->xBlockSize = pxBlock->xBlockSize - xWantedSize;
+ 243:../generate/os_abstraction/src/heap_renesas.c ****                         pxBlock->xBlockSize = xWantedSize;
+ 244:../generate/os_abstraction/src/heap_renesas.c **** 
+ 245:../generate/os_abstraction/src/heap_renesas.c ****                         /* Insert the new block into the list of free blocks. */
+ 246:../generate/os_abstraction/src/heap_renesas.c ****                         prvInsertBlockIntoFreeList( ( pxNewBlockLink ) );
+ 247:../generate/os_abstraction/src/heap_renesas.c ****                     }
+ 248:../generate/os_abstraction/src/heap_renesas.c ****                     else
+ 249:../generate/os_abstraction/src/heap_renesas.c ****                     {
+ 250:../generate/os_abstraction/src/heap_renesas.c ****                         mtCOVERAGE_TEST_MARKER();
+ 251:../generate/os_abstraction/src/heap_renesas.c ****                     }
+ 252:../generate/os_abstraction/src/heap_renesas.c **** 
+ 253:../generate/os_abstraction/src/heap_renesas.c ****                     xFreeBytesRemaining -= pxBlock->xBlockSize;
+ 254:../generate/os_abstraction/src/heap_renesas.c **** 
+ 255:../generate/os_abstraction/src/heap_renesas.c ****                     if( xFreeBytesRemaining < xMinimumEverFreeBytesRemaining )
+ 256:../generate/os_abstraction/src/heap_renesas.c ****                     {
+ 257:../generate/os_abstraction/src/heap_renesas.c ****                         xMinimumEverFreeBytesRemaining = xFreeBytesRemaining;
+ 258:../generate/os_abstraction/src/heap_renesas.c ****                     }
+ 259:../generate/os_abstraction/src/heap_renesas.c ****                     else
+ 260:../generate/os_abstraction/src/heap_renesas.c ****                     {
+ 261:../generate/os_abstraction/src/heap_renesas.c ****                         mtCOVERAGE_TEST_MARKER();
+ 262:../generate/os_abstraction/src/heap_renesas.c ****                     }
+ 263:../generate/os_abstraction/src/heap_renesas.c **** 
+ 264:../generate/os_abstraction/src/heap_renesas.c ****                     /* The block is being returned - it is allocated and owned
+ 265:../generate/os_abstraction/src/heap_renesas.c ****                     by the application and has no "next" block. */
+ 266:../generate/os_abstraction/src/heap_renesas.c ****                     pxBlock->xBlockSize |= xBlockAllocatedBit;
+ 267:../generate/os_abstraction/src/heap_renesas.c ****                     pxBlock->pxNextFreeBlock = NULL;
+ 268:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 269:../generate/os_abstraction/src/heap_renesas.c ****                 else
+ 270:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 271:../generate/os_abstraction/src/heap_renesas.c ****                     mtCOVERAGE_TEST_MARKER();
+ 272:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 273:../generate/os_abstraction/src/heap_renesas.c ****             }
+ 274:../generate/os_abstraction/src/heap_renesas.c ****             else
+ 275:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 276:../generate/os_abstraction/src/heap_renesas.c ****                 mtCOVERAGE_TEST_MARKER();
+ 277:../generate/os_abstraction/src/heap_renesas.c ****             }
+ 278:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 279:../generate/os_abstraction/src/heap_renesas.c ****         else
+ 280:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 281:../generate/os_abstraction/src/heap_renesas.c ****             mtCOVERAGE_TEST_MARKER();
+ 282:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 283:../generate/os_abstraction/src/heap_renesas.c **** 
+ 284:../generate/os_abstraction/src/heap_renesas.c ****         traceMALLOC( pvReturn, xWantedSize );
+ 285:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 286:../generate/os_abstraction/src/heap_renesas.c ****     ( void ) xTaskResumeAll();
+ 287:../generate/os_abstraction/src/heap_renesas.c **** 
+ 288:../generate/os_abstraction/src/heap_renesas.c ****     #if( configUSE_MALLOC_FAILED_HOOK == 1 )
+ 289:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 290:../generate/os_abstraction/src/heap_renesas.c ****         if( pvReturn == NULL )
+ 291:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 292:../generate/os_abstraction/src/heap_renesas.c ****             extern void vApplicationMallocFailedHook( void );
+ 293:../generate/os_abstraction/src/heap_renesas.c ****             vApplicationMallocFailedHook();
+ 294:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 295:../generate/os_abstraction/src/heap_renesas.c ****         else
+ 296:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 297:../generate/os_abstraction/src/heap_renesas.c ****             mtCOVERAGE_TEST_MARKER();
+ 298:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 299:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 300:../generate/os_abstraction/src/heap_renesas.c ****     #endif
+ 301:../generate/os_abstraction/src/heap_renesas.c **** 
+ 302:../generate/os_abstraction/src/heap_renesas.c ****     return pvReturn;
+ 303:../generate/os_abstraction/src/heap_renesas.c **** }
+ 304:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 305:../generate/os_abstraction/src/heap_renesas.c **** 
+ 306:../generate/os_abstraction/src/heap_renesas.c **** void vPortFree( void *pv )
+ 307:../generate/os_abstraction/src/heap_renesas.c **** {
+ 308:../generate/os_abstraction/src/heap_renesas.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 309:../generate/os_abstraction/src/heap_renesas.c **** BlockLink_t *pxLink;
+ 310:../generate/os_abstraction/src/heap_renesas.c **** 
+ 311:../generate/os_abstraction/src/heap_renesas.c ****     if( pv != NULL )
+ 312:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 313:../generate/os_abstraction/src/heap_renesas.c ****         /* The memory being freed will have an BlockLink_t structure immediately
+ 314:../generate/os_abstraction/src/heap_renesas.c ****         before it. */
+ 315:../generate/os_abstraction/src/heap_renesas.c ****         puc -= xHeapStructSize;
+ 316:../generate/os_abstraction/src/heap_renesas.c **** 
+ 317:../generate/os_abstraction/src/heap_renesas.c ****         /* This casting is to keep the compiler from issuing warnings. */
+ 318:../generate/os_abstraction/src/heap_renesas.c ****         pxLink = ( void * ) puc;
+ 319:../generate/os_abstraction/src/heap_renesas.c **** 
+ 320:../generate/os_abstraction/src/heap_renesas.c ****         /* Check the block is actually allocated. */
+ 321:../generate/os_abstraction/src/heap_renesas.c ****         configASSERT( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 );
+ 322:../generate/os_abstraction/src/heap_renesas.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 323:../generate/os_abstraction/src/heap_renesas.c **** 
+ 324:../generate/os_abstraction/src/heap_renesas.c ****         if( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 )
+ 325:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 326:../generate/os_abstraction/src/heap_renesas.c ****             if( pxLink->pxNextFreeBlock == NULL )
+ 327:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 328:../generate/os_abstraction/src/heap_renesas.c ****                 /* The block is being returned to the heap - it is no longer
+ 329:../generate/os_abstraction/src/heap_renesas.c ****                 allocated. */
+ 330:../generate/os_abstraction/src/heap_renesas.c ****                 pxLink->xBlockSize &= ~xBlockAllocatedBit;
+ 331:../generate/os_abstraction/src/heap_renesas.c **** 
+ 332:../generate/os_abstraction/src/heap_renesas.c ****                 vTaskSuspendAll();
+ 333:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 334:../generate/os_abstraction/src/heap_renesas.c ****                     /* Add this block to the list of free blocks. */
+ 335:../generate/os_abstraction/src/heap_renesas.c ****                     xFreeBytesRemaining += pxLink->xBlockSize;
+ 336:../generate/os_abstraction/src/heap_renesas.c ****                     traceFREE( pv, pxLink->xBlockSize );
+ 337:../generate/os_abstraction/src/heap_renesas.c ****                     prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
+ 338:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 339:../generate/os_abstraction/src/heap_renesas.c ****                 ( void ) xTaskResumeAll();
+ 340:../generate/os_abstraction/src/heap_renesas.c ****             }
+ 341:../generate/os_abstraction/src/heap_renesas.c ****             else
+ 342:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 343:../generate/os_abstraction/src/heap_renesas.c ****                 mtCOVERAGE_TEST_MARKER();
+ 344:../generate/os_abstraction/src/heap_renesas.c ****             }
+ 345:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 346:../generate/os_abstraction/src/heap_renesas.c ****         else
+ 347:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 348:../generate/os_abstraction/src/heap_renesas.c ****             mtCOVERAGE_TEST_MARKER();
+ 349:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 350:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 351:../generate/os_abstraction/src/heap_renesas.c **** }
+ 352:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 353:../generate/os_abstraction/src/heap_renesas.c **** 
+ 354:../generate/os_abstraction/src/heap_renesas.c **** size_t xPortGetFreeHeapSize( void )
+ 355:../generate/os_abstraction/src/heap_renesas.c **** {
+ 356:../generate/os_abstraction/src/heap_renesas.c ****     return xFreeBytesRemaining;
+ 357:../generate/os_abstraction/src/heap_renesas.c **** }
+ 358:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 359:../generate/os_abstraction/src/heap_renesas.c **** 
+ 360:../generate/os_abstraction/src/heap_renesas.c **** size_t xPortGetMinimumEverFreeHeapSize( void )
+ 361:../generate/os_abstraction/src/heap_renesas.c **** {
+ 362:../generate/os_abstraction/src/heap_renesas.c ****     return xMinimumEverFreeBytesRemaining;
+ 363:../generate/os_abstraction/src/heap_renesas.c **** }
+ 364:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 365:../generate/os_abstraction/src/heap_renesas.c **** 
+ 366:../generate/os_abstraction/src/heap_renesas.c **** static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert )
+ 367:../generate/os_abstraction/src/heap_renesas.c **** {
+  25              		.loc 1 367 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              		@ link register save eliminated.
+  30              	.LVL0:
+ 368:../generate/os_abstraction/src/heap_renesas.c **** BlockLink_t *pxIterator;
+ 369:../generate/os_abstraction/src/heap_renesas.c **** uint8_t *puc;
+ 370:../generate/os_abstraction/src/heap_renesas.c **** 
+ 371:../generate/os_abstraction/src/heap_renesas.c ****     /* Iterate through the list until a block is found that has a higher address
+ 372:../generate/os_abstraction/src/heap_renesas.c ****     than the block being inserted. */
+ 373:../generate/os_abstraction/src/heap_renesas.c ****     for( pxIterator = &xStart; pxIterator->pxNextFreeBlock < pxBlockToInsert; pxIterator = pxIterat
+  31              		.loc 1 373 0
+  32 0000 002000E3 		movw	r2, #:lower16:.LANCHOR0
+  33 0004 002040E3 		movt	r2, #:upper16:.LANCHOR0
+  34 0008 000000EA 		b	.L2
+  35              	.LVL1:
+  36              	.L8:
+  37 000c 0320A0E1 		mov	r2, r3
+  38              	.LVL2:
+  39              	.L2:
+  40              		.loc 1 373 0 is_stmt 0 discriminator 1
+  41 0010 003092E5 		ldr	r3, [r2]
+  42 0014 000053E1 		cmp	r3, r0
+  43 0018 FBFFFF3A 		bcc	.L8
+  44              	.LVL3:
+ 374:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 375:../generate/os_abstraction/src/heap_renesas.c ****         /* Nothing to do here, just iterate to the right position. */
+ 376:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 377:../generate/os_abstraction/src/heap_renesas.c **** 
+ 378:../generate/os_abstraction/src/heap_renesas.c ****     /* Do the block being inserted, and the block it is being inserted after
+ 379:../generate/os_abstraction/src/heap_renesas.c ****     make a contiguous block of memory? */
+ 380:../generate/os_abstraction/src/heap_renesas.c ****     puc = ( uint8_t * ) pxIterator;
+ 381:../generate/os_abstraction/src/heap_renesas.c ****     if( ( puc + pxIterator->xBlockSize ) == ( uint8_t * ) pxBlockToInsert )
+  45              		.loc 1 381 0 is_stmt 1
+  46 001c 041092E5 		ldr	r1, [r2, #4]
+  47 0020 01C082E0 		add	ip, r2, r1
+  48 0024 0C0050E1 		cmp	r0, ip
+  49 0028 0700000A 		beq	.L9
+  50              	.L3:
+  51              	.LVL4:
+ 382:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 383:../generate/os_abstraction/src/heap_renesas.c ****         pxIterator->xBlockSize += pxBlockToInsert->xBlockSize;
+ 384:../generate/os_abstraction/src/heap_renesas.c ****         pxBlockToInsert = pxIterator;
+ 385:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 386:../generate/os_abstraction/src/heap_renesas.c ****     else
+ 387:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 388:../generate/os_abstraction/src/heap_renesas.c ****         mtCOVERAGE_TEST_MARKER();
+ 389:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 390:../generate/os_abstraction/src/heap_renesas.c **** 
+ 391:../generate/os_abstraction/src/heap_renesas.c ****     /* Do the block being inserted, and the block it is being inserted before
+ 392:../generate/os_abstraction/src/heap_renesas.c ****     make a contiguous block of memory? */
+ 393:../generate/os_abstraction/src/heap_renesas.c ****     puc = ( uint8_t * ) pxBlockToInsert;
+ 394:../generate/os_abstraction/src/heap_renesas.c ****     if( ( puc + pxBlockToInsert->xBlockSize ) == ( uint8_t * ) pxIterator->pxNextFreeBlock )
+  52              		.loc 1 394 0
+  53 002c 041090E5 		ldr	r1, [r0, #4]
+  54 0030 01C080E0 		add	ip, r0, r1
+  55 0034 0C0053E1 		cmp	r3, ip
+  56 0038 0800000A 		beq	.L10
+ 395:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 396:../generate/os_abstraction/src/heap_renesas.c ****         if( pxIterator->pxNextFreeBlock != pxEnd )
+ 397:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 398:../generate/os_abstraction/src/heap_renesas.c ****             /* Form one big block from the two blocks. */
+ 399:../generate/os_abstraction/src/heap_renesas.c ****             pxBlockToInsert->xBlockSize += pxIterator->pxNextFreeBlock->xBlockSize;
+ 400:../generate/os_abstraction/src/heap_renesas.c ****             pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+ 401:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 402:../generate/os_abstraction/src/heap_renesas.c ****         else
+ 403:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 404:../generate/os_abstraction/src/heap_renesas.c ****             pxBlockToInsert->pxNextFreeBlock = pxEnd;
+ 405:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 406:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 407:../generate/os_abstraction/src/heap_renesas.c ****     else
+ 408:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 409:../generate/os_abstraction/src/heap_renesas.c ****         pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock;
+  57              		.loc 1 409 0
+  58 003c 003080E5 		str	r3, [r0]
+  59              	.L6:
+ 410:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 411:../generate/os_abstraction/src/heap_renesas.c **** 
+ 412:../generate/os_abstraction/src/heap_renesas.c ****     /* If the block being inserted plugged a gab, so was merged with the block
+ 413:../generate/os_abstraction/src/heap_renesas.c ****     before and the block after, then it's pxNextFreeBlock pointer will have
+ 414:../generate/os_abstraction/src/heap_renesas.c ****     already been set, and should not be set here as that would make it point
+ 415:../generate/os_abstraction/src/heap_renesas.c ****     to itself. */
+ 416:../generate/os_abstraction/src/heap_renesas.c ****     if( pxIterator != pxBlockToInsert )
+  60              		.loc 1 416 0
+  61 0040 020050E1 		cmp	r0, r2
+ 417:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 418:../generate/os_abstraction/src/heap_renesas.c ****         pxIterator->pxNextFreeBlock = pxBlockToInsert;
+  62              		.loc 1 418 0
+  63 0044 00008215 		strne	r0, [r2]
+  64 0048 1EFF2FE1 		bx	lr
+  65              	.LVL5:
+  66              	.L9:
+ 383:../generate/os_abstraction/src/heap_renesas.c ****         pxBlockToInsert = pxIterator;
+  67              		.loc 1 383 0
+  68 004c 040090E5 		ldr	r0, [r0, #4]
+  69              	.LVL6:
+  70 0050 001081E0 		add	r1, r1, r0
+  71 0054 041082E5 		str	r1, [r2, #4]
+  72              	.LVL7:
+ 384:../generate/os_abstraction/src/heap_renesas.c ****     }
+  73              		.loc 1 384 0
+  74 0058 0200A0E1 		mov	r0, r2
+  75 005c F2FFFFEA 		b	.L3
+  76              	.LVL8:
+  77              	.L10:
+ 396:../generate/os_abstraction/src/heap_renesas.c ****         {
+  78              		.loc 1 396 0
+  79 0060 00C000E3 		movw	ip, #:lower16:.LANCHOR1
+  80 0064 00C040E3 		movt	ip, #:upper16:.LANCHOR1
+  81 0068 00C09CE5 		ldr	ip, [ip]
+  82 006c 0C0053E1 		cmp	r3, ip
+  83 0070 0600000A 		beq	.L5
+ 399:../generate/os_abstraction/src/heap_renesas.c ****             pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+  84              		.loc 1 399 0
+  85 0074 043093E5 		ldr	r3, [r3, #4]
+  86 0078 031081E0 		add	r1, r1, r3
+  87 007c 041080E5 		str	r1, [r0, #4]
+ 400:../generate/os_abstraction/src/heap_renesas.c ****         }
+  88              		.loc 1 400 0
+  89 0080 003092E5 		ldr	r3, [r2]
+  90 0084 003093E5 		ldr	r3, [r3]
+  91 0088 003080E5 		str	r3, [r0]
+  92 008c EBFFFFEA 		b	.L6
+  93              	.L5:
+ 404:../generate/os_abstraction/src/heap_renesas.c ****         }
+  94              		.loc 1 404 0
+  95 0090 00C080E5 		str	ip, [r0]
+  96 0094 E9FFFFEA 		b	.L6
+  97              		.cfi_endproc
+  98              	.LFE5:
+ 100              		.section	.text.pvPortsetDesiredBlockForMalloc,"ax",%progbits
+ 101              		.align	2
+ 102              		.global	pvPortsetDesiredBlockForMalloc
+ 103              		.syntax unified
+ 104              		.arm
+ 105              		.fpu neon
+ 107              	pvPortsetDesiredBlockForMalloc:
+ 108              	.LFB0:
+ 152:../generate/os_abstraction/src/heap_renesas.c ****     xDesiredBlock = xWantedBlock;
+ 109              		.loc 1 152 0
+ 110              		.cfi_startproc
+ 111              		@ args = 0, pretend = 0, frame = 0
+ 112              		@ frame_needed = 0, uses_anonymous_args = 0
+ 113              		@ link register save eliminated.
+ 114              	.LVL9:
+ 153:../generate/os_abstraction/src/heap_renesas.c **** }
+ 115              		.loc 1 153 0
+ 116 0000 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 117 0004 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 118 0008 000083E5 		str	r0, [r3]
+ 119 000c 1EFF2FE1 		bx	lr
+ 120              		.cfi_endproc
+ 121              	.LFE0:
+ 123              		.section	.text.pvPortMalloc,"ax",%progbits
+ 124              		.align	2
+ 125              		.global	pvPortMalloc
+ 126              		.syntax unified
+ 127              		.arm
+ 128              		.fpu neon
+ 130              	pvPortMalloc:
+ 131              	.LFB1:
+ 157:../generate/os_abstraction/src/heap_renesas.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
+ 132              		.loc 1 157 0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 0
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136              	.LVL10:
+ 137 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 138              		.cfi_def_cfa_offset 16
+ 139              		.cfi_offset 4, -16
+ 140              		.cfi_offset 5, -12
+ 141              		.cfi_offset 6, -8
+ 142              		.cfi_offset 14, -4
+ 143 0004 0050A0E1 		mov	r5, r0
+ 144              	.LVL11:
+ 163:../generate/os_abstraction/src/heap_renesas.c **** 
+ 145              		.loc 1 163 0
+ 146 0008 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 147 000c 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 148 0010 003093E5 		ldr	r3, [r3]
+ 149 0014 000053E3 		cmp	r3, #0
+ 150 0018 1600000A 		beq	.L28
+ 151              	.LVL12:
+ 152              	.L13:
+ 165:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 153              		.loc 1 165 0
+ 154 001c FEFFFFEB 		bl	vTaskSuspendAll
+ 155              	.LVL13:
+ 171:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 156              		.loc 1 171 0
+ 157 0020 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 158 0024 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 159 0028 003093E5 		ldr	r3, [r3]
+ 160 002c 030015E1 		tst	r5, r3
+ 161 0030 5700001A 		bne	.L21
+ 175:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 162              		.loc 1 175 0
+ 163 0034 000055E3 		cmp	r5, #0
+ 164 0038 0300000A 		beq	.L15
+ 177:../generate/os_abstraction/src/heap_renesas.c **** 
+ 165              		.loc 1 177 0
+ 166 003c 085085E2 		add	r5, r5, #8
+ 167              	.LVL14:
+ 181:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 168              		.loc 1 181 0
+ 169 0040 070015E3 		tst	r5, #7
+ 184:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 170              		.loc 1 184 0
+ 171 0044 0750C513 		bicne	r5, r5, #7
+ 172              	.LVL15:
+ 173 0048 08508512 		addne	r5, r5, #8
+ 174              	.LVL16:
+ 175              	.L15:
+ 196:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 176              		.loc 1 196 0
+ 177 004c 000055E3 		cmp	r5, #0
+ 178 0050 5100000A 		beq	.L22
+ 196:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 179              		.loc 1 196 0 is_stmt 0 discriminator 1
+ 180 0054 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 181 0058 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 182 005c 003093E5 		ldr	r3, [r3]
+ 183 0060 030055E1 		cmp	r5, r3
+ 184 0064 4E00008A 		bhi	.L23
+ 185              	.LVL17:
+ 201:../generate/os_abstraction/src/heap_renesas.c **** 
+ 186              		.loc 1 201 0 is_stmt 1
+ 187 0068 002000E3 		movw	r2, #:lower16:.LANCHOR0
+ 188 006c 002040E3 		movt	r2, #:upper16:.LANCHOR0
+ 189 0070 004092E5 		ldr	r4, [r2]
+ 190              	.LVL18:
+ 203:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 191              		.loc 1 203 0
+ 192 0074 060000EA 		b	.L17
+ 193              	.LVL19:
+ 194              	.L28:
+ 163:../generate/os_abstraction/src/heap_renesas.c **** 
+ 195              		.loc 1 163 0 discriminator 1
+ 196 0078 A310A0E3 		mov	r1, #163
+ 197 007c 000000E3 		movw	r0, #:lower16:.LC0
+ 198              	.LVL20:
+ 199 0080 000040E3 		movt	r0, #:upper16:.LC0
+ 200 0084 FEFFFFEB 		bl	R_OS_AssertCalled
+ 201              	.LVL21:
+ 202 0088 E3FFFFEA 		b	.L13
+ 203              	.LVL22:
+ 204              	.L24:
+ 205:../generate/os_abstraction/src/heap_renesas.c ****                     pxBlock = pxBlock->pxNextFreeBlock;
+ 205              		.loc 1 205 0
+ 206 008c 0420A0E1 		mov	r2, r4
+ 207              	.LVL23:
+ 206:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 208              		.loc 1 206 0
+ 209 0090 0340A0E1 		mov	r4, r3
+ 210              	.LVL24:
+ 211              	.L17:
+ 203:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 212              		.loc 1 203 0
+ 213 0094 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 214 0098 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 215 009c 003093E5 		ldr	r3, [r3]
+ 216 00a0 040053E1 		cmp	r3, r4
+ 217 00a4 0500009A 		bls	.L16
+ 203:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 218              		.loc 1 203 0 is_stmt 0 discriminator 1
+ 219 00a8 003094E5 		ldr	r3, [r4]
+ 220 00ac 000053E3 		cmp	r3, #0
+ 221 00b0 F5FFFF1A 		bne	.L24
+ 222 00b4 010000EA 		b	.L16
+ 223              	.L25:
+ 211:../generate/os_abstraction/src/heap_renesas.c ****                     pxBlock = pxBlock->pxNextFreeBlock;
+ 224              		.loc 1 211 0 is_stmt 1
+ 225 00b8 0420A0E1 		mov	r2, r4
+ 226              	.LVL25:
+ 212:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 227              		.loc 1 212 0
+ 228 00bc 0340A0E1 		mov	r4, r3
+ 229              	.LVL26:
+ 230              	.L16:
+ 209:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 231              		.loc 1 209 0
+ 232 00c0 043094E5 		ldr	r3, [r4, #4]
+ 233 00c4 030055E1 		cmp	r5, r3
+ 234 00c8 0200009A 		bls	.L18
+ 209:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 235              		.loc 1 209 0 is_stmt 0 discriminator 1
+ 236 00cc 003094E5 		ldr	r3, [r4]
+ 237 00d0 000053E3 		cmp	r3, #0
+ 238 00d4 F7FFFF1A 		bne	.L25
+ 239              	.L18:
+ 216:../generate/os_abstraction/src/heap_renesas.c **** 
+ 240              		.loc 1 216 0 is_stmt 1
+ 241 00d8 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 242 00dc 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 243 00e0 001000E3 		movw	r1, #:lower16:.LANCHOR5
+ 244 00e4 001040E3 		movt	r1, #:upper16:.LANCHOR5
+ 245 00e8 001091E5 		ldr	r1, [r1]
+ 246 00ec 001083E5 		str	r1, [r3]
+ 220:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 247              		.loc 1 220 0
+ 248 00f0 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 249 00f4 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 250 00f8 003093E5 		ldr	r3, [r3]
+ 251 00fc 030054E1 		cmp	r4, r3
+ 252 0100 2900000A 		beq	.L26
+ 224:../generate/os_abstraction/src/heap_renesas.c **** 
+ 253              		.loc 1 224 0
+ 254 0104 006092E5 		ldr	r6, [r2]
+ 255 0108 086086E2 		add	r6, r6, #8
+ 256              	.LVL27:
+ 228:../generate/os_abstraction/src/heap_renesas.c **** 
+ 257              		.loc 1 228 0
+ 258 010c 003094E5 		ldr	r3, [r4]
+ 259 0110 003082E5 		str	r3, [r2]
+ 232:../generate/os_abstraction/src/heap_renesas.c ****                     {
+ 260              		.loc 1 232 0
+ 261 0114 043094E5 		ldr	r3, [r4, #4]
+ 262 0118 053043E0 		sub	r3, r3, r5
+ 263 011c 100053E3 		cmp	r3, #16
+ 264 0120 1600008A 		bhi	.L29
+ 265              	.LVL28:
+ 266              	.L19:
+ 253:../generate/os_abstraction/src/heap_renesas.c **** 
+ 267              		.loc 1 253 0
+ 268 0124 041094E5 		ldr	r1, [r4, #4]
+ 269 0128 002000E3 		movw	r2, #:lower16:.LANCHOR4
+ 270 012c 002040E3 		movt	r2, #:upper16:.LANCHOR4
+ 271 0130 003092E5 		ldr	r3, [r2]
+ 272 0134 013043E0 		sub	r3, r3, r1
+ 273 0138 003082E5 		str	r3, [r2]
+ 255:../generate/os_abstraction/src/heap_renesas.c ****                     {
+ 274              		.loc 1 255 0
+ 275 013c 002000E3 		movw	r2, #:lower16:.LANCHOR6
+ 276 0140 002040E3 		movt	r2, #:upper16:.LANCHOR6
+ 277 0144 002092E5 		ldr	r2, [r2]
+ 278 0148 020053E1 		cmp	r3, r2
+ 257:../generate/os_abstraction/src/heap_renesas.c ****                     }
+ 279              		.loc 1 257 0
+ 280 014c 00200033 		movwcc	r2, #:lower16:.LANCHOR6
+ 281 0150 00204033 		movtcc	r2, #:upper16:.LANCHOR6
+ 282 0154 00308235 		strcc	r3, [r2]
+ 283              	.L20:
+ 266:../generate/os_abstraction/src/heap_renesas.c ****                     pxBlock->pxNextFreeBlock = NULL;
+ 284              		.loc 1 266 0
+ 285 0158 002000E3 		movw	r2, #:lower16:.LANCHOR3
+ 286 015c 002040E3 		movt	r2, #:upper16:.LANCHOR3
+ 287 0160 003092E5 		ldr	r3, [r2]
+ 288 0164 013083E1 		orr	r3, r3, r1
+ 289 0168 043084E5 		str	r3, [r4, #4]
+ 267:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 290              		.loc 1 267 0
+ 291 016c 0030A0E3 		mov	r3, #0
+ 292 0170 003084E5 		str	r3, [r4]
+ 293              	.LVL29:
+ 294              	.L14:
+ 286:../generate/os_abstraction/src/heap_renesas.c **** 
+ 295              		.loc 1 286 0
+ 296 0174 FEFFFFEB 		bl	xTaskResumeAll
+ 297              	.LVL30:
+ 303:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 298              		.loc 1 303 0
+ 299 0178 0600A0E1 		mov	r0, r6
+ 300 017c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 301              	.LVL31:
+ 302              	.L29:
+ 238:../generate/os_abstraction/src/heap_renesas.c **** 
+ 303              		.loc 1 238 0
+ 304 0180 050084E0 		add	r0, r4, r5
+ 305              	.LVL32:
+ 242:../generate/os_abstraction/src/heap_renesas.c ****                         pxBlock->xBlockSize = xWantedSize;
+ 306              		.loc 1 242 0
+ 307 0184 043080E5 		str	r3, [r0, #4]
+ 243:../generate/os_abstraction/src/heap_renesas.c **** 
+ 308              		.loc 1 243 0
+ 309 0188 045084E5 		str	r5, [r4, #4]
+ 246:../generate/os_abstraction/src/heap_renesas.c ****                     }
+ 310              		.loc 1 246 0
+ 311 018c FEFFFFEB 		bl	prvInsertBlockIntoFreeList
+ 312              	.LVL33:
+ 313 0190 E3FFFFEA 		b	.L19
+ 314              	.LVL34:
+ 315              	.L21:
+ 159:../generate/os_abstraction/src/heap_renesas.c **** 
+ 316              		.loc 1 159 0
+ 317 0194 0060A0E3 		mov	r6, #0
+ 318 0198 F5FFFFEA 		b	.L14
+ 319              	.L22:
+ 320 019c 0060A0E3 		mov	r6, #0
+ 321 01a0 F3FFFFEA 		b	.L14
+ 322              	.L23:
+ 323 01a4 0060A0E3 		mov	r6, #0
+ 324 01a8 F1FFFFEA 		b	.L14
+ 325              	.LVL35:
+ 326              	.L26:
+ 327 01ac 0060A0E3 		mov	r6, #0
+ 328 01b0 EFFFFFEA 		b	.L14
+ 329              		.cfi_endproc
+ 330              	.LFE1:
+ 332              		.section	.text.vPortFree,"ax",%progbits
+ 333              		.align	2
+ 334              		.global	vPortFree
+ 335              		.syntax unified
+ 336              		.arm
+ 337              		.fpu neon
+ 339              	vPortFree:
+ 340              	.LFB2:
+ 307:../generate/os_abstraction/src/heap_renesas.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 341              		.loc 1 307 0
+ 342              		.cfi_startproc
+ 343              		@ args = 0, pretend = 0, frame = 0
+ 344              		@ frame_needed = 0, uses_anonymous_args = 0
+ 345              	.LVL36:
+ 346 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 347              		.cfi_def_cfa_offset 16
+ 348              		.cfi_offset 4, -16
+ 349              		.cfi_offset 5, -12
+ 350              		.cfi_offset 6, -8
+ 351              		.cfi_offset 14, -4
+ 352              	.LVL37:
+ 311:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 353              		.loc 1 311 0
+ 354 0004 004050E2 		subs	r4, r0, #0
+ 355 0008 7080BD08 		popeq	{r4, r5, r6, pc}
+ 315:../generate/os_abstraction/src/heap_renesas.c **** 
+ 356              		.loc 1 315 0
+ 357 000c 085044E2 		sub	r5, r4, #8
+ 358              	.LVL38:
+ 321:../generate/os_abstraction/src/heap_renesas.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 359              		.loc 1 321 0
+ 360 0010 042014E5 		ldr	r2, [r4, #-4]
+ 361 0014 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 362 0018 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 363 001c 003093E5 		ldr	r3, [r3]
+ 364 0020 030012E1 		tst	r2, r3
+ 365 0024 1C00000A 		beq	.L35
+ 366              	.LVL39:
+ 367              	.L32:
+ 322:../generate/os_abstraction/src/heap_renesas.c **** 
+ 368              		.loc 1 322 0
+ 369 0028 083014E5 		ldr	r3, [r4, #-8]
+ 370 002c 000053E3 		cmp	r3, #0
+ 371 0030 0300000A 		beq	.L33
+ 322:../generate/os_abstraction/src/heap_renesas.c **** 
+ 372              		.loc 1 322 0 is_stmt 0 discriminator 1
+ 373 0034 421100E3 		movw	r1, #322
+ 374 0038 000000E3 		movw	r0, #:lower16:.LC0
+ 375 003c 000040E3 		movt	r0, #:upper16:.LC0
+ 376 0040 FEFFFFEB 		bl	R_OS_AssertCalled
+ 377              	.LVL40:
+ 378              	.L33:
+ 324:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 379              		.loc 1 324 0 is_stmt 1
+ 380 0044 042014E5 		ldr	r2, [r4, #-4]
+ 381 0048 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 382 004c 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 383 0050 003093E5 		ldr	r3, [r3]
+ 384 0054 030012E1 		tst	r2, r3
+ 385 0058 7080BD08 		popeq	{r4, r5, r6, pc}
+ 326:../generate/os_abstraction/src/heap_renesas.c ****             {
+ 386              		.loc 1 326 0
+ 387 005c 081014E5 		ldr	r1, [r4, #-8]
+ 388 0060 000051E3 		cmp	r1, #0
+ 389 0064 7080BD18 		popne	{r4, r5, r6, pc}
+ 330:../generate/os_abstraction/src/heap_renesas.c **** 
+ 390              		.loc 1 330 0
+ 391 0068 0320C2E1 		bic	r2, r2, r3
+ 392 006c 042004E5 		str	r2, [r4, #-4]
+ 332:../generate/os_abstraction/src/heap_renesas.c ****                 {
+ 393              		.loc 1 332 0
+ 394 0070 FEFFFFEB 		bl	vTaskSuspendAll
+ 395              	.LVL41:
+ 335:../generate/os_abstraction/src/heap_renesas.c ****                     traceFREE( pv, pxLink->xBlockSize );
+ 396              		.loc 1 335 0
+ 397 0074 041014E5 		ldr	r1, [r4, #-4]
+ 398 0078 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 399 007c 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 400 0080 002093E5 		ldr	r2, [r3]
+ 401 0084 012082E0 		add	r2, r2, r1
+ 402 0088 002083E5 		str	r2, [r3]
+ 337:../generate/os_abstraction/src/heap_renesas.c ****                 }
+ 403              		.loc 1 337 0
+ 404 008c 0500A0E1 		mov	r0, r5
+ 405 0090 FEFFFFEB 		bl	prvInsertBlockIntoFreeList
+ 406              	.LVL42:
+ 339:../generate/os_abstraction/src/heap_renesas.c ****             }
+ 407              		.loc 1 339 0
+ 408 0094 FEFFFFEB 		bl	xTaskResumeAll
+ 409              	.LVL43:
+ 410 0098 7080BDE8 		pop	{r4, r5, r6, pc}
+ 411              	.LVL44:
+ 412              	.L35:
+ 321:../generate/os_abstraction/src/heap_renesas.c ****         configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 413              		.loc 1 321 0 discriminator 1
+ 414 009c 411100E3 		movw	r1, #321
+ 415 00a0 000000E3 		movw	r0, #:lower16:.LC0
+ 416              	.LVL45:
+ 417 00a4 000040E3 		movt	r0, #:upper16:.LC0
+ 418 00a8 FEFFFFEB 		bl	R_OS_AssertCalled
+ 419              	.LVL46:
+ 420 00ac DDFFFFEA 		b	.L32
+ 421              		.cfi_endproc
+ 422              	.LFE2:
+ 424              		.section	.text.xPortGetFreeHeapSize,"ax",%progbits
+ 425              		.align	2
+ 426              		.global	xPortGetFreeHeapSize
+ 427              		.syntax unified
+ 428              		.arm
+ 429              		.fpu neon
+ 431              	xPortGetFreeHeapSize:
+ 432              	.LFB3:
+ 355:../generate/os_abstraction/src/heap_renesas.c ****     return xFreeBytesRemaining;
+ 433              		.loc 1 355 0
+ 434              		.cfi_startproc
+ 435              		@ args = 0, pretend = 0, frame = 0
+ 436              		@ frame_needed = 0, uses_anonymous_args = 0
+ 437              		@ link register save eliminated.
+ 356:../generate/os_abstraction/src/heap_renesas.c **** }
+ 438              		.loc 1 356 0
+ 439 0000 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 440 0004 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 357:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 441              		.loc 1 357 0
+ 442 0008 000093E5 		ldr	r0, [r3]
+ 443 000c 1EFF2FE1 		bx	lr
+ 444              		.cfi_endproc
+ 445              	.LFE3:
+ 447              		.section	.text.xPortGetMinimumEverFreeHeapSize,"ax",%progbits
+ 448              		.align	2
+ 449              		.global	xPortGetMinimumEverFreeHeapSize
+ 450              		.syntax unified
+ 451              		.arm
+ 452              		.fpu neon
+ 454              	xPortGetMinimumEverFreeHeapSize:
+ 455              	.LFB4:
+ 361:../generate/os_abstraction/src/heap_renesas.c ****     return xMinimumEverFreeBytesRemaining;
+ 456              		.loc 1 361 0
+ 457              		.cfi_startproc
+ 458              		@ args = 0, pretend = 0, frame = 0
+ 459              		@ frame_needed = 0, uses_anonymous_args = 0
+ 460              		@ link register save eliminated.
+ 362:../generate/os_abstraction/src/heap_renesas.c **** }
+ 461              		.loc 1 362 0
+ 462 0000 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 463 0004 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 363:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 464              		.loc 1 363 0
+ 465 0008 000093E5 		ldr	r0, [r3]
+ 466 000c 1EFF2FE1 		bx	lr
+ 467              		.cfi_endproc
+ 468              	.LFE4:
+ 470              		.section	.text.vPortDefineHeapRegions,"ax",%progbits
+ 471              		.align	2
+ 472              		.global	vPortDefineHeapRegions
+ 473              		.syntax unified
+ 474              		.arm
+ 475              		.fpu neon
+ 477              	vPortDefineHeapRegions:
+ 478              	.LFB6:
+ 419:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 420:../generate/os_abstraction/src/heap_renesas.c ****     else
+ 421:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 422:../generate/os_abstraction/src/heap_renesas.c ****         mtCOVERAGE_TEST_MARKER();
+ 423:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 424:../generate/os_abstraction/src/heap_renesas.c **** }
+ 425:../generate/os_abstraction/src/heap_renesas.c **** /*-----------------------------------------------------------*/
+ 426:../generate/os_abstraction/src/heap_renesas.c **** 
+ 427:../generate/os_abstraction/src/heap_renesas.c **** void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions )
+ 428:../generate/os_abstraction/src/heap_renesas.c **** {
+ 479              		.loc 1 428 0
+ 480              		.cfi_startproc
+ 481              		@ args = 0, pretend = 0, frame = 8
+ 482              		@ frame_needed = 0, uses_anonymous_args = 0
+ 483              	.LVL47:
+ 484 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 485              		.cfi_def_cfa_offset 16
+ 486              		.cfi_offset 4, -16
+ 487              		.cfi_offset 5, -12
+ 488              		.cfi_offset 6, -8
+ 489              		.cfi_offset 14, -4
+ 490 0004 08D04DE2 		sub	sp, sp, #8
+ 491              		.cfi_def_cfa_offset 24
+ 492 0008 0060A0E1 		mov	r6, r0
+ 493              	.LVL48:
+ 429:../generate/os_abstraction/src/heap_renesas.c **** BlockLink_t *pxFirstFreeBlockInRegion = NULL, *pxPreviousFreeBlock;
+ 430:../generate/os_abstraction/src/heap_renesas.c **** size_t xAlignedHeap;
+ 431:../generate/os_abstraction/src/heap_renesas.c **** volatile size_t xTotalRegionSize, xTotalHeapSize = 0;
+ 494              		.loc 1 431 0
+ 495 000c 0030A0E3 		mov	r3, #0
+ 496 0010 00308DE5 		str	r3, [sp]
+ 497              	.LVL49:
+ 432:../generate/os_abstraction/src/heap_renesas.c **** BaseType_t xDefinedRegions = 0;
+ 433:../generate/os_abstraction/src/heap_renesas.c **** size_t xAddress;
+ 434:../generate/os_abstraction/src/heap_renesas.c **** const HeapRegion_t *pxHeapRegion;
+ 435:../generate/os_abstraction/src/heap_renesas.c **** 
+ 436:../generate/os_abstraction/src/heap_renesas.c ****     /* Ensure the heap correctly allocated in linker file. */
+ 437:../generate/os_abstraction/src/heap_renesas.c ****     ucHeap[0] = 1;
+ 498              		.loc 1 437 0
+ 499 0014 003000E3 		movw	r3, #:lower16:ucHeap
+ 500 0018 003040E3 		movt	r3, #:upper16:ucHeap
+ 501 001c 0120A0E3 		mov	r2, #1
+ 502 0020 0020C3E5 		strb	r2, [r3]
+ 438:../generate/os_abstraction/src/heap_renesas.c **** 
+ 439:../generate/os_abstraction/src/heap_renesas.c ****     /* Can only call once! */
+ 440:../generate/os_abstraction/src/heap_renesas.c ****     configASSERT( pxEnd == NULL );
+ 503              		.loc 1 440 0
+ 504 0024 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 505 0028 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 506 002c 003093E5 		ldr	r3, [r3]
+ 507 0030 000053E3 		cmp	r3, #0
+ 508 0034 0300000A 		beq	.L39
+ 509              		.loc 1 440 0 is_stmt 0 discriminator 1
+ 510 0038 6E1FA0E3 		mov	r1, #440
+ 511 003c 000000E3 		movw	r0, #:lower16:.LC0
+ 512              	.LVL50:
+ 513 0040 000040E3 		movt	r0, #:upper16:.LC0
+ 514 0044 FEFFFFEB 		bl	R_OS_AssertCalled
+ 515              	.LVL51:
+ 516              	.L39:
+ 441:../generate/os_abstraction/src/heap_renesas.c **** 
+ 442:../generate/os_abstraction/src/heap_renesas.c ****     pxHeapRegion = &( pxHeapRegions[ xDefinedRegions ] );
+ 443:../generate/os_abstraction/src/heap_renesas.c ****     xDefaultBlock = ( size_t ) pxHeapRegion->pucStartAddress;
+ 517              		.loc 1 443 0 is_stmt 1
+ 518 0048 002096E5 		ldr	r2, [r6]
+ 519 004c 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 520 0050 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 521 0054 002083E5 		str	r2, [r3]
+ 444:../generate/os_abstraction/src/heap_renesas.c ****     xDesiredBlock = ( size_t ) pxHeapRegion->pucStartAddress;
+ 522              		.loc 1 444 0
+ 523 0058 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 524 005c 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 525 0060 002083E5 		str	r2, [r3]
+ 442:../generate/os_abstraction/src/heap_renesas.c ****     xDefaultBlock = ( size_t ) pxHeapRegion->pucStartAddress;
+ 526              		.loc 1 442 0
+ 527 0064 0630A0E1 		mov	r3, r6
+ 432:../generate/os_abstraction/src/heap_renesas.c **** size_t xAddress;
+ 528              		.loc 1 432 0
+ 529 0068 0050A0E3 		mov	r5, #0
+ 445:../generate/os_abstraction/src/heap_renesas.c **** 
+ 446:../generate/os_abstraction/src/heap_renesas.c ****     while( pxHeapRegion->xSizeInBytes > 0 )
+ 530              		.loc 1 446 0
+ 531 006c 200000EA 		b	.L40
+ 532              	.LVL52:
+ 533              	.L42:
+ 447:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 448:../generate/os_abstraction/src/heap_renesas.c ****         xTotalRegionSize = pxHeapRegion->xSizeInBytes;
+ 449:../generate/os_abstraction/src/heap_renesas.c **** 
+ 450:../generate/os_abstraction/src/heap_renesas.c ****         /* Ensure the heap region starts on a correctly aligned boundary. */
+ 451:../generate/os_abstraction/src/heap_renesas.c ****         xAddress = ( size_t ) pxHeapRegion->pucStartAddress;
+ 452:../generate/os_abstraction/src/heap_renesas.c ****         if( ( xAddress & portBYTE_ALIGNMENT_MASK ) != 0 )
+ 453:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 454:../generate/os_abstraction/src/heap_renesas.c ****             xAddress += ( portBYTE_ALIGNMENT - 1 );
+ 455:../generate/os_abstraction/src/heap_renesas.c ****             xAddress &= (uint32_t)~portBYTE_ALIGNMENT_MASK;
+ 456:../generate/os_abstraction/src/heap_renesas.c **** 
+ 457:../generate/os_abstraction/src/heap_renesas.c ****             /* Adjust the size for the bytes lost to alignment. */
+ 458:../generate/os_abstraction/src/heap_renesas.c ****             xTotalRegionSize -= xAddress - ( size_t ) pxHeapRegion->pucStartAddress;
+ 459:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 460:../generate/os_abstraction/src/heap_renesas.c **** 
+ 461:../generate/os_abstraction/src/heap_renesas.c ****         xAlignedHeap = xAddress;
+ 462:../generate/os_abstraction/src/heap_renesas.c **** 
+ 463:../generate/os_abstraction/src/heap_renesas.c ****         /* Set xStart if it has not already been set. */
+ 464:../generate/os_abstraction/src/heap_renesas.c ****         if( xDefinedRegions == 0 )
+ 465:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 466:../generate/os_abstraction/src/heap_renesas.c ****             /* xStart is used to hold a pointer to the first item in the list of
+ 467:../generate/os_abstraction/src/heap_renesas.c ****             free blocks.  The void cast is used to prevent compiler warnings. */
+ 468:../generate/os_abstraction/src/heap_renesas.c ****             xStart.pxNextFreeBlock = ( BlockLink_t * ) xAlignedHeap;
+ 469:../generate/os_abstraction/src/heap_renesas.c ****             xStart.xBlockSize = ( size_t ) 0;
+ 470:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 471:../generate/os_abstraction/src/heap_renesas.c ****         else
+ 472:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 473:../generate/os_abstraction/src/heap_renesas.c ****             /* Should only get here if one region has already been added to the
+ 474:../generate/os_abstraction/src/heap_renesas.c ****             heap. */
+ 475:../generate/os_abstraction/src/heap_renesas.c ****             configASSERT( pxEnd != NULL );
+ 534              		.loc 1 475 0
+ 535 0070 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 536 0074 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 537 0078 003093E5 		ldr	r3, [r3]
+ 538 007c 000053E3 		cmp	r3, #0
+ 539 0080 3100000A 		beq	.L49
+ 540              	.L44:
+ 476:../generate/os_abstraction/src/heap_renesas.c **** 
+ 477:../generate/os_abstraction/src/heap_renesas.c ****             /* Check blocks are passed in with increasing start addresses. */
+ 478:../generate/os_abstraction/src/heap_renesas.c ****             configASSERT( xAddress > ( size_t ) pxEnd );
+ 541              		.loc 1 478 0
+ 542 0084 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 543 0088 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 544 008c 003093E5 		ldr	r3, [r3]
+ 545 0090 030054E1 		cmp	r4, r3
+ 546 0094 3100009A 		bls	.L50
+ 547              	.L43:
+ 479:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 480:../generate/os_abstraction/src/heap_renesas.c **** 
+ 481:../generate/os_abstraction/src/heap_renesas.c ****         /* Remember the location of the end marker in the previous region, if
+ 482:../generate/os_abstraction/src/heap_renesas.c ****         any. */
+ 483:../generate/os_abstraction/src/heap_renesas.c ****         pxPreviousFreeBlock = pxEnd;
+ 548              		.loc 1 483 0
+ 549 0098 002000E3 		movw	r2, #:lower16:.LANCHOR1
+ 550 009c 002040E3 		movt	r2, #:upper16:.LANCHOR1
+ 551 00a0 001092E5 		ldr	r1, [r2]
+ 552              	.LVL53:
+ 484:../generate/os_abstraction/src/heap_renesas.c **** 
+ 485:../generate/os_abstraction/src/heap_renesas.c ****         /* pxEnd is used to mark the end of the list of free blocks and is
+ 486:../generate/os_abstraction/src/heap_renesas.c ****         inserted at the end of the region space. */
+ 487:../generate/os_abstraction/src/heap_renesas.c ****         xAddress = xAlignedHeap + xTotalRegionSize;
+ 553              		.loc 1 487 0
+ 554 00a4 04309DE5 		ldr	r3, [sp, #4]
+ 555 00a8 033084E0 		add	r3, r4, r3
+ 556              	.LVL54:
+ 488:../generate/os_abstraction/src/heap_renesas.c ****         xAddress -= xHeapStructSize;
+ 557              		.loc 1 488 0
+ 558 00ac 083043E2 		sub	r3, r3, #8
+ 559              	.LVL55:
+ 489:../generate/os_abstraction/src/heap_renesas.c ****         xAddress &= (uint32_t)~portBYTE_ALIGNMENT_MASK;
+ 560              		.loc 1 489 0
+ 561 00b0 0730C3E3 		bic	r3, r3, #7
+ 562              	.LVL56:
+ 490:../generate/os_abstraction/src/heap_renesas.c ****         pxEnd = ( BlockLink_t * ) xAddress;
+ 563              		.loc 1 490 0
+ 564 00b4 003082E5 		str	r3, [r2]
+ 491:../generate/os_abstraction/src/heap_renesas.c ****         pxEnd->xBlockSize = 0;
+ 565              		.loc 1 491 0
+ 566 00b8 0020A0E3 		mov	r2, #0
+ 567 00bc 042083E5 		str	r2, [r3, #4]
+ 492:../generate/os_abstraction/src/heap_renesas.c ****         pxEnd->pxNextFreeBlock = NULL;
+ 568              		.loc 1 492 0
+ 569 00c0 002083E5 		str	r2, [r3]
+ 493:../generate/os_abstraction/src/heap_renesas.c **** 
+ 494:../generate/os_abstraction/src/heap_renesas.c ****         /* To start with there is a single free block in this region that is
+ 495:../generate/os_abstraction/src/heap_renesas.c ****         sized to take up the entire heap region minus the space taken by the
+ 496:../generate/os_abstraction/src/heap_renesas.c ****         free block structure. */
+ 497:../generate/os_abstraction/src/heap_renesas.c ****         pxFirstFreeBlockInRegion = ( BlockLink_t * ) xAlignedHeap;
+ 570              		.loc 1 497 0
+ 571 00c4 0420A0E1 		mov	r2, r4
+ 572              	.LVL57:
+ 498:../generate/os_abstraction/src/heap_renesas.c ****         pxFirstFreeBlockInRegion->xBlockSize = xAddress - ( size_t ) pxFirstFreeBlockInRegion;
+ 573              		.loc 1 498 0
+ 574 00c8 040043E0 		sub	r0, r3, r4
+ 575 00cc 040084E5 		str	r0, [r4, #4]
+ 499:../generate/os_abstraction/src/heap_renesas.c ****         pxFirstFreeBlockInRegion->pxNextFreeBlock = pxEnd;
+ 576              		.loc 1 499 0
+ 577 00d0 003084E5 		str	r3, [r4]
+ 500:../generate/os_abstraction/src/heap_renesas.c **** 
+ 501:../generate/os_abstraction/src/heap_renesas.c ****         /* If this is not the first region that makes up the entire heap space
+ 502:../generate/os_abstraction/src/heap_renesas.c ****         then link the previous region to this region. */
+ 503:../generate/os_abstraction/src/heap_renesas.c ****         if( pxPreviousFreeBlock != NULL )
+ 578              		.loc 1 503 0
+ 579 00d4 000051E3 		cmp	r1, #0
+ 580              	.LVL58:
+ 504:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 505:../generate/os_abstraction/src/heap_renesas.c ****             pxPreviousFreeBlock->pxNextFreeBlock = pxFirstFreeBlockInRegion;
+ 581              		.loc 1 505 0
+ 582 00d8 00408115 		strne	r4, [r1]
+ 583              	.L45:
+ 506:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 507:../generate/os_abstraction/src/heap_renesas.c **** 
+ 508:../generate/os_abstraction/src/heap_renesas.c ****         xTotalHeapSize += pxFirstFreeBlockInRegion->xBlockSize;
+ 584              		.loc 1 508 0
+ 585 00dc 043092E5 		ldr	r3, [r2, #4]
+ 586              	.LVL59:
+ 587 00e0 00209DE5 		ldr	r2, [sp]
+ 588              	.LVL60:
+ 589 00e4 023083E0 		add	r3, r3, r2
+ 590 00e8 00308DE5 		str	r3, [sp]
+ 509:../generate/os_abstraction/src/heap_renesas.c **** 
+ 510:../generate/os_abstraction/src/heap_renesas.c ****         /* Move onto the next HeapRegion_t structure. */
+ 511:../generate/os_abstraction/src/heap_renesas.c ****         xDefinedRegions++;
+ 591              		.loc 1 511 0
+ 592 00ec 015085E2 		add	r5, r5, #1
+ 593              	.LVL61:
+ 512:../generate/os_abstraction/src/heap_renesas.c ****         pxHeapRegion = &( pxHeapRegions[ xDefinedRegions ] );
+ 594              		.loc 1 512 0
+ 595 00f0 853186E0 		add	r3, r6, r5, lsl #3
+ 596              	.LVL62:
+ 597              	.L40:
+ 446:../generate/os_abstraction/src/heap_renesas.c ****     {
+ 598              		.loc 1 446 0
+ 599 00f4 042093E5 		ldr	r2, [r3, #4]
+ 600 00f8 000052E3 		cmp	r2, #0
+ 601 00fc 1C00000A 		beq	.L51
+ 448:../generate/os_abstraction/src/heap_renesas.c **** 
+ 602              		.loc 1 448 0
+ 603 0100 04208DE5 		str	r2, [sp, #4]
+ 451:../generate/os_abstraction/src/heap_renesas.c ****         if( ( xAddress & portBYTE_ALIGNMENT_MASK ) != 0 )
+ 604              		.loc 1 451 0
+ 605 0104 004093E5 		ldr	r4, [r3]
+ 606              	.LVL63:
+ 452:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 607              		.loc 1 452 0
+ 608 0108 070014E3 		tst	r4, #7
+ 609 010c 0600000A 		beq	.L41
+ 454:../generate/os_abstraction/src/heap_renesas.c ****             xAddress &= (uint32_t)~portBYTE_ALIGNMENT_MASK;
+ 610              		.loc 1 454 0
+ 611 0110 073084E2 		add	r3, r4, #7
+ 612              	.LVL64:
+ 455:../generate/os_abstraction/src/heap_renesas.c **** 
+ 613              		.loc 1 455 0
+ 614 0114 0730C3E3 		bic	r3, r3, #7
+ 615              	.LVL65:
+ 458:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 616              		.loc 1 458 0
+ 617 0118 034044E0 		sub	r4, r4, r3
+ 618 011c 04209DE5 		ldr	r2, [sp, #4]
+ 619 0120 024084E0 		add	r4, r4, r2
+ 620 0124 04408DE5 		str	r4, [sp, #4]
+ 455:../generate/os_abstraction/src/heap_renesas.c **** 
+ 621              		.loc 1 455 0
+ 622 0128 0340A0E1 		mov	r4, r3
+ 623              	.LVL66:
+ 624              	.L41:
+ 464:../generate/os_abstraction/src/heap_renesas.c ****         {
+ 625              		.loc 1 464 0
+ 626 012c 000055E3 		cmp	r5, #0
+ 627 0130 CEFFFF1A 		bne	.L42
+ 468:../generate/os_abstraction/src/heap_renesas.c ****             xStart.xBlockSize = ( size_t ) 0;
+ 628              		.loc 1 468 0
+ 629 0134 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 630 0138 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 631 013c 004083E5 		str	r4, [r3]
+ 469:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 632              		.loc 1 469 0
+ 633 0140 0020A0E3 		mov	r2, #0
+ 634 0144 042083E5 		str	r2, [r3, #4]
+ 635 0148 D2FFFFEA 		b	.L43
+ 636              	.L49:
+ 475:../generate/os_abstraction/src/heap_renesas.c **** 
+ 637              		.loc 1 475 0 discriminator 1
+ 638 014c DB1100E3 		movw	r1, #475
+ 639 0150 000000E3 		movw	r0, #:lower16:.LC0
+ 640 0154 000040E3 		movt	r0, #:upper16:.LC0
+ 641 0158 FEFFFFEB 		bl	R_OS_AssertCalled
+ 642              	.LVL67:
+ 643 015c C8FFFFEA 		b	.L44
+ 644              	.L50:
+ 478:../generate/os_abstraction/src/heap_renesas.c ****         }
+ 645              		.loc 1 478 0 discriminator 1
+ 646 0160 DE1100E3 		movw	r1, #478
+ 647 0164 000000E3 		movw	r0, #:lower16:.LC0
+ 648 0168 000040E3 		movt	r0, #:upper16:.LC0
+ 649 016c FEFFFFEB 		bl	R_OS_AssertCalled
+ 650              	.LVL68:
+ 651 0170 C8FFFFEA 		b	.L43
+ 652              	.LVL69:
+ 653              	.L51:
+ 513:../generate/os_abstraction/src/heap_renesas.c ****     }
+ 514:../generate/os_abstraction/src/heap_renesas.c **** 
+ 515:../generate/os_abstraction/src/heap_renesas.c ****     xMinimumEverFreeBytesRemaining = xTotalHeapSize;
+ 654              		.loc 1 515 0
+ 655 0174 00209DE5 		ldr	r2, [sp]
+ 656 0178 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 657              	.LVL70:
+ 658 017c 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 659 0180 002083E5 		str	r2, [r3]
+ 516:../generate/os_abstraction/src/heap_renesas.c ****     xFreeBytesRemaining = xTotalHeapSize;
+ 660              		.loc 1 516 0
+ 661 0184 00209DE5 		ldr	r2, [sp]
+ 662 0188 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 663 018c 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 664 0190 002083E5 		str	r2, [r3]
+ 517:../generate/os_abstraction/src/heap_renesas.c **** 
+ 518:../generate/os_abstraction/src/heap_renesas.c ****     /* Check something was actually defined before it is accessed. */
+ 519:../generate/os_abstraction/src/heap_renesas.c ****     configASSERT( xTotalHeapSize );
+ 665              		.loc 1 519 0
+ 666 0194 00309DE5 		ldr	r3, [sp]
+ 667 0198 000053E3 		cmp	r3, #0
+ 668 019c 0500000A 		beq	.L52
+ 669              	.L47:
+ 520:../generate/os_abstraction/src/heap_renesas.c **** 
+ 521:../generate/os_abstraction/src/heap_renesas.c ****     /* Work out the position of the top bit in a size_t variable. */
+ 522:../generate/os_abstraction/src/heap_renesas.c ****     xBlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * heapBITS_PER_BYTE ) - 1 );
+ 670              		.loc 1 522 0
+ 671 01a0 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 672 01a4 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 673 01a8 0221A0E3 		mov	r2, #-2147483648
+ 674 01ac 002083E5 		str	r2, [r3]
+ 523:../generate/os_abstraction/src/heap_renesas.c **** }
+ 675              		.loc 1 523 0
+ 676 01b0 08D08DE2 		add	sp, sp, #8
+ 677              		.cfi_remember_state
+ 678              		.cfi_def_cfa_offset 16
+ 679              		@ sp needed
+ 680 01b4 7080BDE8 		pop	{r4, r5, r6, pc}
+ 681              	.LVL71:
+ 682              	.L52:
+ 683              		.cfi_restore_state
+ 519:../generate/os_abstraction/src/heap_renesas.c **** 
+ 684              		.loc 1 519 0 discriminator 1
+ 685 01b8 071200E3 		movw	r1, #519
+ 686 01bc 000000E3 		movw	r0, #:lower16:.LC0
+ 687 01c0 000040E3 		movt	r0, #:upper16:.LC0
+ 688 01c4 FEFFFFEB 		bl	R_OS_AssertCalled
+ 689              	.LVL72:
+ 690 01c8 F4FFFFEA 		b	.L47
+ 691              		.cfi_endproc
+ 692              	.LFE6:
+ 694              		.section	.bss.pxEnd,"aw",%nobits
+ 695              		.align	2
+ 696              		.set	.LANCHOR1,. + 0
+ 699              	pxEnd:
+ 700 0000 00000000 		.space	4
+ 701              		.section	.bss.xBlockAllocatedBit,"aw",%nobits
+ 702              		.align	2
+ 703              		.set	.LANCHOR3,. + 0
+ 706              	xBlockAllocatedBit:
+ 707 0000 00000000 		.space	4
+ 708              		.section	.bss.xDefaultBlock,"aw",%nobits
+ 709              		.align	2
+ 710              		.set	.LANCHOR5,. + 0
+ 713              	xDefaultBlock:
+ 714 0000 00000000 		.space	4
+ 715              		.section	.bss.xDesiredBlock,"aw",%nobits
+ 716              		.align	2
+ 717              		.set	.LANCHOR2,. + 0
+ 720              	xDesiredBlock:
+ 721 0000 00000000 		.space	4
+ 722              		.section	.bss.xFreeBytesRemaining,"aw",%nobits
+ 723              		.align	2
+ 724              		.set	.LANCHOR4,. + 0
+ 727              	xFreeBytesRemaining:
+ 728 0000 00000000 		.space	4
+ 729              		.section	.bss.xMinimumEverFreeBytesRemaining,"aw",%nobits
+ 730              		.align	2
+ 731              		.set	.LANCHOR6,. + 0
+ 734              	xMinimumEverFreeBytesRemaining:
+ 735 0000 00000000 		.space	4
+ 736              		.section	.bss.xStart,"aw",%nobits
+ 737              		.align	2
+ 738              		.set	.LANCHOR0,. + 0
+ 741              	xStart:
+ 742 0000 00000000 		.space	8
+ 742      00000000 
+ 743              		.section	.rodata.pvPortMalloc.str1.4,"aMS",%progbits,1
+ 744              		.align	2
+ 745              	.LC0:
+ 746 0000 2E2E2F67 		.ascii	"../generate/os_abstraction/src/heap_renesas.c\000"
+ 746      656E6572 
+ 746      6174652F 
+ 746      6F735F61 
+ 746      62737472 
+ 747              		.text
+ 748              	.Letext0:
+ 749              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 750              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 751              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 752              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 753              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 754              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 755              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 756              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 757              		.file 10 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\Free
+ 758              		.file 11 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\Free
+ 759              		.file 12 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\conf
+ 760              		.file 13 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\Free
+DEFINED SYMBOLS
+                            *ABS*:00000000 heap_renesas.c
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:17     .text.prvInsertBlockIntoFreeList:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:22     .text.prvInsertBlockIntoFreeList:00000000 prvInsertBlockIntoFreeList
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:738    .bss.xStart:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:696    .bss.pxEnd:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:101    .text.pvPortsetDesiredBlockForMalloc:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:107    .text.pvPortsetDesiredBlockForMalloc:00000000 pvPortsetDesiredBlockForMalloc
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:717    .bss.xDesiredBlock:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:124    .text.pvPortMalloc:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:130    .text.pvPortMalloc:00000000 pvPortMalloc
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:703    .bss.xBlockAllocatedBit:00000000 .LANCHOR3
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:724    .bss.xFreeBytesRemaining:00000000 .LANCHOR4
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:745    .rodata.pvPortMalloc.str1.4:00000000 .LC0
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:710    .bss.xDefaultBlock:00000000 .LANCHOR5
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:731    .bss.xMinimumEverFreeBytesRemaining:00000000 .LANCHOR6
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:333    .text.vPortFree:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:339    .text.vPortFree:00000000 vPortFree
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:425    .text.xPortGetFreeHeapSize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:431    .text.xPortGetFreeHeapSize:00000000 xPortGetFreeHeapSize
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:448    .text.xPortGetMinimumEverFreeHeapSize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:454    .text.xPortGetMinimumEverFreeHeapSize:00000000 xPortGetMinimumEverFreeHeapSize
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:471    .text.vPortDefineHeapRegions:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:477    .text.vPortDefineHeapRegions:00000000 vPortDefineHeapRegions
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:695    .bss.pxEnd:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:699    .bss.pxEnd:00000000 pxEnd
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:702    .bss.xBlockAllocatedBit:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:706    .bss.xBlockAllocatedBit:00000000 xBlockAllocatedBit
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:709    .bss.xDefaultBlock:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:713    .bss.xDefaultBlock:00000000 xDefaultBlock
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:716    .bss.xDesiredBlock:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:720    .bss.xDesiredBlock:00000000 xDesiredBlock
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:723    .bss.xFreeBytesRemaining:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:727    .bss.xFreeBytesRemaining:00000000 xFreeBytesRemaining
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:730    .bss.xMinimumEverFreeBytesRemaining:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:734    .bss.xMinimumEverFreeBytesRemaining:00000000 xMinimumEverFreeBytesRemaining
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:737    .bss.xStart:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:741    .bss.xStart:00000000 xStart
+C:\Users\rj7356s\AppData\Local\Temp\ccmDf8th.s:744    .rodata.pvPortMalloc.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.stddef.h.187.e1c83cba2098ce92b68f6311de19e6b1
+                           .group:00000000 wm4.stddef.h.39.57db33e786ccd422e31be63a26e19309
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.r_task_priority.h.26.416bb98a222bf391200df359bd0318d1
+                           .group:00000000 wm4.FreeRTOSConfig.h.79.b5458a5c31689ea246b5d3a5f655ce5b
+                           .group:00000000 wm4.projdefs.h.29.3472c8470d131a5f474bc7437ea94609
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.portmacro.h.32.440d21c040186908c7273660706c6bca
+                           .group:00000000 wm4.portable.h.64.00b423ba030e23bed354b037664af7a6
+                           .group:00000000 wm4.mpu_wrappers.h.29.89d425470b0b1ff39fbd61026b3dc073
+                           .group:00000000 wm4.FreeRTOS.h.66.bad6b88d088f10e2b23c3b49ecb7db7d
+                           .group:00000000 wm4.list.h.61.bafeaa82806d71ae8917c6d7827fc3d2
+                           .group:00000000 wm4.task.h.46.d14b2b6bfa640e74f781e050155168fa
+
+UNDEFINED SYMBOLS
+vTaskSuspendAll
+R_OS_AssertCalled
+xTaskResumeAll
+ucHeap

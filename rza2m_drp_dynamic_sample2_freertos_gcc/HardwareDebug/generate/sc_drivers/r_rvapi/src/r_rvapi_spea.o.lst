@@ -1,0 +1,919 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_rvapi_spea.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.R_RVAPI_GraphCreateSurfaceSPEA,"ax",%progbits
+  17              		.align	2
+  18              		.global	R_RVAPI_GraphCreateSurfaceSPEA
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	R_RVAPI_GraphCreateSurfaceSPEA:
+  24              	.LFB0:
+  25              		.file 1 "../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c"
+   1:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * following link:
+  15:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  *
+  17:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************//**
+  20:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * File Name :   r_rvapi_spea.c
+  21:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @file         r_rvapi_spea.c
+  22:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @version      1.12
+  23:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @brief        RVAPI for SPEA function
+  24:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+  25:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  26:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /******************************************************************************
+  27:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  Includes   <System Includes> , "Project Includes"
+  28:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+  29:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** #include    <string.h>
+  30:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  31:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** #include    "r_vdc.h"
+  32:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** #include    "r_spea.h"
+  33:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** #include    "r_rvapi_vdc.h"
+  34:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** #include    "r_rvapi_spea.h"
+  35:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  36:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /******************************************************************************
+  37:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  Macro definitions
+  38:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+  39:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** #define RLE_STRIDE    (4)
+  40:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  41:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /******************************************************************************
+  42:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  Typedef definitions
+  43:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+  44:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  45:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /******************************************************************************
+  46:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  Exported global variables
+  47:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+  48:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** extern vdc_period_rect_t full_screen; 
+  49:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  50:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************//**
+  51:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Function Name : R_RVAPI_GraphCreateSurfaceSPEA
+  52:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @brief       Graphics create surface processing
+  53:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   ch            : Channel
+  54:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   gr_disp_cnf   : Graphics surface read config
+  55:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @retval      VDC driver error code
+  56:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+  57:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** vdc_error_t R_RVAPI_GraphCreateSurfaceSPEA(const vdc_channel_t ch, 
+  58:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             const gr_surface_disp_config_t * const gr_disp_cnf)
+  59:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** {
+  26              		.loc 1 59 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 40
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+  31 0000 30402DE9 		push	{r4, r5, lr}
+  32              		.cfi_def_cfa_offset 12
+  33              		.cfi_offset 4, -12
+  34              		.cfi_offset 5, -8
+  35              		.cfi_offset 14, -4
+  36 0004 2CD04DE2 		sub	sp, sp, #44
+  37              		.cfi_def_cfa_offset 56
+  38 0008 0050A0E1 		mov	r5, r0
+  60:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_error_t error;
+  61:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_read_t spea_cnf;
+  62:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_start_t start;
+  63:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_gr_disp_sel_t disp_mode;
+  64:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  65:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* pointer_NULL_check */
+  66:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if (NULL == gr_disp_cnf)
+  39              		.loc 1 66 0
+  40 000c 004051E2 		subs	r4, r1, #0
+  41 0010 2A00000A 		beq	.L4
+  67:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+  68:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         error = VDC_ERR_PARAM_UNDEFINED;
+  69:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+  70:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     else
+  71:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+  72:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         /* Read data parameter */
+  73:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_ln_off_dir
+  74:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             = VDC_GR_LN_OFF_DIR_INC;       /* Line offset address direction of the frame buffer */
+  42              		.loc 1 74 0
+  43 0014 0030A0E3 		mov	r3, #0
+  44 0018 0C30CDE5 		strb	r3, [sp, #12]
+  75:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_flm_sel     = VDC_GR_FLM_SEL_FLM_NUM;          /* Selects a frame buffer addres
+  45              		.loc 1 75 0
+  46 001c 0120A0E3 		mov	r2, #1
+  47 0020 0D20CDE5 		strb	r2, [sp, #13]
+  76:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_imr_flm_inv = VDC_OFF;                         /* Frame buffer number for disto
+  48              		.loc 1 76 0
+  49 0024 0E30CDE5 		strb	r3, [sp, #14]
+  77:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_bst_md      = VDC_BST_MD_32BYTE;               /* Frame buffer burst transfer m
+  50              		.loc 1 77 0
+  51 0028 0F30CDE5 		strb	r3, [sp, #15]
+  78:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_base        = (void *) VIRTUAL_FRAME_BASE_ADD; /* Frame buffer base address */
+  52              		.loc 1 78 0
+  53 002c 0312A0E3 		mov	r1, #805306368
+  54              	.LVL1:
+  55 0030 10108DE5 		str	r1, [sp, #16]
+  79:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_ln_off      = VIRTUAL_FRAME_STRAID;            /* Frame buffer line offset addr
+  56              		.loc 1 79 0
+  57 0034 021AA0E3 		mov	r1, #8192
+  58 0038 14108DE5 		str	r1, [sp, #20]
+  80:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.width_read_fb  = NULL;                            /* Width of the image read from 
+  59              		.loc 1 80 0
+  60 003c 18308DE5 		str	r3, [sp, #24]
+  81:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.adj_sel
+  82:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             = VDC_ON;                      /* Measures to decrease the influence by folding pixels/
+  61              		.loc 1 82 0
+  62 0040 1C20CDE5 		strb	r2, [sp, #28]
+  83:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_format      = VDC_GR_FORMAT_ARGB8888;          /* Format of the frame buffer re
+  63              		.loc 1 83 0
+  64 0044 0420A0E3 		mov	r2, #4
+  65 0048 1D20CDE5 		strb	r2, [sp, #29]
+  84:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_ycc_swap
+  85:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             = VDC_GR_YCCSWAP_CBY0CRY1;         /* Controls swapping of data read from buffer in the
+  66              		.loc 1 85 0
+  67 004c 1E30CDE5 		strb	r3, [sp, #30]
+  86:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_rdswa       = VDC_WR_RD_WRSWA_32BIT;           /* Frame buffer swap setting */
+  68              		.loc 1 86 0
+  69 0050 1F20CDE5 		strb	r2, [sp, #31]
+  87:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  88:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         /* Display area */
+  89:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.vs = (uint16_t) (gr_disp_cnf->disp_area.vs_rel + full_screen.vs); /* vertic
+  70              		.loc 1 89 0
+  71 0054 B220D4E1 		ldrh	r2, [r4, #2]
+  72 0058 003000E3 		movw	r3, #:lower16:full_screen
+  73 005c 003040E3 		movt	r3, #:upper16:full_screen
+  74 0060 B010D3E1 		ldrh	r1, [r3]
+  75 0064 012082E0 		add	r2, r2, r1
+  76 0068 B022CDE1 		strh	r2, [sp, #32]	@ movhi
+  90:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.vw = (uint16_t) gr_disp_cnf->disp_area.vw_rel;                    /* vertic
+  77              		.loc 1 90 0
+  78 006c B420D4E1 		ldrh	r2, [r4, #4]
+  79 0070 B222CDE1 		strh	r2, [sp, #34]	@ movhi
+  91:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.hs = (uint16_t) (gr_disp_cnf->disp_area.hs_rel + full_screen.hs); /*horizon
+  80              		.loc 1 91 0
+  81 0074 B620D4E1 		ldrh	r2, [r4, #6]
+  82 0078 B430D3E1 		ldrh	r3, [r3, #4]
+  83 007c 033082E0 		add	r3, r2, r3
+  84 0080 B432CDE1 		strh	r3, [sp, #36]	@ movhi
+  92:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.hw = (uint16_t) gr_disp_cnf->disp_area.hw_rel;                    /* horizo
+  85              		.loc 1 92 0
+  86 0084 B830D4E1 		ldrh	r3, [r4, #8]
+  87 0088 B632CDE1 		strh	r3, [sp, #38]	@ movhi
+  93:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  94:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         disp_mode = VDC_DISPSEL_BLEND;
+  88              		.loc 1 94 0
+  89 008c 28308DE2 		add	r3, sp, #40
+  90 0090 0320A0E3 		mov	r2, #3
+  91 0094 212063E5 		strb	r2, [r3, #-33]!
+  95:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         start.gr_disp_sel = &disp_mode;
+  92              		.loc 1 95 0
+  93 0098 08308DE5 		str	r3, [sp, #8]
+  96:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+  97:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         error = R_VDC_ReadDataControl(ch, gr_disp_cnf->layer_id, &spea_cnf);
+  94              		.loc 1 97 0
+  95 009c 0C208DE2 		add	r2, sp, #12
+  96 00a0 D010D4E1 		ldrsb	r1, [r4]
+  97 00a4 FEFFFFEB 		bl	R_VDC_ReadDataControl
+  98              	.LVL2:
+  99              	.L2:
+  98:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+  99:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 100:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* pointer NULL check */
+ 101:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if (NULL == gr_disp_cnf)
+ 100              		.loc 1 101 0
+ 101 00a8 000054E3 		cmp	r4, #0
+ 102 00ac 0A00000A 		beq	.L5
+ 102:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 103:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         error = VDC_ERR_PARAM_UNDEFINED;
+ 104:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 105:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     else
+ 106:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 107:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         if(error == VDC_OK)
+ 103              		.loc 1 107 0
+ 104 00b0 000050E3 		cmp	r0, #0
+ 105 00b4 0300000A 		beq	.L7
+ 106              	.LVL3:
+ 107              	.L3:
+ 108:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         {
+ 109:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             error = R_VDC_StartProcess(ch, gr_disp_cnf->layer_id, &start);
+ 110:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         }
+ 111:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 112:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 113:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     return error;
+ 114:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** } /* End of function R_RVAPI_GraphCreateSurfaceSPEA() */
+ 108              		.loc 1 114 0
+ 109 00b8 2CD08DE2 		add	sp, sp, #44
+ 110              		.cfi_remember_state
+ 111              		.cfi_def_cfa_offset 12
+ 112              		@ sp needed
+ 113 00bc 3080BDE8 		pop	{r4, r5, pc}
+ 114              	.LVL4:
+ 115              	.L4:
+ 116              		.cfi_restore_state
+  68:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 117              		.loc 1 68 0
+ 118 00c0 0500A0E3 		mov	r0, #5
+ 119              	.LVL5:
+ 120 00c4 F7FFFFEA 		b	.L2
+ 121              	.LVL6:
+ 122              	.L7:
+ 109:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         }
+ 123              		.loc 1 109 0
+ 124 00c8 08208DE2 		add	r2, sp, #8
+ 125 00cc D010D4E1 		ldrsb	r1, [r4]
+ 126 00d0 0500A0E1 		mov	r0, r5
+ 127              	.LVL7:
+ 128 00d4 FEFFFFEB 		bl	R_VDC_StartProcess
+ 129              	.LVL8:
+ 130 00d8 F6FFFFEA 		b	.L3
+ 131              	.L5:
+ 103:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 132              		.loc 1 103 0
+ 133 00dc 0500A0E3 		mov	r0, #5
+ 134              	.LVL9:
+ 135 00e0 F4FFFFEA 		b	.L3
+ 136              		.cfi_endproc
+ 137              	.LFE0:
+ 139              		.section	.text.R_RVAPI_WindowOffsetSPEA,"ax",%progbits
+ 140              		.align	2
+ 141              		.global	R_RVAPI_WindowOffsetSPEA
+ 142              		.syntax unified
+ 143              		.arm
+ 144              		.fpu neon
+ 146              	R_RVAPI_WindowOffsetSPEA:
+ 147              	.LFB1:
+ 115:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 116:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************//**
+ 117:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Function Name : R_RVAPI_WindowOffsetSPEA
+ 118:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @brief       Setting the coordinate offset of the window
+ 119:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   layer_id  : VDC Layer ID (2 or 3)
+ 120:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   offset_x  : x position
+ 121:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   offset_y  : y position
+ 122:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @retval      SPEA driver error code
+ 123:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+ 124:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** spea_error_t R_RVAPI_WindowOffsetSPEA
+ 125:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             (const vdc_layer_id_t layer_id, const uint16_t offset_x, const uint16_t offset_y)
+ 126:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** {
+ 148              		.loc 1 126 0
+ 149              		.cfi_startproc
+ 150              		@ args = 0, pretend = 0, frame = 0
+ 151              		@ frame_needed = 0, uses_anonymous_args = 0
+ 152              	.LVL10:
+ 153 0000 10402DE9 		push	{r4, lr}
+ 154              		.cfi_def_cfa_offset 8
+ 155              		.cfi_offset 4, -8
+ 156              		.cfi_offset 14, -4
+ 127:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     spea_error_t spea_error;
+ 128:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 129:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     spea_error = R_SPEA_WindowOffset(layer_id, offset_x, offset_y);
+ 157              		.loc 1 129 0
+ 158 0004 FEFFFFEB 		bl	R_SPEA_WindowOffset
+ 159              	.LVL11:
+ 130:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 131:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     return spea_error;
+ 132:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** } /* End of function R_RVAPI_WindowOffsetSPEA() */
+ 160              		.loc 1 132 0
+ 161 0008 1080BDE8 		pop	{r4, pc}
+ 162              		.cfi_endproc
+ 163              	.LFE1:
+ 165              		.section	.text.R_RVAPI_SetWindowSPEA,"ax",%progbits
+ 166              		.align	2
+ 167              		.global	R_RVAPI_SetWindowSPEA
+ 168              		.syntax unified
+ 169              		.arm
+ 170              		.fpu neon
+ 172              	R_RVAPI_SetWindowSPEA:
+ 173              	.LFB2:
+ 133:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 134:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************//**
+ 135:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Function Name : R_RVAPI_SetWindowSPEA
+ 136:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @brief       Setting Window Parameters
+ 137:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   layer_id     : VDC Layer ID (2 or 3)
+ 138:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   window_id    : SPEA window ID
+ 139:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  *                              - S0_WINDOW_00 - S0_WINDOW_15
+ 140:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  *                              - S1_WINDOW_00 - S0_WINDOW_15
+ 141:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   sken         : Window ON/OFF.
+ 142:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   size         : Window size.
+ 143:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   pos        : Window start coordinates.
+ 144:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   buffer       : Window read buffer address.
+ 145:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @retval      SPEA driver error code
+ 146:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+ 147:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** spea_error_t R_RVAPI_SetWindowSPEA(const vdc_layer_id_t layer_id, 
+ 148:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 const spea_window_id_t window_id,
+ 149:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 const spea_onoff_t sken,
+ 150:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 const spea_sklym_t * size,
+ 151:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 const spea_skpsm_t * pos,
+ 152:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 const void * buffer)
+ 153:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** {
+ 174              		.loc 1 153 0
+ 175              		.cfi_startproc
+ 176              		@ args = 8, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+ 178              	.LVL12:
+ 179 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 180              		.cfi_def_cfa_offset 4
+ 181              		.cfi_offset 14, -4
+ 182 0004 0CD04DE2 		sub	sp, sp, #12
+ 183              		.cfi_def_cfa_offset 16
+ 154:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     spea_error_t spea_error;
+ 155:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 156:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     spea_error = R_SPEA_SetWindow(layer_id, window_id, sken, size, pos, buffer);
+ 184              		.loc 1 156 0
+ 185 0008 14C09DE5 		ldr	ip, [sp, #20]
+ 186 000c 04C08DE5 		str	ip, [sp, #4]
+ 187 0010 10C09DE5 		ldr	ip, [sp, #16]
+ 188 0014 00C08DE5 		str	ip, [sp]
+ 189 0018 FEFFFFEB 		bl	R_SPEA_SetWindow
+ 190              	.LVL13:
+ 157:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 158:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     return spea_error;
+ 159:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** } /* End of function R_RVAPI_SetWindowSPEA() */
+ 191              		.loc 1 159 0
+ 192 001c 0CD08DE2 		add	sp, sp, #12
+ 193              		.cfi_def_cfa_offset 4
+ 194              		@ sp needed
+ 195 0020 04F09DE4 		ldr	pc, [sp], #4
+ 196              		.cfi_endproc
+ 197              	.LFE2:
+ 199              		.section	.text.R_RVAPI_WindowUpdateSPEA,"ax",%progbits
+ 200              		.align	2
+ 201              		.global	R_RVAPI_WindowUpdateSPEA
+ 202              		.syntax unified
+ 203              		.arm
+ 204              		.fpu neon
+ 206              	R_RVAPI_WindowUpdateSPEA:
+ 207              	.LFB3:
+ 160:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 161:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************//**
+ 162:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Function Name : R_RVAPI_WindowUpdateSPEA
+ 163:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @brief       Window parameters update request
+ 164:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   layer_id        : VDC Layer ID (2 or 3)
+ 165:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @retval      SPEA driver error code
+ 166:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+ 167:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** spea_error_t R_RVAPI_WindowUpdateSPEA(const vdc_layer_id_t layer_id) 
+ 168:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** {
+ 208              		.loc 1 168 0
+ 209              		.cfi_startproc
+ 210              		@ args = 0, pretend = 0, frame = 0
+ 211              		@ frame_needed = 0, uses_anonymous_args = 0
+ 212              	.LVL14:
+ 213 0000 10402DE9 		push	{r4, lr}
+ 214              		.cfi_def_cfa_offset 8
+ 215              		.cfi_offset 4, -8
+ 216              		.cfi_offset 14, -4
+ 169:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     spea_error_t spea_error;
+ 170:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 171:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     spea_error = R_SPEA_WindowUpdate(layer_id);
+ 217              		.loc 1 171 0
+ 218 0004 FEFFFFEB 		bl	R_SPEA_WindowUpdate
+ 219              	.LVL15:
+ 172:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 173:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     return spea_error;
+ 174:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** } /* End of function R_RVAPI_WindowUpdateSPEA() */
+ 220              		.loc 1 174 0
+ 221 0008 1080BDE8 		pop	{r4, pc}
+ 222              		.cfi_endproc
+ 223              	.LFE3:
+ 225              		.section	.text.R_RVAPI_GraphCreateSurfaceRLE,"ax",%progbits
+ 226              		.align	2
+ 227              		.global	R_RVAPI_GraphCreateSurfaceRLE
+ 228              		.syntax unified
+ 229              		.arm
+ 230              		.fpu neon
+ 232              	R_RVAPI_GraphCreateSurfaceRLE:
+ 233              	.LFB4:
+ 175:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 176:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************//**
+ 177:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Function Name : R_RVAPI_GraphCreateSurfaceRLE
+ 178:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @brief       Graphics create surface processing
+ 179:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   ch            : Channel
+ 180:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   gr_disp_cnf   : Graphics surface read config
+ 181:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @retval      VDC driver error code
+ 182:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+ 183:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** vdc_error_t R_RVAPI_GraphCreateSurfaceRLE(const vdc_channel_t ch, 
+ 184:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 const gr_surface_disp_config_t * const gr_disp_cnf)
+ 185:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** {
+ 234              		.loc 1 185 0
+ 235              		.cfi_startproc
+ 236              		@ args = 0, pretend = 0, frame = 40
+ 237              		@ frame_needed = 0, uses_anonymous_args = 0
+ 238              	.LVL16:
+ 239 0000 30402DE9 		push	{r4, r5, lr}
+ 240              		.cfi_def_cfa_offset 12
+ 241              		.cfi_offset 4, -12
+ 242              		.cfi_offset 5, -8
+ 243              		.cfi_offset 14, -4
+ 244 0004 2CD04DE2 		sub	sp, sp, #44
+ 245              		.cfi_def_cfa_offset 56
+ 246 0008 0050A0E1 		mov	r5, r0
+ 186:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_error_t error;
+ 187:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_read_t spea_cnf;
+ 188:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_start_t start;
+ 189:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_gr_disp_sel_t disp_mode;
+ 190:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 191:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* pointer NULL check */
+ 192:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if (NULL == gr_disp_cnf)
+ 247              		.loc 1 192 0
+ 248 000c 004051E2 		subs	r4, r1, #0
+ 249 0010 2A00000A 		beq	.L17
+ 193:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 194:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         error = VDC_ERR_PARAM_UNDEFINED;
+ 195:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 196:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     else
+ 197:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 198:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         /* Read data parameter */
+ 199:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_ln_off_dir  = VDC_GR_LN_OFF_DIR_INC;  /* Line offset address direction of the f
+ 250              		.loc 1 199 0
+ 251 0014 0030A0E3 		mov	r3, #0
+ 252 0018 0C30CDE5 		strb	r3, [sp, #12]
+ 200:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_flm_sel     = VDC_GR_FLM_SEL_FLM_NUM; /* Selects a frame buffer address setting
+ 253              		.loc 1 200 0
+ 254 001c 0110A0E3 		mov	r1, #1
+ 255              	.LVL17:
+ 256 0020 0D10CDE5 		strb	r1, [sp, #13]
+ 201:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_imr_flm_inv = VDC_OFF;                /* Frame buffer number for distortion cor
+ 257              		.loc 1 201 0
+ 258 0024 0E30CDE5 		strb	r3, [sp, #14]
+ 202:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_bst_md      = VDC_BST_MD_32BYTE;      /* Frame buffer burst transfer mode */
+ 259              		.loc 1 202 0
+ 260 0028 0F30CDE5 		strb	r3, [sp, #15]
+ 203:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_base        = (void *)gr_disp_cnf->fb_buff;     /* Frame buffer base address */
+ 261              		.loc 1 203 0
+ 262 002c 0C2094E5 		ldr	r2, [r4, #12]
+ 263 0030 10208DE5 		str	r2, [sp, #16]
+ 204:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_ln_off /* Cast to an appropriate type */
+ 205:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             = ((uint16_t)gr_disp_cnf->disp_area.hw_rel * RLE_STRIDE); /* Frame buffer line offset a
+ 264              		.loc 1 205 0
+ 265 0034 B800D4E1 		ldrh	r0, [r4, #8]
+ 266              	.LVL18:
+ 267 0038 0021A0E1 		lsl	r2, r0, #2
+ 268 003c 14208DE5 		str	r2, [sp, #20]
+ 206:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 207:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         /* Cast to an appropriate type */
+ 208:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.width_read_fb  = NULL;                   /* Width of the image read from frame buf
+ 269              		.loc 1 208 0
+ 270 0040 18308DE5 		str	r3, [sp, #24]
+ 209:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.adj_sel
+ 210:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             = VDC_ON;                 /* Measures to decrease the influence by folding pixels/lines
+ 271              		.loc 1 210 0
+ 272 0044 1C10CDE5 		strb	r1, [sp, #28]
+ 211:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_format      = VDC_GR_FORMAT_RGB888;   /* Format of the frame buffer read signal
+ 273              		.loc 1 211 0
+ 274 0048 1D10CDE5 		strb	r1, [sp, #29]
+ 212:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_ycc_swap
+ 213:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             = VDC_GR_YCCSWAP_CBY0CRY1;/* Controls swapping of data read from buffer in the YCbCr422
+ 275              		.loc 1 213 0
+ 276 004c 1E30CDE5 		strb	r3, [sp, #30]
+ 214:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_rdswa       = VDC_WR_RD_WRSWA_32BIT;  /* Frame buffer swap setting */
+ 277              		.loc 1 214 0
+ 278 0050 0430A0E3 		mov	r3, #4
+ 279 0054 1F30CDE5 		strb	r3, [sp, #31]
+ 215:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 216:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         /* Display area */
+ 217:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.vs = (uint16_t) (gr_disp_cnf->disp_area.vs_rel + full_screen.vs);/* vertica
+ 280              		.loc 1 217 0
+ 281 0058 B220D4E1 		ldrh	r2, [r4, #2]
+ 282 005c 003000E3 		movw	r3, #:lower16:full_screen
+ 283 0060 003040E3 		movt	r3, #:upper16:full_screen
+ 284 0064 B0C0D3E1 		ldrh	ip, [r3]
+ 285 0068 0C2082E0 		add	r2, r2, ip
+ 286 006c B022CDE1 		strh	r2, [sp, #32]	@ movhi
+ 218:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.vw = (uint16_t) gr_disp_cnf->disp_area.vw_rel;                   /* vertica
+ 287              		.loc 1 218 0
+ 288 0070 B420D4E1 		ldrh	r2, [r4, #4]
+ 289 0074 B222CDE1 		strh	r2, [sp, #34]	@ movhi
+ 219:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.hs = (uint16_t) (gr_disp_cnf->disp_area.hs_rel + full_screen.hs);/* horizon
+ 290              		.loc 1 219 0
+ 291 0078 B620D4E1 		ldrh	r2, [r4, #6]
+ 292 007c B430D3E1 		ldrh	r3, [r3, #4]
+ 293 0080 033082E0 		add	r3, r2, r3
+ 294 0084 B432CDE1 		strh	r3, [sp, #36]	@ movhi
+ 220:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_cnf.gr_grc.hw = (uint16_t) gr_disp_cnf->disp_area.hw_rel;                   /* horizon
+ 295              		.loc 1 220 0
+ 296 0088 B602CDE1 		strh	r0, [sp, #38]	@ movhi
+ 221:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 222:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         disp_mode = VDC_DISPSEL_CURRENT;
+ 297              		.loc 1 222 0
+ 298 008c 28308DE2 		add	r3, sp, #40
+ 299 0090 0220A0E3 		mov	r2, #2
+ 300 0094 212063E5 		strb	r2, [r3, #-33]!
+ 223:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         start.gr_disp_sel = &disp_mode;
+ 301              		.loc 1 223 0
+ 302 0098 08308DE5 		str	r3, [sp, #8]
+ 224:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 225:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         error = R_VDC_ReadDataControl(ch, VDC_LAYER_ID_0_RD, &spea_cnf);
+ 303              		.loc 1 225 0
+ 304 009c 0C208DE2 		add	r2, sp, #12
+ 305 00a0 0500A0E1 		mov	r0, r5
+ 306 00a4 FEFFFFEB 		bl	R_VDC_ReadDataControl
+ 307              	.LVL19:
+ 308              	.L15:
+ 226:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 227:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 228:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* pointer NULL check */
+ 229:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if (NULL == gr_disp_cnf)
+ 309              		.loc 1 229 0
+ 310 00a8 000054E3 		cmp	r4, #0
+ 311 00ac 0A00000A 		beq	.L18
+ 230:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 231:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         error = VDC_ERR_PARAM_UNDEFINED;
+ 232:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 233:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     else
+ 234:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 235:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         if(VDC_OK == error)
+ 312              		.loc 1 235 0
+ 313 00b0 000050E3 		cmp	r0, #0
+ 314 00b4 0300000A 		beq	.L20
+ 315              	.LVL20:
+ 316              	.L16:
+ 236:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         {
+ 237:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             error = R_VDC_StartProcess(ch, VDC_LAYER_ID_0_RD, &start);
+ 238:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         }
+ 239:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 240:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 241:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     return error;
+ 242:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** }  /* End of function R_RVAPI_GraphCreateSurfaceRLE() */
+ 317              		.loc 1 242 0
+ 318 00b8 2CD08DE2 		add	sp, sp, #44
+ 319              		.cfi_remember_state
+ 320              		.cfi_def_cfa_offset 12
+ 321              		@ sp needed
+ 322 00bc 3080BDE8 		pop	{r4, r5, pc}
+ 323              	.LVL21:
+ 324              	.L17:
+ 325              		.cfi_restore_state
+ 194:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 326              		.loc 1 194 0
+ 327 00c0 0500A0E3 		mov	r0, #5
+ 328              	.LVL22:
+ 329 00c4 F7FFFFEA 		b	.L15
+ 330              	.LVL23:
+ 331              	.L20:
+ 237:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         }
+ 332              		.loc 1 237 0
+ 333 00c8 08208DE2 		add	r2, sp, #8
+ 334 00cc 0110A0E3 		mov	r1, #1
+ 335 00d0 0500A0E1 		mov	r0, r5
+ 336              	.LVL24:
+ 337 00d4 FEFFFFEB 		bl	R_VDC_StartProcess
+ 338              	.LVL25:
+ 339 00d8 F6FFFFEA 		b	.L16
+ 340              	.L18:
+ 231:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 341              		.loc 1 231 0
+ 342 00dc 0500A0E3 		mov	r0, #5
+ 343              	.LVL26:
+ 344 00e0 F4FFFFEA 		b	.L16
+ 345              		.cfi_endproc
+ 346              	.LFE4:
+ 348              		.section	.text.R_RVAPI_SetWindowRLE,"ax",%progbits
+ 349              		.align	2
+ 350              		.global	R_RVAPI_SetWindowRLE
+ 351              		.syntax unified
+ 352              		.arm
+ 353              		.fpu neon
+ 355              	R_RVAPI_SetWindowRLE:
+ 356              	.LFB5:
+ 243:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 244:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** /**************************************************************************//**
+ 245:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * Function Name : R_RVAPI_SetWindowRLE
+ 246:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @brief       Setting Window Parameters
+ 247:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   ch            : Channel
+ 248:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   sken          : RLE ON/OFF
+ 249:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   rle_cfg       : Set NULL(TBD)
+ 250:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   buffer        : Window read buffer address
+ 251:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   g_rle_image   : image data
+ 252:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @param[in]   size_of_image : size of image
+ 253:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  * @retval      VDC driver error code
+ 254:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****  ******************************************************************************/
+ 255:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** vdc_error_t R_RVAPI_SetWindowRLE(const vdc_channel_t ch, 
+ 256:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                                 const rle_onoff_t sken,
+ 257:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                                 const rle_cfg_t * rle_cfg,
+ 258:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                                 const void * buffer,
+ 259:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                                 const uint8_t * g_rle_image,
+ 260:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                                 uint32_t size_of_image)
+ 261:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** {
+ 357              		.loc 1 261 0
+ 358              		.cfi_startproc
+ 359              		@ args = 8, pretend = 0, frame = 16
+ 360              		@ frame_needed = 0, uses_anonymous_args = 0
+ 361              	.LVL27:
+ 362 0000 F0402DE9 		push	{r4, r5, r6, r7, lr}
+ 363              		.cfi_def_cfa_offset 20
+ 364              		.cfi_offset 4, -20
+ 365              		.cfi_offset 5, -16
+ 366              		.cfi_offset 6, -12
+ 367              		.cfi_offset 7, -8
+ 368              		.cfi_offset 14, -4
+ 369 0004 14D04DE2 		sub	sp, sp, #20
+ 370              		.cfi_def_cfa_offset 40
+ 371 0008 28C09DE5 		ldr	ip, [sp, #40]
+ 372              	.LVL28:
+ 262:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_error_t error = VDC_OK;
+ 263:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     spea_error_t spea_error = SPEA_OK;
+ 264:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_read_chg_t read_chg;
+ 265:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     uint32_t image_size;
+ 266:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     uint16_t width_check;
+ 267:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 268:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* Set read_chg */
+ 269:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     read_chg.gr_base = (void *)buffer;  /* Set buffer */
+ 373              		.loc 1 269 0
+ 374 000c 00308DE5 		str	r3, [sp]
+ 270:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     read_chg.gr_disp_sel = NULL;        /* Set NULL */
+ 375              		.loc 1 270 0
+ 376 0010 00E0A0E3 		mov	lr, #0
+ 377 0014 0CE08DE5 		str	lr, [sp, #12]
+ 271:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     read_chg.gr_grc = NULL;             /* Set NULL */
+ 378              		.loc 1 271 0
+ 379 0018 08E08DE5 		str	lr, [sp, #8]
+ 272:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     read_chg.width_read_fb = NULL;      /* Set NULL */
+ 380              		.loc 1 272 0
+ 381 001c 04E08DE5 		str	lr, [sp, #4]
+ 273:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 274:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* alignment check 32pixel */
+ 275:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     width_check = (uint16_t)((g_rle_image[13] << 0x08)|g_rle_image[12]);
+ 382              		.loc 1 275 0
+ 383 0020 0CE0DCE5 		ldrb	lr, [ip, #12]	@ zero_extendqisi2
+ 276:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if((width_check % 32) != 0)
+ 384              		.loc 1 276 0
+ 385 0024 1F001EE3 		tst	lr, #31
+ 386 0028 0B00001A 		bne	.L26
+ 263:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     vdc_read_chg_t read_chg;
+ 387              		.loc 1 263 0
+ 388 002c 00E0A0E3 		mov	lr, #0
+ 389              	.L22:
+ 390              	.LVL29:
+ 277:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 278:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_error = SPEA_ERR_PARAM;
+ 279:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 280:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 281:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* image type check fullcolor(RLE) */
+ 282:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if(g_rle_image[2] != 0x0A)
+ 391              		.loc 1 282 0
+ 392 0030 0240DCE5 		ldrb	r4, [ip, #2]	@ zero_extendqisi2
+ 393 0034 0A0054E3 		cmp	r4, #10
+ 283:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 284:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_error = SPEA_ERR_PARAM;
+ 394              		.loc 1 284 0
+ 395 0038 03E0A013 		movne	lr, #3
+ 396              	.LVL30:
+ 397              	.L23:
+ 285:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 286:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 287:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     /* pixel size check 24bit(RGB888) */
+ 288:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if(g_rle_image[16] != 0x18)
+ 398              		.loc 1 288 0
+ 399 003c 1040DCE5 		ldrb	r4, [ip, #16]	@ zero_extendqisi2
+ 400 0040 180054E3 		cmp	r4, #24
+ 289:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 290:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_error = SPEA_ERR_PARAM;
+ 401              		.loc 1 290 0
+ 402 0044 03E0A013 		movne	lr, #3
+ 403              	.LVL31:
+ 404              	.L24:
+ 291:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 292:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 293:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     if(SPEA_OK == spea_error)
+ 405              		.loc 1 293 0
+ 406 0048 00005EE3 		cmp	lr, #0
+ 407 004c 0400000A 		beq	.L33
+ 294:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 295:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         image_size = size_of_image - 18;
+ 296:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 297:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         /* Copy Targa image file */
+ 298:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         memcpy((void *)buffer, &g_rle_image[18], image_size);
+ 299:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 300:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         spea_error = R_RLE_SetWindow(VDC_LAYER_ID_0_RD, sken, rle_cfg, buffer);
+ 301:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 302:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         if(SPEA_OK == spea_error)
+ 303:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         {
+ 304:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             spea_error = R_RLE_WindowUpdate(VDC_LAYER_ID_0_RD);
+ 305:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 306:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             if(SPEA_OK == spea_error)
+ 307:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             {
+ 308:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 error = R_VDC_ChangeReadProcess(ch, VDC_LAYER_ID_0_RD, &read_chg);
+ 309:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             }
+ 310:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             else
+ 311:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             {
+ 312:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****                 error = VDC_ERR_PARAM_CONDITION;
+ 313:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             }
+ 314:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         }
+ 315:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         else
+ 316:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         {
+ 317:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             error = VDC_ERR_PARAM_CONDITION;
+ 318:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         }
+ 319:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 320:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     else
+ 321:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     {
+ 322:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         error = VDC_ERR_PARAM_CONDITION;
+ 408              		.loc 1 322 0
+ 409 0050 0700A0E3 		mov	r0, #7
+ 410              	.LVL32:
+ 411              	.L25:
+ 323:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 324:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 325:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     return error;
+ 326:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** } /* End of function R_RVAPI_SetWindowRLE() */
+ 412              		.loc 1 326 0
+ 413 0054 14D08DE2 		add	sp, sp, #20
+ 414              		.cfi_remember_state
+ 415              		.cfi_def_cfa_offset 20
+ 416              		@ sp needed
+ 417 0058 F080BDE8 		pop	{r4, r5, r6, r7, pc}
+ 418              	.LVL33:
+ 419              	.L26:
+ 420              		.cfi_restore_state
+ 278:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****     }
+ 421              		.loc 1 278 0
+ 422 005c 03E0A0E3 		mov	lr, #3
+ 423 0060 F2FFFFEA 		b	.L22
+ 424              	.LVL34:
+ 425              	.L33:
+ 426 0064 0340A0E1 		mov	r4, r3
+ 427 0068 0260A0E1 		mov	r6, r2
+ 428 006c 0150A0E1 		mov	r5, r1
+ 429 0070 0070A0E1 		mov	r7, r0
+ 430              	.LVL35:
+ 298:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 431              		.loc 1 298 0
+ 432 0074 2C209DE5 		ldr	r2, [sp, #44]
+ 433              	.LVL36:
+ 434 0078 122042E2 		sub	r2, r2, #18
+ 435              	.LVL37:
+ 436 007c 12108CE2 		add	r1, ip, #18
+ 437              	.LVL38:
+ 438 0080 0300A0E1 		mov	r0, r3
+ 439              	.LVL39:
+ 440 0084 FEFFFFEB 		bl	memcpy
+ 441              	.LVL40:
+ 300:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 442              		.loc 1 300 0
+ 443 0088 0430A0E1 		mov	r3, r4
+ 444 008c 0620A0E1 		mov	r2, r6
+ 445 0090 0510A0E1 		mov	r1, r5
+ 446 0094 0100A0E3 		mov	r0, #1
+ 447 0098 FEFFFFEB 		bl	R_RLE_SetWindow
+ 448              	.LVL41:
+ 302:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         {
+ 449              		.loc 1 302 0
+ 450 009c 000050E3 		cmp	r0, #0
+ 317:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****         }
+ 451              		.loc 1 317 0
+ 452 00a0 0700A013 		movne	r0, #7
+ 453              	.LVL42:
+ 454 00a4 EAFFFF1A 		bne	.L25
+ 455              	.LVL43:
+ 456              	.L34:
+ 304:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c **** 
+ 457              		.loc 1 304 0
+ 458 00a8 0100A0E3 		mov	r0, #1
+ 459              	.LVL44:
+ 460 00ac FEFFFFEB 		bl	R_RLE_WindowUpdate
+ 461              	.LVL45:
+ 306:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             {
+ 462              		.loc 1 306 0
+ 463 00b0 000050E3 		cmp	r0, #0
+ 312:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             }
+ 464              		.loc 1 312 0
+ 465 00b4 0700A013 		movne	r0, #7
+ 466              	.LVL46:
+ 467 00b8 E5FFFF1A 		bne	.L25
+ 468              	.LVL47:
+ 469              	.L35:
+ 308:../generate/sc_drivers/r_rvapi/src/r_rvapi_spea.c ****             }
+ 470              		.loc 1 308 0
+ 471 00bc 0D20A0E1 		mov	r2, sp
+ 472 00c0 0110A0E3 		mov	r1, #1
+ 473 00c4 0700A0E1 		mov	r0, r7
+ 474              	.LVL48:
+ 475 00c8 FEFFFFEB 		bl	R_VDC_ChangeReadProcess
+ 476              	.LVL49:
+ 477 00cc E0FFFFEA 		b	.L25
+ 478              		.cfi_endproc
+ 479              	.LFE5:
+ 481              		.text
+ 482              	.Letext0:
+ 483              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 484              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 485              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 486              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 487              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 488              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 489              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 490              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_driv
+ 491              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 492              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_rvapi_spea.c
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:17     .text.R_RVAPI_GraphCreateSurfaceSPEA:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:23     .text.R_RVAPI_GraphCreateSurfaceSPEA:00000000 R_RVAPI_GraphCreateSurfaceSPEA
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:140    .text.R_RVAPI_WindowOffsetSPEA:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:146    .text.R_RVAPI_WindowOffsetSPEA:00000000 R_RVAPI_WindowOffsetSPEA
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:166    .text.R_RVAPI_SetWindowSPEA:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:172    .text.R_RVAPI_SetWindowSPEA:00000000 R_RVAPI_SetWindowSPEA
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:200    .text.R_RVAPI_WindowUpdateSPEA:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:206    .text.R_RVAPI_WindowUpdateSPEA:00000000 R_RVAPI_WindowUpdateSPEA
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:226    .text.R_RVAPI_GraphCreateSurfaceRLE:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:232    .text.R_RVAPI_GraphCreateSurfaceRLE:00000000 R_RVAPI_GraphCreateSurfaceRLE
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:349    .text.R_RVAPI_SetWindowRLE:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccx0mH7h.s:355    .text.R_RVAPI_SetWindowRLE:00000000 R_RVAPI_SetWindowRLE
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.string.h.15.dab3980bf35408a4c507182805e2de3a
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_vdc_user.h.32.3f3db05b07a24f5c3abdea3809348418
+                           .group:00000000 wm4.r_vdc.h.31.7a8e28d4a80bfb6c6b4be0ab3890da8f
+                           .group:00000000 wm4.r_spea.h.31.97e439be2c83413163d6591ee53d8748
+                           .group:00000000 wm4.r_rvapi_vdc.h.56.5c61db780dd0e78fd0dc60ae6029256c
+
+UNDEFINED SYMBOLS
+full_screen
+R_VDC_ReadDataControl
+R_VDC_StartProcess
+R_SPEA_WindowOffset
+R_SPEA_SetWindow
+R_SPEA_WindowUpdate
+memcpy
+R_RLE_SetWindow
+R_RLE_WindowUpdate
+R_VDC_ChangeReadProcess

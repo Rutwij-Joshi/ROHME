@@ -1,0 +1,520 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"ceu_userdef.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.setinterrupt,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	setinterrupt:
+  23              	.LFB3:
+  24              		.file 1 "../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c"
+   1:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * following link:
+  15:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  *
+  17:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  20:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /**************************************************************************//**
+  21:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * File Name :   ceu_userdef.c
+  22:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @file         ceu_userdef.c
+  23:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @version      1.12
+  24:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @brief        RZ/A2M CEU driver user function
+  25:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  ******************************************************************************/
+  26:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  27:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /******************************************************************************
+  28:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** Includes   <System Includes> , "Project Includes"
+  29:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** ******************************************************************************/
+  30:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #include     "r_typedefs.h"
+  31:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #include     "iodefine.h"
+  32:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #include     "r_intc_drv_api.h"
+  33:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #include     "r_mmu_drv_api.h"
+  34:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #include     "r_ceu.h"
+  35:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #include     "r_ceu_user.h"
+  36:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  37:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /******************************************************************************
+  38:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** Macro definitions
+  39:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** ******************************************************************************/
+  40:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #define STP56_BIT               (0x40u)
+  41:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #define STBRQ10_BIT             (0x01u)
+  42:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** #define STBAK10_BIT             (0x01u)
+  43:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  44:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /******************************************************************************
+  45:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** Typedef definitions
+  46:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** ******************************************************************************/
+  47:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  48:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /******************************************************************************
+  49:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** Private global variables and functions
+  50:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** ******************************************************************************/
+  51:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** static void setinterrupt (const uint32_t user_num);
+  52:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  53:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /**************************************************************************//**
+  54:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * Function Name: R_CEU_CPUVAddrToSysPAddr
+  55:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @brief       Cet the System Physical address of the given virtual memory address.
+  56:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @param[in]   vaddr          : virtual address
+  57:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @retval      none
+  58:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  *****************************************************************************/
+  59:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** uint32_t R_CEU_CPUVAddrToSysPAddr(uint32_t vaddr)
+  60:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** {
+  61:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     e_mmu_err_t ret;
+  62:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     uint32_t  paddress = 0;
+  63:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  64:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     ret = R_MMU_VAtoPA(vaddr, &paddress);
+  65:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     if( MMU_SUCCESS != ret)
+  66:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+  67:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         paddress = 0;
+  68:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     }
+  69:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     return paddress;
+  70:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** }   /* End of function R_CEU_CPUVAddrToSysPAddr() */
+  71:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  72:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /**************************************************************************//**
+  73:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * Function Name: R_CEU_OnInitialize
+  74:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @brief       CEU User difinistion part Init
+  75:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @param[in]   user_num          :
+  76:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @retval      none
+  77:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  *****************************************************************************/
+  78:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** void R_CEU_OnInitialize(const uint32_t user_num)
+  79:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** {
+  80:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     uint32_t reg_data;
+  81:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     volatile uint8_t dummy_read;
+  82:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  83:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* Standby control register 5 (STBCR5)
+  84:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         b6      -0------;  MSTP56 : 0 : CEU enable */
+  85:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     reg_data    = (uint32_t)CPG.STBCR5.BYTE & (uint32_t)~STP56_BIT;
+  86:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  87:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* This implicit casting is valid. */
+  88:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     CPG.STBCR5.BYTE  = (uint8_t)reg_data;
+  89:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  90:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* In order to reflect the change, a dummy read should be done. */
+  91:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     dummy_read = CPG.STBCR5.BYTE;
+  92:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  93:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* Standby Request Register 1 (STBREQ1)
+  94:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         b0      -------0;  STBRQ10 : The standby request to CEU is invalid. */
+  95:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     reg_data    = (uint32_t)CPG.STBREQ1.BYTE & (uint32_t)~STBRQ10_BIT;
+  96:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  97:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* This implicit casting is valid. */
+  98:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     CPG.STBREQ1.BYTE = (uint8_t)reg_data;
+  99:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 100:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* Standby Acknowledge Register 1 (STBACK1)
+ 101:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         b0      -------*;  STBAK10 : Standby acknowledgement from CEU. */
+ 102:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     while (((uint32_t)CPG.STBACK1.BYTE & (uint32_t)STBAK10_BIT) != 0u)
+ 103:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+ 104:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         /* Wait for the STBAK10 to be cleared to 0. */
+ 105:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         ;
+ 106:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     }
+ 107:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 108:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     setinterrupt(user_num);
+ 109:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 110:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** } /* End of function R_CEU_OnInitialize() */
+ 111:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 112:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /**************************************************************************//**
+ 113:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * Function Name: R_CEU_OnFinalize
+ 114:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @brief       CEU User difinistion part final
+ 115:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @param[in]   user_num          : user param
+ 116:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @retval      none
+ 117:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  *****************************************************************************/
+ 118:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** void R_CEU_OnFinalize(const uint32_t user_num)
+ 119:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** {
+ 120:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     uint32_t reg_data;
+ 121:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     volatile uint8_t dummy_read;
+ 122:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 123:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* Standby Request Register 1 (STBREQ1)
+ 124:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****        b0      -------1;  STBRQ10 : The standby request to CEU is valid. */
+ 125:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     reg_data    = (uint32_t)CPG.STBREQ1.BYTE | (uint32_t)STBRQ10_BIT;
+ 126:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 127:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* This implicit casting is valid. */
+ 128:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     CPG.STBREQ1.BYTE = (uint8_t)reg_data;
+ 129:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 130:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* Standby Acknowledge Register 1 (STBACK1)
+ 131:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         b0      -------*;  STBAK10 : Standby acknowledgement from CEU. */
+ 132:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     while (((uint32_t)CPG.STBACK1.BYTE & (uint32_t)STBAK10_BIT) == 0u)
+ 133:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+ 134:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         /* Wait for the STBAK10 to be set to 1. */
+ 135:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         ;
+ 136:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     }
+ 137:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 138:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* Standby control register 5 (STBCR5)
+ 139:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****        b6      -1------;  MSTP56 : 1 : CEU disable */
+ 140:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     reg_data    = (uint32_t)CPG.STBCR5.BYTE | (uint32_t)STP56_BIT;
+ 141:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 142:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* This implicit casting is valid. */
+ 143:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     CPG.STBCR5.BYTE  = (uint8_t)reg_data;
+ 144:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 145:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* In order to reflect the change, a dummy read should be done. */
+ 146:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     dummy_read = CPG.STBCR5.BYTE;
+ 147:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 148:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** } /* End of function R_CEU_OnFinalize() */
+ 149:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 150:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** /**************************************************************************//**
+ 151:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * Function Name: setinterrupt
+ 152:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @brief       Setup CEU interrupt
+ 153:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @param[in]   user_num          : user param
+ 154:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****  * @retval      None
+ 155:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** ******************************************************************************/
+ 156:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** static void setinterrupt (const uint32_t user_num)
+ 157:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** {
+  25              		.loc 1 157 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              	.LVL0:
+  30 0000 10402DE9 		push	{r4, lr}
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 4, -8
+  33              		.cfi_offset 14, -4
+  34              	.LVL1:
+ 158:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     uint16_t        int_id;
+ 159:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     int32_t         ret_code;
+ 160:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 161:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     /* Set Interrupt ID */
+ 162:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     int_id = (uint16_t)INTC_ID_CEU_CEUI;
+ 163:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     ret_code = R_INTC_RegistIntFunc(int_id, R_CEU_Isr);
+  35              		.loc 1 163 0
+  36 0004 001000E3 		movw	r1, #:lower16:R_CEU_Isr
+  37 0008 001040E3 		movt	r1, #:upper16:R_CEU_Isr
+  38 000c 7A0100E3 		movw	r0, #378
+  39              	.LVL2:
+  40 0010 FEFFFFEB 		bl	R_INTC_RegistIntFunc
+  41              	.LVL3:
+  42 0014 0030A0E1 		mov	r3, r0
+  43              	.LVL4:
+ 164:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     if (ret_code != INTC_SUCCESS)
+ 165:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+ 166:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         /* Do Nothing */
+ 167:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         ;
+ 168:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     }
+ 169:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 170:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     if (ret_code == INTC_SUCCESS)
+  44              		.loc 1 170 0
+  45 0018 000050E3 		cmp	r0, #0
+  46 001c 0400000A 		beq	.L5
+  47              	.LVL5:
+  48              	.L2:
+ 171:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+ 172:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         /* Set Interrupt priority */
+ 173:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         ret_code = R_INTC_SetPriority(int_id, (uint8_t)CEU_INTERRUPT_PRIORITY);
+ 174:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         if (ret_code != INTC_SUCCESS)
+ 175:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         {
+ 176:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****             /* Do Nothing */
+ 177:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****             ;
+ 178:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         }
+ 179:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     }
+ 180:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 181:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     if (ret_code == INTC_SUCCESS)
+  49              		.loc 1 181 0
+  50 0020 000053E3 		cmp	r3, #0
+  51 0024 1080BD18 		popne	{r4, pc}
+ 182:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+ 183:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         ret_code = R_INTC_Enable(int_id);
+  52              		.loc 1 183 0
+  53 0028 7A0100E3 		movw	r0, #378
+  54 002c FEFFFFEB 		bl	R_INTC_Enable
+  55              	.LVL6:
+  56 0030 1080BDE8 		pop	{r4, pc}
+  57              	.LVL7:
+  58              	.L5:
+ 173:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****         if (ret_code != INTC_SUCCESS)
+  59              		.loc 1 173 0
+  60 0034 0510A0E3 		mov	r1, #5
+  61 0038 7A0100E3 		movw	r0, #378
+  62              	.LVL8:
+  63 003c FEFFFFEB 		bl	R_INTC_SetPriority
+  64              	.LVL9:
+  65 0040 0030A0E1 		mov	r3, r0
+  66              	.LVL10:
+  67 0044 F5FFFFEA 		b	.L2
+  68              		.cfi_endproc
+  69              	.LFE3:
+  71              		.section	.text.R_CEU_CPUVAddrToSysPAddr,"ax",%progbits
+  72              		.align	2
+  73              		.global	R_CEU_CPUVAddrToSysPAddr
+  74              		.syntax unified
+  75              		.arm
+  76              		.fpu neon
+  78              	R_CEU_CPUVAddrToSysPAddr:
+  79              	.LFB0:
+  60:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     e_mmu_err_t ret;
+  80              		.loc 1 60 0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 8
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84              	.LVL11:
+  85 0000 04E02DE5 		str	lr, [sp, #-4]!
+  86              		.cfi_def_cfa_offset 4
+  87              		.cfi_offset 14, -4
+  88 0004 0CD04DE2 		sub	sp, sp, #12
+  89              		.cfi_def_cfa_offset 16
+  62:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+  90              		.loc 1 62 0
+  91 0008 08108DE2 		add	r1, sp, #8
+  92 000c 0030A0E3 		mov	r3, #0
+  93 0010 043021E5 		str	r3, [r1, #-4]!
+  64:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     if( MMU_SUCCESS != ret)
+  94              		.loc 1 64 0
+  95 0014 FEFFFFEB 		bl	R_MMU_VAtoPA
+  96              	.LVL12:
+  65:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+  97              		.loc 1 65 0
+  98 0018 000050E3 		cmp	r0, #0
+  67:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     }
+  99              		.loc 1 67 0
+ 100 001c 0030A013 		movne	r3, #0
+ 101 0020 04308D15 		strne	r3, [sp, #4]
+ 102              	.L7:
+  70:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 103              		.loc 1 70 0
+ 104 0024 04009DE5 		ldr	r0, [sp, #4]
+ 105              	.LVL13:
+ 106 0028 0CD08DE2 		add	sp, sp, #12
+ 107              		.cfi_def_cfa_offset 4
+ 108              		@ sp needed
+ 109 002c 04F09DE4 		ldr	pc, [sp], #4
+ 110              		.cfi_endproc
+ 111              	.LFE0:
+ 113              		.section	.text.R_CEU_OnInitialize,"ax",%progbits
+ 114              		.align	2
+ 115              		.global	R_CEU_OnInitialize
+ 116              		.syntax unified
+ 117              		.arm
+ 118              		.fpu neon
+ 120              	R_CEU_OnInitialize:
+ 121              	.LFB1:
+  79:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     uint32_t reg_data;
+ 122              		.loc 1 79 0
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 8
+ 125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126              	.LVL14:
+ 127 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 128              		.cfi_def_cfa_offset 4
+ 129              		.cfi_offset 14, -4
+ 130 0004 0CD04DE2 		sub	sp, sp, #12
+ 131              		.cfi_def_cfa_offset 16
+  85:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 132              		.loc 1 85 0
+ 133 0008 FF30A0E3 		mov	r3, #255
+ 134 000c FE3C4FE3 		movt	r3, 64766
+ 135 0010 2923D3E5 		ldrb	r2, [r3, #809]	@ zero_extendqisi2
+ 136              	.LVL15:
+  88:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 137              		.loc 1 88 0
+ 138 0014 BF2002E2 		and	r2, r2, #191
+ 139              	.LVL16:
+ 140 0018 2923C3E5 		strb	r2, [r3, #809]
+  91:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 141              		.loc 1 91 0
+ 142 001c 2923D3E5 		ldrb	r2, [r3, #809]	@ zero_extendqisi2
+ 143              	.LVL17:
+ 144 0020 7220EFE6 		uxtb	r2, r2
+ 145 0024 0720CDE5 		strb	r2, [sp, #7]
+  95:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 146              		.loc 1 95 0
+ 147 0028 CF2053E5 		ldrb	r2, [r3, #-207]	@ zero_extendqisi2
+ 148              	.LVL18:
+  98:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 149              		.loc 1 98 0
+ 150 002c FE2002E2 		and	r2, r2, #254
+ 151              	.LVL19:
+ 152 0030 CF2043E5 		strb	r2, [r3, #-207]
+ 153              	.L10:
+ 102:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+ 154              		.loc 1 102 0 discriminator 1
+ 155 0034 FF30A0E3 		mov	r3, #255
+ 156 0038 FE3C4FE3 		movt	r3, 64766
+ 157 003c BF3053E5 		ldrb	r3, [r3, #-191]	@ zero_extendqisi2
+ 158 0040 010013E3 		tst	r3, #1
+ 159 0044 FAFFFF1A 		bne	.L10
+ 108:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 160              		.loc 1 108 0
+ 161 0048 FEFFFFEB 		bl	setinterrupt
+ 162              	.LVL20:
+ 110:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 163              		.loc 1 110 0
+ 164 004c 0CD08DE2 		add	sp, sp, #12
+ 165              		.cfi_def_cfa_offset 4
+ 166              		@ sp needed
+ 167 0050 04F09DE4 		ldr	pc, [sp], #4
+ 168              		.cfi_endproc
+ 169              	.LFE1:
+ 171              		.section	.text.R_CEU_OnFinalize,"ax",%progbits
+ 172              		.align	2
+ 173              		.global	R_CEU_OnFinalize
+ 174              		.syntax unified
+ 175              		.arm
+ 176              		.fpu neon
+ 178              	R_CEU_OnFinalize:
+ 179              	.LFB2:
+ 119:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     uint32_t reg_data;
+ 180              		.loc 1 119 0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 8
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              		@ link register save eliminated.
+ 185              	.LVL21:
+ 186 0000 08D04DE2 		sub	sp, sp, #8
+ 187              		.cfi_def_cfa_offset 8
+ 125:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 188              		.loc 1 125 0
+ 189 0004 FF30A0E3 		mov	r3, #255
+ 190 0008 FE3C4FE3 		movt	r3, 64766
+ 191 000c CF2053E5 		ldrb	r2, [r3, #-207]	@ zero_extendqisi2
+ 192 0010 012082E3 		orr	r2, r2, #1
+ 193              	.LVL22:
+ 128:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 194              		.loc 1 128 0
+ 195 0014 CF2043E5 		strb	r2, [r3, #-207]
+ 196              	.L13:
+ 132:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c ****     {
+ 197              		.loc 1 132 0 discriminator 1
+ 198 0018 FF30A0E3 		mov	r3, #255
+ 199 001c FE3C4FE3 		movt	r3, 64766
+ 200 0020 BF3053E5 		ldrb	r3, [r3, #-191]	@ zero_extendqisi2
+ 201 0024 010013E3 		tst	r3, #1
+ 202 0028 FAFFFF0A 		beq	.L13
+ 140:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 203              		.loc 1 140 0
+ 204 002c FF30A0E3 		mov	r3, #255
+ 205 0030 FE3C4FE3 		movt	r3, 64766
+ 206 0034 2923D3E5 		ldrb	r2, [r3, #809]	@ zero_extendqisi2
+ 207              	.LVL23:
+ 208 0038 402082E3 		orr	r2, r2, #64
+ 209              	.LVL24:
+ 143:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 210              		.loc 1 143 0
+ 211 003c 2923C3E5 		strb	r2, [r3, #809]
+ 146:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 212              		.loc 1 146 0
+ 213 0040 2933D3E5 		ldrb	r3, [r3, #809]	@ zero_extendqisi2
+ 214 0044 7330EFE6 		uxtb	r3, r3
+ 215 0048 0730CDE5 		strb	r3, [sp, #7]
+ 148:../generate/sc_drivers/r_ceu/userdef/ceu_userdef.c **** 
+ 216              		.loc 1 148 0
+ 217 004c 08D08DE2 		add	sp, sp, #8
+ 218              		.cfi_def_cfa_offset 0
+ 219              		@ sp needed
+ 220 0050 1EFF2FE1 		bx	lr
+ 221              		.cfi_endproc
+ 222              	.LFE2:
+ 224              		.text
+ 225              	.Letext0:
+ 226              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 227              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 228              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 229              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 230              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 231              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 232              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 233              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 234              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 235              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+DEFINED SYMBOLS
+                            *ABS*:00000000 ceu_userdef.c
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:17     .text.setinterrupt:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:22     .text.setinterrupt:00000000 setinterrupt
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:72     .text.R_CEU_CPUVAddrToSysPAddr:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:78     .text.R_CEU_CPUVAddrToSysPAddr:00000000 R_CEU_CPUVAddrToSysPAddr
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:114    .text.R_CEU_OnInitialize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:120    .text.R_CEU_OnInitialize:00000000 R_CEU_OnInitialize
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:172    .text.R_CEU_OnFinalize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccStJd2E.s:178    .text.R_CEU_OnFinalize:00000000 R_CEU_OnFinalize
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_intc_lld_rza2m.h.35.148dee33e6a963828fdce2545668b517
+                           .group:00000000 wm4.r_mmu_lld_rza2m.h.39.be55e997d8665d00d9f529dbd893c422
+                           .group:00000000 wm4.r_ceu_user.h.33.bdfe449297742e9a8f6e2695bf6d16b4
+
+UNDEFINED SYMBOLS
+R_CEU_Isr
+R_INTC_RegistIntFunc
+R_INTC_Enable
+R_INTC_SetPriority
+R_MMU_VAtoPA

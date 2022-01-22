@@ -1,0 +1,656 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_spea.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.R_SPEA_SetWindow,"ax",%progbits
+  17              		.align	2
+  18              		.global	R_SPEA_SetWindow
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	R_SPEA_SetWindow:
+  24              	.LFB0:
+  25              		.file 1 "../generate/sc_drivers/r_vdc/src/r_spea.c"
+   1:../generate/sc_drivers/r_vdc/src/r_spea.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * following link:
+  15:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *
+  17:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_vdc/src/r_spea.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_vdc/src/r_spea.c **** /**************************************************************************//**
+  20:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * File Name :   r_spea.c
+  21:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @file         r_spea.c
+  22:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @version      1.12
+  23:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @brief        RZ/A2M SPEA driver API function
+  24:../generate/sc_drivers/r_vdc/src/r_spea.c ****  ******************************************************************************/
+  25:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  26:../generate/sc_drivers/r_vdc/src/r_spea.c **** /******************************************************************************
+  27:../generate/sc_drivers/r_vdc/src/r_spea.c **** Includes   <System Includes> , "Project Includes"
+  28:../generate/sc_drivers/r_vdc/src/r_spea.c **** ******************************************************************************/
+  29:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_spea.h"
+  30:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  31:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_spea_user.h"
+  32:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_vdc.h"
+  33:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_vdc_user.h"
+  34:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_vdc_register.h"
+  35:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_vdc_shared_param.h"
+  36:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_vdc_check_parameter.h"
+  37:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  38:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_spea_register.h"
+  39:../generate/sc_drivers/r_vdc/src/r_spea.c **** #include    "r_spea_check_parameter.h"
+  40:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  41:../generate/sc_drivers/r_vdc/src/r_spea.c **** /******************************************************************************
+  42:../generate/sc_drivers/r_vdc/src/r_spea.c **** Macro definitions
+  43:../generate/sc_drivers/r_vdc/src/r_spea.c **** ******************************************************************************/
+  44:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  45:../generate/sc_drivers/r_vdc/src/r_spea.c **** /******************************************************************************
+  46:../generate/sc_drivers/r_vdc/src/r_spea.c **** Typedef definitions
+  47:../generate/sc_drivers/r_vdc/src/r_spea.c **** ******************************************************************************/
+  48:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  49:../generate/sc_drivers/r_vdc/src/r_spea.c **** /******************************************************************************
+  50:../generate/sc_drivers/r_vdc/src/r_spea.c **** Private global variables and functions
+  51:../generate/sc_drivers/r_vdc/src/r_spea.c **** ******************************************************************************/
+  52:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  53:../generate/sc_drivers/r_vdc/src/r_spea.c **** /**************************************************************************//**
+  54:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * Function Name:R_SPEA_SetWindow
+  55:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @brief       Setting Window Parameters
+  56:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *
+  57:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              Description:<br>
+  58:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              This function performs the following processing:
+  59:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              - SPEA Window ON / OFF
+  60:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              - Set window starting coordinates and size and read buffer address to SPEA.
+  61:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              - VDC frame buffer burst transfer mode setting (SPEA_ON: 128 bytes SPEA_OFF: 32 byt
+  62:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   layer_id     : VDC Layer ID (2 or 3)
+  63:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   window_id    : SPEA window ID
+  64:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *                              - S0_WINDOW_00 - S0_WINDOW_15
+  65:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *                              - S1_WINDOW_00 - S0_WINDOW_15
+  66:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   sken         : Window ON/OFF.
+  67:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   sklym        : Window size.
+  68:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   skpsm        : Window start coordinates.
+  69:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   buffer       : Window read buffer address.
+  70:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @retval      Error code
+  71:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *****************************************************************************/
+  72:../generate/sc_drivers/r_vdc/src/r_spea.c **** spea_error_t R_SPEA_SetWindow( 
+  73:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const vdc_layer_id_t       layer_id,
+  74:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const spea_window_id_t     window_id,
+  75:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const spea_onoff_t         sken,
+  76:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const spea_sklym_t       * sklym,
+  77:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const spea_skpsm_t       * skpsm,
+  78:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const void               * buffer)
+  79:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  80:../generate/sc_drivers/r_vdc/src/r_spea.c **** {
+  26              		.loc 1 80 0
+  27              		.cfi_startproc
+  28              		@ args = 8, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+  31 0000 F0472DE9 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+  32              		.cfi_def_cfa_offset 32
+  33              		.cfi_offset 4, -32
+  34              		.cfi_offset 5, -28
+  35              		.cfi_offset 6, -24
+  36              		.cfi_offset 7, -20
+  37              		.cfi_offset 8, -16
+  38              		.cfi_offset 9, -12
+  39              		.cfi_offset 10, -8
+  40              		.cfi_offset 14, -4
+  41 0004 08D04DE2 		sub	sp, sp, #8
+  42              		.cfi_def_cfa_offset 40
+  43 0008 00A0A0E1 		mov	r10, r0
+  44 000c 0170A0E1 		mov	r7, r1
+  45 0010 0280A0E1 		mov	r8, r2
+  46 0014 0390A0E1 		mov	r9, r3
+  47 0018 28509DE5 		ldr	r5, [sp, #40]
+  48 001c 2C609DE5 		ldr	r6, [sp, #44]
+  49              	.LVL1:
+  81:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error_t    spea_error    = SPEA_OK;
+  82:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_layer_id_t spea_layer_id = SPEA_LAYER_ID_0;
+  83:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  84:../generate/sc_drivers/r_vdc/src/r_spea.c **** #ifdef  R_SPEA_CHECK_PARAMETERS
+  85:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error = SPEA_SetWindowCheckPrm(layer_id, window_id, sken, sklym, skpsm, buffer );
+  50              		.loc 1 85 0
+  51 0020 04608DE5 		str	r6, [sp, #4]
+  52 0024 00508DE5 		str	r5, [sp]
+  53 0028 FEFFFFEB 		bl	SPEA_SetWindowCheckPrm
+  54              	.LVL2:
+  86:../generate/sc_drivers/r_vdc/src/r_spea.c **** #endif  /* R_SPEA_CHECK_PARAMETERS */
+  87:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+  88:../generate/sc_drivers/r_vdc/src/r_spea.c ****     if ( SPEA_OK == spea_error )
+  55              		.loc 1 88 0
+  56 002c 004050E2 		subs	r4, r0, #0
+  57 0030 0300000A 		beq	.L7
+  89:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+  90:../generate/sc_drivers/r_vdc/src/r_spea.c ****         if( VDC_LAYER_ID_2_RD == layer_id )
+  91:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+  92:../generate/sc_drivers/r_vdc/src/r_spea.c ****             spea_layer_id = SPEA_LAYER_ID_0;
+  93:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+  94:../generate/sc_drivers/r_vdc/src/r_spea.c ****         else
+  95:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+  96:../generate/sc_drivers/r_vdc/src/r_spea.c ****             spea_layer_id = SPEA_LAYER_ID_1;
+  97:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+  98:../generate/sc_drivers/r_vdc/src/r_spea.c ****         SPEA_SetWindow(spea_layer_id, window_id, sken, sklym, skpsm, buffer);
+  99:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 100:../generate/sc_drivers/r_vdc/src/r_spea.c ****     else
+ 101:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 102:../generate/sc_drivers/r_vdc/src/r_spea.c ****         spea_error = SPEA_ERR_PARAM;
+  58              		.loc 1 102 0
+  59 0034 0340A0E3 		mov	r4, #3
+  60              	.LVL3:
+  61              	.L2:
+ 103:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 104:../generate/sc_drivers/r_vdc/src/r_spea.c ****     return spea_error;
+ 105:../generate/sc_drivers/r_vdc/src/r_spea.c **** }   /* End of function R_SPEA_SetWindow() */
+  62              		.loc 1 105 0
+  63 0038 0400A0E1 		mov	r0, r4
+  64 003c 08D08DE2 		add	sp, sp, #8
+  65              		.cfi_remember_state
+  66              		.cfi_def_cfa_offset 32
+  67              		@ sp needed
+  68 0040 F087BDE8 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+  69              	.LVL4:
+  70              	.L7:
+  71              		.cfi_restore_state
+  90:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+  72              		.loc 1 90 0
+  73 0044 02005AE3 		cmp	r10, #2
+  96:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+  74              		.loc 1 96 0
+  75 0048 0100A013 		movne	r0, #1
+  76              	.LVL5:
+  77              	.L3:
+  98:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+  78              		.loc 1 98 0
+  79 004c 04608DE5 		str	r6, [sp, #4]
+  80 0050 00508DE5 		str	r5, [sp]
+  81 0054 0930A0E1 		mov	r3, r9
+  82 0058 0820A0E1 		mov	r2, r8
+  83 005c 0710A0E1 		mov	r1, r7
+  84 0060 FEFFFFEB 		bl	SPEA_SetWindow
+  85              	.LVL6:
+  86 0064 F3FFFFEA 		b	.L2
+  87              		.cfi_endproc
+  88              	.LFE0:
+  90              		.section	.text.R_SPEA_WindowOffset,"ax",%progbits
+  91              		.align	2
+  92              		.global	R_SPEA_WindowOffset
+  93              		.syntax unified
+  94              		.arm
+  95              		.fpu neon
+  97              	R_SPEA_WindowOffset:
+  98              	.LFB1:
+ 106:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 107:../generate/sc_drivers/r_vdc/src/r_spea.c **** /**************************************************************************//**
+ 108:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * Function Name:R_SPEA_WindowOffset
+ 109:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @brief       Setting the coordinate offset of the window
+ 110:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *
+ 111:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              Description:<br>
+ 112:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              This function performs the following processing:
+ 113:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              Set the arrangement of VDC (layers 2 and 3) display area on virtual frame of SPEA.
+ 114:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   layer_id     : VDC Layer ID (2 or 3)
+ 115:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   offset_x     : x position
+ 116:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   offset_y     : y position
+ 117:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @retval      Error code
+ 118:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *****************************************************************************/
+ 119:../generate/sc_drivers/r_vdc/src/r_spea.c **** spea_error_t R_SPEA_WindowOffset( 
+ 120:../generate/sc_drivers/r_vdc/src/r_spea.c ****         const vdc_layer_id_t       layer_id,
+ 121:../generate/sc_drivers/r_vdc/src/r_spea.c ****         const uint16_t             offset_x,
+ 122:../generate/sc_drivers/r_vdc/src/r_spea.c ****         const uint16_t             offset_y)
+ 123:../generate/sc_drivers/r_vdc/src/r_spea.c **** {
+  99              		.loc 1 123 0
+ 100              		.cfi_startproc
+ 101              		@ args = 0, pretend = 0, frame = 0
+ 102              		@ frame_needed = 0, uses_anonymous_args = 0
+ 103              	.LVL7:
+ 104 0000 F0412DE9 		push	{r4, r5, r6, r7, r8, lr}
+ 105              		.cfi_def_cfa_offset 24
+ 106              		.cfi_offset 4, -24
+ 107              		.cfi_offset 5, -20
+ 108              		.cfi_offset 6, -16
+ 109              		.cfi_offset 7, -12
+ 110              		.cfi_offset 8, -8
+ 111              		.cfi_offset 14, -4
+ 112 0004 0070A0E1 		mov	r7, r0
+ 113 0008 0150A0E1 		mov	r5, r1
+ 114 000c 0260A0E1 		mov	r6, r2
+ 115              	.LVL8:
+ 124:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error_t    spea_error    = SPEA_OK;
+ 125:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_layer_id_t spea_layer_id = SPEA_LAYER_ID_0;
+ 126:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 127:../generate/sc_drivers/r_vdc/src/r_spea.c **** #ifdef  R_SPEA_CHECK_PARAMETERS
+ 128:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error = SPEA_WindowOffsetCheckPrm( layer_id, offset_x, offset_y );
+ 116              		.loc 1 128 0
+ 117 0010 FEFFFFEB 		bl	SPEA_WindowOffsetCheckPrm
+ 118              	.LVL9:
+ 129:../generate/sc_drivers/r_vdc/src/r_spea.c **** #endif  /* R_SPEA_CHECK_PARAMETERS */
+ 130:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 131:../generate/sc_drivers/r_vdc/src/r_spea.c ****     if ( SPEA_OK == spea_error )
+ 119              		.loc 1 131 0
+ 120 0014 004050E2 		subs	r4, r0, #0
+ 121 0018 0200000A 		beq	.L14
+ 132:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 133:../generate/sc_drivers/r_vdc/src/r_spea.c ****         if( VDC_LAYER_ID_2_RD == layer_id )
+ 134:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+ 135:../generate/sc_drivers/r_vdc/src/r_spea.c ****             spea_layer_id = SPEA_LAYER_ID_0;
+ 136:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+ 137:../generate/sc_drivers/r_vdc/src/r_spea.c ****         else
+ 138:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+ 139:../generate/sc_drivers/r_vdc/src/r_spea.c ****             spea_layer_id = SPEA_LAYER_ID_1;
+ 140:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+ 141:../generate/sc_drivers/r_vdc/src/r_spea.c ****         SPEA_WindowOffset(spea_layer_id, offset_x, offset_y );
+ 142:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 143:../generate/sc_drivers/r_vdc/src/r_spea.c ****     else
+ 144:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 145:../generate/sc_drivers/r_vdc/src/r_spea.c ****         spea_error = SPEA_ERR_PARAM;
+ 122              		.loc 1 145 0
+ 123 001c 0340A0E3 		mov	r4, #3
+ 124              	.LVL10:
+ 125              	.L9:
+ 146:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 147:../generate/sc_drivers/r_vdc/src/r_spea.c ****     return spea_error;
+ 148:../generate/sc_drivers/r_vdc/src/r_spea.c **** }   /* End of function R_SPEA_WindowOffset() */
+ 126              		.loc 1 148 0
+ 127 0020 0400A0E1 		mov	r0, r4
+ 128 0024 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 129              	.LVL11:
+ 130              	.L14:
+ 133:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+ 131              		.loc 1 133 0
+ 132 0028 020057E3 		cmp	r7, #2
+ 139:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+ 133              		.loc 1 139 0
+ 134 002c 0100A013 		movne	r0, #1
+ 135              	.LVL12:
+ 136              	.L10:
+ 141:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 137              		.loc 1 141 0
+ 138 0030 0620A0E1 		mov	r2, r6
+ 139 0034 0510A0E1 		mov	r1, r5
+ 140 0038 FEFFFFEB 		bl	SPEA_WindowOffset
+ 141              	.LVL13:
+ 142 003c F7FFFFEA 		b	.L9
+ 143              		.cfi_endproc
+ 144              	.LFE1:
+ 146              		.section	.text.R_SPEA_WindowUpdate,"ax",%progbits
+ 147              		.align	2
+ 148              		.global	R_SPEA_WindowUpdate
+ 149              		.syntax unified
+ 150              		.arm
+ 151              		.fpu neon
+ 153              	R_SPEA_WindowUpdate:
+ 154              	.LFB2:
+ 149:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 150:../generate/sc_drivers/r_vdc/src/r_spea.c **** /**************************************************************************//**
+ 151:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * Function Name:R_SPEA_WindowUpdate
+ 152:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @brief       Window parameter update request
+ 153:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *
+ 154:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              Description:<br>
+ 155:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              This function performs the following processing:
+ 156:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              Request to update SPEA Window parameters.
+ 157:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   layer_id     : VDC Layer ID (2 or 3)
+ 158:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @retval      Error code
+ 159:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *****************************************************************************/
+ 160:../generate/sc_drivers/r_vdc/src/r_spea.c **** spea_error_t R_SPEA_WindowUpdate( 
+ 161:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const vdc_layer_id_t         layer_id)
+ 162:../generate/sc_drivers/r_vdc/src/r_spea.c **** {
+ 155              		.loc 1 162 0
+ 156              		.cfi_startproc
+ 157              		@ args = 0, pretend = 0, frame = 0
+ 158              		@ frame_needed = 0, uses_anonymous_args = 0
+ 159              	.LVL14:
+ 160 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 161              		.cfi_def_cfa_offset 16
+ 162              		.cfi_offset 4, -16
+ 163              		.cfi_offset 5, -12
+ 164              		.cfi_offset 6, -8
+ 165              		.cfi_offset 14, -4
+ 166 0004 0050A0E1 		mov	r5, r0
+ 167              	.LVL15:
+ 163:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error_t    spea_error    = SPEA_OK;
+ 164:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_layer_id_t spea_layer_id = SPEA_LAYER_ID_0;
+ 165:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 166:../generate/sc_drivers/r_vdc/src/r_spea.c **** #ifdef  R_SPEA_CHECK_PARAMETERS
+ 167:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error = SPEA_CreateSurfaceIDCheckPrm(layer_id);
+ 168              		.loc 1 167 0
+ 169 0008 FEFFFFEB 		bl	SPEA_CreateSurfaceIDCheckPrm
+ 170              	.LVL16:
+ 168:../generate/sc_drivers/r_vdc/src/r_spea.c **** #endif  /* R_SPEA_CHECK_PARAMETERS */
+ 169:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 170:../generate/sc_drivers/r_vdc/src/r_spea.c ****     if ( SPEA_OK == spea_error )
+ 171              		.loc 1 170 0
+ 172 000c 004050E2 		subs	r4, r0, #0
+ 173 0010 0200000A 		beq	.L21
+ 171:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 172:../generate/sc_drivers/r_vdc/src/r_spea.c ****         if( VDC_LAYER_ID_2_RD == layer_id )
+ 173:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+ 174:../generate/sc_drivers/r_vdc/src/r_spea.c ****             spea_layer_id = SPEA_LAYER_ID_0;
+ 175:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+ 176:../generate/sc_drivers/r_vdc/src/r_spea.c ****         else
+ 177:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+ 178:../generate/sc_drivers/r_vdc/src/r_spea.c ****             spea_layer_id = SPEA_LAYER_ID_1;
+ 179:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+ 180:../generate/sc_drivers/r_vdc/src/r_spea.c ****         SPEA_WindowUpdate(spea_layer_id);
+ 181:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 182:../generate/sc_drivers/r_vdc/src/r_spea.c ****     else
+ 183:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 184:../generate/sc_drivers/r_vdc/src/r_spea.c ****         spea_error = SPEA_ERR_PARAM;
+ 174              		.loc 1 184 0
+ 175 0014 0340A0E3 		mov	r4, #3
+ 176              	.LVL17:
+ 177              	.L16:
+ 185:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 186:../generate/sc_drivers/r_vdc/src/r_spea.c ****     return spea_error;
+ 187:../generate/sc_drivers/r_vdc/src/r_spea.c **** }   /* End of function R_SPEA_WindowUpdate() */
+ 178              		.loc 1 187 0
+ 179 0018 0400A0E1 		mov	r0, r4
+ 180 001c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 181              	.LVL18:
+ 182              	.L21:
+ 172:../generate/sc_drivers/r_vdc/src/r_spea.c ****         {
+ 183              		.loc 1 172 0
+ 184 0020 020055E3 		cmp	r5, #2
+ 178:../generate/sc_drivers/r_vdc/src/r_spea.c ****         }
+ 185              		.loc 1 178 0
+ 186 0024 0100A013 		movne	r0, #1
+ 187              	.LVL19:
+ 188              	.L17:
+ 180:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 189              		.loc 1 180 0
+ 190 0028 FEFFFFEB 		bl	SPEA_WindowUpdate
+ 191              	.LVL20:
+ 192 002c F9FFFFEA 		b	.L16
+ 193              		.cfi_endproc
+ 194              	.LFE2:
+ 196              		.section	.text.R_RLE_SetWindow,"ax",%progbits
+ 197              		.align	2
+ 198              		.global	R_RLE_SetWindow
+ 199              		.syntax unified
+ 200              		.arm
+ 201              		.fpu neon
+ 203              	R_RLE_SetWindow:
+ 204              	.LFB3:
+ 188:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 189:../generate/sc_drivers/r_vdc/src/r_spea.c **** /**************************************************************************//**
+ 190:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * Function Name:R_RLE_SetWindow
+ 191:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @brief       Setting the RLE parameter
+ 192:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *
+ 193:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              Description:<br>
+ 194:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              This function performs the following processing:
+ 195:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              - RLE ON /OFF.
+ 196:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              - Setting SPEA RLE parameters.
+ 197:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   layer_id     : VDC Layer ID (0)
+ 198:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   sken         : RLE ON / OFF
+ 199:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   rle_cfg      : Set  NULL(TBD)
+ 200:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   buffer       : Window read buffer address.
+ 201:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @retval      Error code
+ 202:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *****************************************************************************/
+ 203:../generate/sc_drivers/r_vdc/src/r_spea.c **** spea_error_t R_RLE_SetWindow( 
+ 204:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const vdc_error_t    layer_id,
+ 205:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const rle_onoff_t    sken,
+ 206:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const rle_cfg_t    * rle_cfg,
+ 207:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const void         * buffer)
+ 208:../generate/sc_drivers/r_vdc/src/r_spea.c **** {
+ 205              		.loc 1 208 0
+ 206              		.cfi_startproc
+ 207              		@ args = 0, pretend = 0, frame = 0
+ 208              		@ frame_needed = 0, uses_anonymous_args = 0
+ 209              	.LVL21:
+ 210 0000 F0412DE9 		push	{r4, r5, r6, r7, r8, lr}
+ 211              		.cfi_def_cfa_offset 24
+ 212              		.cfi_offset 4, -24
+ 213              		.cfi_offset 5, -20
+ 214              		.cfi_offset 6, -16
+ 215              		.cfi_offset 7, -12
+ 216              		.cfi_offset 8, -8
+ 217              		.cfi_offset 14, -4
+ 218 0004 0170A0E1 		mov	r7, r1
+ 219 0008 0250A0E1 		mov	r5, r2
+ 220 000c 0360A0E1 		mov	r6, r3
+ 221              	.LVL22:
+ 209:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error_t    spea_error = SPEA_OK;
+ 210:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 211:../generate/sc_drivers/r_vdc/src/r_spea.c **** #ifdef  R_SPEA_CHECK_PARAMETERS
+ 212:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error = RLE_SetWindowCheckPrm(layer_id, rle_cfg, buffer);
+ 222              		.loc 1 212 0
+ 223 0010 0320A0E1 		mov	r2, r3
+ 224              	.LVL23:
+ 225 0014 0510A0E1 		mov	r1, r5
+ 226              	.LVL24:
+ 227 0018 7000AFE6 		sxtb	r0, r0
+ 228 001c FEFFFFEB 		bl	RLE_SetWindowCheckPrm
+ 229              	.LVL25:
+ 213:../generate/sc_drivers/r_vdc/src/r_spea.c **** #endif  /* R_SPEA_CHECK_PARAMETERS */
+ 214:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 215:../generate/sc_drivers/r_vdc/src/r_spea.c ****     if ( SPEA_OK == spea_error )
+ 230              		.loc 1 215 0
+ 231 0020 004050E2 		subs	r4, r0, #0
+ 232 0024 0200000A 		beq	.L26
+ 216:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 217:../generate/sc_drivers/r_vdc/src/r_spea.c ****         RLE_SetWindow( sken, rle_cfg, buffer);
+ 218:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 219:../generate/sc_drivers/r_vdc/src/r_spea.c ****     else
+ 220:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 221:../generate/sc_drivers/r_vdc/src/r_spea.c ****         spea_error = SPEA_ERR_PARAM;
+ 233              		.loc 1 221 0
+ 234 0028 0340A0E3 		mov	r4, #3
+ 235              	.LVL26:
+ 236              	.L23:
+ 222:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 223:../generate/sc_drivers/r_vdc/src/r_spea.c ****     return spea_error;
+ 224:../generate/sc_drivers/r_vdc/src/r_spea.c **** }   /* End of function R_RLE_SetWindow() */
+ 237              		.loc 1 224 0
+ 238 002c 0400A0E1 		mov	r0, r4
+ 239 0030 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 240              	.LVL27:
+ 241              	.L26:
+ 217:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 242              		.loc 1 217 0
+ 243 0034 0620A0E1 		mov	r2, r6
+ 244 0038 0510A0E1 		mov	r1, r5
+ 245 003c 0700A0E1 		mov	r0, r7
+ 246              	.LVL28:
+ 247 0040 FEFFFFEB 		bl	RLE_SetWindow
+ 248              	.LVL29:
+ 249 0044 F8FFFFEA 		b	.L23
+ 250              		.cfi_endproc
+ 251              	.LFE3:
+ 253              		.section	.text.R_RLE_WindowUpdate,"ax",%progbits
+ 254              		.align	2
+ 255              		.global	R_RLE_WindowUpdate
+ 256              		.syntax unified
+ 257              		.arm
+ 258              		.fpu neon
+ 260              	R_RLE_WindowUpdate:
+ 261              	.LFB4:
+ 225:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 226:../generate/sc_drivers/r_vdc/src/r_spea.c **** /**************************************************************************//**
+ 227:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * Function Name:R_RLE_WindowUpdate
+ 228:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @brief       RLE parameter update request
+ 229:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *
+ 230:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              Description:<br>
+ 231:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              This function performs the following processing:
+ 232:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *              -Request to update RLE parameters.
+ 233:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @param[in]   layer_id     : VDC Layer ID (0)
+ 234:../generate/sc_drivers/r_vdc/src/r_spea.c ****  * @retval      Error code
+ 235:../generate/sc_drivers/r_vdc/src/r_spea.c ****  *****************************************************************************/
+ 236:../generate/sc_drivers/r_vdc/src/r_spea.c **** spea_error_t R_RLE_WindowUpdate( 
+ 237:../generate/sc_drivers/r_vdc/src/r_spea.c ****     const vdc_layer_id_t   layer_id)
+ 238:../generate/sc_drivers/r_vdc/src/r_spea.c **** {
+ 262              		.loc 1 238 0
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 0
+ 265              		@ frame_needed = 0, uses_anonymous_args = 0
+ 266              	.LVL30:
+ 267 0000 10402DE9 		push	{r4, lr}
+ 268              		.cfi_def_cfa_offset 8
+ 269              		.cfi_offset 4, -8
+ 270              		.cfi_offset 14, -4
+ 271              	.LVL31:
+ 239:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error_t    spea_error = SPEA_OK;
+ 240:../generate/sc_drivers/r_vdc/src/r_spea.c **** #ifdef  R_SPEA_CHECK_PARAMETERS
+ 241:../generate/sc_drivers/r_vdc/src/r_spea.c ****     spea_error = RLE_CreateSurfaceIDCheckPrm(layer_id);
+ 272              		.loc 1 241 0
+ 273 0004 FEFFFFEB 		bl	RLE_CreateSurfaceIDCheckPrm
+ 274              	.LVL32:
+ 242:../generate/sc_drivers/r_vdc/src/r_spea.c **** #endif  /* R_SPEA_CHECK_PARAMETERS */
+ 243:../generate/sc_drivers/r_vdc/src/r_spea.c **** 
+ 244:../generate/sc_drivers/r_vdc/src/r_spea.c ****     if ( SPEA_OK == spea_error )
+ 275              		.loc 1 244 0
+ 276 0008 004050E2 		subs	r4, r0, #0
+ 277 000c 0200000A 		beq	.L31
+ 245:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 246:../generate/sc_drivers/r_vdc/src/r_spea.c ****         RLE_WindowUpdate();
+ 247:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 248:../generate/sc_drivers/r_vdc/src/r_spea.c ****     else
+ 249:../generate/sc_drivers/r_vdc/src/r_spea.c ****     {
+ 250:../generate/sc_drivers/r_vdc/src/r_spea.c ****         spea_error = SPEA_ERR_PARAM;
+ 278              		.loc 1 250 0
+ 279 0010 0340A0E3 		mov	r4, #3
+ 280              	.LVL33:
+ 281              	.L28:
+ 251:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 252:../generate/sc_drivers/r_vdc/src/r_spea.c ****     return spea_error;
+ 253:../generate/sc_drivers/r_vdc/src/r_spea.c **** }   /* End of function R_RLE_WindowUpdate() */
+ 282              		.loc 1 253 0
+ 283 0014 0400A0E1 		mov	r0, r4
+ 284 0018 1080BDE8 		pop	{r4, pc}
+ 285              	.LVL34:
+ 286              	.L31:
+ 246:../generate/sc_drivers/r_vdc/src/r_spea.c ****     }
+ 287              		.loc 1 246 0
+ 288 001c FEFFFFEB 		bl	RLE_WindowUpdate
+ 289              	.LVL35:
+ 290 0020 FBFFFFEA 		b	.L28
+ 291              		.cfi_endproc
+ 292              	.LFE4:
+ 294              		.text
+ 295              	.Letext0:
+ 296              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 297              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 298              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 299              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 300              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 301              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 302              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 303              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_driv
+ 304              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 305              		.file 11 "../generate/sc_drivers/r_vdc/src/r_vdc_register.h"
+ 306              		.file 12 "../generate/sc_drivers/r_vdc/src/r_spea_register.h"
+ 307              		.file 13 "../generate/sc_drivers/r_vdc/src/r_spea_check_parameter.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_spea.c
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:17     .text.R_SPEA_SetWindow:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:23     .text.R_SPEA_SetWindow:00000000 R_SPEA_SetWindow
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:91     .text.R_SPEA_WindowOffset:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:97     .text.R_SPEA_WindowOffset:00000000 R_SPEA_WindowOffset
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:147    .text.R_SPEA_WindowUpdate:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:153    .text.R_SPEA_WindowUpdate:00000000 R_SPEA_WindowUpdate
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:197    .text.R_RLE_SetWindow:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:203    .text.R_RLE_SetWindow:00000000 R_RLE_SetWindow
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:254    .text.R_RLE_WindowUpdate:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccSkmf88.s:260    .text.R_RLE_WindowUpdate:00000000 R_RLE_WindowUpdate
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_vdc_user.h.32.3f3db05b07a24f5c3abdea3809348418
+                           .group:00000000 wm4.r_vdc.h.31.7a8e28d4a80bfb6c6b4be0ab3890da8f
+                           .group:00000000 wm4.r_spea.h.31.97e439be2c83413163d6591ee53d8748
+                           .group:00000000 wm4.r_spea_user.h.32.541c187ba0e0f197387e7df0384f9fcf
+                           .group:00000000 wm4.r_vdc_register.h.32.76d2530dc3b12780409c9b9c662462be
+                           .group:00000000 wm4.r_spea_register.h.31.b55d99a589db5e7606a0103517398cb1
+
+UNDEFINED SYMBOLS
+SPEA_SetWindowCheckPrm
+SPEA_SetWindow
+SPEA_WindowOffsetCheckPrm
+SPEA_WindowOffset
+SPEA_CreateSurfaceIDCheckPrm
+SPEA_WindowUpdate
+RLE_SetWindowCheckPrm
+RLE_SetWindow
+RLE_CreateSurfaceIDCheckPrm
+RLE_WindowUpdate

@@ -1,0 +1,2860 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_vdc_shared_param.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.GetResourceStatePointer,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	GetResourceStatePointer:
+  23              	.LFB32:
+  24              		.file 1 "../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c"
+   1:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * following link:
+  15:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *
+  17:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+  20:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * File Name :   r_vdc_shared_param.c
+  21:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @file         r_vdc_shared_param.c
+  22:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @version      1.12
+  23:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief        RZ/A2M VDC driver shared parameter processing
+  24:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  ******************************************************************************/
+  25:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  26:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /******************************************************************************
+  27:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** Includes   <System Includes> , "Project Includes"
+  28:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** ******************************************************************************/
+  29:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #include    <string.h>
+  30:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  31:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #include    "r_vdc_shared_param.h"
+  32:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #include    "r_vdc.h"
+  33:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #include    "r_vdc_user.h"
+  34:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  35:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /******************************************************************************
+  36:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** Macro definitions
+  37:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** ******************************************************************************/
+  38:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /*! Two to the power of eleven */
+  39:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     TWO_POWER_ELEVEN                (2048)
+  40:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  41:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     VDC_SPARA_DIV_2                (2)
+  42:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     VDC_SPARA_DIV_256              (256)
+  43:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  44:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /* Color Conversion Value */
+  45:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     VDC_SPARA_COLOR_CONV_RANGE     (255)
+  46:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     VDC_SPARA_COLOR_CONV_OFFSET    (128)
+  47:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  48:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /* Color mask data */
+  49:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     VDC_SPARA_COLOR_8BIT_MASK      (0x000000FFu)
+  50:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  51:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /* shift value */
+  52:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     VDC_SPARA_SHIFT_16             (16u)
+  53:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** #define     VDC_SPARA_SHIFT_8              (8u)
+  54:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  55:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /******************************************************************************
+  56:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** Typedef definitions
+  57:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** ******************************************************************************/
+  58:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** typedef struct
+  59:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+  60:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_panel_clksel_t     panel_icksel;   /*!< Panel clock select */
+  61:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_onoff_t            lvds_ref;       /*!< Reference to the LVDS PLL clock */
+  62:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_color_space_t      color_sp_in;    /*!< Color space of the input video image signal */
+  63:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     uint32_t               bg_color_rgb;   /*!< Background color in 24-bit RGB color format */
+  64:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     uint32_t               bg_color_crycb; /*!< Background color in 24-bit CrYCb format */
+  65:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** } vdc_shared_param_common_t;
+  66:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  67:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** typedef struct
+  68:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+  69:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_wr_md_t            res_ds_wr_md;   /*!< Frame buffer writing mode for image processing */
+  70:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_res_inter_t        res_inter;      /*!< Field operating mode select */
+  71:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_color_space_t      color_sp_fb_wr; /*!< Color space of the frame buffer writing format */
+  72:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     void                 * btm_base;       /*!< Frame buffer base address for bottom */
+  73:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_width_read_fb_t    width_wr_fb;    /*!< Size of the image output by scaling-down control bl
+  74:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** } vdc_shared_param_scaling_t;
+  75:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  76:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** typedef struct
+  77:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+  78:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_gr_ln_off_dir_t    gr_ln_off_dir;      /*!< Line offset address direction of the frame buff
+  79:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_gr_flm_sel_t       gr_flm_sel;         /*!< Frame buffer address setting signal */
+  80:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_gr_format_t        gr_format;          /*!< Format of the frame buffer read signal */
+  81:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_color_space_t      color_sp_fb_rd;     /*!< Color space of the frame buffer reading format 
+  82:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_onoff_t            adj_sel;            /*!< Folding handling (on/off) */
+  83:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_period_rect_t      gr_grc;             /*!< Graphics display area */
+  84:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_width_read_fb_t    width_read_fb;      /*!< Size of the frame buffer to be read */
+  85:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** } vdc_shared_param_graphics_t;
+  86:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  87:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** typedef struct
+  88:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+  89:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t   rsrc_panel_clock;
+  90:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t   rsrc_video_input;
+  91:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t   rsrc_vsync_signal;
+  92:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t   rsrc_lcd_panel;
+  93:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** } vdc_shared_param_resource_t;
+  94:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+  95:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /*! Read/write process state */
+  96:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** typedef enum
+  97:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+  98:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     VDC_RW_PROC_STATE_DISABLE   = 0,
+  99:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     VDC_RW_PROC_STATE_ENABLE    = 1
+ 100:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** } vdc_rw_proc_state_t;
+ 101:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 102:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /******************************************************************************
+ 103:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** Private global variables and functions
+ 104:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** ******************************************************************************/
+ 105:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_resource_state_t * GetResourceStatePointer(const vdc_resource_type_t rsrc_type);
+ 106:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static uint32_t SumProduct(
+ 107:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   red,
+ 108:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   green,
+ 109:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   blue,
+ 110:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t         coeff_r,
+ 111:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t         coeff_g,
+ 112:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t         coeff_b,
+ 113:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   offset);
+ 114:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 115:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_shared_param_common_t   param_common;
+ 116:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_shared_param_scaling_t  param_scaling;
+ 117:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_shared_param_graphics_t param_graphics[VDC_GR_TYPE_NUM];
+ 118:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 119:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /*! A channel in VDC whose data is to be output through the LVDS */
+ 120:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_channel_t               lvds_vdc_sel_ch;
+ 121:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 122:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_resource_state_t        layer_resource[VDC_LAYER_ID_NUM];
+ 123:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_rw_proc_state_t         rw_proc_state[VDC_LAYER_ID_NUM];
+ 124:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 125:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_onoff_t                 video_input_flag = VDC_OFF;
+ 126:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 127:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 128:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmInit
+ 129:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Initializes variables of the VDC driver
+ 130:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 131:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 132:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 133:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmInit (void) 
+ 134:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 135:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t                        layer_id_num;
+ 136:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 137:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_scaling_t   * shared_param_scaling; 
+ 138:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_graphics_t  * shared_param_graphics; 
+ 139:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_graphics_type_t            graphics_id;
+ 140:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 141:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     for (layer_id_num = 0; layer_id_num < VDC_LAYER_ID_NUM; layer_id_num++)
+ 142:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 143:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         layer_resource[layer_id_num] = VDC_RESOURCE_ST_INVALID;
+ 144:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         rw_proc_state[layer_id_num]  = VDC_RW_PROC_STATE_DISABLE;
+ 145:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 146:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 147:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common = &param_common;
+ 148:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 149:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->panel_icksel   = VDC_PANEL_ICKSEL_PERI;   /* Panel clock select */
+ 150:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->lvds_ref       = VDC_OFF;                 /* Reference to the LVDS PLL clo
+ 151:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->bg_color_rgb   = (uint32_t)0u;             /* Background color in 24-bit R
+ 152:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->bg_color_crycb = (uint32_t)0u;             /* Background color in 24-bit C
+ 153:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 154:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (video_input_flag == VDC_OFF)
+ 155:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 156:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_common->color_sp_in    = VDC_COLOR_SPACE_GBR; /* Color space of the input vide
+ 157:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 158:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 159:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling = &param_scaling;
+ 160:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 161:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Frame buffer writing mode for image processing */
+ 162:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->res_ds_wr_md      = VDC_WR_MD_NORMAL;
+ 163:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->res_inter         = VDC_RES_INTER_PROGRESSIVE;   /* Field operating mode 
+ 164:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 165:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Color space of the frame buffer writing format */
+ 166:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->color_sp_fb_wr    = VDC_COLOR_SPACE_GBR;
+ 167:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 168:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Frame buffer base address for bottom */
+ 169:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->btm_base          = NULL;
+ 170:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 171:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Size of the image output by scaling-down control block */
+ 172:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_vw = (uint16_t)0;
+ 173:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 174:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 175:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_hw = (uint16_t)0;
+ 176:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 177:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     for (graphics_id = VDC_GR_TYPE_GR0; graphics_id < VDC_GR_TYPE_NUM; graphics_id++)
+ 178:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 179:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics = &param_graphics[graphics_id];
+ 180:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 181:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Line offset address direction of the frame buffer */
+ 182:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_ln_off_dir = VDC_GR_LN_OFF_DIR_INC;
+ 183:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 184:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Frame buffer address setting signal */
+ 185:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_flm_sel = VDC_GR_FLM_SEL_FLM_NUM;
+ 186:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 187:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Format of the frame buffer read signal */
+ 188:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_format = VDC_GR_FORMAT_RGB565;
+ 189:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 190:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Color space of the frame buffer reading format */
+ 191:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->color_sp_fb_rd = VDC_COLOR_SPACE_GBR;
+ 192:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 193:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Folding handling (on/off) */
+ 194:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->adj_sel = VDC_OFF;
+ 195:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 196:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Graphics display area */
+ 197:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_grc.vs = (uint16_t)0;
+ 198:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 199:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 200:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_grc.vw = (uint16_t)0;
+ 201:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 202:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 203:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_grc.hs = (uint16_t)0;
+ 204:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 205:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 206:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_grc.hw = (uint16_t)0;
+ 207:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 208:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Size of the frame buffer to be read */
+ 209:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_vw = (uint16_t)0;
+ 210:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 211:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 212:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_hw = (uint16_t)0;
+ 213:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 214:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 215:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* A channel in VDC whose data is to be output through the LVDS */
+ 216:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     lvds_vdc_sel_ch = VDC_CHANNEL_NUM;     /* Initialized with invalid channel */
+ 217:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmInit() */
+ 218:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 219:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 220:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetInitParam
+ 221:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the initialization parameter
+ 222:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   param                   : Initialization parameter
+ 223:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 224:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 225:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetInitParam (const vdc_init_t * const param) 
+ 226:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 227:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 228:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 229:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common = &param_common;
+ 230:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 231:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Panel clock select */
+ 232:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->panel_icksel = param->panel_icksel;
+ 233:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 234:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Reference to the LVDS PLL clock */
+ 235:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if ((param->panel_icksel == VDC_PANEL_ICKSEL_LVDS) || (param->panel_icksel == VDC_PANEL_ICKSEL_
+ 236:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 237:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_common->lvds_ref = VDC_ON;
+ 238:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 239:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 240:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* NULL check */
+ 241:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (param->lvds != NULL)
+ 242:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 243:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* A channel in VDC whose data is to be output through the LVDS */
+ 244:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         lvds_vdc_sel_ch = param->lvds->lvds_vdc_sel;
+ 245:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 246:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetInitParam() */
+ 247:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 248:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 249:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetTerminate
+ 250:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the termination parameter
+ 251:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   None
+ 252:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 253:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 254:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetTerminate (void) 
+ 255:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 256:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 257:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 258:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common = &param_common;
+ 259:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 260:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Reference to the LVDS PLL clock */
+ 261:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->lvds_ref = VDC_OFF;
+ 262:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetTerminate() */
+ 263:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 264:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 265:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetInputParam
+ 266:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the video input setup parameter
+ 267:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   param                   : Video input setup parameter
+ 268:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 269:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 270:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetInputParam (const vdc_input_t * const param) 
+ 271:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 272:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 273:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 274:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     video_input_flag = VDC_ON;
+ 275:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 276:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common = &param_common;
+ 277:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 278:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Color space */
+ 279:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if ((param->ext_sig->inp_format == VDC_EXTIN_FORMAT_RGB888) ||
+ 280:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (param->ext_sig->inp_format == VDC_EXTIN_FORMAT_RGB666) ||
+ 281:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (param->ext_sig->inp_format == VDC_EXTIN_FORMAT_RGB565))
+ 282:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 283:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_common->color_sp_in = VDC_COLOR_SPACE_GBR;
+ 284:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 285:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 286:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 287:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_common->color_sp_in = VDC_COLOR_SPACE_YCBCR;
+ 288:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 289:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetInputParam() */
+ 290:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 291:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 292:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetOutputParam
+ 293:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the display output configuration parameter
+ 294:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   param                   : Display output configuration parameter
+ 295:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 296:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 297:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetOutputParam (const vdc_output_t * const param) 
+ 298:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 299:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 300:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t                        red;
+ 301:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t                        green;
+ 302:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t                        blue;
+ 303:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     uint32_t                       y_val;
+ 304:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     uint32_t                       cb_val;
+ 305:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     uint32_t                       cr_val;
+ 306:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 307:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common = &param_common;
+ 308:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 309:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Background color in 24-bit RGB color format */
+ 310:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->bg_color_rgb = param->bg_color;
+ 311:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 312:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 313:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     red     = (int32_t)((param->bg_color >> VDC_SPARA_SHIFT_16) & (uint32_t)VDC_SPARA_COLOR_8BIT_MA
+ 314:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 315:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 316:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     green   = (int32_t)((param->bg_color >> VDC_SPARA_SHIFT_8)  & (uint32_t)VDC_SPARA_COLOR_8BIT_MA
+ 317:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 318:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 319:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     blue    = (int32_t)( param->bg_color                         & (uint32_t)VDC_SPARA_COLOR_8BIT_M
+ 320:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 321:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Y */
+ 322:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     y_val = SumProduct(
+ 323:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         red,
+ 324:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         green,
+ 325:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         blue,
+ 326:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 327:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 328:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_Y_R,
+ 329:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 330:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 331:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_Y_G,
+ 332:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 333:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 334:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_Y_B,
+ 335:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         0);
+ 336:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 337:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cb */
+ 338:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     cb_val = SumProduct(
+ 339:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         red,
+ 340:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         green,
+ 341:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         blue,
+ 342:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 343:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 344:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_CB_R,
+ 345:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 346:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 347:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_CB_G,
+ 348:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 349:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 350:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_CB_B,
+ 351:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 352:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 353:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_SPARA_COLOR_CONV_OFFSET);
+ 354:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 355:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cr */
+ 356:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     cr_val = SumProduct(
+ 357:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         red,
+ 358:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         green,
+ 359:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         blue,
+ 360:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 361:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 362:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_CR_R,
+ 363:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 364:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 365:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_CR_G,
+ 366:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 367:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 368:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_COLORCONV_CR_B,
+ 369:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 370:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 371:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (int32_t)VDC_SPARA_COLOR_CONV_OFFSET);
+ 372:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 373:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 374:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Background color in 24-bit CrYCb format */
+ 375:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->bg_color_crycb
+ 376:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 377:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 378:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     = (uint32_t)((cr_val << VDC_SPARA_SHIFT_16) | (y_val << VDC_SPARA_SHIFT_8) | cb_val);
+ 379:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetOutputParam() */
+ 380:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 381:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 382:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetWriteParam
+ 383:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the data write control parameter
+ 384:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   param                   : Data write control parameter
+ 385:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 386:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 387:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetWriteParam (const vdc_write_t * const param) 
+ 388:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 389:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_scaling_t   * shared_param_scaling; 
+ 390:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 391:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling = &param_scaling;
+ 392:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 393:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Frame buffer writing mode for image processing */
+ 394:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->res_ds_wr_md = param->scalingdown_rot.res_ds_wr_md;
+ 395:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 396:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Field operating mode select */
+ 397:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->res_inter = param->res_inter;
+ 398:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 399:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Color space of the frame buffer */
+ 400:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if ((param->res_md == VDC_RES_MD_YCBCR422) || (param->res_md == VDC_RES_MD_YCBCR444))
+ 401:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 402:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_scaling->color_sp_fb_wr = VDC_COLOR_SPACE_YCBCR;
+ 403:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 404:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 405:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 406:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_scaling->color_sp_fb_wr = VDC_COLOR_SPACE_GBR;
+ 407:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 408:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 409:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Frame buffer base address for bottom */
+ 410:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->btm_base = param->btm_base;
+ 411:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 412:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Size of the image output by scaling-down control block */
+ 413:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_vw = param->scalingdown_rot.res_out_vw;
+ 414:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_hw = param->scalingdown_rot.res_out_hw;
+ 415:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetWriteParam() */
+ 416:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 417:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 418:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetChgWriteParam
+ 419:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the data write change parameter
+ 420:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   param                   : Data write change parameter
+ 421:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 422:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 423:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetChgWriteParam (const vdc_write_chg_t * const param) 
+ 424:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 425:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_scaling_t   * shared_param_scaling; 
+ 426:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 427:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling = &param_scaling;
+ 428:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 429:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Frame buffer writing mode for image processing */
+ 430:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->res_ds_wr_md = param->scalingdown_rot.res_ds_wr_md;
+ 431:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 432:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Size of the image output by scaling-down control block */
+ 433:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_vw = param->scalingdown_rot.res_out_vw;
+ 434:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_hw = param->scalingdown_rot.res_out_hw;
+ 435:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetChgWriteParam() */
+ 436:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 437:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 438:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetReadParam
+ 439:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the data read control parameter
+ 440:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 441:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   param                   : Data read control parameter
+ 442:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 443:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 444:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetReadParam  
+ 445:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     (const vdc_graphics_type_t graphics_id, const vdc_read_t * const param)
+ 446:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 447:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_graphics_t  * shared_param_graphics; 
+ 448:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 449:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_graphics = &param_graphics[graphics_id];
+ 450:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 451:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Line offset address direction of the frame buffer */
+ 452:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_graphics->gr_ln_off_dir = param->gr_ln_off_dir;
+ 453:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 454:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Frame buffer address setting signal */
+ 455:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_graphics->gr_flm_sel = param->gr_flm_sel;
+ 456:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 457:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Format of the frame buffer read signal */
+ 458:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_graphics->gr_format = param->gr_format;
+ 459:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 460:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Color space of the frame buffer */
+ 461:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if ((param->gr_format == VDC_GR_FORMAT_YCBCR422) || (param->gr_format == VDC_GR_FORMAT_YCBCR444
+ 462:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 463:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->color_sp_fb_rd = VDC_COLOR_SPACE_YCBCR;
+ 464:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 465:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 466:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 467:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->color_sp_fb_rd = VDC_COLOR_SPACE_GBR;
+ 468:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 469:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 470:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Folding handling (on/off) */
+ 471:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_graphics->adj_sel = param->adj_sel;
+ 472:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 473:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Graphics display area */
+ 474:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_graphics->gr_grc = param->gr_grc;
+ 475:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 476:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Size of the frame buffer to be read */
+ 477:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (param->width_read_fb != NULL)
+ 478:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 479:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_vw = param->width_read_fb->in_vw;
+ 480:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_hw = param->width_read_fb->in_hw;
+ 481:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 482:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 483:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 484:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* If not specified, ... */
+ 485:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         if (param->gr_flm_sel == VDC_GR_FLM_SEL_FLM_NUM)
+ 486:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 487:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             /* The size of the frame buffer to be read is assumed that it is the same as
+ 488:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                the width of the graphics display area. */
+ 489:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             shared_param_graphics->width_read_fb.in_vw = param->gr_grc.vw;
+ 490:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             shared_param_graphics->width_read_fb.in_hw = param->gr_grc.hw;
+ 491:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 492:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         else
+ 493:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 494:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             /* The size of the image output by scaling-down control block is used for the size of t
+ 495:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                to be read when a frame buffer address setting signal links to the video image signa
+ 496:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             shared_param_graphics->width_read_fb = param_scaling.width_wr_fb;
+ 497:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 498:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 499:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetReadParam() */
+ 500:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 501:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 502:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetChgReadParam
+ 503:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Sets the data read change parameter
+ 504:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 505:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   param                   : Data read change parameter
+ 506:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 507:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 508:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetChgReadParam  
+ 509:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     (const vdc_graphics_type_t graphics_id, const vdc_read_chg_t * const param)
+ 510:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 511:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_graphics_t  * shared_param_graphics; 
+ 512:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 513:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_graphics = &param_graphics[graphics_id];
+ 514:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 515:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Graphics display area */
+ 516:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (param->gr_grc != NULL)
+ 517:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 518:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->gr_grc = *(param->gr_grc);
+ 519:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 520:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 521:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Size of the frame buffer to be read */
+ 522:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (param->width_read_fb != NULL)
+ 523:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 524:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_vw = param->width_read_fb->in_vw;
+ 525:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_hw = param->width_read_fb->in_hw;
+ 526:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 527:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetChgReadParam() */
+ 528:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 529:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 530:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetLvdsClkRef
+ 531:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the reference to the LVDS PLL clock
+ 532:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 533:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Reference to the LVDS PLL clock
+ 534:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 535:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_onoff_t VDC_ShrdPrmGetLvdsClkRef (void) 
+ 536:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 537:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_onoff_t onoff;
+ 538:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 539:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (param_common.lvds_ref == VDC_OFF)
+ 540:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 541:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         onoff = VDC_OFF;
+ 542:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 543:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 544:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 545:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         onoff = VDC_ON;
+ 546:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 547:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return onoff;
+ 548:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetLvdsClkRef() */
+ 549:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 550:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 551:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetColorSpace
+ 552:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the color space of the input video image signal
+ 553:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 554:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Color space of the input video image signal
+ 555:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 556:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_color_space_t VDC_ShrdPrmGetColorSpace (void) 
+ 557:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 558:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_common.color_sp_in;
+ 559:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetColorSpace() */
+ 560:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 561:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 562:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetBgColor
+ 563:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Get the background color
+ 564:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   color_space             : Color space
+ 565:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Background color in 24-bit RGB color format or CrYCb format
+ 566:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 567:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** uint32_t VDC_ShrdPrmGetBgColor (const vdc_color_space_t color_space) 
+ 568:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 569:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return (color_space == VDC_COLOR_SPACE_GBR) ? param_common.bg_color_rgb : param_common.bg_color
+ 570:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetBgColor() */
+ 571:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 572:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 573:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetWritingMode
+ 574:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Get the frame buffer writing mode for image processing
+ 575:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 576:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Frame buffer writing mode for image processing
+ 577:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 578:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_wr_md_t VDC_ShrdPrmGetWritingMode (void) 
+ 579:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 580:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.res_ds_wr_md;
+ 581:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetWritingMode() */
+ 582:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 583:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 584:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetInterlace
+ 585:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief
+ 586:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 587:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Field operating mode select
+ 588:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 589:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_res_inter_t VDC_ShrdPrmGetInterlace (void) 
+ 590:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 591:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.res_inter;
+ 592:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetInterlace() */
+ 593:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 594:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 595:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetColorSpaceFbWr
+ 596:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the color space of the frame buffer writing format
+ 597:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 598:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Color space of the frame buffer writing format
+ 599:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 600:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_color_space_t VDC_ShrdPrmGetColorSpaceFbWr (void) 
+ 601:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 602:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.color_sp_fb_wr;
+ 603:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetColorSpaceFbWr() */
+ 604:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 605:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 606:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetFrBuffBtm
+ 607:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the frame buffer base address for bottom
+ 608:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 609:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Frame buffer base address for bottom
+ 610:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 611:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void * VDC_ShrdPrmGetFrBuffBtm (void) 
+ 612:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 613:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.btm_base;
+ 614:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetFrBuffBtm() */
+ 615:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 616:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 617:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetLineOfsAddrDir
+ 618:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the line offset address direction of the frame buffer
+ 619:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 620:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Line offset address direction of the frame buffer
+ 621:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 622:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_gr_ln_off_dir_t VDC_ShrdPrmGetLineOfsAddrDir  
+ 623:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                     (const vdc_graphics_type_t graphics_id)
+ 624:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 625:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].gr_ln_off_dir;
+ 626:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetLineOfsAddrDir() */
+ 627:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 628:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 629:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetSelFbAddrSig
+ 630:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the frame buffer address setting signal
+ 631:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 632:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Frame buffer address setting signal
+ 633:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 634:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_gr_flm_sel_t VDC_ShrdPrmGetSelFbAddrSig  
+ 635:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                 (const vdc_graphics_type_t graphics_id)
+ 636:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 637:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].gr_flm_sel;
+ 638:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetSelFbAddrSig() */
+ 639:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 640:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 641:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetGraphicsFormat
+ 642:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the format of the frame buffer read signal
+ 643:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 644:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Format of the frame buffer read signal
+ 645:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 646:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_gr_format_t VDC_ShrdPrmGetGraphicsFormat  
+ 647:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                 (const vdc_graphics_type_t graphics_id)
+ 648:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 649:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].gr_format;
+ 650:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetGraphicsFormat() */
+ 651:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 652:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 653:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetColorSpaceFbRd
+ 654:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the color space of the frame buffer reading format
+ 655:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 656:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Color space of the frame buffer reading format
+ 657:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 658:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_color_space_t VDC_ShrdPrmGetColorSpaceFbRd 
+ 659:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                 (const vdc_graphics_type_t graphics_id)
+ 660:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 661:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].color_sp_fb_rd;
+ 662:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetColorSpaceFbRd() */
+ 663:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 664:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 665:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetMeasureFolding
+ 666:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the folding handling
+ 667:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 668:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Folding handling (on/off)
+ 669:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 670:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_onoff_t VDC_ShrdPrmGetMeasureFolding 
+ 671:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             (const vdc_graphics_type_t graphics_id)
+ 672:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 673:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].adj_sel;
+ 674:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetMeasureFolding() */
+ 675:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 676:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 677:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetDisplayArea
+ 678:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the graphics display area
+ 679:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 680:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Graphics display area
+ 681:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 682:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_period_rect_t * VDC_ShrdPrmGetDisplayArea 
+ 683:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                     (const vdc_graphics_type_t graphics_id)
+ 684:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 685:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return &param_graphics[graphics_id].gr_grc;
+ 686:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetDisplayArea() */
+ 687:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 688:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 689:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetFrBuffWidth_Rd
+ 690:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the size of the frame buffer to be read
+ 691:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   graphics_id             : Graphics type ID
+ 692:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Size of the frame buffer to be read
+ 693:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 694:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_width_read_fb_t * VDC_ShrdPrmGetFrBuffWidth_Rd
+ 695:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                     (const vdc_graphics_type_t graphics_id)
+ 696:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 697:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return &param_graphics[graphics_id].width_read_fb;
+ 698:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetFrBuffWidth_Rd() */
+ 699:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 700:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 701:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetLvdsCh
+ 702:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the VDC channel whose data is to be output through the LVDS
+ 703:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   void
+ 704:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      A channel in VDC whose data is to be output through the LVDS
+ 705:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 706:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_channel_t VDC_ShrdPrmGetLvdsCh (void) 
+ 707:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 708:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* This value is valid only when LVDS PLL clock resource (VDC_RESOURCE_LVDS_CLK) is valid. */
+ 709:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return lvds_vdc_sel_ch;
+ 710:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetLvdsCh() */
+ 711:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 712:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 713:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetResource
+ 714:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Updates the resource state
+ 715:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   rsrc_type               : Resource type
+ 716:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   rsrc_state              : Resource state
+ 717:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 718:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 719:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetResource  
+ 720:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     (const vdc_resource_type_t rsrc_type, const vdc_resource_state_t rsrc_state)
+ 721:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 722:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t * resource_state; 
+ 723:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 724:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     resource_state = GetResourceStatePointer(rsrc_type);
+ 725:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 726:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* NULL check */
+ 727:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (resource_state != NULL)
+ 728:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 729:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         *resource_state = rsrc_state;
+ 730:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 731:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetResource() */
+ 732:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 733:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 734:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetLayerResource
+ 735:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Updates the layer resource state
+ 736:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   layer_id                : Layer ID
+ 737:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   rsrc_state              : Resource state
+ 738:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 739:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 740:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetLayerResource 
+ 741:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     (const vdc_layer_id_t layer_id, const vdc_resource_state_t rsrc_state)
+ 742:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 743:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     uint32_t layer_id_num;
+ 744:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 745:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (layer_id != VDC_LAYER_ID_ALL)
+ 746:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 747:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         layer_resource[layer_id] = rsrc_state;
+ 748:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 749:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 750:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 751:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 752:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         for (layer_id_num = 0; layer_id_num < (uint32_t)VDC_LAYER_ID_NUM; layer_id_num++)
+ 753:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 754:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             if (rw_proc_state[layer_id_num] == VDC_RW_PROC_STATE_DISABLE)
+ 755:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             {
+ 756:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                 layer_resource[layer_id_num] = rsrc_state;
+ 757:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             }
+ 758:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 759:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 760:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetLayerResource() */
+ 761:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 762:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 763:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetResource
+ 764:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the resource state
+ 765:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   rsrc_type               : Resource type
+ 766:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Resource state
+ 767:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 768:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_resource_state_t VDC_ShrdPrmGetResource  
+ 769:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                     (const vdc_resource_type_t rsrc_type)
+ 770:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 771:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t * resource_state; 
+ 772:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t   rsrc_state;
+ 773:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 774:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     rsrc_state = VDC_RESOURCE_ST_INVALID;
+ 775:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 776:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     resource_state = GetResourceStatePointer(rsrc_type);
+ 777:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 778:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* NULL check */
+ 779:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (resource_state != NULL)
+ 780:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 781:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         rsrc_state = *resource_state;
+ 782:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 783:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return rsrc_state;
+ 784:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetResource() */
+ 785:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 786:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 787:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetLayerResource
+ 788:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the layer resource state
+ 789:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   layer_id                : Layer ID
+ 790:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Layer resource state
+ 791:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 792:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_resource_state_t VDC_ShrdPrmGetLayerResource  
+ 793:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                     (const vdc_layer_id_t layer_id)
+ 794:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 795:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return layer_resource[layer_id];
+ 796:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetLayerResource() */
+ 797:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 798:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 799:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetRwProcEnable
+ 800:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Makes the data write/read processing enabled
+ 801:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   layer_id                : Layer ID
+ 802:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 803:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 804:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetRwProcEnable (const vdc_layer_id_t layer_id) 
+ 805:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 806:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (layer_id != VDC_LAYER_ID_ALL)
+ 807:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 808:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         if (layer_resource[layer_id] != VDC_RESOURCE_ST_INVALID)
+ 809:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 810:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             rw_proc_state[layer_id] = VDC_RW_PROC_STATE_ENABLE;
+ 811:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 812:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 813:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetRwProcEnable() */
+ 814:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 815:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 816:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmSetRwProcDisable
+ 817:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Makes the data write/read processing disabled
+ 818:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   layer_id                : Layer ID
+ 819:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      None
+ 820:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 821:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** void VDC_ShrdPrmSetRwProcDisable (const vdc_layer_id_t layer_id) 
+ 822:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 823:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (layer_id != VDC_LAYER_ID_ALL)
+ 824:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 825:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         if (layer_resource[layer_id] != VDC_RESOURCE_ST_INVALID)
+ 826:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 827:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             rw_proc_state[layer_id] = VDC_RW_PROC_STATE_DISABLE;
+ 828:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 829:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 830:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetRwProcDisable() */
+ 831:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 832:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 833:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetRwProcReady
+ 834:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the state whether the specified layer is ready or not
+ 835:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   layer_id                : Layer ID
+ 836:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Resource state
+ 837:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *              - VDC_RESOURCE_ST_VALID: The layer resource state of the specified layer is valid a
+ 838:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *                the data write/read processing in the layer is disabled.
+ 839:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *              - VDC_RESOURCE_ST_INVALID: The specified layer is not ready.
+ 840:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 841:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_resource_state_t VDC_ShrdPrmGetRwProcReady (const vdc_layer_id_t layer_id) 
+ 842:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 843:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t state;
+ 844:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 845:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if ((layer_resource[layer_id] != VDC_RESOURCE_ST_INVALID) &&
+ 846:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (rw_proc_state[layer_id] == VDC_RW_PROC_STATE_DISABLE))
+ 847:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 848:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         state = VDC_RESOURCE_ST_VALID;
+ 849:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 850:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 851:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 852:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         state = VDC_RESOURCE_ST_INVALID;
+ 853:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 854:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return state;
+ 855:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetRwProcReady() */
+ 856:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 857:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 858:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          VDC_ShrdPrmGetRwProcEnabled
+ 859:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the state whether the specified layer is already run or not
+ 860:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   layer_id                : Layer ID
+ 861:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Resource state
+ 862:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *              - VDC_RESOURCE_ST_VALID: The layer resource state of the specified layer is valid a
+ 863:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *                the data write/read processing in the layer is enabled.
+ 864:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *              - VDC_RESOURCE_ST_INVALID: The specified layer is not enabled.
+ 865:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 866:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** vdc_resource_state_t VDC_ShrdPrmGetRwProcEnabled  
+ 867:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                         (const vdc_layer_id_t layer_id)
+ 868:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 869:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t state;
+ 870:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 871:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if ((layer_resource[layer_id] != VDC_RESOURCE_ST_INVALID) &&
+ 872:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (rw_proc_state[layer_id] != VDC_RW_PROC_STATE_DISABLE))
+ 873:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 874:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         state = VDC_RESOURCE_ST_VALID;
+ 875:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 876:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 877:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 878:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         state = VDC_RESOURCE_ST_INVALID;
+ 879:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 880:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return state;
+ 881:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetRwProcEnabled() */
+ 882:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 883:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /******************************************************************************
+ 884:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** Local Functions
+ 885:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** ******************************************************************************/
+ 886:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 887:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          GetResourceStatePointer
+ 888:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Gets the pointer to the resource state
+ 889:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   rsrc_type               : Resource type
+ 890:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Pointer to the resource state
+ 891:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 892:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static vdc_resource_state_t * GetResourceStatePointer 
+ 893:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****                                 (const vdc_resource_type_t rsrc_type)
+ 894:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+  25              		.loc 1 894 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              		@ link register save eliminated.
+  30              	.LVL0:
+ 895:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t             * resource_state; 
+ 896:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     static vdc_shared_param_resource_t param_resource =
+ 897:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 898:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         VDC_RESOURCE_ST_INVALID, VDC_RESOURCE_ST_INVALID, VDC_RESOURCE_ST_INVALID, VDC_RESOURCE_ST_
+ 899:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     };
+ 900:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     static vdc_resource_state_t        lvds_resource = VDC_RESOURCE_ST_INVALID;
+ 901:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 902:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     switch (rsrc_type)
+  31              		.loc 1 902 0
+  32 0000 040050E3 		cmp	r0, #4
+  33 0004 00F19F97 		ldrls	pc, [pc, r0, asl #2]
+  34 0008 0E0000EA 		b	.L2
+  35              	.L4:
+  36 000c 20000000 		.word	.L3
+  37 0010 50000000 		.word	.L9
+  38 0014 2C000000 		.word	.L6
+  39 0018 34000000 		.word	.L7
+  40 001c 3C000000 		.word	.L8
+  41              	.L3:
+ 903:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 904:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         case VDC_RESOURCE_PANEL_CLK:
+ 905:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             resource_state = &param_resource.rsrc_panel_clock;
+  42              		.loc 1 905 0
+  43 0020 000000E3 		movw	r0, #:lower16:.LANCHOR0
+  44              	.LVL1:
+  45 0024 000040E3 		movt	r0, #:upper16:.LANCHOR0
+  46 0028 1EFF2FE1 		bx	lr
+  47              	.LVL2:
+  48              	.L6:
+ 906:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         break;
+ 907:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         case VDC_RESOURCE_VIDEO_IN:
+ 908:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             resource_state = &param_resource.rsrc_video_input;
+ 909:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         break;
+ 910:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         case VDC_RESOURCE_VSYNC:
+ 911:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             resource_state = &param_resource.rsrc_vsync_signal;
+  49              		.loc 1 911 0
+  50 002c 24009FE5 		ldr	r0, .L10
+  51              	.LVL3:
+ 912:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         break;
+  52              		.loc 1 912 0
+  53 0030 1EFF2FE1 		bx	lr
+  54              	.LVL4:
+  55              	.L7:
+ 913:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         case VDC_RESOURCE_LCD_PANEL:
+ 914:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             resource_state = &param_resource.rsrc_lcd_panel;
+  56              		.loc 1 914 0
+  57 0034 20009FE5 		ldr	r0, .L10+4
+  58              	.LVL5:
+ 915:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         break;
+  59              		.loc 1 915 0
+  60 0038 1EFF2FE1 		bx	lr
+  61              	.LVL6:
+  62              	.L8:
+ 916:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         case VDC_RESOURCE_LVDS_CLK:
+ 917:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             resource_state = &lvds_resource;
+  63              		.loc 1 917 0
+  64 003c 000000E3 		movw	r0, #:lower16:.LANCHOR1
+  65              	.LVL7:
+  66 0040 000040E3 		movt	r0, #:upper16:.LANCHOR1
+ 918:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         break;
+  67              		.loc 1 918 0
+  68 0044 1EFF2FE1 		bx	lr
+  69              	.LVL8:
+  70              	.L2:
+ 919:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 920:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         default:
+ 921:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 922:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             /* NULL initialize */
+ 923:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             resource_state = NULL;
+  71              		.loc 1 923 0
+  72 0048 0000A0E3 		mov	r0, #0
+  73              	.LVL9:
+ 924:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         break;
+  74              		.loc 1 924 0
+  75 004c 1EFF2FE1 		bx	lr
+  76              	.LVL10:
+  77              	.L9:
+ 908:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         break;
+  78              		.loc 1 908 0
+  79 0050 08009FE5 		ldr	r0, .L10+8
+  80              	.LVL11:
+ 925:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 926:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return resource_state;
+ 927:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function GetResourceStatePointer() */
+  81              		.loc 1 927 0
+  82 0054 1EFF2FE1 		bx	lr
+  83              	.L11:
+  84              		.align	2
+  85              	.L10:
+  86 0058 02000000 		.word	.LANCHOR0+2
+  87 005c 03000000 		.word	.LANCHOR0+3
+  88 0060 01000000 		.word	.LANCHOR0+1
+  89              		.cfi_endproc
+  90              	.LFE32:
+  92              		.section	.text.SumProduct,"ax",%progbits
+  93              		.align	2
+  94              		.syntax unified
+  95              		.arm
+  96              		.fpu neon
+  98              	SumProduct:
+  99              	.LFB33:
+ 928:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 929:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** /**************************************************************************//**
+ 930:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @fn          SumProduct
+ 931:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @brief       Product-sum operation
+ 932:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   red             : 8 bits for red
+ 933:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   green           : 8 bits for green
+ 934:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   blue            : 8 bits for blue
+ 935:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   coeff_r         : Coefficient value for Cr/R signal gain adjustment
+ 936:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   coeff_g         : Coefficient value for Y/G signal gain adjustment
+ 937:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   coeff_b         : Coefficient value for Cb/B signal gain adjustment
+ 938:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @param[in]   offset          : Coefficient value for offset adjustment
+ 939:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  * @retval      Answer
+ 940:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****  *****************************************************************************/
+ 941:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** static uint32_t SumProduct ( 
+ 942:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   red,
+ 943:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   green,
+ 944:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   blue,
+ 945:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t         coeff_r,
+ 946:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t         coeff_g,
+ 947:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t         coeff_b,
+ 948:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     const int32_t   offset)
+ 949:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** {
+ 100              		.loc 1 949 0
+ 101              		.cfi_startproc
+ 102              		@ args = 12, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+ 104              	.LVL12:
+ 105 0000 10402DE9 		push	{r4, lr}
+ 106              		.cfi_def_cfa_offset 8
+ 107              		.cfi_offset 4, -8
+ 108              		.cfi_offset 14, -4
+ 109 0004 08409DE5 		ldr	r4, [sp, #8]
+ 110 0008 0CC09DE5 		ldr	ip, [sp, #12]
+ 111 000c 10E09DE5 		ldr	lr, [sp, #16]
+ 950:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t color_val;
+ 951:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 952:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Coefficient values are represented in 11-bit two's complement integer. */
+ 953:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (coeff_r >= (TWO_POWER_ELEVEN / VDC_SPARA_DIV_2))
+ 112              		.loc 1 953 0
+ 113 0010 010B53E3 		cmp	r3, #1024
+ 954:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 955:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 956:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         coeff_r -= (int32_t)TWO_POWER_ELEVEN;
+ 114              		.loc 1 956 0
+ 115 0014 023B43A2 		subge	r3, r3, #2048
+ 116              	.LVL13:
+ 117              	.L13:
+ 957:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 958:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (coeff_g >= (TWO_POWER_ELEVEN / VDC_SPARA_DIV_2))
+ 118              		.loc 1 958 0
+ 119 0018 010B54E3 		cmp	r4, #1024
+ 959:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 960:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 961:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         coeff_g -= (int32_t)TWO_POWER_ELEVEN;
+ 120              		.loc 1 961 0
+ 121 001c 024B44A2 		subge	r4, r4, #2048
+ 122              	.LVL14:
+ 123              	.L14:
+ 962:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 963:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (coeff_b >= (TWO_POWER_ELEVEN / VDC_SPARA_DIV_2))
+ 124              		.loc 1 963 0
+ 125 0020 010B5CE3 		cmp	ip, #1024
+ 964:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 965:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 966:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         coeff_b -= (int32_t)TWO_POWER_ELEVEN;
+ 126              		.loc 1 966 0
+ 127 0024 02CB4CA2 		subge	ip, ip, #2048
+ 128              	.LVL15:
+ 129              	.L15:
+ 967:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 968:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 969:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     color_val  = (red * coeff_r) + (green * coeff_g) + (blue * coeff_b);
+ 130              		.loc 1 969 0
+ 131 0028 910401E0 		mul	r1, r1, r4
+ 132              	.LVL16:
+ 133 002c 901323E0 		mla	r3, r0, r3, r1
+ 134              	.LVL17:
+ 135 0030 923C22E0 		mla	r2, r2, ip, r3
+ 136              	.LVL18:
+ 970:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 971:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 972:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     color_val /= (int32_t)VDC_SPARA_DIV_256;
+ 137              		.loc 1 972 0
+ 138 0034 FF0082E2 		add	r0, r2, #255
+ 139              	.LVL19:
+ 140 0038 000052E3 		cmp	r2, #0
+ 141 003c 0200A0A1 		movge	r0, r2
+ 142              	.LVL20:
+ 973:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     color_val += offset;
+ 974:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (color_val < 0)
+ 143              		.loc 1 974 0
+ 144 0040 40049EE0 		adds	r0, lr, r0, asr #8
+ 145              	.LVL21:
+ 146 0044 0400004A 		bmi	.L17
+ 975:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 976:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         color_val = 0;
+ 977:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 978:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 979:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else if (color_val > (int32_t)VDC_SPARA_COLOR_CONV_RANGE)
+ 147              		.loc 1 979 0
+ 148 0048 FF0050E3 		cmp	r0, #255
+ 149 004c 010000DA 		ble	.L20
+ 980:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 981:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* Cast to an appropriate type */
+ 982:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         color_val = (int32_t)VDC_SPARA_COLOR_CONV_RANGE;
+ 150              		.loc 1 982 0
+ 151 0050 FF00A0E3 		mov	r0, #255
+ 152              	.LVL22:
+ 983:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 984:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     else
+ 985:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 986:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         /* DO NOTHING */
+ 987:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         ;
+ 988:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 989:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 990:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* Cast to an appropriate type */
+ 991:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return (uint32_t)color_val;
+ 992:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function SumProduct() */
+ 153              		.loc 1 992 0
+ 154 0054 1080BDE8 		pop	{r4, pc}
+ 155              	.L20:
+ 156 0058 1080BDE8 		pop	{r4, pc}
+ 157              	.L17:
+ 976:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 158              		.loc 1 976 0
+ 159 005c 0000A0E3 		mov	r0, #0
+ 160              	.LVL23:
+ 161 0060 1080BDE8 		pop	{r4, pc}
+ 162              		.cfi_endproc
+ 163              	.LFE33:
+ 165              		.section	.text.VDC_ShrdPrmInit,"ax",%progbits
+ 166              		.align	2
+ 167              		.global	VDC_ShrdPrmInit
+ 168              		.syntax unified
+ 169              		.arm
+ 170              		.fpu neon
+ 172              	VDC_ShrdPrmInit:
+ 173              	.LFB0:
+ 134:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t                        layer_id_num;
+ 174              		.loc 1 134 0
+ 175              		.cfi_startproc
+ 176              		@ args = 0, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+ 178              	.LVL24:
+ 141:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 179              		.loc 1 141 0
+ 180 0000 0030A0E3 		mov	r3, #0
+ 181 0004 070000EA 		b	.L22
+ 182              	.LVL25:
+ 183              	.L23:
+ 143:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         rw_proc_state[layer_id_num]  = VDC_RW_PROC_STATE_DISABLE;
+ 184              		.loc 1 143 0 discriminator 3
+ 185 0008 002000E3 		movw	r2, #:lower16:.LANCHOR2
+ 186 000c 002040E3 		movt	r2, #:upper16:.LANCHOR2
+ 187 0010 0010A0E3 		mov	r1, #0
+ 188 0014 0310C2E7 		strb	r1, [r2, r3]
+ 144:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 189              		.loc 1 144 0 discriminator 3
+ 190 0018 002000E3 		movw	r2, #:lower16:.LANCHOR3
+ 191 001c 002040E3 		movt	r2, #:upper16:.LANCHOR3
+ 192 0020 0310C2E7 		strb	r1, [r2, r3]
+ 141:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 193              		.loc 1 141 0 discriminator 3
+ 194 0024 013083E2 		add	r3, r3, #1
+ 195              	.LVL26:
+ 196              	.L22:
+ 141:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 197              		.loc 1 141 0 is_stmt 0 discriminator 1
+ 198 0028 030053E3 		cmp	r3, #3
+ 199 002c F5FFFFDA 		ble	.L23
+ 200              	.LVL27:
+ 149:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->lvds_ref       = VDC_OFF;                 /* Reference to the LVDS PLL clo
+ 201              		.loc 1 149 0 is_stmt 1
+ 202 0030 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 203              	.LVL28:
+ 204 0034 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 205 0038 0220A0E3 		mov	r2, #2
+ 206 003c 0020C3E5 		strb	r2, [r3]
+ 150:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->bg_color_rgb   = (uint32_t)0u;             /* Background color in 24-bit R
+ 207              		.loc 1 150 0
+ 208 0040 0020A0E3 		mov	r2, #0
+ 209 0044 0120C3E5 		strb	r2, [r3, #1]
+ 151:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_common->bg_color_crycb = (uint32_t)0u;             /* Background color in 24-bit C
+ 210              		.loc 1 151 0
+ 211 0048 042083E5 		str	r2, [r3, #4]
+ 152:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 212              		.loc 1 152 0
+ 213 004c 082083E5 		str	r2, [r3, #8]
+ 154:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 214              		.loc 1 154 0
+ 215 0050 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 216 0054 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 217 0058 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 218 005c 020053E1 		cmp	r3, r2
+ 156:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 219              		.loc 1 156 0
+ 220 0060 00300003 		movweq	r3, #:lower16:.LANCHOR4
+ 221 0064 00304003 		movteq	r3, #:upper16:.LANCHOR4
+ 222 0068 0220C305 		strbeq	r2, [r3, #2]
+ 223              	.L24:
+ 224              	.LVL29:
+ 162:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->res_inter         = VDC_RES_INTER_PROGRESSIVE;   /* Field operating mode 
+ 225              		.loc 1 162 0
+ 226 006c 002000E3 		movw	r2, #:lower16:.LANCHOR6
+ 227 0070 002040E3 		movt	r2, #:upper16:.LANCHOR6
+ 228 0074 0030A0E3 		mov	r3, #0
+ 229 0078 0030C2E5 		strb	r3, [r2]
+ 163:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 230              		.loc 1 163 0
+ 231 007c 0130C2E5 		strb	r3, [r2, #1]
+ 166:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 232              		.loc 1 166 0
+ 233 0080 0230C2E5 		strb	r3, [r2, #2]
+ 169:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 234              		.loc 1 169 0
+ 235 0084 043082E5 		str	r3, [r2, #4]
+ 172:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 236              		.loc 1 172 0
+ 237 0088 B830C2E1 		strh	r3, [r2, #8]	@ movhi
+ 175:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 238              		.loc 1 175 0
+ 239 008c BA30C2E1 		strh	r3, [r2, #10]	@ movhi
+ 240              	.LVL30:
+ 177:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 241              		.loc 1 177 0
+ 242 0090 020053E3 		cmp	r3, #2
+ 243 0094 1F00008A 		bhi	.L31
+ 134:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     int32_t                        layer_id_num;
+ 244              		.loc 1 134 0
+ 245 0098 04E02DE5 		str	lr, [sp, #-4]!
+ 246              		.cfi_def_cfa_offset 4
+ 247              		.cfi_offset 14, -4
+ 248              	.L26:
+ 249              	.LVL31:
+ 182:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 250              		.loc 1 182 0 discriminator 3
+ 251 009c 000000E3 		movw	r0, #:lower16:.LANCHOR7
+ 252 00a0 000040E3 		movt	r0, #:upper16:.LANCHOR7
+ 253 00a4 83C1A0E1 		lsl	ip, r3, #3
+ 254 00a8 03208CE0 		add	r2, ip, r3
+ 255 00ac 82E0A0E1 		lsl	lr, r2, #1
+ 256 00b0 0E1080E0 		add	r1, r0, lr
+ 257 00b4 0020A0E3 		mov	r2, #0
+ 258 00b8 0E20C0E7 		strb	r2, [r0, lr]
+ 185:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 259              		.loc 1 185 0 discriminator 3
+ 260 00bc 01E0A0E3 		mov	lr, #1
+ 261 00c0 01E0C1E5 		strb	lr, [r1, #1]
+ 188:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 262              		.loc 1 188 0 discriminator 3
+ 263 00c4 0220C1E5 		strb	r2, [r1, #2]
+ 191:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 264              		.loc 1 191 0 discriminator 3
+ 265 00c8 0320C1E5 		strb	r2, [r1, #3]
+ 194:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 266              		.loc 1 194 0 discriminator 3
+ 267 00cc 0420C1E5 		strb	r2, [r1, #4]
+ 197:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 268              		.loc 1 197 0 discriminator 3
+ 269 00d0 B620C1E1 		strh	r2, [r1, #6]	@ movhi
+ 200:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 270              		.loc 1 200 0 discriminator 3
+ 271 00d4 B820C1E1 		strh	r2, [r1, #8]	@ movhi
+ 203:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 272              		.loc 1 203 0 discriminator 3
+ 273 00d8 BA20C1E1 		strh	r2, [r1, #10]	@ movhi
+ 206:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 274              		.loc 1 206 0 discriminator 3
+ 275 00dc BC20C1E1 		strh	r2, [r1, #12]	@ movhi
+ 209:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 276              		.loc 1 209 0 discriminator 3
+ 277 00e0 BE20C1E1 		strh	r2, [r1, #14]	@ movhi
+ 212:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 278              		.loc 1 212 0 discriminator 3
+ 279 00e4 03108CE0 		add	r1, ip, r3
+ 280 00e8 11CEA0E1 		lsl	ip, r1, lr
+ 281 00ec 0C0080E0 		add	r0, r0, ip
+ 282 00f0 B021C0E1 		strh	r2, [r0, #16]	@ movhi
+ 177:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 283              		.loc 1 177 0 discriminator 3
+ 284 00f4 0E3083E0 		add	r3, r3, lr
+ 285              	.LVL32:
+ 286 00f8 7330EFE6 		uxtb	r3, r3
+ 287              	.LVL33:
+ 288 00fc 020053E3 		cmp	r3, #2
+ 289 0100 E5FFFF9A 		bls	.L26
+ 216:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmInit() */
+ 290              		.loc 1 216 0
+ 291 0104 003000E3 		movw	r3, #:lower16:.LANCHOR8
+ 292              	.LVL34:
+ 293 0108 003040E3 		movt	r3, #:upper16:.LANCHOR8
+ 294 010c 0120A0E3 		mov	r2, #1
+ 295 0110 0020C3E5 		strb	r2, [r3]
+ 296 0114 04F09DE4 		ldr	pc, [sp], #4
+ 297              	.LVL35:
+ 298              	.L31:
+ 299              		.cfi_def_cfa_offset 0
+ 300              		.cfi_restore 14
+ 301 0118 003000E3 		movw	r3, #:lower16:.LANCHOR8
+ 302              	.LVL36:
+ 303 011c 003040E3 		movt	r3, #:upper16:.LANCHOR8
+ 304 0120 0120A0E3 		mov	r2, #1
+ 305 0124 0020C3E5 		strb	r2, [r3]
+ 306 0128 1EFF2FE1 		bx	lr
+ 307              		.cfi_endproc
+ 308              	.LFE0:
+ 310              		.section	.text.VDC_ShrdPrmSetInitParam,"ax",%progbits
+ 311              		.align	2
+ 312              		.global	VDC_ShrdPrmSetInitParam
+ 313              		.syntax unified
+ 314              		.arm
+ 315              		.fpu neon
+ 317              	VDC_ShrdPrmSetInitParam:
+ 318              	.LFB1:
+ 226:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 319              		.loc 1 226 0
+ 320              		.cfi_startproc
+ 321              		@ args = 0, pretend = 0, frame = 0
+ 322              		@ frame_needed = 0, uses_anonymous_args = 0
+ 323              		@ link register save eliminated.
+ 324              	.LVL37:
+ 232:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 325              		.loc 1 232 0
+ 326 0000 0030D0E5 		ldrb	r3, [r0]	@ zero_extendqisi2
+ 327 0004 002000E3 		movw	r2, #:lower16:.LANCHOR4
+ 328 0008 002040E3 		movt	r2, #:upper16:.LANCHOR4
+ 329 000c 0030C2E5 		strb	r3, [r2]
+ 235:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 330              		.loc 1 235 0
+ 331 0010 033043E2 		sub	r3, r3, #3
+ 332 0014 7330EFE6 		uxtb	r3, r3
+ 333 0018 010053E3 		cmp	r3, #1
+ 334 001c 0600009A 		bls	.L35
+ 335              	.L33:
+ 241:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 336              		.loc 1 241 0
+ 337 0020 043090E5 		ldr	r3, [r0, #4]
+ 338 0024 000053E3 		cmp	r3, #0
+ 244:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 339              		.loc 1 244 0
+ 340 0028 0520D315 		ldrbne	r2, [r3, #5]	@ zero_extendqisi2
+ 341 002c 00300013 		movwne	r3, #:lower16:.LANCHOR8
+ 342 0030 00304013 		movtne	r3, #:upper16:.LANCHOR8
+ 343 0034 0020C315 		strbne	r2, [r3]
+ 344 0038 1EFF2FE1 		bx	lr
+ 345              	.L35:
+ 237:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 346              		.loc 1 237 0
+ 347 003c 0230A0E1 		mov	r3, r2
+ 348 0040 0120A0E3 		mov	r2, #1
+ 349 0044 0120C3E5 		strb	r2, [r3, #1]
+ 350 0048 F4FFFFEA 		b	.L33
+ 351              		.cfi_endproc
+ 352              	.LFE1:
+ 354              		.section	.text.VDC_ShrdPrmSetTerminate,"ax",%progbits
+ 355              		.align	2
+ 356              		.global	VDC_ShrdPrmSetTerminate
+ 357              		.syntax unified
+ 358              		.arm
+ 359              		.fpu neon
+ 361              	VDC_ShrdPrmSetTerminate:
+ 362              	.LFB2:
+ 255:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 363              		.loc 1 255 0
+ 364              		.cfi_startproc
+ 365              		@ args = 0, pretend = 0, frame = 0
+ 366              		@ frame_needed = 0, uses_anonymous_args = 0
+ 367              		@ link register save eliminated.
+ 368              	.LVL38:
+ 261:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetTerminate() */
+ 369              		.loc 1 261 0
+ 370 0000 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 371 0004 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 372 0008 0020A0E3 		mov	r2, #0
+ 373 000c 0120C3E5 		strb	r2, [r3, #1]
+ 374 0010 1EFF2FE1 		bx	lr
+ 375              		.cfi_endproc
+ 376              	.LFE2:
+ 378              		.section	.text.VDC_ShrdPrmSetInputParam,"ax",%progbits
+ 379              		.align	2
+ 380              		.global	VDC_ShrdPrmSetInputParam
+ 381              		.syntax unified
+ 382              		.arm
+ 383              		.fpu neon
+ 385              	VDC_ShrdPrmSetInputParam:
+ 386              	.LFB3:
+ 271:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 387              		.loc 1 271 0
+ 388              		.cfi_startproc
+ 389              		@ args = 0, pretend = 0, frame = 0
+ 390              		@ frame_needed = 0, uses_anonymous_args = 0
+ 391              		@ link register save eliminated.
+ 392              	.LVL39:
+ 274:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 393              		.loc 1 274 0
+ 394 0000 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 395 0004 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 396 0008 0120A0E3 		mov	r2, #1
+ 397 000c 0020C3E5 		strb	r2, [r3]
+ 398              	.LVL40:
+ 279:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (param->ext_sig->inp_format == VDC_EXTIN_FORMAT_RGB666) ||
+ 399              		.loc 1 279 0
+ 400 0010 0C3090E5 		ldr	r3, [r0, #12]
+ 401 0014 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 402 0018 020053E3 		cmp	r3, #2
+ 403 001c 0400009A 		bls	.L40
+ 287:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 404              		.loc 1 287 0
+ 405 0020 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 406 0024 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 407 0028 0120A0E3 		mov	r2, #1
+ 408 002c 0220C3E5 		strb	r2, [r3, #2]
+ 409 0030 1EFF2FE1 		bx	lr
+ 410              	.L40:
+ 283:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 411              		.loc 1 283 0
+ 412 0034 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 413 0038 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 414 003c 0020A0E3 		mov	r2, #0
+ 415 0040 0220C3E5 		strb	r2, [r3, #2]
+ 416 0044 1EFF2FE1 		bx	lr
+ 417              		.cfi_endproc
+ 418              	.LFE3:
+ 420              		.section	.text.VDC_ShrdPrmSetOutputParam,"ax",%progbits
+ 421              		.align	2
+ 422              		.global	VDC_ShrdPrmSetOutputParam
+ 423              		.syntax unified
+ 424              		.arm
+ 425              		.fpu neon
+ 427              	VDC_ShrdPrmSetOutputParam:
+ 428              	.LFB4:
+ 298:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_common_t    * shared_param_common; 
+ 429              		.loc 1 298 0
+ 430              		.cfi_startproc
+ 431              		@ args = 0, pretend = 0, frame = 0
+ 432              		@ frame_needed = 0, uses_anonymous_args = 0
+ 433              	.LVL41:
+ 434 0000 F0472DE9 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 435              		.cfi_def_cfa_offset 32
+ 436              		.cfi_offset 4, -32
+ 437              		.cfi_offset 5, -28
+ 438              		.cfi_offset 6, -24
+ 439              		.cfi_offset 7, -20
+ 440              		.cfi_offset 8, -16
+ 441              		.cfi_offset 9, -12
+ 442              		.cfi_offset 10, -8
+ 443              		.cfi_offset 14, -4
+ 444 0004 10D04DE2 		sub	sp, sp, #16
+ 445              		.cfi_def_cfa_offset 48
+ 446              	.LVL42:
+ 310:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 447              		.loc 1 310 0
+ 448 0008 2C2090E5 		ldr	r2, [r0, #44]
+ 449 000c 007000E3 		movw	r7, #:lower16:.LANCHOR4
+ 450 0010 007040E3 		movt	r7, #:upper16:.LANCHOR4
+ 451 0014 042087E5 		str	r2, [r7, #4]
+ 313:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 452              		.loc 1 313 0
+ 453 0018 5298E7E7 		ubfx	r9, r2, #16, #8
+ 454              	.LVL43:
+ 316:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 455              		.loc 1 316 0
+ 456 001c 52A4E7E7 		ubfx	r10, r2, #8, #8
+ 457              	.LVL44:
+ 319:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 458              		.loc 1 319 0
+ 459 0020 7260EFE6 		uxtb	r6, r2
+ 460              	.LVL45:
+ 322:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         red,
+ 461              		.loc 1 322 0
+ 462 0024 0030A0E3 		mov	r3, #0
+ 463 0028 08308DE5 		str	r3, [sp, #8]
+ 464 002c 1D30A0E3 		mov	r3, #29
+ 465 0030 04308DE5 		str	r3, [sp, #4]
+ 466 0034 9630A0E3 		mov	r3, #150
+ 467 0038 00308DE5 		str	r3, [sp]
+ 468 003c 4D30A0E3 		mov	r3, #77
+ 469 0040 0620A0E1 		mov	r2, r6
+ 470 0044 0A10A0E1 		mov	r1, r10
+ 471 0048 0900A0E1 		mov	r0, r9
+ 472              	.LVL46:
+ 473 004c FEFFFFEB 		bl	SumProduct
+ 474              	.LVL47:
+ 475 0050 0040A0E1 		mov	r4, r0
+ 476              	.LVL48:
+ 338:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         red,
+ 477              		.loc 1 338 0
+ 478 0054 8050A0E3 		mov	r5, #128
+ 479 0058 08508DE5 		str	r5, [sp, #8]
+ 480 005c 04508DE5 		str	r5, [sp, #4]
+ 481 0060 AB3700E3 		movw	r3, #1963
+ 482 0064 00308DE5 		str	r3, [sp]
+ 483 0068 D53700E3 		movw	r3, #2005
+ 484 006c 0620A0E1 		mov	r2, r6
+ 485 0070 0A10A0E1 		mov	r1, r10
+ 486 0074 0900A0E1 		mov	r0, r9
+ 487              	.LVL49:
+ 488 0078 FEFFFFEB 		bl	SumProduct
+ 489              	.LVL50:
+ 490 007c 0080A0E1 		mov	r8, r0
+ 491              	.LVL51:
+ 356:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         red,
+ 492              		.loc 1 356 0
+ 493 0080 08508DE5 		str	r5, [sp, #8]
+ 494 0084 EB3700E3 		movw	r3, #2027
+ 495 0088 04308DE5 		str	r3, [sp, #4]
+ 496 008c 953700E3 		movw	r3, #1941
+ 497 0090 00308DE5 		str	r3, [sp]
+ 498 0094 0530A0E1 		mov	r3, r5
+ 499 0098 0620A0E1 		mov	r2, r6
+ 500 009c 0A10A0E1 		mov	r1, r10
+ 501 00a0 0900A0E1 		mov	r0, r9
+ 502              	.LVL52:
+ 503 00a4 FEFFFFEB 		bl	SumProduct
+ 504              	.LVL53:
+ 378:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetOutputParam() */
+ 505              		.loc 1 378 0
+ 506 00a8 0444A0E1 		lsl	r4, r4, #8
+ 507              	.LVL54:
+ 508 00ac 004884E1 		orr	r4, r4, r0, lsl #16
+ 509 00b0 044088E1 		orr	r4, r8, r4
+ 510 00b4 084087E5 		str	r4, [r7, #8]
+ 379:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 511              		.loc 1 379 0
+ 512 00b8 10D08DE2 		add	sp, sp, #16
+ 513              		.cfi_def_cfa_offset 32
+ 514              		@ sp needed
+ 515 00bc F087BDE8 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 516              		.cfi_endproc
+ 517              	.LFE4:
+ 519              		.section	.text.VDC_ShrdPrmSetWriteParam,"ax",%progbits
+ 520              		.align	2
+ 521              		.global	VDC_ShrdPrmSetWriteParam
+ 522              		.syntax unified
+ 523              		.arm
+ 524              		.fpu neon
+ 526              	VDC_ShrdPrmSetWriteParam:
+ 527              	.LFB5:
+ 388:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_scaling_t   * shared_param_scaling; 
+ 528              		.loc 1 388 0
+ 529              		.cfi_startproc
+ 530              		@ args = 0, pretend = 0, frame = 0
+ 531              		@ frame_needed = 0, uses_anonymous_args = 0
+ 532              		@ link register save eliminated.
+ 533              	.LVL55:
+ 394:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 534              		.loc 1 394 0
+ 535 0000 0F20D0E5 		ldrb	r2, [r0, #15]	@ zero_extendqisi2
+ 536 0004 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 537 0008 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 538 000c 0020C3E5 		strb	r2, [r3]
+ 397:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 539              		.loc 1 397 0
+ 540 0010 1320D0E5 		ldrb	r2, [r0, #19]	@ zero_extendqisi2
+ 541 0014 0120C3E5 		strb	r2, [r3, #1]
+ 400:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 542              		.loc 1 400 0
+ 543 0018 1130D0E5 		ldrb	r3, [r0, #17]	@ zero_extendqisi2
+ 544 001c 030053E3 		cmp	r3, #3
+ 545 0020 00005313 		cmpne	r3, #0
+ 546 0024 0C00000A 		beq	.L46
+ 406:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 547              		.loc 1 406 0
+ 548 0028 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 549 002c 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 550 0030 0020A0E3 		mov	r2, #0
+ 551 0034 0220C3E5 		strb	r2, [r3, #2]
+ 552              	.L45:
+ 410:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 553              		.loc 1 410 0
+ 554 0038 282090E5 		ldr	r2, [r0, #40]
+ 555 003c 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 556 0040 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 557 0044 042083E5 		str	r2, [r3, #4]
+ 413:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_hw = param->scalingdown_rot.res_out_hw;
+ 558              		.loc 1 413 0
+ 559 0048 BA20D0E1 		ldrh	r2, [r0, #10]
+ 560 004c B820C3E1 		strh	r2, [r3, #8]	@ movhi
+ 414:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetWriteParam() */
+ 561              		.loc 1 414 0
+ 562 0050 BC20D0E1 		ldrh	r2, [r0, #12]
+ 563 0054 BA20C3E1 		strh	r2, [r3, #10]	@ movhi
+ 564 0058 1EFF2FE1 		bx	lr
+ 565              	.L46:
+ 402:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 566              		.loc 1 402 0
+ 567 005c 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 568 0060 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 569 0064 0120A0E3 		mov	r2, #1
+ 570 0068 0220C3E5 		strb	r2, [r3, #2]
+ 571 006c F1FFFFEA 		b	.L45
+ 572              		.cfi_endproc
+ 573              	.LFE5:
+ 575              		.section	.text.VDC_ShrdPrmSetChgWriteParam,"ax",%progbits
+ 576              		.align	2
+ 577              		.global	VDC_ShrdPrmSetChgWriteParam
+ 578              		.syntax unified
+ 579              		.arm
+ 580              		.fpu neon
+ 582              	VDC_ShrdPrmSetChgWriteParam:
+ 583              	.LFB6:
+ 424:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_scaling_t   * shared_param_scaling; 
+ 584              		.loc 1 424 0
+ 585              		.cfi_startproc
+ 586              		@ args = 0, pretend = 0, frame = 0
+ 587              		@ frame_needed = 0, uses_anonymous_args = 0
+ 588              		@ link register save eliminated.
+ 589              	.LVL56:
+ 430:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 590              		.loc 1 430 0
+ 591 0000 0F20D0E5 		ldrb	r2, [r0, #15]	@ zero_extendqisi2
+ 592 0004 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 593 0008 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 594 000c 0020C3E5 		strb	r2, [r3]
+ 433:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     shared_param_scaling->width_wr_fb.in_hw = param->scalingdown_rot.res_out_hw;
+ 595              		.loc 1 433 0
+ 596 0010 BA20D0E1 		ldrh	r2, [r0, #10]
+ 597 0014 B820C3E1 		strh	r2, [r3, #8]	@ movhi
+ 434:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmSetChgWriteParam() */
+ 598              		.loc 1 434 0
+ 599 0018 BC20D0E1 		ldrh	r2, [r0, #12]
+ 600 001c BA20C3E1 		strh	r2, [r3, #10]	@ movhi
+ 601 0020 1EFF2FE1 		bx	lr
+ 602              		.cfi_endproc
+ 603              	.LFE6:
+ 605              		.section	.text.VDC_ShrdPrmSetReadParam,"ax",%progbits
+ 606              		.align	2
+ 607              		.global	VDC_ShrdPrmSetReadParam
+ 608              		.syntax unified
+ 609              		.arm
+ 610              		.fpu neon
+ 612              	VDC_ShrdPrmSetReadParam:
+ 613              	.LFB7:
+ 446:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_graphics_t  * shared_param_graphics; 
+ 614              		.loc 1 446 0
+ 615              		.cfi_startproc
+ 616              		@ args = 0, pretend = 0, frame = 0
+ 617              		@ frame_needed = 0, uses_anonymous_args = 0
+ 618              	.LVL57:
+ 619 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 620              		.cfi_def_cfa_offset 16
+ 621              		.cfi_offset 4, -16
+ 622              		.cfi_offset 5, -12
+ 623              		.cfi_offset 6, -8
+ 624              		.cfi_offset 14, -4
+ 625 0004 0040A0E1 		mov	r4, r0
+ 626 0008 0150A0E1 		mov	r5, r1
+ 627              	.LVL58:
+ 452:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 628              		.loc 1 452 0
+ 629 000c 0000D1E5 		ldrb	r0, [r1]	@ zero_extendqisi2
+ 630              	.LVL59:
+ 631 0010 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 632 0014 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 633 0018 8421A0E1 		lsl	r2, r4, #3
+ 634 001c 042082E0 		add	r2, r2, r4
+ 635 0020 8210A0E1 		lsl	r1, r2, #1
+ 636              	.LVL60:
+ 637 0024 012083E0 		add	r2, r3, r1
+ 638 0028 0100C3E7 		strb	r0, [r3, r1]
+ 455:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 639              		.loc 1 455 0
+ 640 002c 0130D5E5 		ldrb	r3, [r5, #1]	@ zero_extendqisi2
+ 641 0030 0130C2E5 		strb	r3, [r2, #1]
+ 458:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 642              		.loc 1 458 0
+ 643 0034 1130D5E5 		ldrb	r3, [r5, #17]	@ zero_extendqisi2
+ 644 0038 0230C2E5 		strb	r3, [r2, #2]
+ 461:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 645              		.loc 1 461 0
+ 646 003c 1130D5E5 		ldrb	r3, [r5, #17]	@ zero_extendqisi2
+ 647 0040 083043E2 		sub	r3, r3, #8
+ 648 0044 7330EFE6 		uxtb	r3, r3
+ 649 0048 010053E3 		cmp	r3, #1
+ 650 004c 2400009A 		bls	.L55
+ 467:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 651              		.loc 1 467 0
+ 652 0050 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 653 0054 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 654 0058 841184E0 		add	r1, r4, r4, lsl #3
+ 655 005c 8120A0E1 		lsl	r2, r1, #1
+ 656 0060 023083E0 		add	r3, r3, r2
+ 657 0064 0020A0E3 		mov	r2, #0
+ 658 0068 0320C3E5 		strb	r2, [r3, #3]
+ 659              	.L50:
+ 471:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 660              		.loc 1 471 0
+ 661 006c 1010D5E5 		ldrb	r1, [r5, #16]	@ zero_extendqisi2
+ 662 0070 000000E3 		movw	r0, #:lower16:.LANCHOR7
+ 663 0074 000040E3 		movt	r0, #:upper16:.LANCHOR7
+ 664 0078 8431A0E1 		lsl	r3, r4, #3
+ 665 007c 043083E0 		add	r3, r3, r4
+ 666 0080 8320A0E1 		lsl	r2, r3, #1
+ 667 0084 020080E0 		add	r0, r0, r2
+ 668 0088 0410C0E5 		strb	r1, [r0, #4]
+ 474:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 669              		.loc 1 474 0
+ 670 008c 0820A0E3 		mov	r2, #8
+ 671 0090 141085E2 		add	r1, r5, #20
+ 672 0094 060080E2 		add	r0, r0, #6
+ 673 0098 FEFFFFEB 		bl	memcpy
+ 674              	.LVL61:
+ 477:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 675              		.loc 1 477 0
+ 676 009c 0C3095E5 		ldr	r3, [r5, #12]
+ 677 00a0 000053E3 		cmp	r3, #0
+ 678 00a4 1600000A 		beq	.L51
+ 479:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_hw = param->width_read_fb->in_hw;
+ 679              		.loc 1 479 0
+ 680 00a8 B0C0D3E1 		ldrh	ip, [r3]
+ 681 00ac 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 682 00b0 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 683 00b4 8421A0E1 		lsl	r2, r4, #3
+ 684 00b8 040082E0 		add	r0, r2, r4
+ 685 00bc 8010A0E1 		lsl	r1, r0, #1
+ 686 00c0 011083E0 		add	r1, r3, r1
+ 687 00c4 BEC0C1E1 		strh	ip, [r1, #14]	@ movhi
+ 480:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 688              		.loc 1 480 0
+ 689 00c8 0C1095E5 		ldr	r1, [r5, #12]
+ 690 00cc B210D1E1 		ldrh	r1, [r1, #2]
+ 691 00d0 0040A0E1 		mov	r4, r0
+ 692              	.LVL62:
+ 693 00d4 8020A0E1 		lsl	r2, r0, #1
+ 694 00d8 023083E0 		add	r3, r3, r2
+ 695 00dc B011C3E1 		strh	r1, [r3, #16]	@ movhi
+ 696 00e0 7080BDE8 		pop	{r4, r5, r6, pc}
+ 697              	.LVL63:
+ 698              	.L55:
+ 463:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 699              		.loc 1 463 0
+ 700 00e4 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 701 00e8 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 702 00ec 841184E0 		add	r1, r4, r4, lsl #3
+ 703 00f0 8120A0E1 		lsl	r2, r1, #1
+ 704 00f4 023083E0 		add	r3, r3, r2
+ 705 00f8 0120A0E3 		mov	r2, #1
+ 706 00fc 0320C3E5 		strb	r2, [r3, #3]
+ 707 0100 D9FFFFEA 		b	.L50
+ 708              	.L51:
+ 485:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 709              		.loc 1 485 0
+ 710 0104 0130D5E5 		ldrb	r3, [r5, #1]	@ zero_extendqisi2
+ 711 0108 010053E3 		cmp	r3, #1
+ 712 010c 0900000A 		beq	.L56
+ 496:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 713              		.loc 1 496 0
+ 714 0110 000000E3 		movw	r0, #:lower16:.LANCHOR7
+ 715 0114 000040E3 		movt	r0, #:upper16:.LANCHOR7
+ 716 0118 844184E0 		add	r4, r4, r4, lsl #3
+ 717              	.LVL64:
+ 718 011c 8430A0E1 		lsl	r3, r4, #1
+ 719 0120 030080E0 		add	r0, r0, r3
+ 720 0124 0420A0E3 		mov	r2, #4
+ 721 0128 40109FE5 		ldr	r1, .L57
+ 722 012c 0E0080E2 		add	r0, r0, #14
+ 723 0130 FEFFFFEB 		bl	memcpy
+ 724              	.LVL65:
+ 725 0134 7080BDE8 		pop	{r4, r5, r6, pc}
+ 726              	.LVL66:
+ 727              	.L56:
+ 489:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             shared_param_graphics->width_read_fb.in_hw = param->gr_grc.hw;
+ 728              		.loc 1 489 0
+ 729 0138 B6C1D5E1 		ldrh	ip, [r5, #22]
+ 730 013c 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 731 0140 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 732 0144 8421A0E1 		lsl	r2, r4, #3
+ 733 0148 040082E0 		add	r0, r2, r4
+ 734 014c 8010A0E1 		lsl	r1, r0, #1
+ 735 0150 011083E0 		add	r1, r3, r1
+ 736 0154 BEC0C1E1 		strh	ip, [r1, #14]	@ movhi
+ 490:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 737              		.loc 1 490 0
+ 738 0158 BA11D5E1 		ldrh	r1, [r5, #26]
+ 739 015c 0040A0E1 		mov	r4, r0
+ 740              	.LVL67:
+ 741 0160 8020A0E1 		lsl	r2, r0, #1
+ 742 0164 023083E0 		add	r3, r3, r2
+ 743 0168 B011C3E1 		strh	r1, [r3, #16]	@ movhi
+ 744 016c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 745              	.L58:
+ 746              		.align	2
+ 747              	.L57:
+ 748 0170 08000000 		.word	.LANCHOR6+8
+ 749              		.cfi_endproc
+ 750              	.LFE7:
+ 752              		.section	.text.VDC_ShrdPrmSetChgReadParam,"ax",%progbits
+ 753              		.align	2
+ 754              		.global	VDC_ShrdPrmSetChgReadParam
+ 755              		.syntax unified
+ 756              		.arm
+ 757              		.fpu neon
+ 759              	VDC_ShrdPrmSetChgReadParam:
+ 760              	.LFB8:
+ 510:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_shared_param_graphics_t  * shared_param_graphics; 
+ 761              		.loc 1 510 0
+ 762              		.cfi_startproc
+ 763              		@ args = 0, pretend = 0, frame = 0
+ 764              		@ frame_needed = 0, uses_anonymous_args = 0
+ 765              	.LVL68:
+ 766 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 767              		.cfi_def_cfa_offset 16
+ 768              		.cfi_offset 4, -16
+ 769              		.cfi_offset 5, -12
+ 770              		.cfi_offset 6, -8
+ 771              		.cfi_offset 14, -4
+ 772 0004 0040A0E1 		mov	r4, r0
+ 773 0008 0150A0E1 		mov	r5, r1
+ 774              	.LVL69:
+ 516:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 775              		.loc 1 516 0
+ 776 000c 081091E5 		ldr	r1, [r1, #8]
+ 777              	.LVL70:
+ 778 0010 000051E3 		cmp	r1, #0
+ 779 0014 0700000A 		beq	.L60
+ 518:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 780              		.loc 1 518 0
+ 781 0018 000000E3 		movw	r0, #:lower16:.LANCHOR7
+ 782              	.LVL71:
+ 783 001c 000040E3 		movt	r0, #:upper16:.LANCHOR7
+ 784 0020 842184E0 		add	r2, r4, r4, lsl #3
+ 785 0024 8230A0E1 		lsl	r3, r2, #1
+ 786 0028 030080E0 		add	r0, r0, r3
+ 787 002c 0820A0E3 		mov	r2, #8
+ 788 0030 060080E2 		add	r0, r0, #6
+ 789 0034 FEFFFFEB 		bl	memcpy
+ 790              	.LVL72:
+ 791              	.L60:
+ 522:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 792              		.loc 1 522 0
+ 793 0038 043095E5 		ldr	r3, [r5, #4]
+ 794 003c 000053E3 		cmp	r3, #0
+ 795 0040 7080BD08 		popeq	{r4, r5, r6, pc}
+ 524:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         shared_param_graphics->width_read_fb.in_hw = param->width_read_fb->in_hw;
+ 796              		.loc 1 524 0
+ 797 0044 B0C0D3E1 		ldrh	ip, [r3]
+ 798 0048 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 799 004c 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 800 0050 8421A0E1 		lsl	r2, r4, #3
+ 801 0054 040082E0 		add	r0, r2, r4
+ 802 0058 8010A0E1 		lsl	r1, r0, #1
+ 803 005c 011083E0 		add	r1, r3, r1
+ 804 0060 BEC0C1E1 		strh	ip, [r1, #14]	@ movhi
+ 525:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 805              		.loc 1 525 0
+ 806 0064 041095E5 		ldr	r1, [r5, #4]
+ 807 0068 B210D1E1 		ldrh	r1, [r1, #2]
+ 808 006c 0040A0E1 		mov	r4, r0
+ 809              	.LVL73:
+ 810 0070 8020A0E1 		lsl	r2, r0, #1
+ 811 0074 023083E0 		add	r3, r3, r2
+ 812 0078 B011C3E1 		strh	r1, [r3, #16]	@ movhi
+ 813 007c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 814              		.cfi_endproc
+ 815              	.LFE8:
+ 817              		.section	.text.VDC_ShrdPrmGetLvdsClkRef,"ax",%progbits
+ 818              		.align	2
+ 819              		.global	VDC_ShrdPrmGetLvdsClkRef
+ 820              		.syntax unified
+ 821              		.arm
+ 822              		.fpu neon
+ 824              	VDC_ShrdPrmGetLvdsClkRef:
+ 825              	.LFB9:
+ 536:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_onoff_t onoff;
+ 826              		.loc 1 536 0
+ 827              		.cfi_startproc
+ 828              		@ args = 0, pretend = 0, frame = 0
+ 829              		@ frame_needed = 0, uses_anonymous_args = 0
+ 830              		@ link register save eliminated.
+ 539:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 831              		.loc 1 539 0
+ 832 0000 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 833 0004 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 834 0008 0100D3E5 		ldrb	r0, [r3, #1]	@ zero_extendqisi2
+ 835 000c 000050E3 		cmp	r0, #0
+ 836 0010 1EFF2F01 		bxeq	lr
+ 545:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 837              		.loc 1 545 0
+ 838 0014 0100A0E3 		mov	r0, #1
+ 839              	.LVL74:
+ 548:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 840              		.loc 1 548 0
+ 841 0018 1EFF2FE1 		bx	lr
+ 842              		.cfi_endproc
+ 843              	.LFE9:
+ 845              		.section	.text.VDC_ShrdPrmGetColorSpace,"ax",%progbits
+ 846              		.align	2
+ 847              		.global	VDC_ShrdPrmGetColorSpace
+ 848              		.syntax unified
+ 849              		.arm
+ 850              		.fpu neon
+ 852              	VDC_ShrdPrmGetColorSpace:
+ 853              	.LFB10:
+ 557:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_common.color_sp_in;
+ 854              		.loc 1 557 0
+ 855              		.cfi_startproc
+ 856              		@ args = 0, pretend = 0, frame = 0
+ 857              		@ frame_needed = 0, uses_anonymous_args = 0
+ 858              		@ link register save eliminated.
+ 558:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetColorSpace() */
+ 859              		.loc 1 558 0
+ 860 0000 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 861 0004 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 559:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 862              		.loc 1 559 0
+ 863 0008 0200D3E5 		ldrb	r0, [r3, #2]	@ zero_extendqisi2
+ 864 000c 1EFF2FE1 		bx	lr
+ 865              		.cfi_endproc
+ 866              	.LFE10:
+ 868              		.section	.text.VDC_ShrdPrmGetBgColor,"ax",%progbits
+ 869              		.align	2
+ 870              		.global	VDC_ShrdPrmGetBgColor
+ 871              		.syntax unified
+ 872              		.arm
+ 873              		.fpu neon
+ 875              	VDC_ShrdPrmGetBgColor:
+ 876              	.LFB11:
+ 568:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return (color_space == VDC_COLOR_SPACE_GBR) ? param_common.bg_color_rgb : param_common.bg_color
+ 877              		.loc 1 568 0
+ 878              		.cfi_startproc
+ 879              		@ args = 0, pretend = 0, frame = 0
+ 880              		@ frame_needed = 0, uses_anonymous_args = 0
+ 881              		@ link register save eliminated.
+ 882              	.LVL75:
+ 569:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetBgColor() */
+ 883              		.loc 1 569 0
+ 884 0000 000050E3 		cmp	r0, #0
+ 885 0004 0300000A 		beq	.L70
+ 569:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetBgColor() */
+ 886              		.loc 1 569 0 is_stmt 0 discriminator 2
+ 887 0008 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 888 000c 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 889 0010 080093E5 		ldr	r0, [r3, #8]
+ 890              	.LVL76:
+ 570:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 891              		.loc 1 570 0 is_stmt 1 discriminator 2
+ 892 0014 1EFF2FE1 		bx	lr
+ 893              	.LVL77:
+ 894              	.L70:
+ 569:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetBgColor() */
+ 895              		.loc 1 569 0 discriminator 1
+ 896 0018 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 897 001c 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 898 0020 040093E5 		ldr	r0, [r3, #4]
+ 899              	.LVL78:
+ 900 0024 1EFF2FE1 		bx	lr
+ 901              		.cfi_endproc
+ 902              	.LFE11:
+ 904              		.section	.text.VDC_ShrdPrmGetWritingMode,"ax",%progbits
+ 905              		.align	2
+ 906              		.global	VDC_ShrdPrmGetWritingMode
+ 907              		.syntax unified
+ 908              		.arm
+ 909              		.fpu neon
+ 911              	VDC_ShrdPrmGetWritingMode:
+ 912              	.LFB12:
+ 579:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.res_ds_wr_md;
+ 913              		.loc 1 579 0
+ 914              		.cfi_startproc
+ 915              		@ args = 0, pretend = 0, frame = 0
+ 916              		@ frame_needed = 0, uses_anonymous_args = 0
+ 917              		@ link register save eliminated.
+ 580:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetWritingMode() */
+ 918              		.loc 1 580 0
+ 919 0000 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 920 0004 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 581:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 921              		.loc 1 581 0
+ 922 0008 0000D3E5 		ldrb	r0, [r3]	@ zero_extendqisi2
+ 923 000c 1EFF2FE1 		bx	lr
+ 924              		.cfi_endproc
+ 925              	.LFE12:
+ 927              		.section	.text.VDC_ShrdPrmGetInterlace,"ax",%progbits
+ 928              		.align	2
+ 929              		.global	VDC_ShrdPrmGetInterlace
+ 930              		.syntax unified
+ 931              		.arm
+ 932              		.fpu neon
+ 934              	VDC_ShrdPrmGetInterlace:
+ 935              	.LFB13:
+ 590:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.res_inter;
+ 936              		.loc 1 590 0
+ 937              		.cfi_startproc
+ 938              		@ args = 0, pretend = 0, frame = 0
+ 939              		@ frame_needed = 0, uses_anonymous_args = 0
+ 940              		@ link register save eliminated.
+ 591:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetInterlace() */
+ 941              		.loc 1 591 0
+ 942 0000 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 943 0004 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 592:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 944              		.loc 1 592 0
+ 945 0008 0100D3E5 		ldrb	r0, [r3, #1]	@ zero_extendqisi2
+ 946 000c 1EFF2FE1 		bx	lr
+ 947              		.cfi_endproc
+ 948              	.LFE13:
+ 950              		.section	.text.VDC_ShrdPrmGetColorSpaceFbWr,"ax",%progbits
+ 951              		.align	2
+ 952              		.global	VDC_ShrdPrmGetColorSpaceFbWr
+ 953              		.syntax unified
+ 954              		.arm
+ 955              		.fpu neon
+ 957              	VDC_ShrdPrmGetColorSpaceFbWr:
+ 958              	.LFB14:
+ 601:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.color_sp_fb_wr;
+ 959              		.loc 1 601 0
+ 960              		.cfi_startproc
+ 961              		@ args = 0, pretend = 0, frame = 0
+ 962              		@ frame_needed = 0, uses_anonymous_args = 0
+ 963              		@ link register save eliminated.
+ 602:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetColorSpaceFbWr() */
+ 964              		.loc 1 602 0
+ 965 0000 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 966 0004 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 603:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 967              		.loc 1 603 0
+ 968 0008 0200D3E5 		ldrb	r0, [r3, #2]	@ zero_extendqisi2
+ 969 000c 1EFF2FE1 		bx	lr
+ 970              		.cfi_endproc
+ 971              	.LFE14:
+ 973              		.section	.text.VDC_ShrdPrmGetFrBuffBtm,"ax",%progbits
+ 974              		.align	2
+ 975              		.global	VDC_ShrdPrmGetFrBuffBtm
+ 976              		.syntax unified
+ 977              		.arm
+ 978              		.fpu neon
+ 980              	VDC_ShrdPrmGetFrBuffBtm:
+ 981              	.LFB15:
+ 612:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_scaling.btm_base;
+ 982              		.loc 1 612 0
+ 983              		.cfi_startproc
+ 984              		@ args = 0, pretend = 0, frame = 0
+ 985              		@ frame_needed = 0, uses_anonymous_args = 0
+ 986              		@ link register save eliminated.
+ 613:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetFrBuffBtm() */
+ 987              		.loc 1 613 0
+ 988 0000 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 989 0004 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 614:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 990              		.loc 1 614 0
+ 991 0008 040093E5 		ldr	r0, [r3, #4]
+ 992 000c 1EFF2FE1 		bx	lr
+ 993              		.cfi_endproc
+ 994              	.LFE15:
+ 996              		.section	.text.VDC_ShrdPrmGetLineOfsAddrDir,"ax",%progbits
+ 997              		.align	2
+ 998              		.global	VDC_ShrdPrmGetLineOfsAddrDir
+ 999              		.syntax unified
+ 1000              		.arm
+ 1001              		.fpu neon
+ 1003              	VDC_ShrdPrmGetLineOfsAddrDir:
+ 1004              	.LFB16:
+ 624:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].gr_ln_off_dir;
+ 1005              		.loc 1 624 0
+ 1006              		.cfi_startproc
+ 1007              		@ args = 0, pretend = 0, frame = 0
+ 1008              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1009              		@ link register save eliminated.
+ 1010              	.LVL79:
+ 625:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetLineOfsAddrDir() */
+ 1011              		.loc 1 625 0
+ 1012 0000 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1013 0004 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1014 0008 800180E0 		add	r0, r0, r0, lsl #3
+ 1015              	.LVL80:
+ 1016 000c 8020A0E1 		lsl	r2, r0, #1
+ 626:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1017              		.loc 1 626 0
+ 1018 0010 0200D3E7 		ldrb	r0, [r3, r2]	@ zero_extendqisi2
+ 1019 0014 1EFF2FE1 		bx	lr
+ 1020              		.cfi_endproc
+ 1021              	.LFE16:
+ 1023              		.section	.text.VDC_ShrdPrmGetSelFbAddrSig,"ax",%progbits
+ 1024              		.align	2
+ 1025              		.global	VDC_ShrdPrmGetSelFbAddrSig
+ 1026              		.syntax unified
+ 1027              		.arm
+ 1028              		.fpu neon
+ 1030              	VDC_ShrdPrmGetSelFbAddrSig:
+ 1031              	.LFB17:
+ 636:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].gr_flm_sel;
+ 1032              		.loc 1 636 0
+ 1033              		.cfi_startproc
+ 1034              		@ args = 0, pretend = 0, frame = 0
+ 1035              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1036              		@ link register save eliminated.
+ 1037              	.LVL81:
+ 637:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetSelFbAddrSig() */
+ 1038              		.loc 1 637 0
+ 1039 0000 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1040 0004 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1041 0008 800180E0 		add	r0, r0, r0, lsl #3
+ 1042              	.LVL82:
+ 1043 000c 8020A0E1 		lsl	r2, r0, #1
+ 1044 0010 023083E0 		add	r3, r3, r2
+ 638:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1045              		.loc 1 638 0
+ 1046 0014 0100D3E5 		ldrb	r0, [r3, #1]	@ zero_extendqisi2
+ 1047 0018 1EFF2FE1 		bx	lr
+ 1048              		.cfi_endproc
+ 1049              	.LFE17:
+ 1051              		.section	.text.VDC_ShrdPrmGetGraphicsFormat,"ax",%progbits
+ 1052              		.align	2
+ 1053              		.global	VDC_ShrdPrmGetGraphicsFormat
+ 1054              		.syntax unified
+ 1055              		.arm
+ 1056              		.fpu neon
+ 1058              	VDC_ShrdPrmGetGraphicsFormat:
+ 1059              	.LFB18:
+ 648:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].gr_format;
+ 1060              		.loc 1 648 0
+ 1061              		.cfi_startproc
+ 1062              		@ args = 0, pretend = 0, frame = 0
+ 1063              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1064              		@ link register save eliminated.
+ 1065              	.LVL83:
+ 649:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetGraphicsFormat() */
+ 1066              		.loc 1 649 0
+ 1067 0000 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1068 0004 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1069 0008 800180E0 		add	r0, r0, r0, lsl #3
+ 1070              	.LVL84:
+ 1071 000c 8020A0E1 		lsl	r2, r0, #1
+ 1072 0010 023083E0 		add	r3, r3, r2
+ 650:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1073              		.loc 1 650 0
+ 1074 0014 0200D3E5 		ldrb	r0, [r3, #2]	@ zero_extendqisi2
+ 1075 0018 1EFF2FE1 		bx	lr
+ 1076              		.cfi_endproc
+ 1077              	.LFE18:
+ 1079              		.section	.text.VDC_ShrdPrmGetColorSpaceFbRd,"ax",%progbits
+ 1080              		.align	2
+ 1081              		.global	VDC_ShrdPrmGetColorSpaceFbRd
+ 1082              		.syntax unified
+ 1083              		.arm
+ 1084              		.fpu neon
+ 1086              	VDC_ShrdPrmGetColorSpaceFbRd:
+ 1087              	.LFB19:
+ 660:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].color_sp_fb_rd;
+ 1088              		.loc 1 660 0
+ 1089              		.cfi_startproc
+ 1090              		@ args = 0, pretend = 0, frame = 0
+ 1091              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1092              		@ link register save eliminated.
+ 1093              	.LVL85:
+ 661:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetColorSpaceFbRd() */
+ 1094              		.loc 1 661 0
+ 1095 0000 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1096 0004 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1097 0008 800180E0 		add	r0, r0, r0, lsl #3
+ 1098              	.LVL86:
+ 1099 000c 8020A0E1 		lsl	r2, r0, #1
+ 1100 0010 023083E0 		add	r3, r3, r2
+ 662:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1101              		.loc 1 662 0
+ 1102 0014 0300D3E5 		ldrb	r0, [r3, #3]	@ zero_extendqisi2
+ 1103 0018 1EFF2FE1 		bx	lr
+ 1104              		.cfi_endproc
+ 1105              	.LFE19:
+ 1107              		.section	.text.VDC_ShrdPrmGetMeasureFolding,"ax",%progbits
+ 1108              		.align	2
+ 1109              		.global	VDC_ShrdPrmGetMeasureFolding
+ 1110              		.syntax unified
+ 1111              		.arm
+ 1112              		.fpu neon
+ 1114              	VDC_ShrdPrmGetMeasureFolding:
+ 1115              	.LFB20:
+ 672:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return param_graphics[graphics_id].adj_sel;
+ 1116              		.loc 1 672 0
+ 1117              		.cfi_startproc
+ 1118              		@ args = 0, pretend = 0, frame = 0
+ 1119              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1120              		@ link register save eliminated.
+ 1121              	.LVL87:
+ 673:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetMeasureFolding() */
+ 1122              		.loc 1 673 0
+ 1123 0000 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1124 0004 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1125 0008 800180E0 		add	r0, r0, r0, lsl #3
+ 1126              	.LVL88:
+ 1127 000c 8020A0E1 		lsl	r2, r0, #1
+ 1128 0010 023083E0 		add	r3, r3, r2
+ 674:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1129              		.loc 1 674 0
+ 1130 0014 0400D3E5 		ldrb	r0, [r3, #4]	@ zero_extendqisi2
+ 1131 0018 1EFF2FE1 		bx	lr
+ 1132              		.cfi_endproc
+ 1133              	.LFE20:
+ 1135              		.section	.text.VDC_ShrdPrmGetDisplayArea,"ax",%progbits
+ 1136              		.align	2
+ 1137              		.global	VDC_ShrdPrmGetDisplayArea
+ 1138              		.syntax unified
+ 1139              		.arm
+ 1140              		.fpu neon
+ 1142              	VDC_ShrdPrmGetDisplayArea:
+ 1143              	.LFB21:
+ 684:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return &param_graphics[graphics_id].gr_grc;
+ 1144              		.loc 1 684 0
+ 1145              		.cfi_startproc
+ 1146              		@ args = 0, pretend = 0, frame = 0
+ 1147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1148              		@ link register save eliminated.
+ 1149              	.LVL89:
+ 685:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetDisplayArea() */
+ 1150              		.loc 1 685 0
+ 1151 0000 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1152 0004 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1153 0008 800180E0 		add	r0, r0, r0, lsl #3
+ 1154              	.LVL90:
+ 1155 000c 8020A0E1 		lsl	r2, r0, #1
+ 1156 0010 020083E0 		add	r0, r3, r2
+ 686:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1157              		.loc 1 686 0
+ 1158 0014 060080E2 		add	r0, r0, #6
+ 1159 0018 1EFF2FE1 		bx	lr
+ 1160              		.cfi_endproc
+ 1161              	.LFE21:
+ 1163              		.section	.text.VDC_ShrdPrmGetFrBuffWidth_Rd,"ax",%progbits
+ 1164              		.align	2
+ 1165              		.global	VDC_ShrdPrmGetFrBuffWidth_Rd
+ 1166              		.syntax unified
+ 1167              		.arm
+ 1168              		.fpu neon
+ 1170              	VDC_ShrdPrmGetFrBuffWidth_Rd:
+ 1171              	.LFB22:
+ 696:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return &param_graphics[graphics_id].width_read_fb;
+ 1172              		.loc 1 696 0
+ 1173              		.cfi_startproc
+ 1174              		@ args = 0, pretend = 0, frame = 0
+ 1175              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1176              		@ link register save eliminated.
+ 1177              	.LVL91:
+ 697:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetFrBuffWidth_Rd() */
+ 1178              		.loc 1 697 0
+ 1179 0000 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1180 0004 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1181 0008 800180E0 		add	r0, r0, r0, lsl #3
+ 1182              	.LVL92:
+ 1183 000c 8020A0E1 		lsl	r2, r0, #1
+ 1184 0010 080082E2 		add	r0, r2, #8
+ 1185 0014 000083E0 		add	r0, r3, r0
+ 698:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1186              		.loc 1 698 0
+ 1187 0018 060080E2 		add	r0, r0, #6
+ 1188 001c 1EFF2FE1 		bx	lr
+ 1189              		.cfi_endproc
+ 1190              	.LFE22:
+ 1192              		.section	.text.VDC_ShrdPrmGetLvdsCh,"ax",%progbits
+ 1193              		.align	2
+ 1194              		.global	VDC_ShrdPrmGetLvdsCh
+ 1195              		.syntax unified
+ 1196              		.arm
+ 1197              		.fpu neon
+ 1199              	VDC_ShrdPrmGetLvdsCh:
+ 1200              	.LFB23:
+ 707:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     /* This value is valid only when LVDS PLL clock resource (VDC_RESOURCE_LVDS_CLK) is valid. */
+ 1201              		.loc 1 707 0
+ 1202              		.cfi_startproc
+ 1203              		@ args = 0, pretend = 0, frame = 0
+ 1204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1205              		@ link register save eliminated.
+ 709:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetLvdsCh() */
+ 1206              		.loc 1 709 0
+ 1207 0000 003000E3 		movw	r3, #:lower16:.LANCHOR8
+ 1208 0004 003040E3 		movt	r3, #:upper16:.LANCHOR8
+ 710:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1209              		.loc 1 710 0
+ 1210 0008 0000D3E5 		ldrb	r0, [r3]	@ zero_extendqisi2
+ 1211 000c 1EFF2FE1 		bx	lr
+ 1212              		.cfi_endproc
+ 1213              	.LFE23:
+ 1215              		.section	.text.VDC_ShrdPrmSetResource,"ax",%progbits
+ 1216              		.align	2
+ 1217              		.global	VDC_ShrdPrmSetResource
+ 1218              		.syntax unified
+ 1219              		.arm
+ 1220              		.fpu neon
+ 1222              	VDC_ShrdPrmSetResource:
+ 1223              	.LFB24:
+ 721:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t * resource_state; 
+ 1224              		.loc 1 721 0
+ 1225              		.cfi_startproc
+ 1226              		@ args = 0, pretend = 0, frame = 0
+ 1227              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1228              	.LVL93:
+ 1229 0000 10402DE9 		push	{r4, lr}
+ 1230              		.cfi_def_cfa_offset 8
+ 1231              		.cfi_offset 4, -8
+ 1232              		.cfi_offset 14, -4
+ 1233 0004 0140A0E1 		mov	r4, r1
+ 724:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1234              		.loc 1 724 0
+ 1235 0008 FEFFFFEB 		bl	GetResourceStatePointer
+ 1236              	.LVL94:
+ 727:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 1237              		.loc 1 727 0
+ 1238 000c 000050E3 		cmp	r0, #0
+ 729:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 1239              		.loc 1 729 0
+ 1240 0010 0040C015 		strbne	r4, [r0]
+ 1241 0014 1080BDE8 		pop	{r4, pc}
+ 1242              		.cfi_endproc
+ 1243              	.LFE24:
+ 1245              		.section	.text.VDC_ShrdPrmSetLayerResource,"ax",%progbits
+ 1246              		.align	2
+ 1247              		.global	VDC_ShrdPrmSetLayerResource
+ 1248              		.syntax unified
+ 1249              		.arm
+ 1250              		.fpu neon
+ 1252              	VDC_ShrdPrmSetLayerResource:
+ 1253              	.LFB25:
+ 742:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     uint32_t layer_id_num;
+ 1254              		.loc 1 742 0
+ 1255              		.cfi_startproc
+ 1256              		@ args = 0, pretend = 0, frame = 0
+ 1257              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1258              		@ link register save eliminated.
+ 1259              	.LVL95:
+ 745:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 1260              		.loc 1 745 0
+ 1261 0000 010070E3 		cmn	r0, #1
+ 1262 0004 0E00000A 		beq	.L91
+ 747:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 1263              		.loc 1 747 0
+ 1264 0008 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 1265 000c 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 1266 0010 0010C3E7 		strb	r1, [r3, r0]
+ 1267 0014 1EFF2FE1 		bx	lr
+ 1268              	.LVL96:
+ 1269              	.L89:
+ 752:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 1270              		.loc 1 752 0 discriminator 2
+ 1271 0018 013083E2 		add	r3, r3, #1
+ 1272              	.LVL97:
+ 1273              	.L87:
+ 752:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 1274              		.loc 1 752 0 is_stmt 0 discriminator 1
+ 1275 001c 030053E3 		cmp	r3, #3
+ 1276 0020 0900008A 		bhi	.L92
+ 754:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             {
+ 1277              		.loc 1 754 0 is_stmt 1
+ 1278 0024 002000E3 		movw	r2, #:lower16:.LANCHOR3
+ 1279 0028 002040E3 		movt	r2, #:upper16:.LANCHOR3
+ 1280 002c 0320D2E7 		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 1281 0030 000052E3 		cmp	r2, #0
+ 756:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****             }
+ 1282              		.loc 1 756 0
+ 1283 0034 00200003 		movweq	r2, #:lower16:.LANCHOR2
+ 1284 0038 00204003 		movteq	r2, #:upper16:.LANCHOR2
+ 1285 003c 0310C207 		strbeq	r1, [r2, r3]
+ 1286 0040 F4FFFFEA 		b	.L89
+ 1287              	.LVL98:
+ 1288              	.L91:
+ 1289 0044 0030A0E3 		mov	r3, #0
+ 1290 0048 F3FFFFEA 		b	.L87
+ 1291              	.LVL99:
+ 1292              	.L92:
+ 1293 004c 1EFF2FE1 		bx	lr
+ 1294              		.cfi_endproc
+ 1295              	.LFE25:
+ 1297              		.section	.text.VDC_ShrdPrmGetResource,"ax",%progbits
+ 1298              		.align	2
+ 1299              		.global	VDC_ShrdPrmGetResource
+ 1300              		.syntax unified
+ 1301              		.arm
+ 1302              		.fpu neon
+ 1304              	VDC_ShrdPrmGetResource:
+ 1305              	.LFB26:
+ 770:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t * resource_state; 
+ 1306              		.loc 1 770 0
+ 1307              		.cfi_startproc
+ 1308              		@ args = 0, pretend = 0, frame = 0
+ 1309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1310              	.LVL100:
+ 1311 0000 10402DE9 		push	{r4, lr}
+ 1312              		.cfi_def_cfa_offset 8
+ 1313              		.cfi_offset 4, -8
+ 1314              		.cfi_offset 14, -4
+ 1315              	.LVL101:
+ 776:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1316              		.loc 1 776 0
+ 1317 0004 FEFFFFEB 		bl	GetResourceStatePointer
+ 1318              	.LVL102:
+ 779:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 1319              		.loc 1 779 0
+ 1320 0008 000050E3 		cmp	r0, #0
+ 1321 000c 0100000A 		beq	.L95
+ 781:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 1322              		.loc 1 781 0
+ 1323 0010 0000D0E5 		ldrb	r0, [r0]	@ zero_extendqisi2
+ 1324              	.LVL103:
+ 1325 0014 1080BDE8 		pop	{r4, pc}
+ 1326              	.LVL104:
+ 1327              	.L95:
+ 774:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1328              		.loc 1 774 0
+ 1329 0018 0000A0E3 		mov	r0, #0
+ 1330              	.LVL105:
+ 784:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1331              		.loc 1 784 0
+ 1332 001c 1080BDE8 		pop	{r4, pc}
+ 1333              		.cfi_endproc
+ 1334              	.LFE26:
+ 1336              		.section	.text.VDC_ShrdPrmGetLayerResource,"ax",%progbits
+ 1337              		.align	2
+ 1338              		.global	VDC_ShrdPrmGetLayerResource
+ 1339              		.syntax unified
+ 1340              		.arm
+ 1341              		.fpu neon
+ 1343              	VDC_ShrdPrmGetLayerResource:
+ 1344              	.LFB27:
+ 794:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     return layer_resource[layer_id];
+ 1345              		.loc 1 794 0
+ 1346              		.cfi_startproc
+ 1347              		@ args = 0, pretend = 0, frame = 0
+ 1348              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1349              		@ link register save eliminated.
+ 1350              	.LVL106:
+ 795:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** }   /* End of function VDC_ShrdPrmGetLayerResource() */
+ 1351              		.loc 1 795 0
+ 1352 0000 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 1353 0004 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 796:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1354              		.loc 1 796 0
+ 1355 0008 0000D3E7 		ldrb	r0, [r3, r0]	@ zero_extendqisi2
+ 1356              	.LVL107:
+ 1357 000c 1EFF2FE1 		bx	lr
+ 1358              		.cfi_endproc
+ 1359              	.LFE27:
+ 1361              		.section	.text.VDC_ShrdPrmSetRwProcEnable,"ax",%progbits
+ 1362              		.align	2
+ 1363              		.global	VDC_ShrdPrmSetRwProcEnable
+ 1364              		.syntax unified
+ 1365              		.arm
+ 1366              		.fpu neon
+ 1368              	VDC_ShrdPrmSetRwProcEnable:
+ 1369              	.LFB28:
+ 805:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (layer_id != VDC_LAYER_ID_ALL)
+ 1370              		.loc 1 805 0
+ 1371              		.cfi_startproc
+ 1372              		@ args = 0, pretend = 0, frame = 0
+ 1373              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1374              		@ link register save eliminated.
+ 1375              	.LVL108:
+ 806:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 1376              		.loc 1 806 0
+ 1377 0000 010070E3 		cmn	r0, #1
+ 1378 0004 1EFF2F01 		bxeq	lr
+ 808:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 1379              		.loc 1 808 0
+ 1380 0008 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 1381 000c 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 1382 0010 0030D3E7 		ldrb	r3, [r3, r0]	@ zero_extendqisi2
+ 1383 0014 000053E3 		cmp	r3, #0
+ 810:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 1384              		.loc 1 810 0
+ 1385 0018 00300013 		movwne	r3, #:lower16:.LANCHOR3
+ 1386 001c 00304013 		movtne	r3, #:upper16:.LANCHOR3
+ 1387 0020 0120A013 		movne	r2, #1
+ 1388 0024 0020C317 		strbne	r2, [r3, r0]
+ 1389 0028 1EFF2FE1 		bx	lr
+ 1390              		.cfi_endproc
+ 1391              	.LFE28:
+ 1393              		.section	.text.VDC_ShrdPrmSetRwProcDisable,"ax",%progbits
+ 1394              		.align	2
+ 1395              		.global	VDC_ShrdPrmSetRwProcDisable
+ 1396              		.syntax unified
+ 1397              		.arm
+ 1398              		.fpu neon
+ 1400              	VDC_ShrdPrmSetRwProcDisable:
+ 1401              	.LFB29:
+ 822:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     if (layer_id != VDC_LAYER_ID_ALL)
+ 1402              		.loc 1 822 0
+ 1403              		.cfi_startproc
+ 1404              		@ args = 0, pretend = 0, frame = 0
+ 1405              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1406              		@ link register save eliminated.
+ 1407              	.LVL109:
+ 823:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 1408              		.loc 1 823 0
+ 1409 0000 010070E3 		cmn	r0, #1
+ 1410 0004 1EFF2F01 		bxeq	lr
+ 825:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         {
+ 1411              		.loc 1 825 0
+ 1412 0008 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 1413 000c 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 1414 0010 0030D3E7 		ldrb	r3, [r3, r0]	@ zero_extendqisi2
+ 1415 0014 000053E3 		cmp	r3, #0
+ 827:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         }
+ 1416              		.loc 1 827 0
+ 1417 0018 00300013 		movwne	r3, #:lower16:.LANCHOR3
+ 1418 001c 00304013 		movtne	r3, #:upper16:.LANCHOR3
+ 1419 0020 0020A013 		movne	r2, #0
+ 1420 0024 0020C317 		strbne	r2, [r3, r0]
+ 1421 0028 1EFF2FE1 		bx	lr
+ 1422              		.cfi_endproc
+ 1423              	.LFE29:
+ 1425              		.section	.text.VDC_ShrdPrmGetRwProcReady,"ax",%progbits
+ 1426              		.align	2
+ 1427              		.global	VDC_ShrdPrmGetRwProcReady
+ 1428              		.syntax unified
+ 1429              		.arm
+ 1430              		.fpu neon
+ 1432              	VDC_ShrdPrmGetRwProcReady:
+ 1433              	.LFB30:
+ 842:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t state;
+ 1434              		.loc 1 842 0
+ 1435              		.cfi_startproc
+ 1436              		@ args = 0, pretend = 0, frame = 0
+ 1437              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1438              		@ link register save eliminated.
+ 1439              	.LVL110:
+ 845:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (rw_proc_state[layer_id] == VDC_RW_PROC_STATE_DISABLE))
+ 1440              		.loc 1 845 0
+ 1441 0000 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 1442 0004 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 1443 0008 0030D3E7 		ldrb	r3, [r3, r0]	@ zero_extendqisi2
+ 1444 000c 000053E3 		cmp	r3, #0
+ 1445 0010 0600000A 		beq	.L104
+ 846:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 1446              		.loc 1 846 0 discriminator 1
+ 1447 0014 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 1448 0018 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 1449 001c 0030D3E7 		ldrb	r3, [r3, r0]	@ zero_extendqisi2
+ 845:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (rw_proc_state[layer_id] == VDC_RW_PROC_STATE_DISABLE))
+ 1450              		.loc 1 845 0 discriminator 1
+ 1451 0020 000053E3 		cmp	r3, #0
+ 1452 0024 0300000A 		beq	.L105
+ 852:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 1453              		.loc 1 852 0
+ 1454 0028 0000A0E3 		mov	r0, #0
+ 1455              	.LVL111:
+ 1456 002c 1EFF2FE1 		bx	lr
+ 1457              	.LVL112:
+ 1458              	.L104:
+ 1459 0030 0000A0E3 		mov	r0, #0
+ 1460              	.LVL113:
+ 1461 0034 1EFF2FE1 		bx	lr
+ 1462              	.LVL114:
+ 1463              	.L105:
+ 848:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 1464              		.loc 1 848 0
+ 1465 0038 0100A0E3 		mov	r0, #1
+ 1466              	.LVL115:
+ 855:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1467              		.loc 1 855 0
+ 1468 003c 1EFF2FE1 		bx	lr
+ 1469              		.cfi_endproc
+ 1470              	.LFE30:
+ 1472              		.section	.text.VDC_ShrdPrmGetRwProcEnabled,"ax",%progbits
+ 1473              		.align	2
+ 1474              		.global	VDC_ShrdPrmGetRwProcEnabled
+ 1475              		.syntax unified
+ 1476              		.arm
+ 1477              		.fpu neon
+ 1479              	VDC_ShrdPrmGetRwProcEnabled:
+ 1480              	.LFB31:
+ 868:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     vdc_resource_state_t state;
+ 1481              		.loc 1 868 0
+ 1482              		.cfi_startproc
+ 1483              		@ args = 0, pretend = 0, frame = 0
+ 1484              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1485              		@ link register save eliminated.
+ 1486              	.LVL116:
+ 871:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (rw_proc_state[layer_id] != VDC_RW_PROC_STATE_DISABLE))
+ 1487              		.loc 1 871 0
+ 1488 0000 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 1489 0004 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 1490 0008 0030D3E7 		ldrb	r3, [r3, r0]	@ zero_extendqisi2
+ 1491 000c 000053E3 		cmp	r3, #0
+ 1492 0010 0600000A 		beq	.L108
+ 872:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     {
+ 1493              		.loc 1 872 0 discriminator 1
+ 1494 0014 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 1495 0018 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 1496 001c 0030D3E7 		ldrb	r3, [r3, r0]	@ zero_extendqisi2
+ 871:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****         (rw_proc_state[layer_id] != VDC_RW_PROC_STATE_DISABLE))
+ 1497              		.loc 1 871 0 discriminator 1
+ 1498 0020 000053E3 		cmp	r3, #0
+ 1499 0024 0300001A 		bne	.L109
+ 878:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 1500              		.loc 1 878 0
+ 1501 0028 0000A0E3 		mov	r0, #0
+ 1502              	.LVL117:
+ 1503 002c 1EFF2FE1 		bx	lr
+ 1504              	.LVL118:
+ 1505              	.L108:
+ 1506 0030 0000A0E3 		mov	r0, #0
+ 1507              	.LVL119:
+ 1508 0034 1EFF2FE1 		bx	lr
+ 1509              	.LVL120:
+ 1510              	.L109:
+ 874:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c ****     }
+ 1511              		.loc 1 874 0
+ 1512 0038 0100A0E3 		mov	r0, #1
+ 1513              	.LVL121:
+ 881:../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.c **** 
+ 1514              		.loc 1 881 0
+ 1515 003c 1EFF2FE1 		bx	lr
+ 1516              		.cfi_endproc
+ 1517              	.LFE31:
+ 1519              		.section	.bss.layer_resource,"aw",%nobits
+ 1520              		.align	2
+ 1521              		.set	.LANCHOR2,. + 0
+ 1524              	layer_resource:
+ 1525 0000 00000000 		.space	4
+ 1526              		.section	.bss.lvds_resource.69837,"aw",%nobits
+ 1527              		.set	.LANCHOR1,. + 0
+ 1530              	lvds_resource.69837:
+ 1531 0000 00       		.space	1
+ 1532              		.section	.bss.lvds_vdc_sel_ch,"aw",%nobits
+ 1533              		.set	.LANCHOR8,. + 0
+ 1536              	lvds_vdc_sel_ch:
+ 1537 0000 00       		.space	1
+ 1538              		.section	.bss.param_common,"aw",%nobits
+ 1539              		.align	2
+ 1540              		.set	.LANCHOR4,. + 0
+ 1543              	param_common:
+ 1544 0000 00000000 		.space	12
+ 1544      00000000 
+ 1544      00000000 
+ 1545              		.section	.bss.param_graphics,"aw",%nobits
+ 1546              		.align	2
+ 1547              		.set	.LANCHOR7,. + 0
+ 1550              	param_graphics:
+ 1551 0000 00000000 		.space	54
+ 1551      00000000 
+ 1551      00000000 
+ 1551      00000000 
+ 1551      00000000 
+ 1552              		.section	.bss.param_resource.69836,"aw",%nobits
+ 1553              		.align	2
+ 1554              		.set	.LANCHOR0,. + 0
+ 1557              	param_resource.69836:
+ 1558 0000 00000000 		.space	4
+ 1559              		.section	.bss.param_scaling,"aw",%nobits
+ 1560              		.align	2
+ 1561              		.set	.LANCHOR6,. + 0
+ 1564              	param_scaling:
+ 1565 0000 00000000 		.space	12
+ 1565      00000000 
+ 1565      00000000 
+ 1566              		.section	.bss.rw_proc_state,"aw",%nobits
+ 1567              		.align	2
+ 1568              		.set	.LANCHOR3,. + 0
+ 1571              	rw_proc_state:
+ 1572 0000 00000000 		.space	4
+ 1573              		.section	.bss.video_input_flag,"aw",%nobits
+ 1574              		.set	.LANCHOR5,. + 0
+ 1577              	video_input_flag:
+ 1578 0000 00       		.space	1
+ 1579              		.text
+ 1580              	.Letext0:
+ 1581              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1582              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1583              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1584              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 1585              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1586              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1587              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1588              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_driv
+ 1589              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 1590              		.file 11 "../generate/sc_drivers/r_vdc/src/r_vdc_shared_param.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_vdc_shared_param.c
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:17     .text.GetResourceStatePointer:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:22     .text.GetResourceStatePointer:00000000 GetResourceStatePointer
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:36     .text.GetResourceStatePointer:0000000c $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1554   .bss.param_resource.69836:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:43     .text.GetResourceStatePointer:00000020 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1527   .bss.lvds_resource.69837:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:86     .text.GetResourceStatePointer:00000058 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:93     .text.SumProduct:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:98     .text.SumProduct:00000000 SumProduct
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:166    .text.VDC_ShrdPrmInit:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:172    .text.VDC_ShrdPrmInit:00000000 VDC_ShrdPrmInit
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1521   .bss.layer_resource:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1568   .bss.rw_proc_state:00000000 .LANCHOR3
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1540   .bss.param_common:00000000 .LANCHOR4
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1574   .bss.video_input_flag:00000000 .LANCHOR5
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1561   .bss.param_scaling:00000000 .LANCHOR6
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1547   .bss.param_graphics:00000000 .LANCHOR7
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1533   .bss.lvds_vdc_sel_ch:00000000 .LANCHOR8
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:311    .text.VDC_ShrdPrmSetInitParam:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:317    .text.VDC_ShrdPrmSetInitParam:00000000 VDC_ShrdPrmSetInitParam
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:355    .text.VDC_ShrdPrmSetTerminate:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:361    .text.VDC_ShrdPrmSetTerminate:00000000 VDC_ShrdPrmSetTerminate
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:379    .text.VDC_ShrdPrmSetInputParam:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:385    .text.VDC_ShrdPrmSetInputParam:00000000 VDC_ShrdPrmSetInputParam
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:421    .text.VDC_ShrdPrmSetOutputParam:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:427    .text.VDC_ShrdPrmSetOutputParam:00000000 VDC_ShrdPrmSetOutputParam
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:520    .text.VDC_ShrdPrmSetWriteParam:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:526    .text.VDC_ShrdPrmSetWriteParam:00000000 VDC_ShrdPrmSetWriteParam
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:576    .text.VDC_ShrdPrmSetChgWriteParam:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:582    .text.VDC_ShrdPrmSetChgWriteParam:00000000 VDC_ShrdPrmSetChgWriteParam
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:606    .text.VDC_ShrdPrmSetReadParam:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:612    .text.VDC_ShrdPrmSetReadParam:00000000 VDC_ShrdPrmSetReadParam
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:748    .text.VDC_ShrdPrmSetReadParam:00000170 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:753    .text.VDC_ShrdPrmSetChgReadParam:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:759    .text.VDC_ShrdPrmSetChgReadParam:00000000 VDC_ShrdPrmSetChgReadParam
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:818    .text.VDC_ShrdPrmGetLvdsClkRef:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:824    .text.VDC_ShrdPrmGetLvdsClkRef:00000000 VDC_ShrdPrmGetLvdsClkRef
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:846    .text.VDC_ShrdPrmGetColorSpace:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:852    .text.VDC_ShrdPrmGetColorSpace:00000000 VDC_ShrdPrmGetColorSpace
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:869    .text.VDC_ShrdPrmGetBgColor:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:875    .text.VDC_ShrdPrmGetBgColor:00000000 VDC_ShrdPrmGetBgColor
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:905    .text.VDC_ShrdPrmGetWritingMode:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:911    .text.VDC_ShrdPrmGetWritingMode:00000000 VDC_ShrdPrmGetWritingMode
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:928    .text.VDC_ShrdPrmGetInterlace:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:934    .text.VDC_ShrdPrmGetInterlace:00000000 VDC_ShrdPrmGetInterlace
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:951    .text.VDC_ShrdPrmGetColorSpaceFbWr:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:957    .text.VDC_ShrdPrmGetColorSpaceFbWr:00000000 VDC_ShrdPrmGetColorSpaceFbWr
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:974    .text.VDC_ShrdPrmGetFrBuffBtm:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:980    .text.VDC_ShrdPrmGetFrBuffBtm:00000000 VDC_ShrdPrmGetFrBuffBtm
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:997    .text.VDC_ShrdPrmGetLineOfsAddrDir:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1003   .text.VDC_ShrdPrmGetLineOfsAddrDir:00000000 VDC_ShrdPrmGetLineOfsAddrDir
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1024   .text.VDC_ShrdPrmGetSelFbAddrSig:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1030   .text.VDC_ShrdPrmGetSelFbAddrSig:00000000 VDC_ShrdPrmGetSelFbAddrSig
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1052   .text.VDC_ShrdPrmGetGraphicsFormat:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1058   .text.VDC_ShrdPrmGetGraphicsFormat:00000000 VDC_ShrdPrmGetGraphicsFormat
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1080   .text.VDC_ShrdPrmGetColorSpaceFbRd:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1086   .text.VDC_ShrdPrmGetColorSpaceFbRd:00000000 VDC_ShrdPrmGetColorSpaceFbRd
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1108   .text.VDC_ShrdPrmGetMeasureFolding:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1114   .text.VDC_ShrdPrmGetMeasureFolding:00000000 VDC_ShrdPrmGetMeasureFolding
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1136   .text.VDC_ShrdPrmGetDisplayArea:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1142   .text.VDC_ShrdPrmGetDisplayArea:00000000 VDC_ShrdPrmGetDisplayArea
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1164   .text.VDC_ShrdPrmGetFrBuffWidth_Rd:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1170   .text.VDC_ShrdPrmGetFrBuffWidth_Rd:00000000 VDC_ShrdPrmGetFrBuffWidth_Rd
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1193   .text.VDC_ShrdPrmGetLvdsCh:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1199   .text.VDC_ShrdPrmGetLvdsCh:00000000 VDC_ShrdPrmGetLvdsCh
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1216   .text.VDC_ShrdPrmSetResource:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1222   .text.VDC_ShrdPrmSetResource:00000000 VDC_ShrdPrmSetResource
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1246   .text.VDC_ShrdPrmSetLayerResource:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1252   .text.VDC_ShrdPrmSetLayerResource:00000000 VDC_ShrdPrmSetLayerResource
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1298   .text.VDC_ShrdPrmGetResource:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1304   .text.VDC_ShrdPrmGetResource:00000000 VDC_ShrdPrmGetResource
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1337   .text.VDC_ShrdPrmGetLayerResource:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1343   .text.VDC_ShrdPrmGetLayerResource:00000000 VDC_ShrdPrmGetLayerResource
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1362   .text.VDC_ShrdPrmSetRwProcEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1368   .text.VDC_ShrdPrmSetRwProcEnable:00000000 VDC_ShrdPrmSetRwProcEnable
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1394   .text.VDC_ShrdPrmSetRwProcDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1400   .text.VDC_ShrdPrmSetRwProcDisable:00000000 VDC_ShrdPrmSetRwProcDisable
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1426   .text.VDC_ShrdPrmGetRwProcReady:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1432   .text.VDC_ShrdPrmGetRwProcReady:00000000 VDC_ShrdPrmGetRwProcReady
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1473   .text.VDC_ShrdPrmGetRwProcEnabled:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1479   .text.VDC_ShrdPrmGetRwProcEnabled:00000000 VDC_ShrdPrmGetRwProcEnabled
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1520   .bss.layer_resource:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1524   .bss.layer_resource:00000000 layer_resource
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1530   .bss.lvds_resource.69837:00000000 lvds_resource.69837
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1531   .bss.lvds_resource.69837:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1536   .bss.lvds_vdc_sel_ch:00000000 lvds_vdc_sel_ch
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1537   .bss.lvds_vdc_sel_ch:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1539   .bss.param_common:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1543   .bss.param_common:00000000 param_common
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1546   .bss.param_graphics:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1550   .bss.param_graphics:00000000 param_graphics
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1553   .bss.param_resource.69836:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1557   .bss.param_resource.69836:00000000 param_resource.69836
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1560   .bss.param_scaling:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1564   .bss.param_scaling:00000000 param_scaling
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1567   .bss.rw_proc_state:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1571   .bss.rw_proc_state:00000000 rw_proc_state
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1577   .bss.video_input_flag:00000000 video_input_flag
+C:\Users\rj7356s\AppData\Local\Temp\cciRDIun.s:1578   .bss.video_input_flag:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.string.h.15.dab3980bf35408a4c507182805e2de3a
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_vdc_user.h.32.3f3db05b07a24f5c3abdea3809348418
+                           .group:00000000 wm4.r_vdc.h.31.7a8e28d4a80bfb6c6b4be0ab3890da8f
+
+UNDEFINED SYMBOLS
+memcpy

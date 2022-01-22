@@ -1,0 +1,1613 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"port.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.pxPortInitialiseStack,"ax",%progbits
+  17              		.align	2
+  18              		.global	pxPortInitialiseStack
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	pxPortInitialiseStack:
+  24              	.LFB3:
+  25              		.file 1 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c"
+   1:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*
+   2:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * FreeRTOS Kernel V10.0.0
+   3:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  *
+   5:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   6:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * this software and associated documentation files (the "Software"), to deal in
+   7:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * the Software without restriction, including without limitation the rights to
+   8:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+   9:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  10:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * subject to the following conditions:
+  11:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  *
+  12:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * The above copyright notice and this permission notice shall be included in all
+  13:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * copies or substantial portions of the Software. If you wish to use our Amazon
+  14:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * FreeRTOS name, please do so in a fair use way that does not cause confusion.
+  15:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  *
+  16:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  17:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  18:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  19:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  20:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  21:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  22:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  *
+  23:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * http://www.FreeRTOS.org
+  24:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * http://aws.amazon.com/freertos
+  25:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  *
+  26:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * 1 tab == 4 spaces!
+  27:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  */
+  28:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  29:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Standard includes. */
+  30:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #include <stdlib.h>
+  31:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  32:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Scheduler includes. */
+  33:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #include "FreeRTOS.h"
+  34:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #include "task.h"
+  35:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #include "compiler_settings.h"
+  36:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #include "r_intc_drv_api.h"
+  37:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  38:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #ifndef configINTERRUPT_CONTROLLER_BASE_ADDRESS
+  39:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configINTERRUPT_CONTROLLER_BASE_ADDRESS must be defined.  See http://www.freertos.org/Using
+  40:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  41:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  42:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #ifndef configINTERRUPT_CONTROLLER_CPU_INTERFACE_OFFSET
+  43:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configINTERRUPT_CONTROLLER_CPU_INTERFACE_OFFSET must be defined.  See http://www.freertos.o
+  44:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  45:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  46:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #ifndef configUNIQUE_INTERRUPT_PRIORITIES
+  47:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configUNIQUE_INTERRUPT_PRIORITIES must be defined.  See http://www.freertos.org/Using-FreeR
+  48:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  49:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  50:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #ifndef configSETUP_TICK_INTERRUPT
+  51:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configSETUP_TICK_INTERRUPT() must be defined.  See http://www.freertos.org/Using-FreeRTOS-o
+  52:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif /* configSETUP_TICK_INTERRUPT */
+  53:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  54:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #ifndef configMAX_API_CALL_INTERRUPT_PRIORITY
+  55:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configMAX_API_CALL_INTERRUPT_PRIORITY must be defined.  See http://www.freertos.org/Using-F
+  56:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  57:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  58:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #if configMAX_API_CALL_INTERRUPT_PRIORITY == 0
+  59:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configMAX_API_CALL_INTERRUPT_PRIORITY must not be set to 0
+  60:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  61:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  62:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #if configMAX_API_CALL_INTERRUPT_PRIORITY > configUNIQUE_INTERRUPT_PRIORITIES
+  63:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configMAX_API_CALL_INTERRUPT_PRIORITY must be less than or equal to configUNIQUE_INTERRUPT_
+  64:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  65:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  66:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
+  67:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Check the configuration. */
+  68:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#if( configMAX_PRIORITIES > 32 )
+  69:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		#error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIORITIES is 
+  70:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#endif
+  71:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
+  72:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  73:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* In case security extensions are implemented. */
+  74:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #if configMAX_API_CALL_INTERRUPT_PRIORITY <= ( configUNIQUE_INTERRUPT_PRIORITIES / 2 )
+  75:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#error configMAX_API_CALL_INTERRUPT_PRIORITY must be greater than ( configUNIQUE_INTERRUPT_PRIORIT
+  76:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  77:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  78:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Some vendor specific files default configCLEAR_TICK_INTERRUPT() in
+  79:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** portmacro.h. */
+  80:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #ifndef configCLEAR_TICK_INTERRUPT
+  81:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#define configCLEAR_TICK_INTERRUPT()
+  82:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+  83:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  84:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* A critical section is exited when the critical section nesting count reaches
+  85:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** this value. */
+  86:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portNO_CRITICAL_NESTING			( ( uint32_t ) 0 )
+  87:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  88:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* In all GICs 255 can be written to the priority mask register to unmask all
+  89:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** (but the lowest) interrupt priority. */
+  90:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portUNMASK_VALUE				( 0xFFUL )
+  91:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  92:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Tasks are not created with a floating point context, but can be given a
+  93:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** floating point context after they have been created.  A variable is stored as
+  94:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** part of the tasks context that holds portNO_FLOATING_POINT_CONTEXT if the task
+  95:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** does not have an FPU context, or any other value if the task does have an FPU
+  96:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** context. */
+  97:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portNO_FLOATING_POINT_CONTEXT	( ( StackType_t ) 0 )
+  98:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+  99:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Constants required to setup the initial task context. */
+ 100:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portINITIAL_SPSR				( ( StackType_t ) 0x1f ) /* System mode, ARM mode, IRQ enabled FIQ enab
+ 101:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portTHUMB_MODE_BIT				( ( StackType_t ) 0x20 )
+ 102:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portINTERRUPT_ENABLE_BIT		( 0x80UL )
+ 103:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portTHUMB_MODE_ADDRESS			( 0x01UL )
+ 104:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 105:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Used by portASSERT_IF_INTERRUPT_PRIORITY_INVALID() when ensuring the binary
+ 106:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** point is zero. */
+ 107:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portBINARY_POINT_BITS			( ( uint8_t ) 0x03 )
+ 108:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 109:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Masks all bits in the APSR other than the mode bits. */
+ 110:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portAPSR_MODE_BITS_MASK			( 0x1F )
+ 111:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 112:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* The value of the mode bits in the APSR when the CPU is executing in user
+ 113:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** mode. */
+ 114:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portAPSR_USER_MODE				( 0x10 )
+ 115:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 116:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* The critical section macros only mask interrupts up to an application
+ 117:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** determined priority level.  Sometimes it is necessary to turn interrupt off in
+ 118:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** the CPU itself before modifying certain hardware registers. */
+ 119:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portCPU_IRQ_DISABLE()										\
+ 120:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile ( "CPSID i" ::: "memory" );						\
+ 121:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile ( "DSB" );										\
+ 122:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile ( "ISB" );
+ 123:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 124:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portCPU_IRQ_ENABLE()										\
+ 125:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile ( "CPSIE i" ::: "memory" );						\
+ 126:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile ( "DSB" );										\
+ 127:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile ( "ISB" );
+ 128:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 129:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 130:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Macro to unmask all interrupt priorities. */
+ 131:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portCLEAR_INTERRUPT_MASK()									\
+ 132:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {																	\
+ 133:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portCPU_IRQ_DISABLE();											\
+ 134:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portICCPMR_PRIORITY_MASK_REGISTER = portUNMASK_VALUE;			\
+ 135:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile (	"DSB		\n"								\
+ 136:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 						"ISB		\n" );							\
+ 137:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portCPU_IRQ_ENABLE();											\
+ 138:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 139:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 140:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portINTERRUPT_PRIORITY_REGISTER_OFFSET		0x400UL
+ 141:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portMAX_8_BIT_VALUE							( ( uint8_t ) 0xff )
+ 142:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portBIT_0_SET								( ( uint8_t ) 0x01 )
+ 143:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 144:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Let the user override the pre-loading of the initial LR with the address of
+ 145:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** prvTaskExitError() in case it messes up unwinding of the stack in the
+ 146:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** debugger. */
+ 147:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #ifdef configTASK_RETURN_ADDRESS
+ 148:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#define portTASK_RETURN_ADDRESS	configTASK_RETURN_ADDRESS
+ 149:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #else
+ 150:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#define portTASK_RETURN_ADDRESS	prvTaskExitError
+ 151:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+ 152:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 153:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* The space on the stack required to hold the FPU registers.  This is 32 64-bit
+ 154:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** registers, plus a 32-bit status register. */
+ 155:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #define portFPU_REGISTER_WORDS	( ( 32 * 2 ) + 1 )
+ 156:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 157:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Needed to overcome GCC inline ASM variable limitation */
+ 158:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** extern void set_fpscr(unsigned long);
+ 159:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** extern unsigned long get_apsr(void);
+ 160:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 161:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 162:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 163:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*
+ 164:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * Starts the first task executing.  This function is necessarily written in
+ 165:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * assembly code so is implemented in portASM.s.
+ 166:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  */
+ 167:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** extern void vPortRestoreTaskContext( void );
+ 168:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 169:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*
+ 170:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * Used to catch tasks that attempt to return from their implementing function.
+ 171:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  */
+ 172:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** static void prvTaskExitError( void );
+ 173:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 174:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*
+ 175:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * If the application provides an implementation of vApplicationIRQHandler(),
+ 176:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * then it will get called directly without saving the FPU registers on
+ 177:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * interrupt entry, and this weak implementation of
+ 178:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * vApplicationFPUSafeIRQHandler() is just provided to remove linkage errors -
+ 179:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * it should never actually get called so its implementation contains a
+ 180:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * call to configASSERT() that will always fail.
+ 181:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  *
+ 182:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * If the application provides its own implementation of
+ 183:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * vApplicationFPUSafeIRQHandler() then the implementation of
+ 184:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * vApplicationIRQHandler() provided in portASM.S will save the FPU registers
+ 185:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * before calling it.
+ 186:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  *
+ 187:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * Therefore, if the application writer wants FPU registers to be saved on
+ 188:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * interrupt entry their IRQ handler must be called
+ 189:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * vApplicationFPUSafeIRQHandler(), and if the application writer does not want
+ 190:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * FPU registers to be saved on interrupt entry their IRQ handler must be
+ 191:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * called vApplicationIRQHandler().
+ 192:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  */
+ 193:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void vApplicationFPUSafeIRQHandler( uint32_t ulICCIAR ) __attribute__((weak) );
+ 194:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 195:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 196:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 197:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* A variable is used to keep track of the critical section nesting.  This
+ 198:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** variable has to be stored as part of the task context and must be initialised to
+ 199:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** a non zero value to ensure interrupts don't inadvertently become unmasked before
+ 200:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** the scheduler starts.  As it is stored as part of the task context it will
+ 201:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** automatically be set to 0 when the first task is started. */
+ 202:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** volatile uint32_t ulCriticalNesting = 9999UL;
+ 203:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 204:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Saved as part of the task context.  If ulPortTaskHasFPUContext is non-zero then
+ 205:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** a floating point context must be saved and restored for the task. */
+ 206:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** volatile uint32_t ulPortTaskHasFPUContext = pdFALSE;
+ 207:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 208:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Set to 1 to pend a context switch from an ISR. */
+ 209:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** volatile uint32_t ulPortYieldRequired = pdFALSE;
+ 210:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 211:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Counts the interrupt nesting depth.  A context switch is only performed if
+ 212:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** if the nesting depth is 0. */
+ 213:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** volatile uint32_t ulPortInterruptNesting = 0UL;
+ 214:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 215:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /* Used in the asm file. */
+ 216:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** __attribute__(( used )) const uint32_t ulICCIAR = portICCIAR_INTERRUPT_ACKNOWLEDGE_REGISTER_ADDRESS
+ 217:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** __attribute__(( used )) const uint32_t ulICCEOIR = portICCEOIR_END_OF_INTERRUPT_REGISTER_ADDRESS;
+ 218:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** __attribute__(( used )) const uint32_t ulICCPMR	= portICCPMR_PRIORITY_MASK_REGISTER_ADDRESS;
+ 219:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** __attribute__(( used )) const uint32_t ulMaxAPIPriorityMask = ( configMAX_API_CALL_INTERRUPT_PRIORI
+ 220:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 221:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 222:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 223:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*
+ 224:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  * See header file for description.
+ 225:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****  */
+ 226:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParam
+ 227:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+  26              		.loc 1 227 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31              	.LVL0:
+ 228:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Setup the initial stack of the task.  The stack is set exactly as
+ 229:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	expected by the portRESTORE_CONTEXT() macro.
+ 230:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 231:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	The fist real value on the stack is the status register, which is set for
+ 232:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	system mode, with interrupts enabled.  A few NULLs are added first to ensure
+ 233:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	GDB does not try decoding a non-existent return address. */
+ 234:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) NULL;
+  32              		.loc 1 234 0
+  33 0000 0030A0E3 		mov	r3, #0
+  34 0004 003080E5 		str	r3, [r0]
+  35              	.LVL1:
+ 235:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 236:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) NULL;
+  36              		.loc 1 236 0
+  37 0008 043000E5 		str	r3, [r0, #-4]
+  38              	.LVL2:
+ 237:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 238:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) NULL;
+  39              		.loc 1 238 0
+  40 000c 083000E5 		str	r3, [r0, #-8]
+  41              	.LVL3:
+ 239:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 240:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) portINITIAL_SPSR;
+  42              		.loc 1 240 0
+  43 0010 1F30A0E3 		mov	r3, #31
+  44 0014 0C3000E5 		str	r3, [r0, #-12]
+ 241:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 242:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	if( ( ( uint32_t ) pxCode & portTHUMB_MODE_ADDRESS ) != 0x00UL )
+  45              		.loc 1 242 0
+  46 0018 010011E3 		tst	r1, #1
+ 243:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 244:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* The task will start in THUMB mode. */
+ 245:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		*pxTopOfStack |= portTHUMB_MODE_BIT;
+  47              		.loc 1 245 0
+  48 001c 3F30A013 		movne	r3, #63
+  49 0020 0C300015 		strne	r3, [r0, #-12]
+  50              	.L2:
+  51              	.LVL4:
+ 246:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 247:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 248:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 249:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 250:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Next the return address, which in this case is the start of the task. */
+ 251:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) pxCode;
+  52              		.loc 1 251 0
+  53 0024 101000E5 		str	r1, [r0, #-16]
+  54              	.LVL5:
+ 252:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 253:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 254:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Next all the registers other than the stack pointer. */
+ 255:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) portTASK_RETURN_ADDRESS;	/* R14 */
+  55              		.loc 1 255 0
+  56 0028 003000E3 		movw	r3, #:lower16:prvTaskExitError
+  57 002c 003040E3 		movt	r3, #:upper16:prvTaskExitError
+  58 0030 143000E5 		str	r3, [r0, #-20]
+  59              	.LVL6:
+ 256:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 257:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x12121212;	/* R12 */
+  60              		.loc 1 257 0
+  61 0034 123201E3 		movw	r3, #4626
+  62 0038 1338DFE7 		bfi	r3, r3, #16, #16
+  63 003c 183000E5 		str	r3, [r0, #-24]
+  64              	.LVL7:
+ 258:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 259:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x11111111;	/* R11 */
+  65              		.loc 1 259 0
+  66 0040 113101E3 		movw	r3, #4369
+  67 0044 1338DFE7 		bfi	r3, r3, #16, #16
+  68 0048 1C3000E5 		str	r3, [r0, #-28]
+  69              	.LVL8:
+ 260:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 261:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x10101010;	/* R10 */
+  70              		.loc 1 261 0
+  71 004c 103001E3 		movw	r3, #4112
+  72 0050 1338DFE7 		bfi	r3, r3, #16, #16
+  73 0054 203000E5 		str	r3, [r0, #-32]
+  74              	.LVL9:
+ 262:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 263:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x09090909;	/* R9 */
+  75              		.loc 1 263 0
+  76 0058 093900E3 		movw	r3, #2313
+  77 005c 1338DFE7 		bfi	r3, r3, #16, #16
+  78 0060 243000E5 		str	r3, [r0, #-36]
+  79              	.LVL10:
+ 264:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 265:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x08080808;	/* R8 */
+  80              		.loc 1 265 0
+  81 0064 083800E3 		movw	r3, #2056
+  82 0068 1338DFE7 		bfi	r3, r3, #16, #16
+  83 006c 283000E5 		str	r3, [r0, #-40]
+  84              	.LVL11:
+ 266:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 267:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x07070707;	/* R7 */
+  85              		.loc 1 267 0
+  86 0070 073700E3 		movw	r3, #1799
+  87 0074 1338DFE7 		bfi	r3, r3, #16, #16
+  88 0078 2C3000E5 		str	r3, [r0, #-44]
+  89              	.LVL12:
+ 268:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 269:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x06060606;	/* R6 */
+  90              		.loc 1 269 0
+  91 007c 063600E3 		movw	r3, #1542
+  92 0080 1338DFE7 		bfi	r3, r3, #16, #16
+  93 0084 303000E5 		str	r3, [r0, #-48]
+  94              	.LVL13:
+ 270:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 271:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x05050505;	/* R5 */
+  95              		.loc 1 271 0
+  96 0088 053500E3 		movw	r3, #1285
+  97 008c 1338DFE7 		bfi	r3, r3, #16, #16
+  98 0090 343000E5 		str	r3, [r0, #-52]
+  99              	.LVL14:
+ 272:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 273:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x04040404;	/* R4 */
+ 100              		.loc 1 273 0
+ 101 0094 043400E3 		movw	r3, #1028
+ 102 0098 1338DFE7 		bfi	r3, r3, #16, #16
+ 103 009c 383000E5 		str	r3, [r0, #-56]
+ 104              	.LVL15:
+ 274:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 275:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x03030303;	/* R3 */
+ 105              		.loc 1 275 0
+ 106 00a0 033300E3 		movw	r3, #771
+ 107 00a4 1338DFE7 		bfi	r3, r3, #16, #16
+ 108 00a8 3C3000E5 		str	r3, [r0, #-60]
+ 109              	.LVL16:
+ 276:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 277:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x02020202;	/* R2 */
+ 110              		.loc 1 277 0
+ 111 00ac 023200E3 		movw	r3, #514
+ 112 00b0 1338DFE7 		bfi	r3, r3, #16, #16
+ 113 00b4 403000E5 		str	r3, [r0, #-64]
+ 114              	.LVL17:
+ 278:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 279:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x01010101;	/* R1 */
+ 115              		.loc 1 279 0
+ 116 00b8 013100E3 		movw	r3, #257
+ 117 00bc 1338DFE7 		bfi	r3, r3, #16, #16
+ 118 00c0 443000E5 		str	r3, [r0, #-68]
+ 119              	.LVL18:
+ 280:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 281:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = ( StackType_t ) pvParameters; /* R0 */
+ 120              		.loc 1 281 0
+ 121 00c4 482000E5 		str	r2, [r0, #-72]
+ 122              	.LVL19:
+ 282:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	pxTopOfStack--;
+ 283:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 284:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* The task will start with a critical nesting count of 0 as interrupts are
+ 285:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	enabled. */
+ 286:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	*pxTopOfStack = portNO_CRITICAL_NESTING;
+ 123              		.loc 1 286 0
+ 124 00c8 0030A0E3 		mov	r3, #0
+ 125 00cc 4C3000E5 		str	r3, [r0, #-76]
+ 126              	.LVL20:
+ 287:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 288:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#if( configUSE_TASK_FPU_SUPPORT == 1 )
+ 289:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 290:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* The task will start without a floating point context.  A task that
+ 291:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		uses the floating point hardware must call vPortTaskUsesFPU() before
+ 292:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		executing any floating point instructions. */
+ 293:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		pxTopOfStack--;
+ 294:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		*pxTopOfStack = portNO_FLOATING_POINT_CONTEXT;
+ 127              		.loc 1 294 0
+ 128 00d0 503000E5 		str	r3, [r0, #-80]
+ 295:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 296:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#elif( configUSE_TASK_FPU_SUPPORT == 2 )
+ 297:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 298:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* The task will start with a floating point context.  Leave enough
+ 299:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		space for the registers - and ensure they are initialised to 0. */
+ 300:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		pxTopOfStack -= portFPU_REGISTER_WORDS;
+ 301:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		memset( pxTopOfStack, 0x00, portFPU_REGISTER_WORDS * sizeof( StackType_t ) );
+ 302:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 303:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		pxTopOfStack--;
+ 304:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		*pxTopOfStack = pdTRUE;
+ 305:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ulPortTaskHasFPUContext = pdTRUE;
+ 306:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 307:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#else
+ 308:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 309:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		#error Invalid configUSE_TASK_FPU_SUPPORT setting - configUSE_TASK_FPU_SUPPORT must be set to 1, 
+ 310:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 311:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#endif
+ 312:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 313:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	return pxTopOfStack;
+ 314:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 129              		.loc 1 314 0
+ 130 00d4 500040E2 		sub	r0, r0, #80
+ 131              	.LVL21:
+ 132 00d8 1EFF2FE1 		bx	lr
+ 133              		.cfi_endproc
+ 134              	.LFE3:
+ 136              		.section	.text.xPortStartScheduler,"ax",%progbits
+ 137              		.align	2
+ 138              		.global	xPortStartScheduler
+ 139              		.syntax unified
+ 140              		.arm
+ 141              		.fpu neon
+ 143              	xPortStartScheduler:
+ 144              	.LFB5:
+ 315:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 316:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 317:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** static void prvTaskExitError( void )
+ 318:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 319:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* A function that implements a task must not exit or attempt to return to
+ 320:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	its caller as there is nothing to return to.  If a task wants to exit it
+ 321:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	should instead call vTaskDelete( NULL ).
+ 322:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 323:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	Artificially force an assert() to be triggered if configASSERT() is
+ 324:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	defined, then stop here so application writers can catch the error. */
+ 325:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	configASSERT( ulPortInterruptNesting == ~0UL );
+ 326:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portDISABLE_INTERRUPTS();
+ 327:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	for( ;; );
+ 328:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 329:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 330:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 331:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** BaseType_t xPortStartScheduler( void )
+ 332:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 145              		.loc 1 332 0
+ 146              		.cfi_startproc
+ 147              		@ args = 0, pretend = 0, frame = 8
+ 148              		@ frame_needed = 0, uses_anonymous_args = 0
+ 149 0000 10402DE9 		push	{r4, lr}
+ 150              		.cfi_def_cfa_offset 8
+ 151              		.cfi_offset 4, -8
+ 152              		.cfi_offset 14, -4
+ 153 0004 08D04DE2 		sub	sp, sp, #8
+ 154              		.cfi_def_cfa_offset 16
+ 155              	.LVL22:
+ 156              	.LBB2:
+ 333:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** uint32_t ulAPSR;
+ 334:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 335:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#if( configASSERT_DEFINED == 1 )
+ 336:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 337:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		volatile uint32_t ulOriginalPriority;
+ 338:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		volatile uint8_t * const pucFirstUserPriorityRegister = ( volatile uint8_t * const ) ( configINTE
+ 339:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		volatile uint8_t ucMaxPriorityValue;
+ 340:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 341:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Determine how many priority bits are implemented in the GIC.
+ 342:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 343:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		Save the interrupt priority value that is about to be clobbered. */
+ 344:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ulOriginalPriority = *pucFirstUserPriorityRegister;
+ 157              		.loc 1 344 0
+ 158 0008 053BA0E3 		mov	r3, #5120
+ 159 000c 22384EE3 		movt	r3, 59426
+ 160 0010 0020D3E5 		ldrb	r2, [r3]	@ zero_extendqisi2
+ 161 0014 7220EFE6 		uxtb	r2, r2
+ 162 0018 04208DE5 		str	r2, [sp, #4]
+ 345:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 346:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Determine the number of priority bits available.  First write to
+ 347:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		all possible bits. */
+ 348:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		*pucFirstUserPriorityRegister = portMAX_8_BIT_VALUE;
+ 163              		.loc 1 348 0
+ 164 001c 0020E0E3 		mvn	r2, #0
+ 165 0020 0020C3E5 		strb	r2, [r3]
+ 349:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 350:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Read the value back to see how many bits stuck. */
+ 351:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ucMaxPriorityValue = *pucFirstUserPriorityRegister;
+ 166              		.loc 1 351 0
+ 167 0024 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 168 0028 7330EFE6 		uxtb	r3, r3
+ 169 002c 0330CDE5 		strb	r3, [sp, #3]
+ 352:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 353:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Shift to the least significant bits. */
+ 354:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		while( ( ucMaxPriorityValue & portBIT_0_SET ) != portBIT_0_SET )
+ 170              		.loc 1 354 0
+ 171 0030 020000EA 		b	.L4
+ 172              	.L5:
+ 355:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		{
+ 356:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			ucMaxPriorityValue >>= ( uint8_t ) 0x01;
+ 173              		.loc 1 356 0
+ 174 0034 0330DDE5 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
+ 175 0038 A330A0E1 		lsr	r3, r3, #1
+ 176 003c 0330CDE5 		strb	r3, [sp, #3]
+ 177              	.L4:
+ 354:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		{
+ 178              		.loc 1 354 0
+ 179 0040 0330DDE5 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
+ 180 0044 010013E3 		tst	r3, #1
+ 181 0048 F9FFFF0A 		beq	.L5
+ 357:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		}
+ 358:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 359:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Sanity check configUNIQUE_INTERRUPT_PRIORITIES matches the read
+ 360:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		value. */
+ 361:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configASSERT( ucMaxPriorityValue == portLOWEST_INTERRUPT_PRIORITY );
+ 182              		.loc 1 361 0
+ 183 004c 0330DDE5 		ldrb	r3, [sp, #3]	@ zero_extendqisi2
+ 184 0050 7330EFE6 		uxtb	r3, r3
+ 185 0054 1F0053E3 		cmp	r3, #31
+ 186 0058 0300000A 		beq	.L6
+ 187              		.loc 1 361 0 is_stmt 0 discriminator 1
+ 188 005c 691100E3 		movw	r1, #361
+ 189 0060 000000E3 		movw	r0, #:lower16:.LC0
+ 190 0064 000040E3 		movt	r0, #:upper16:.LC0
+ 191 0068 FEFFFFEB 		bl	R_OS_AssertCalled
+ 192              	.LVL23:
+ 193              	.L6:
+ 362:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 363:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Restore the clobbered interrupt priority register to its original
+ 364:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		value. */
+ 365:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		*pucFirstUserPriorityRegister = ulOriginalPriority;
+ 194              		.loc 1 365 0 is_stmt 1
+ 195 006c 04209DE5 		ldr	r2, [sp, #4]
+ 196 0070 7220EFE6 		uxtb	r2, r2
+ 197 0074 053BA0E3 		mov	r3, #5120
+ 198 0078 22384EE3 		movt	r3, 59426
+ 199 007c 0020C3E5 		strb	r2, [r3]
+ 200              	.LBE2:
+ 366:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 367:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	#endif /* conifgASSERT_DEFINED */
+ 368:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 369:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 370:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Only continue if the CPU is not in User mode.  The CPU must be in a
+ 371:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	Privileged mode for the scheduler to start. */
+ 372:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #if 0
+ 373:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile ( "MRS %0, APSR" : "=r" ( ulAPSR ) );
+ 374:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #else
+ 375:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	ulAPSR = get_apsr();
+ 201              		.loc 1 375 0
+ 202 0080 FEFFFFEB 		bl	get_apsr
+ 203              	.LVL24:
+ 376:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif
+ 377:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 378:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	ulAPSR &= portAPSR_MODE_BITS_MASK;
+ 204              		.loc 1 378 0
+ 205 0084 1F4000E2 		and	r4, r0, #31
+ 206              	.LVL25:
+ 379:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	configASSERT( ulAPSR != portAPSR_USER_MODE );
+ 207              		.loc 1 379 0
+ 208 0088 100054E3 		cmp	r4, #16
+ 209 008c 1000000A 		beq	.L11
+ 210              	.L7:
+ 380:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 381:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	if( ulAPSR != portAPSR_USER_MODE )
+ 211              		.loc 1 381 0
+ 212 0090 100054E3 		cmp	r4, #16
+ 213 0094 0B00000A 		beq	.L8
+ 382:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 383:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Only continue if the binary point value is set to its lowest possible
+ 384:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		setting.  See the comments in vPortValidateInterruptPriority() below for
+ 385:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		more information. */
+ 386:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configASSERT( ( portICCBPR_BINARY_POINT_REGISTER & portBINARY_POINT_BITS ) <= portMAX_BINARY_POIN
+ 214              		.loc 1 386 0
+ 215 0098 023AA0E3 		mov	r3, #8192
+ 216 009c 22384EE3 		movt	r3, 59426
+ 217 00a0 083093E5 		ldr	r3, [r3, #8]
+ 218 00a4 033003E2 		and	r3, r3, #3
+ 219 00a8 020053E3 		cmp	r3, #2
+ 220 00ac 0D00008A 		bhi	.L12
+ 221              	.L9:
+ 387:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 388:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		if( ( portICCBPR_BINARY_POINT_REGISTER & portBINARY_POINT_BITS ) <= portMAX_BINARY_POINT_VALUE )
+ 222              		.loc 1 388 0
+ 223 00b0 023AA0E3 		mov	r3, #8192
+ 224 00b4 22384EE3 		movt	r3, 59426
+ 225 00b8 083093E5 		ldr	r3, [r3, #8]
+ 226 00bc 033003E2 		and	r3, r3, #3
+ 227 00c0 020053E3 		cmp	r3, #2
+ 228 00c4 0C00009A 		bls	.L13
+ 229              	.L8:
+ 389:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		{
+ 390:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			/* Interrupts are turned off in the CPU itself to ensure tick does
+ 391:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			not execute	while the scheduler is being started.  Interrupts are
+ 392:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			automatically turned back on in the CPU when the first task starts
+ 393:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			executing. */
+ 394:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			portCPU_IRQ_DISABLE();
+ 395:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 396:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			/* Start the timer that generates the tick ISR. */
+ 397:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			configSETUP_TICK_INTERRUPT();
+ 398:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 399:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			/* Start the first task executing. */
+ 400:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			vPortRestoreTaskContext();
+ 401:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		}
+ 402:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 403:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 404:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Will only get here if vTaskStartScheduler() was called with the CPU in
+ 405:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	a non-privileged mode or the binary point register was not set to its lowest
+ 406:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	possible value.  prvTaskExitError() is referenced to prevent a compiler
+ 407:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	warning about it being defined but not referenced in the case that the user
+ 408:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	defines their own exit address. */
+ 409:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	( void ) prvTaskExitError;
+ 410:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	return 0;
+ 411:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 230              		.loc 1 411 0
+ 231 00c8 0000A0E3 		mov	r0, #0
+ 232 00cc 08D08DE2 		add	sp, sp, #8
+ 233              		.cfi_remember_state
+ 234              		.cfi_def_cfa_offset 8
+ 235              		@ sp needed
+ 236 00d0 1080BDE8 		pop	{r4, pc}
+ 237              	.LVL26:
+ 238              	.L11:
+ 239              		.cfi_restore_state
+ 379:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 240              		.loc 1 379 0 discriminator 1
+ 241 00d4 7B1100E3 		movw	r1, #379
+ 242 00d8 000000E3 		movw	r0, #:lower16:.LC0
+ 243 00dc 000040E3 		movt	r0, #:upper16:.LC0
+ 244 00e0 FEFFFFEB 		bl	R_OS_AssertCalled
+ 245              	.LVL27:
+ 246 00e4 E9FFFFEA 		b	.L7
+ 247              	.L12:
+ 386:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 248              		.loc 1 386 0 discriminator 1
+ 249 00e8 821100E3 		movw	r1, #386
+ 250 00ec 000000E3 		movw	r0, #:lower16:.LC0
+ 251 00f0 000040E3 		movt	r0, #:upper16:.LC0
+ 252 00f4 FEFFFFEB 		bl	R_OS_AssertCalled
+ 253              	.LVL28:
+ 254 00f8 ECFFFFEA 		b	.L9
+ 255              	.L13:
+ 394:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 256              		.loc 1 394 0
+ 257              		.syntax divided
+ 258              	@ 394 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 259 00fc 80000CF1 		CPSID i
+ 260              	@ 0 "" 2
+ 261              	@ 394 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 262 0100 4FF07FF5 		DSB
+ 263              	@ 0 "" 2
+ 264              	@ 394 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 265 0104 6FF07FF5 		ISB
+ 266              	@ 0 "" 2
+ 397:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 267              		.loc 1 397 0
+ 268              		.arm
+ 269              		.syntax unified
+ 270 0108 FEFFFFEB 		bl	vConfigureTickInterrupt
+ 271              	.LVL29:
+ 400:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		}
+ 272              		.loc 1 400 0
+ 273 010c FEFFFFEB 		bl	vPortRestoreTaskContext
+ 274              	.LVL30:
+ 275 0110 ECFFFFEA 		b	.L8
+ 276              		.cfi_endproc
+ 277              	.LFE5:
+ 279              		.section	.text.vPortEndScheduler,"ax",%progbits
+ 280              		.align	2
+ 281              		.global	vPortEndScheduler
+ 282              		.syntax unified
+ 283              		.arm
+ 284              		.fpu neon
+ 286              	vPortEndScheduler:
+ 287              	.LFB6:
+ 412:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 413:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 414:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void vPortEndScheduler( void )
+ 415:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 288              		.loc 1 415 0
+ 289              		.cfi_startproc
+ 290              		@ args = 0, pretend = 0, frame = 0
+ 291              		@ frame_needed = 0, uses_anonymous_args = 0
+ 416:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Not implemented in ports where there is nothing to return to.
+ 417:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	Artificially force an assert. */
+ 418:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	configASSERT( ulCriticalNesting == 1000UL );
+ 292              		.loc 1 418 0
+ 293 0000 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 294 0004 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 295 0008 003093E5 		ldr	r3, [r3]
+ 296 000c FA0F53E3 		cmp	r3, #1000
+ 297 0010 1EFF2F01 		bxeq	lr
+ 415:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Not implemented in ports where there is nothing to return to.
+ 298              		.loc 1 415 0 discriminator 1
+ 299 0014 10402DE9 		push	{r4, lr}
+ 300              		.cfi_def_cfa_offset 8
+ 301              		.cfi_offset 4, -8
+ 302              		.cfi_offset 14, -4
+ 303              		.loc 1 418 0 discriminator 1
+ 304 0018 A21100E3 		movw	r1, #418
+ 305 001c 000000E3 		movw	r0, #:lower16:.LC0
+ 306 0020 000040E3 		movt	r0, #:upper16:.LC0
+ 307 0024 FEFFFFEB 		bl	R_OS_AssertCalled
+ 308              	.LVL31:
+ 309 0028 1080BDE8 		pop	{r4, pc}
+ 310              		.cfi_endproc
+ 311              	.LFE6:
+ 313              		.section	.text.vPortExitCritical,"ax",%progbits
+ 314              		.align	2
+ 315              		.global	vPortExitCritical
+ 316              		.syntax unified
+ 317              		.arm
+ 318              		.fpu neon
+ 320              	vPortExitCritical:
+ 321              	.LFB8:
+ 419:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 420:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 421:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 422:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void vPortEnterCritical( void )
+ 423:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 424:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Mask interrupts up to the max syscall interrupt priority. */
+ 425:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	ulPortSetInterruptMask();
+ 426:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 427:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Now interrupts are disabled ulCriticalNesting can be accessed
+ 428:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	directly.  Increment ulCriticalNesting to keep a count of how many times
+ 429:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portENTER_CRITICAL() has been called. */
+ 430:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	ulCriticalNesting++;
+ 431:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 432:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* This is not the interrupt safe version of the enter critical function so
+ 433:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	assert() if it is being called from an interrupt context.  Only API
+ 434:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	functions that end in "FromISR" can be used in an interrupt.  Only assert if
+ 435:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	the critical nesting count is 1 to protect against recursive calls if the
+ 436:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	assert function also uses a critical section. */
+ 437:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	if( ulCriticalNesting == 1 )
+ 438:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 439:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configASSERT( ulPortInterruptNesting == 0 );
+ 440:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 441:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 442:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 443:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 444:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void vPortExitCritical( void )
+ 445:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 322              		.loc 1 445 0
+ 323              		.cfi_startproc
+ 324              		@ args = 0, pretend = 0, frame = 0
+ 325              		@ frame_needed = 0, uses_anonymous_args = 0
+ 326              		@ link register save eliminated.
+ 446:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	if( ulCriticalNesting > portNO_CRITICAL_NESTING )
+ 327              		.loc 1 446 0
+ 328 0000 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 329 0004 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 330 0008 003093E5 		ldr	r3, [r3]
+ 331 000c 000053E3 		cmp	r3, #0
+ 332 0010 1EFF2F01 		bxeq	lr
+ 447:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 448:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Decrement the nesting count as the critical section is being
+ 449:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		exited. */
+ 450:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ulCriticalNesting--;
+ 333              		.loc 1 450 0
+ 334 0014 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 335 0018 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 336 001c 002093E5 		ldr	r2, [r3]
+ 337 0020 012042E2 		sub	r2, r2, #1
+ 338 0024 002083E5 		str	r2, [r3]
+ 451:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 452:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* If the nesting level has reached zero then all interrupt
+ 453:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		priorities must be re-enabled. */
+ 454:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		if( ulCriticalNesting == portNO_CRITICAL_NESTING )
+ 339              		.loc 1 454 0
+ 340 0028 003093E5 		ldr	r3, [r3]
+ 341 002c 000053E3 		cmp	r3, #0
+ 342 0030 1EFF2F11 		bxne	lr
+ 455:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		{
+ 456:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			/* Critical nesting has reached zero so all interrupt priorities
+ 457:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			should be unmasked. */
+ 458:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			portCLEAR_INTERRUPT_MASK();
+ 343              		.loc 1 458 0
+ 344              		.syntax divided
+ 345              	@ 458 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 346 0034 80000CF1 		CPSID i
+ 347              	@ 0 "" 2
+ 348              	@ 458 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 349 0038 4FF07FF5 		DSB
+ 350              	@ 0 "" 2
+ 351              	@ 458 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 352 003c 6FF07FF5 		ISB
+ 353              	@ 0 "" 2
+ 354              		.arm
+ 355              		.syntax unified
+ 356 0040 023AA0E3 		mov	r3, #8192
+ 357 0044 22384EE3 		movt	r3, 59426
+ 358 0048 FF20A0E3 		mov	r2, #255
+ 359 004c 042083E5 		str	r2, [r3, #4]
+ 360              		.syntax divided
+ 361              	@ 458 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 362 0050 4FF07FF5 		DSB		
+ 363 0054 6FF07FF5 	ISB		
+ 364              	
+ 365              	@ 0 "" 2
+ 366              	@ 458 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 367 0058 800008F1 		CPSIE i
+ 368              	@ 0 "" 2
+ 369              	@ 458 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 370 005c 4FF07FF5 		DSB
+ 371              	@ 0 "" 2
+ 372              	@ 458 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 373 0060 6FF07FF5 		ISB
+ 374              	@ 0 "" 2
+ 375              		.arm
+ 376              		.syntax unified
+ 377 0064 1EFF2FE1 		bx	lr
+ 378              		.cfi_endproc
+ 379              	.LFE8:
+ 381              		.section	.text.FreeRTOS_Tick_Handler,"ax",%progbits
+ 382              		.align	2
+ 383              		.global	FreeRTOS_Tick_Handler
+ 384              		.syntax unified
+ 385              		.arm
+ 386              		.fpu neon
+ 388              	FreeRTOS_Tick_Handler:
+ 389              	.LFB9:
+ 459:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		}
+ 460:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 461:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 462:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 463:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 464:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void FreeRTOS_Tick_Handler( void )
+ 465:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 390              		.loc 1 465 0
+ 391              		.cfi_startproc
+ 392              		@ args = 0, pretend = 0, frame = 0
+ 393              		@ frame_needed = 0, uses_anonymous_args = 0
+ 394 0000 10402DE9 		push	{r4, lr}
+ 395              		.cfi_def_cfa_offset 8
+ 396              		.cfi_offset 4, -8
+ 397              		.cfi_offset 14, -4
+ 466:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Set interrupt mask before altering scheduler structures.   The tick
+ 467:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	handler runs at the lowest priority, so interrupts cannot already be masked,
+ 468:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	so there is no need to save and restore the current mask value.  It is
+ 469:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	necessary to turn off interrupts in the CPU itself while the ICCPMR is being
+ 470:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	updated. */
+ 471:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portCPU_IRQ_DISABLE();
+ 398              		.loc 1 471 0
+ 399              		.syntax divided
+ 400              	@ 471 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 401 0004 80000CF1 		CPSID i
+ 402              	@ 0 "" 2
+ 403              	@ 471 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 404 0008 4FF07FF5 		DSB
+ 405              	@ 0 "" 2
+ 406              	@ 471 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 407 000c 6FF07FF5 		ISB
+ 408              	@ 0 "" 2
+ 472:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portICCPMR_PRIORITY_MASK_REGISTER = ( uint32_t ) ( configMAX_API_CALL_INTERRUPT_PRIORITY << portPR
+ 409              		.loc 1 472 0
+ 410              		.arm
+ 411              		.syntax unified
+ 412 0010 023AA0E3 		mov	r3, #8192
+ 413 0014 22384EE3 		movt	r3, 59426
+ 414 0018 C820A0E3 		mov	r2, #200
+ 415 001c 042083E5 		str	r2, [r3, #4]
+ 473:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	__asm volatile (	"dsb		\n"
+ 416              		.loc 1 473 0
+ 417              		.syntax divided
+ 418              	@ 473 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 419 0020 4FF07FF5 		dsb		
+ 420 0024 6FF07FF5 	isb		
+ 421              	
+ 422              	@ 0 "" 2
+ 474:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 						"isb		\n" ::: "memory" );
+ 475:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portCPU_IRQ_ENABLE();
+ 423              		.loc 1 475 0
+ 424              	@ 475 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 425 0028 800008F1 		CPSIE i
+ 426              	@ 0 "" 2
+ 427              	@ 475 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 428 002c 4FF07FF5 		DSB
+ 429              	@ 0 "" 2
+ 430              	@ 475 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 431 0030 6FF07FF5 		ISB
+ 432              	@ 0 "" 2
+ 476:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 477:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Increment the RTOS tick. */
+ 478:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	if( xTaskIncrementTick() != pdFALSE )
+ 433              		.loc 1 478 0
+ 434              		.arm
+ 435              		.syntax unified
+ 436 0034 FEFFFFEB 		bl	xTaskIncrementTick
+ 437              	.LVL32:
+ 438 0038 000050E3 		cmp	r0, #0
+ 479:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 480:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ulPortYieldRequired = pdTRUE;
+ 439              		.loc 1 480 0
+ 440 003c 00300013 		movwne	r3, #:lower16:.LANCHOR1
+ 441 0040 00304013 		movtne	r3, #:upper16:.LANCHOR1
+ 442 0044 0120A013 		movne	r2, #1
+ 443 0048 00208315 		strne	r2, [r3]
+ 444              	.L23:
+ 481:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 482:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 483:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Ensure all interrupt priorities are active again. */
+ 484:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portCLEAR_INTERRUPT_MASK();
+ 445              		.loc 1 484 0
+ 446              		.syntax divided
+ 447              	@ 484 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 448 004c 80000CF1 		CPSID i
+ 449              	@ 0 "" 2
+ 450              	@ 484 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 451 0050 4FF07FF5 		DSB
+ 452              	@ 0 "" 2
+ 453              	@ 484 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 454 0054 6FF07FF5 		ISB
+ 455              	@ 0 "" 2
+ 456              		.arm
+ 457              		.syntax unified
+ 458 0058 023AA0E3 		mov	r3, #8192
+ 459 005c 22384EE3 		movt	r3, 59426
+ 460 0060 FF20A0E3 		mov	r2, #255
+ 461 0064 042083E5 		str	r2, [r3, #4]
+ 462              		.syntax divided
+ 463              	@ 484 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 464 0068 4FF07FF5 		DSB		
+ 465 006c 6FF07FF5 	ISB		
+ 466              	
+ 467              	@ 0 "" 2
+ 468              	@ 484 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 469 0070 800008F1 		CPSIE i
+ 470              	@ 0 "" 2
+ 471              	@ 484 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 472 0074 4FF07FF5 		DSB
+ 473              	@ 0 "" 2
+ 474              	@ 484 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 475 0078 6FF07FF5 		ISB
+ 476              	@ 0 "" 2
+ 477              		.arm
+ 478              		.syntax unified
+ 479 007c 1080BDE8 		pop	{r4, pc}
+ 480              		.cfi_endproc
+ 481              	.LFE9:
+ 483              		.section	.text.vPortTaskUsesFPU,"ax",%progbits
+ 484              		.align	2
+ 485              		.global	vPortTaskUsesFPU
+ 486              		.syntax unified
+ 487              		.arm
+ 488              		.fpu neon
+ 490              	vPortTaskUsesFPU:
+ 491              	.LFB10:
+ 485:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	configCLEAR_TICK_INTERRUPT();
+ 486:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 487:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 488:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 489:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #if( configUSE_TASK_FPU_SUPPORT != 2 )
+ 490:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 491:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	void vPortTaskUsesFPU( void )
+ 492:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 492              		.loc 1 492 0
+ 493              		.cfi_startproc
+ 494              		@ args = 0, pretend = 0, frame = 0
+ 495              		@ frame_needed = 0, uses_anonymous_args = 0
+ 496 0000 10402DE9 		push	{r4, lr}
+ 497              		.cfi_def_cfa_offset 8
+ 498              		.cfi_offset 4, -8
+ 499              		.cfi_offset 14, -4
+ 500              	.LVL33:
+ 493:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	uint32_t ulInitialFPSCR = 0;
+ 494:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 495:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* A task is registering the fact that it needs an FPU context.  Set the
+ 496:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		FPU flag (which is saved as part of the task context). */
+ 497:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ulPortTaskHasFPUContext = pdTRUE;
+ 501              		.loc 1 497 0
+ 502 0004 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 503 0008 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 504 000c 0120A0E3 		mov	r2, #1
+ 505 0010 002083E5 		str	r2, [r3]
+ 498:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 499:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Initialise the floating point status register. */
+ 500:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		#if 0
+ 501:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			__asm volatile ( "FMXR 	FPSCR, %0" :: "r" (ulInitialFPSCR) );
+ 502:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		#else
+ 503:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 			set_fpscr(ulInitialFPSCR);
+ 506              		.loc 1 503 0
+ 507 0014 0000A0E3 		mov	r0, #0
+ 508 0018 FEFFFFEB 		bl	set_fpscr
+ 509              	.LVL34:
+ 510 001c 1080BDE8 		pop	{r4, pc}
+ 511              		.cfi_endproc
+ 512              	.LFE10:
+ 514              		.section	.text.vPortClearInterruptMask,"ax",%progbits
+ 515              		.align	2
+ 516              		.global	vPortClearInterruptMask
+ 517              		.syntax unified
+ 518              		.arm
+ 519              		.fpu neon
+ 521              	vPortClearInterruptMask:
+ 522              	.LFB11:
+ 504:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		#endif
+ 505:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 506:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 507:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 508:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif /* configUSE_TASK_FPU_SUPPORT */
+ 509:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 510:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 511:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void vPortClearInterruptMask( uint32_t ulNewMaskValue )
+ 512:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 523              		.loc 1 512 0
+ 524              		.cfi_startproc
+ 525              		@ args = 0, pretend = 0, frame = 0
+ 526              		@ frame_needed = 0, uses_anonymous_args = 0
+ 527              		@ link register save eliminated.
+ 528              	.LVL35:
+ 513:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	if( ulNewMaskValue == pdFALSE )
+ 529              		.loc 1 513 0
+ 530 0000 000050E3 		cmp	r0, #0
+ 531 0004 1EFF2F11 		bxne	lr
+ 514:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 515:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		portCLEAR_INTERRUPT_MASK();
+ 532              		.loc 1 515 0
+ 533              		.syntax divided
+ 534              	@ 515 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 535 0008 80000CF1 		CPSID i
+ 536              	@ 0 "" 2
+ 537              	@ 515 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 538 000c 4FF07FF5 		DSB
+ 539              	@ 0 "" 2
+ 540              	@ 515 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 541 0010 6FF07FF5 		ISB
+ 542              	@ 0 "" 2
+ 543              		.arm
+ 544              		.syntax unified
+ 545 0014 023AA0E3 		mov	r3, #8192
+ 546 0018 22384EE3 		movt	r3, 59426
+ 547 001c FF20A0E3 		mov	r2, #255
+ 548 0020 042083E5 		str	r2, [r3, #4]
+ 549              		.syntax divided
+ 550              	@ 515 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 551 0024 4FF07FF5 		DSB		
+ 552 0028 6FF07FF5 	ISB		
+ 553              	
+ 554              	@ 0 "" 2
+ 555              	@ 515 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 556 002c 800008F1 		CPSIE i
+ 557              	@ 0 "" 2
+ 558              	@ 515 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 559 0030 4FF07FF5 		DSB
+ 560              	@ 0 "" 2
+ 561              	@ 515 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 562 0034 6FF07FF5 		ISB
+ 563              	@ 0 "" 2
+ 564              		.arm
+ 565              		.syntax unified
+ 566 0038 1EFF2FE1 		bx	lr
+ 567              		.cfi_endproc
+ 568              	.LFE11:
+ 570              		.section	.text.ulPortSetInterruptMask,"ax",%progbits
+ 571              		.align	2
+ 572              		.global	ulPortSetInterruptMask
+ 573              		.syntax unified
+ 574              		.arm
+ 575              		.fpu neon
+ 577              	ulPortSetInterruptMask:
+ 578              	.LFB12:
+ 516:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 517:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 518:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 519:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 520:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** uint32_t ulPortSetInterruptMask( void )
+ 521:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 579              		.loc 1 521 0
+ 580              		.cfi_startproc
+ 581              		@ args = 0, pretend = 0, frame = 0
+ 582              		@ frame_needed = 0, uses_anonymous_args = 0
+ 583              		@ link register save eliminated.
+ 522:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** uint32_t ulReturn;
+ 523:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 524:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Interrupt in the CPU must be turned off while the ICCPMR is being
+ 525:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	updated. */
+ 526:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portCPU_IRQ_DISABLE();
+ 584              		.loc 1 526 0
+ 585              		.syntax divided
+ 586              	@ 526 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 587 0000 80000CF1 		CPSID i
+ 588              	@ 0 "" 2
+ 589              	@ 526 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 590 0004 4FF07FF5 		DSB
+ 591              	@ 0 "" 2
+ 592              	@ 526 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 593 0008 6FF07FF5 		ISB
+ 594              	@ 0 "" 2
+ 527:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	if( portICCPMR_PRIORITY_MASK_REGISTER == ( uint32_t ) ( configMAX_API_CALL_INTERRUPT_PRIORITY << p
+ 595              		.loc 1 527 0
+ 596              		.arm
+ 597              		.syntax unified
+ 598 000c 023AA0E3 		mov	r3, #8192
+ 599 0010 22384EE3 		movt	r3, 59426
+ 600 0014 043093E5 		ldr	r3, [r3, #4]
+ 601 0018 C80053E3 		cmp	r3, #200
+ 602 001c 0A00000A 		beq	.L31
+ 603              	.LVL36:
+ 528:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 529:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Interrupts were already masked. */
+ 530:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ulReturn = pdTRUE;
+ 531:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 532:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	else
+ 533:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 534:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		ulReturn = pdFALSE;
+ 535:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		portICCPMR_PRIORITY_MASK_REGISTER = ( uint32_t ) ( configMAX_API_CALL_INTERRUPT_PRIORITY << portP
+ 604              		.loc 1 535 0
+ 605 0020 023AA0E3 		mov	r3, #8192
+ 606 0024 22384EE3 		movt	r3, 59426
+ 607 0028 C820A0E3 		mov	r2, #200
+ 608 002c 042083E5 		str	r2, [r3, #4]
+ 536:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		__asm volatile (	"dsb		\n"
+ 609              		.loc 1 536 0
+ 610              		.syntax divided
+ 611              	@ 536 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 612 0030 4FF07FF5 		dsb		
+ 613 0034 6FF07FF5 	isb		
+ 614              	
+ 615              	@ 0 "" 2
+ 534:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		portICCPMR_PRIORITY_MASK_REGISTER = ( uint32_t ) ( configMAX_API_CALL_INTERRUPT_PRIORITY << portP
+ 616              		.loc 1 534 0
+ 617              		.arm
+ 618              		.syntax unified
+ 619 0038 0000A0E3 		mov	r0, #0
+ 620              	.LVL37:
+ 621              	.L30:
+ 537:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 							"isb		\n" ::: "memory" );
+ 538:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 539:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portCPU_IRQ_ENABLE();
+ 622              		.loc 1 539 0
+ 623              		.syntax divided
+ 624              	@ 539 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 625 003c 800008F1 		CPSIE i
+ 626              	@ 0 "" 2
+ 627              	@ 539 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 628 0040 4FF07FF5 		DSB
+ 629              	@ 0 "" 2
+ 630              	@ 539 "../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c" 1
+ 631 0044 6FF07FF5 		ISB
+ 632              	@ 0 "" 2
+ 540:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 541:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	return ulReturn;
+ 542:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 633              		.loc 1 542 0
+ 634              		.arm
+ 635              		.syntax unified
+ 636 0048 1EFF2FE1 		bx	lr
+ 637              	.LVL38:
+ 638              	.L31:
+ 530:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 639              		.loc 1 530 0
+ 640 004c 0100A0E3 		mov	r0, #1
+ 641 0050 F9FFFFEA 		b	.L30
+ 642              		.cfi_endproc
+ 643              	.LFE12:
+ 645              		.section	.text.prvTaskExitError,"ax",%progbits
+ 646              		.align	2
+ 647              		.syntax unified
+ 648              		.arm
+ 649              		.fpu neon
+ 651              	prvTaskExitError:
+ 652              	.LFB4:
+ 318:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* A function that implements a task must not exit or attempt to return to
+ 653              		.loc 1 318 0
+ 654              		.cfi_startproc
+ 655              		@ Volatile: function does not return.
+ 656              		@ args = 0, pretend = 0, frame = 0
+ 657              		@ frame_needed = 0, uses_anonymous_args = 0
+ 658 0000 10402DE9 		push	{r4, lr}
+ 659              		.cfi_def_cfa_offset 8
+ 660              		.cfi_offset 4, -8
+ 661              		.cfi_offset 14, -4
+ 325:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portDISABLE_INTERRUPTS();
+ 662              		.loc 1 325 0
+ 663 0004 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 664 0008 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 665 000c 003093E5 		ldr	r3, [r3]
+ 666 0010 010073E3 		cmn	r3, #1
+ 667 0014 0300000A 		beq	.L33
+ 325:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	portDISABLE_INTERRUPTS();
+ 668              		.loc 1 325 0 is_stmt 0 discriminator 1
+ 669 0018 451100E3 		movw	r1, #325
+ 670 001c 000000E3 		movw	r0, #:lower16:.LC0
+ 671 0020 000040E3 		movt	r0, #:upper16:.LC0
+ 672 0024 FEFFFFEB 		bl	R_OS_AssertCalled
+ 673              	.LVL39:
+ 674              	.L33:
+ 326:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	for( ;; );
+ 675              		.loc 1 326 0 is_stmt 1
+ 676 0028 FEFFFFEB 		bl	ulPortSetInterruptMask
+ 677              	.LVL40:
+ 678              	.L34:
+ 679 002c FEFFFFEA 		b	.L34
+ 680              		.cfi_endproc
+ 681              	.LFE4:
+ 683              		.section	.text.vPortEnterCritical,"ax",%progbits
+ 684              		.align	2
+ 685              		.global	vPortEnterCritical
+ 686              		.syntax unified
+ 687              		.arm
+ 688              		.fpu neon
+ 690              	vPortEnterCritical:
+ 691              	.LFB7:
+ 423:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	/* Mask interrupts up to the max syscall interrupt priority. */
+ 692              		.loc 1 423 0
+ 693              		.cfi_startproc
+ 694              		@ args = 0, pretend = 0, frame = 0
+ 695              		@ frame_needed = 0, uses_anonymous_args = 0
+ 696 0000 10402DE9 		push	{r4, lr}
+ 697              		.cfi_def_cfa_offset 8
+ 698              		.cfi_offset 4, -8
+ 699              		.cfi_offset 14, -4
+ 425:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 700              		.loc 1 425 0
+ 701 0004 FEFFFFEB 		bl	ulPortSetInterruptMask
+ 702              	.LVL41:
+ 430:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 703              		.loc 1 430 0
+ 704 0008 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 705 000c 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 706 0010 002093E5 		ldr	r2, [r3]
+ 707 0014 012082E2 		add	r2, r2, #1
+ 708 0018 002083E5 		str	r2, [r3]
+ 437:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 709              		.loc 1 437 0
+ 710 001c 003093E5 		ldr	r3, [r3]
+ 711 0020 010053E3 		cmp	r3, #1
+ 712 0024 1080BD18 		popne	{r4, pc}
+ 439:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 713              		.loc 1 439 0
+ 714 0028 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 715 002c 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 716 0030 003093E5 		ldr	r3, [r3]
+ 717 0034 000053E3 		cmp	r3, #0
+ 718 0038 1080BD08 		popeq	{r4, pc}
+ 439:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 719              		.loc 1 439 0 is_stmt 0 discriminator 1
+ 720 003c B71100E3 		movw	r1, #439
+ 721 0040 000000E3 		movw	r0, #:lower16:.LC0
+ 722 0044 000040E3 		movt	r0, #:upper16:.LC0
+ 723 0048 FEFFFFEB 		bl	R_OS_AssertCalled
+ 724              	.LVL42:
+ 725 004c 1080BDE8 		pop	{r4, pc}
+ 726              		.cfi_endproc
+ 727              	.LFE7:
+ 729              		.section	.text.vPortValidateInterruptPriority,"ax",%progbits
+ 730              		.align	2
+ 731              		.global	vPortValidateInterruptPriority
+ 732              		.syntax unified
+ 733              		.arm
+ 734              		.fpu neon
+ 736              	vPortValidateInterruptPriority:
+ 737              	.LFB13:
+ 543:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 544:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 545:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #if( configASSERT_DEFINED == 1 )
+ 546:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 547:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	void vPortValidateInterruptPriority( void )
+ 548:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	{
+ 738              		.loc 1 548 0 is_stmt 1
+ 739              		.cfi_startproc
+ 740              		@ args = 0, pretend = 0, frame = 0
+ 741              		@ frame_needed = 0, uses_anonymous_args = 0
+ 742 0000 10402DE9 		push	{r4, lr}
+ 743              		.cfi_def_cfa_offset 8
+ 744              		.cfi_offset 4, -8
+ 745              		.cfi_offset 14, -4
+ 549:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* The following assertion will fail if a service routine (ISR) for
+ 550:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		an interrupt that has been assigned a priority above
+ 551:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configMAX_SYSCALL_INTERRUPT_PRIORITY calls an ISR safe FreeRTOS API
+ 552:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		function.  ISR safe FreeRTOS API functions must *only* be called
+ 553:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		from interrupts that have been assigned a priority at or below
+ 554:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configMAX_SYSCALL_INTERRUPT_PRIORITY.
+ 555:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 556:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		Numerically low interrupt priority numbers represent logically high
+ 557:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		interrupt priorities, therefore the priority of the interrupt must
+ 558:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		be set to a value equal to or numerically *higher* than
+ 559:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configMAX_SYSCALL_INTERRUPT_PRIORITY.
+ 560:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 561:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		FreeRTOS maintains separate thread and ISR API functions to ensure
+ 562:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		interrupt entry is as fast and simple as possible. */
+ 563:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configASSERT( portICCRPR_RUNNING_PRIORITY_REGISTER >= ( uint32_t ) ( configMAX_API_CALL_INTERRUPT
+ 746              		.loc 1 563 0
+ 747 0004 023AA0E3 		mov	r3, #8192
+ 748 0008 22384EE3 		movt	r3, 59426
+ 749 000c 143093E5 		ldr	r3, [r3, #20]
+ 750 0010 C70053E3 		cmp	r3, #199
+ 751 0014 0A00009A 		bls	.L43
+ 752              	.L40:
+ 564:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 565:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		/* Priority grouping:  The interrupt controller (GIC) allows the bits
+ 566:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		that define each interrupt's priority to be split between bits that
+ 567:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		define the interrupt's pre-emption priority bits and bits that define
+ 568:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		the interrupt's sub-priority.  For simplicity all bits must be defined
+ 569:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		to be pre-emption priority bits.  The following assertion will fail if
+ 570:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		this is not the case (if some bits represent a sub-priority).
+ 571:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 572:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		The priority grouping is configured by the GIC's binary point register
+ 573:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		(ICCBPR).  Writting 0 to ICCBPR will ensure it is set to its lowest
+ 574:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		possible value (which may be above 0). */
+ 575:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 		configASSERT( ( portICCBPR_BINARY_POINT_REGISTER & portBINARY_POINT_BITS ) <= portMAX_BINARY_POIN
+ 753              		.loc 1 575 0
+ 754 0018 023AA0E3 		mov	r3, #8192
+ 755 001c 22384EE3 		movt	r3, 59426
+ 756 0020 083093E5 		ldr	r3, [r3, #8]
+ 757 0024 033003E2 		and	r3, r3, #3
+ 758 0028 020053E3 		cmp	r3, #2
+ 759 002c 1080BD98 		popls	{r4, pc}
+ 760              		.loc 1 575 0 is_stmt 0 discriminator 1
+ 761 0030 3F1200E3 		movw	r1, #575
+ 762 0034 000000E3 		movw	r0, #:lower16:.LC0
+ 763 0038 000040E3 		movt	r0, #:upper16:.LC0
+ 764 003c FEFFFFEB 		bl	R_OS_AssertCalled
+ 765              	.LVL43:
+ 766 0040 1080BDE8 		pop	{r4, pc}
+ 767              	.L43:
+ 563:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 768              		.loc 1 563 0 is_stmt 1 discriminator 1
+ 769 0044 331200E3 		movw	r1, #563
+ 770 0048 000000E3 		movw	r0, #:lower16:.LC0
+ 771 004c 000040E3 		movt	r0, #:upper16:.LC0
+ 772 0050 FEFFFFEB 		bl	R_OS_AssertCalled
+ 773              	.LVL44:
+ 774 0054 EFFFFFEA 		b	.L40
+ 775              		.cfi_endproc
+ 776              	.LFE13:
+ 778              		.section	.text.vApplicationFPUSafeIRQHandler,"ax",%progbits
+ 779              		.align	2
+ 780              		.weak	vApplicationFPUSafeIRQHandler
+ 781              		.syntax unified
+ 782              		.arm
+ 783              		.fpu neon
+ 785              	vApplicationFPUSafeIRQHandler:
+ 786              	.LFB14:
+ 576:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	}
+ 577:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 578:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** #endif /* configASSERT_DEFINED */
+ 579:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** /*-----------------------------------------------------------*/
+ 580:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 581:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void vApplicationFPUSafeIRQHandler( uint32_t ulICCIAR )
+ 582:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 787              		.loc 1 582 0
+ 788              		.cfi_startproc
+ 789              		@ args = 0, pretend = 0, frame = 0
+ 790              		@ frame_needed = 0, uses_anonymous_args = 0
+ 791              	.LVL45:
+ 792 0000 10402DE9 		push	{r4, lr}
+ 793              		.cfi_def_cfa_offset 8
+ 794              		.cfi_offset 4, -8
+ 795              		.cfi_offset 14, -4
+ 583:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	( void ) ulICCIAR;
+ 584:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	configASSERT( ( volatile void * ) NULL );
+ 796              		.loc 1 584 0
+ 797 0004 921FA0E3 		mov	r1, #584
+ 798 0008 000000E3 		movw	r0, #:lower16:.LC0
+ 799              	.LVL46:
+ 800 000c 000040E3 		movt	r0, #:upper16:.LC0
+ 801 0010 FEFFFFEB 		bl	R_OS_AssertCalled
+ 802              	.LVL47:
+ 803 0014 1080BDE8 		pop	{r4, pc}
+ 804              		.cfi_endproc
+ 805              	.LFE14:
+ 807              		.section	.text.vApplicationIRQHandler,"ax",%progbits
+ 808              		.align	2
+ 809              		.global	vApplicationIRQHandler
+ 810              		.syntax unified
+ 811              		.arm
+ 812              		.fpu neon
+ 814              	vApplicationIRQHandler:
+ 815              	.LFB15:
+ 585:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** }
+ 586:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 587:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** void vApplicationIRQHandler( uint32_t ulICCIAR )
+ 588:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** {
+ 816              		.loc 1 588 0
+ 817              		.cfi_startproc
+ 818              		@ args = 0, pretend = 0, frame = 0
+ 819              		@ frame_needed = 0, uses_anonymous_args = 0
+ 820              	.LVL48:
+ 821 0000 10402DE9 		push	{r4, lr}
+ 822              		.cfi_def_cfa_offset 8
+ 823              		.cfi_offset 4, -8
+ 824              		.cfi_offset 14, -4
+ 825 0004 0040A0E1 		mov	r4, r0
+ 589:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** uint32_t ulInterruptID;
+ 590:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 591:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****    /* Re-enable interrupts. */
+ 592:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****     __enable_irq();
+ 826              		.loc 1 592 0
+ 827 0008 FEFFFFEB 		bl	__enable_irq
+ 828              	.LVL49:
+ 593:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 594:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****    /* The ID of the interrupt can be obtained by bitwise anding the ICCIAR value
+ 595:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****    with 0x3FF. */
+ 596:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****    ulInterruptID = ulICCIAR & 0x3FFUL;
+ 829              		.loc 1 596 0
+ 830 000c 5400E9E7 		ubfx	r0, r4, #0, #10
+ 831              	.LVL50:
+ 597:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 
+ 598:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****    /* Properly handle spurious interrupts */
+ 599:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****    if(ulInterruptID < INTC_GIC_ID_TOTAL)
+ 832              		.loc 1 599 0
+ 833 0010 020C50E3 		cmp	r0, #512
+ 834 0014 1080BD28 		popcs	{r4, pc}
+ 600:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****    {
+ 601:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c ****       /* Call the function installed in the array of installed handler functions. */
+ 602:../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c **** 	   g_intc_func_table[ ulInterruptID ]( 0 );
+ 835              		.loc 1 602 0
+ 836 0018 003000E3 		movw	r3, #:lower16:g_intc_func_table
+ 837 001c 003040E3 		movt	r3, #:upper16:g_intc_func_table
+ 838 0020 003193E7 		ldr	r3, [r3, r0, lsl #2]
+ 839 0024 0000A0E3 		mov	r0, #0
+ 840              	.LVL51:
+ 841 0028 33FF2FE1 		blx	r3
+ 842              	.LVL52:
+ 843 002c 1080BDE8 		pop	{r4, pc}
+ 844              		.cfi_endproc
+ 845              	.LFE15:
+ 847              		.global	ulMaxAPIPriorityMask
+ 848              		.global	ulICCPMR
+ 849              		.global	ulICCEOIR
+ 850              		.global	ulICCIAR
+ 851              		.global	ulPortInterruptNesting
+ 852              		.global	ulPortYieldRequired
+ 853              		.global	ulPortTaskHasFPUContext
+ 854              		.global	ulCriticalNesting
+ 855              		.section	.bss.ulPortInterruptNesting,"aw",%nobits
+ 856              		.align	2
+ 857              		.set	.LANCHOR3,. + 0
+ 860              	ulPortInterruptNesting:
+ 861 0000 00000000 		.space	4
+ 862              		.section	.bss.ulPortTaskHasFPUContext,"aw",%nobits
+ 863              		.align	2
+ 864              		.set	.LANCHOR2,. + 0
+ 867              	ulPortTaskHasFPUContext:
+ 868 0000 00000000 		.space	4
+ 869              		.section	.bss.ulPortYieldRequired,"aw",%nobits
+ 870              		.align	2
+ 871              		.set	.LANCHOR1,. + 0
+ 874              	ulPortYieldRequired:
+ 875 0000 00000000 		.space	4
+ 876              		.section	.data.ulCriticalNesting,"aw",%progbits
+ 877              		.align	2
+ 878              		.set	.LANCHOR0,. + 0
+ 881              	ulCriticalNesting:
+ 882 0000 0F270000 		.word	9999
+ 883              		.section	.rodata.ulICCEOIR,"a",%progbits
+ 884              		.align	2
+ 887              	ulICCEOIR:
+ 888 0000 102022E8 		.word	-400416752
+ 889              		.section	.rodata.ulICCIAR,"a",%progbits
+ 890              		.align	2
+ 893              	ulICCIAR:
+ 894 0000 0C2022E8 		.word	-400416756
+ 895              		.section	.rodata.ulICCPMR,"a",%progbits
+ 896              		.align	2
+ 899              	ulICCPMR:
+ 900 0000 042022E8 		.word	-400416764
+ 901              		.section	.rodata.ulMaxAPIPriorityMask,"a",%progbits
+ 902              		.align	2
+ 905              	ulMaxAPIPriorityMask:
+ 906 0000 C8000000 		.word	200
+ 907              		.section	.rodata.xPortStartScheduler.str1.4,"aMS",%progbits,1
+ 908              		.align	2
+ 909              	.LC0:
+ 910 0000 2E2E2F73 		.ascii	"../src/FreeRTOS/portable/GCC/ARM_CA9_RZA2M/port.c\000"
+ 910      72632F46 
+ 910      72656552 
+ 910      544F532F 
+ 910      706F7274 
+ 911              		.text
+ 912              	.Letext0:
+ 913              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 914              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 915              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 916              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 917              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 918              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 919              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 920              		.file 9 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\FreeR
+ 921              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 922              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 923              		.file 12 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\Free
+ 924              		.file 13 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 925              		.file 14 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+ 926              		.file 15 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 927              		.file 16 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compil
+ 928              		.file 17 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+ 929              		.file 18 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\Free
+ 930              		.file 19 "C:\\Users\\rj7356s\\e2-new\\workspace\\rza2m_drp_dynamic_sample2_freertos_gcc\\src\\conf
+DEFINED SYMBOLS
+                            *ABS*:00000000 port.c
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:17     .text.pxPortInitialiseStack:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:23     .text.pxPortInitialiseStack:00000000 pxPortInitialiseStack
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:651    .text.prvTaskExitError:00000000 prvTaskExitError
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:137    .text.xPortStartScheduler:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:143    .text.xPortStartScheduler:00000000 xPortStartScheduler
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:909    .rodata.xPortStartScheduler.str1.4:00000000 .LC0
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:280    .text.vPortEndScheduler:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:286    .text.vPortEndScheduler:00000000 vPortEndScheduler
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:878    .data.ulCriticalNesting:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:314    .text.vPortExitCritical:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:320    .text.vPortExitCritical:00000000 vPortExitCritical
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:382    .text.FreeRTOS_Tick_Handler:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:388    .text.FreeRTOS_Tick_Handler:00000000 FreeRTOS_Tick_Handler
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:871    .bss.ulPortYieldRequired:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:484    .text.vPortTaskUsesFPU:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:490    .text.vPortTaskUsesFPU:00000000 vPortTaskUsesFPU
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:864    .bss.ulPortTaskHasFPUContext:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:515    .text.vPortClearInterruptMask:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:521    .text.vPortClearInterruptMask:00000000 vPortClearInterruptMask
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:571    .text.ulPortSetInterruptMask:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:577    .text.ulPortSetInterruptMask:00000000 ulPortSetInterruptMask
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:646    .text.prvTaskExitError:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:857    .bss.ulPortInterruptNesting:00000000 .LANCHOR3
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:684    .text.vPortEnterCritical:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:690    .text.vPortEnterCritical:00000000 vPortEnterCritical
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:730    .text.vPortValidateInterruptPriority:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:736    .text.vPortValidateInterruptPriority:00000000 vPortValidateInterruptPriority
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:779    .text.vApplicationFPUSafeIRQHandler:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:785    .text.vApplicationFPUSafeIRQHandler:00000000 vApplicationFPUSafeIRQHandler
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:808    .text.vApplicationIRQHandler:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:814    .text.vApplicationIRQHandler:00000000 vApplicationIRQHandler
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:905    .rodata.ulMaxAPIPriorityMask:00000000 ulMaxAPIPriorityMask
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:899    .rodata.ulICCPMR:00000000 ulICCPMR
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:887    .rodata.ulICCEOIR:00000000 ulICCEOIR
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:893    .rodata.ulICCIAR:00000000 ulICCIAR
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:860    .bss.ulPortInterruptNesting:00000000 ulPortInterruptNesting
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:874    .bss.ulPortYieldRequired:00000000 ulPortYieldRequired
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:867    .bss.ulPortTaskHasFPUContext:00000000 ulPortTaskHasFPUContext
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:881    .data.ulCriticalNesting:00000000 ulCriticalNesting
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:856    .bss.ulPortInterruptNesting:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:863    .bss.ulPortTaskHasFPUContext:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:870    .bss.ulPortYieldRequired:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:877    .data.ulCriticalNesting:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:884    .rodata.ulICCEOIR:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:890    .rodata.ulICCIAR:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:896    .rodata.ulICCPMR:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:902    .rodata.ulMaxAPIPriorityMask:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cc1JBkBB.s:908    .rodata.xPortStartScheduler.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.stddef.h.187.e1c83cba2098ce92b68f6311de19e6b1
+                           .group:00000000 wm4.stddef.h.39.57db33e786ccd422e31be63a26e19309
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.r_task_priority.h.26.416bb98a222bf391200df359bd0318d1
+                           .group:00000000 wm4.FreeRTOSConfig.h.79.b5458a5c31689ea246b5d3a5f655ce5b
+                           .group:00000000 wm4.projdefs.h.29.3472c8470d131a5f474bc7437ea94609
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.portmacro.h.32.440d21c040186908c7273660706c6bca
+                           .group:00000000 wm4.portable.h.64.00b423ba030e23bed354b037664af7a6
+                           .group:00000000 wm4.mpu_wrappers.h.29.89d425470b0b1ff39fbd61026b3dc073
+                           .group:00000000 wm4.FreeRTOS.h.66.bad6b88d088f10e2b23c3b49ecb7db7d
+                           .group:00000000 wm4.list.h.61.bafeaa82806d71ae8917c6d7827fc3d2
+                           .group:00000000 wm4.task.h.46.d14b2b6bfa640e74f781e050155168fa
+                           .group:00000000 wm4.r_startup_config.h.28.41a2bd9676f9208cac4163ceb2eb9006
+                           .group:00000000 wm4.r_compiler_abstraction_api.h.26.bb21b39b83806cb7bb8838b6f825dcff
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_os_abstraction_api.h.53.c40489f97d2474c70b40d43822d1406c
+                           .group:00000000 wm4.compiler_settings.h.55.412db3588640e7e83336e77c1cd11233
+                           .group:00000000 wm4.r_intc_lld_rza2m.h.35.148dee33e6a963828fdce2545668b517
+
+UNDEFINED SYMBOLS
+R_OS_AssertCalled
+get_apsr
+vConfigureTickInterrupt
+vPortRestoreTaskContext
+xTaskIncrementTick
+set_fpscr
+__enable_irq
+g_intc_func_table

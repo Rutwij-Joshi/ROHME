@@ -1,0 +1,514 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"camera_mipi_imx219_b.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.RIIC_MipiWrite,"ax",%progbits
+  17              		.align	2
+  18              		.global	RIIC_MipiWrite
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	RIIC_MipiWrite:
+  24              	.LFB3:
+  25              		.file 1 "../src/renesas/application/common/camera/camera_mipi_imx219_b.c"
+   1:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /**************************************************************************************************
+   2:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * DISCLAIMER
+   3:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * applicable laws, including copyright laws.
+   6:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * following link:
+  15:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * http://www.renesas.com/disclaimer
+  16:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  *
+  17:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  **************************************************************************************************
+  19:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /**************************************************************************//**
+  20:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @file         camera_mipi_imx219_b.c
+  21:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @version      0.01
+  22:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @brief        MIPI Camera Register Setting
+  23:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  24:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  25:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /******************************************************************************
+  26:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** Includes   <System Includes> , "Project Includes"
+  27:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  28:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    "mipi_camera.h"
+  29:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #if (CAM_MIPI == CAM_IMX219_B)
+  30:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    <stdio.h>
+  31:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    <iodefine.h>
+  32:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    "r_mipi_api.h"
+  33:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    "r_mmu_drv_api.h"
+  34:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    "r_riic_drv_api.h"
+  35:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    "camera_mipi_imx219_b_regdata.h"
+  36:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    "r_devlink_wrapper.h"
+  37:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #include    "r_riic_drv_sc_cfg.h"
+  38:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  39:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /******************************************************************************
+  40:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** Macro definitions
+  41:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  42:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** #define MIPI_CAMERA_SUBADD    (0x20)
+  43:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  44:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /******************************************************************************
+  45:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** Typedef definitions
+  46:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  47:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  48:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /******************************************************************************
+  49:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** Imported global variables and functions (from other files)
+  50:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  51:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  52:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /******************************************************************************
+  53:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** Exported global variables (to be accessed by other files)
+  54:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  55:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  56:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /******************************************************************************
+  57:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** Private global variables and functions
+  58:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  59:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** int_t hi2c2 = ( -1);
+  60:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  61:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /**************************************************************************//**
+  62:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @fn          Init_Camera
+  63:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @brief       Init_Camera
+  64:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @param[in]   None
+  65:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @retval      None
+  66:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+  67:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** void Init_Camera(void) 
+  68:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** {
+  69:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     volatile uint32_t count;
+  70:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     uint8_t  reg_sw_standby_in[3] = {0x01,0x00,0x00};    /* Software standby in setting */
+  71:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     uint8_t  reg_sw_reset[3]      = {0x01,0x03,0x01};    /* Software reset setting */
+  72:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     int_t    ret;
+  73:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  74:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     /* open RIIC */
+  75:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     ret = open(DEVICE_INDENTIFIER "riic1", O_RDWR);
+  76:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  77:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     if (ret >= 0)
+  78:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+  79:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****         hi2c2 = ret;
+  80:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     }
+  81:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  82:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     /* SW standby */
+  83:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     RIIC_MipiWrite(MIPI_CAMERA_SUBADD,
+  84:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_in[0],
+  85:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_in[1],
+  86:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_in[2]);
+  87:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  88:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     /* SW Reset */
+  89:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     RIIC_MipiWrite(MIPI_CAMERA_SUBADD,
+  90:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_reset[0],
+  91:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_reset[1],
+  92:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_reset[2]);
+  93:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  94:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     /* Have to wait Camera ready */
+  95:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     for (count = (528 * 2000); count > 0; count--) /* CPU Clock = 528MHz, 528 clock is needed to wa
+  96:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+  97:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****         /* Do nothing 2ms(2000us) wait*/
+  98:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****         ;
+  99:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     }
+ 100:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 101:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     /* MIPI Camera Init */
+ 102:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     for(count = 0; count < INIT_REG_NUM_MIPI; count++)
+ 103:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+ 104:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****         RIIC_MipiWrite(MIPI_CAMERA_SUBADD,
+ 105:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                         g_mipi_reg_init_table[count].reg_add_upper,
+ 106:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                         g_mipi_reg_init_table[count].reg_add_lower,
+ 107:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                         g_mipi_reg_init_table[count].value);
+ 108:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     }
+ 109:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** }   /* End of function Init_Camera() */
+ 110:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 111:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /**************************************************************************//**
+ 112:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @fn          Start_Camera
+ 113:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @brief       Start_Camera
+ 114:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @param[in]   None
+ 115:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @retval      None
+ 116:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+ 117:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** void Start_Camera( void )
+ 118:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** {
+ 119:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     /* MIPI camera clock start setting */
+ 120:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     uint8_t reg_sw_standby_out[3] = {0x01,0x00,0x01};
+ 121:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 122:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     RIIC_MipiWrite(MIPI_CAMERA_SUBADD,
+ 123:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_out[0],
+ 124:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_out[1],
+ 125:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_out[2]);
+ 126:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** }   /* End of function Start_Camera() */
+ 127:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 128:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 129:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** /******************************************************************************
+ 130:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @fn        RIIC_MipiWrite
+ 131:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****  * @brief     RIIC_MipiWrite
+ 132:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @param[in]  ic_adr         : device address.
+ 133:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @param[in]  reg_adr_upper  : upper register address to write .
+ 134:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @param[in]  reg_adr_lower  : lower register address to write .
+ 135:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @param[in]  reg_data       : write data .
+ 136:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** * @retval  : none
+ 137:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** ******************************************************************************/
+ 138:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** void RIIC_MipiWrite 
+ 139:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     ( uint8_t ic_adr, uint8_t reg_adr_upper, uint8_t reg_adr_lower, uint8_t reg_data )
+ 140:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** {
+  26              		.loc 1 140 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 24
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+  31 0000 04E02DE5 		str	lr, [sp, #-4]!
+  32              		.cfi_def_cfa_offset 4
+  33              		.cfi_offset 14, -4
+  34 0004 1CD04DE2 		sub	sp, sp, #28
+  35              		.cfi_def_cfa_offset 32
+  36 0008 0730CDE5 		strb	r3, [sp, #7]
+ 141:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     int_t ret;
+ 142:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     st_r_drv_riic_transfer_t i2c_write;
+ 143:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 144:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     i2c_write.device_address = ic_adr;
+  37              		.loc 1 144 0
+  38 000c B800CDE1 		strh	r0, [sp, #8]	@ movhi
+ 145:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     i2c_write.sub_address_type = RIIC_SUB_ADDR_WIDTH_16_BITS;
+  39              		.loc 1 145 0
+  40 0010 0230A0E3 		mov	r3, #2
+  41              	.LVL1:
+  42 0014 0A30CDE5 		strb	r3, [sp, #10]
+ 146:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     i2c_write.sub_address = (reg_adr_upper << 8) | reg_adr_lower;
+  43              		.loc 1 146 0
+  44 0018 012482E1 		orr	r2, r2, r1, lsl #8
+  45              	.LVL2:
+  46 001c 0C208DE5 		str	r2, [sp, #12]
+ 147:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     i2c_write.number_of_bytes = 1;
+  47              		.loc 1 147 0
+  48 0020 0130A0E3 		mov	r3, #1
+  49 0024 10308DE5 		str	r3, [sp, #16]
+ 148:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     i2c_write.p_data_buffer = &reg_data;
+  50              		.loc 1 148 0
+  51 0028 07308DE2 		add	r3, sp, #7
+  52              	.LVL3:
+  53 002c 14308DE5 		str	r3, [sp, #20]
+ 149:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 150:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     ret = control(hi2c2, CTL_RIIC_WRITE, &i2c_write);
+  54              		.loc 1 150 0
+  55 0030 003000E3 		movw	r3, #:lower16:.LANCHOR0
+  56              	.LVL4:
+  57 0034 003040E3 		movt	r3, #:upper16:.LANCHOR0
+  58 0038 08208DE2 		add	r2, sp, #8
+  59 003c 0410A0E3 		mov	r1, #4
+  60              	.LVL5:
+  61 0040 000093E5 		ldr	r0, [r3]
+  62              	.LVL6:
+  63 0044 FEFFFFEB 		bl	control
+  64              	.LVL7:
+ 151:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 152:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** }   /* End of function RIIC_MipiWrite() */
+  65              		.loc 1 152 0
+  66 0048 1CD08DE2 		add	sp, sp, #28
+  67              		.cfi_def_cfa_offset 4
+  68              		@ sp needed
+  69 004c 04F09DE4 		ldr	pc, [sp], #4
+  70              		.cfi_endproc
+  71              	.LFE3:
+  73              		.section	.text.Init_Camera,"ax",%progbits
+  74              		.align	2
+  75              		.global	Init_Camera
+  76              		.syntax unified
+  77              		.arm
+  78              		.fpu neon
+  80              	Init_Camera:
+  81              	.LFB1:
+  68:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     volatile uint32_t count;
+  82              		.loc 1 68 0
+  83              		.cfi_startproc
+  84              		@ args = 0, pretend = 0, frame = 8
+  85              		@ frame_needed = 0, uses_anonymous_args = 0
+  86 0000 04E02DE5 		str	lr, [sp, #-4]!
+  87              		.cfi_def_cfa_offset 4
+  88              		.cfi_offset 14, -4
+  89 0004 0CD04DE2 		sub	sp, sp, #12
+  90              		.cfi_def_cfa_offset 16
+  75:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+  91              		.loc 1 75 0
+  92 0008 0210A0E3 		mov	r1, #2
+  93 000c 000000E3 		movw	r0, #:lower16:.LC2
+  94 0010 000040E3 		movt	r0, #:upper16:.LC2
+  95 0014 FEFFFFEB 		bl	open
+  96              	.LVL8:
+  77:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+  97              		.loc 1 77 0
+  98 0018 000050E3 		cmp	r0, #0
+  79:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     }
+  99              		.loc 1 79 0
+ 100 001c 003000A3 		movwge	r3, #:lower16:.LANCHOR0
+ 101 0020 003040A3 		movtge	r3, #:upper16:.LANCHOR0
+ 102 0024 000083A5 		strge	r0, [r3]
+ 103              	.L4:
+  83:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_in[0],
+ 104              		.loc 1 83 0
+ 105 0028 0030A0E3 		mov	r3, #0
+ 106 002c 0320A0E1 		mov	r2, r3
+ 107 0030 0110A0E3 		mov	r1, #1
+ 108 0034 2000A0E3 		mov	r0, #32
+ 109              	.LVL9:
+ 110 0038 FEFFFFEB 		bl	RIIC_MipiWrite
+ 111              	.LVL10:
+  89:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_reset[0],
+ 112              		.loc 1 89 0
+ 113 003c 0130A0E3 		mov	r3, #1
+ 114 0040 0320A0E3 		mov	r2, #3
+ 115 0044 0310A0E1 		mov	r1, r3
+ 116 0048 2000A0E3 		mov	r0, #32
+ 117 004c FEFFFFEB 		bl	RIIC_MipiWrite
+ 118              	.LVL11:
+  95:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+ 119              		.loc 1 95 0
+ 120 0050 1D3CA0E3 		mov	r3, #7424
+ 121 0054 103040E3 		movt	r3, 16
+ 122 0058 04308DE5 		str	r3, [sp, #4]
+ 123 005c 020000EA 		b	.L5
+ 124              	.L6:
+  95:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+ 125              		.loc 1 95 0 is_stmt 0 discriminator 3
+ 126 0060 04309DE5 		ldr	r3, [sp, #4]
+ 127 0064 013043E2 		sub	r3, r3, #1
+ 128 0068 04308DE5 		str	r3, [sp, #4]
+ 129              	.L5:
+  95:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+ 130              		.loc 1 95 0 discriminator 1
+ 131 006c 04309DE5 		ldr	r3, [sp, #4]
+ 132 0070 000053E3 		cmp	r3, #0
+ 133 0074 F9FFFF1A 		bne	.L6
+ 102:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+ 134              		.loc 1 102 0 is_stmt 1
+ 135 0078 04308DE5 		str	r3, [sp, #4]
+ 136 007c 110000EA 		b	.L7
+ 137              	.L8:
+ 104:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                         g_mipi_reg_init_table[count].reg_add_upper,
+ 138              		.loc 1 104 0 discriminator 3
+ 139 0080 04C09DE5 		ldr	ip, [sp, #4]
+ 140 0084 04309DE5 		ldr	r3, [sp, #4]
+ 141 0088 04209DE5 		ldr	r2, [sp, #4]
+ 142 008c 000000E3 		movw	r0, #:lower16:g_mipi_reg_init_table
+ 143 0090 000040E3 		movt	r0, #:upper16:g_mipi_reg_init_table
+ 144 0094 822082E0 		add	r2, r2, r2, lsl #1
+ 145 0098 021080E0 		add	r1, r0, r2
+ 146 009c 833083E0 		add	r3, r3, r3, lsl #1
+ 147 00a0 032080E0 		add	r2, r0, r3
+ 148 00a4 8CC08CE0 		add	ip, ip, ip, lsl #1
+ 149 00a8 0230D1E5 		ldrb	r3, [r1, #2]	@ zero_extendqisi2
+ 150 00ac 0120D2E5 		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 151 00b0 0C10D0E7 		ldrb	r1, [r0, ip]	@ zero_extendqisi2
+ 152 00b4 2000A0E3 		mov	r0, #32
+ 153 00b8 FEFFFFEB 		bl	RIIC_MipiWrite
+ 154              	.LVL12:
+ 102:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+ 155              		.loc 1 102 0 discriminator 3
+ 156 00bc 04309DE5 		ldr	r3, [sp, #4]
+ 157 00c0 013083E2 		add	r3, r3, #1
+ 158 00c4 04308DE5 		str	r3, [sp, #4]
+ 159              	.L7:
+ 102:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     {
+ 160              		.loc 1 102 0 is_stmt 0 discriminator 1
+ 161 00c8 04309DE5 		ldr	r3, [sp, #4]
+ 162 00cc 240053E3 		cmp	r3, #36
+ 163 00d0 EAFFFF9A 		bls	.L8
+ 109:../src/renesas/application/common/camera/camera_mipi_imx219_b.c **** 
+ 164              		.loc 1 109 0 is_stmt 1
+ 165 00d4 0CD08DE2 		add	sp, sp, #12
+ 166              		.cfi_def_cfa_offset 4
+ 167              		@ sp needed
+ 168 00d8 04F09DE4 		ldr	pc, [sp], #4
+ 169              		.cfi_endproc
+ 170              	.LFE1:
+ 172              		.section	.text.Start_Camera,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	Start_Camera
+ 175              		.syntax unified
+ 176              		.arm
+ 177              		.fpu neon
+ 179              	Start_Camera:
+ 180              	.LFB2:
+ 118:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****     /* MIPI camera clock start setting */
+ 181              		.loc 1 118 0
+ 182              		.cfi_startproc
+ 183              		@ args = 0, pretend = 0, frame = 0
+ 184              		@ frame_needed = 0, uses_anonymous_args = 0
+ 185 0000 10402DE9 		push	{r4, lr}
+ 186              		.cfi_def_cfa_offset 8
+ 187              		.cfi_offset 4, -8
+ 188              		.cfi_offset 14, -4
+ 122:../src/renesas/application/common/camera/camera_mipi_imx219_b.c ****                     reg_sw_standby_out[0],
+ 189              		.loc 1 122 0
+ 190 0004 0130A0E3 		mov	r3, #1
+ 191 0008 0020A0E3 		mov	r2, #0
+ 192 000c 0310A0E1 		mov	r1, r3
+ 193 0010 2000A0E3 		mov	r0, #32
+ 194 0014 FEFFFFEB 		bl	RIIC_MipiWrite
+ 195              	.LVL13:
+ 196 0018 1080BDE8 		pop	{r4, pc}
+ 197              		.cfi_endproc
+ 198              	.LFE2:
+ 200              		.global	hi2c2
+ 201              		.section	.data.hi2c2,"aw",%progbits
+ 202              		.align	2
+ 203              		.set	.LANCHOR0,. + 0
+ 206              	hi2c2:
+ 207 0000 FFFFFFFF 		.word	-1
+ 208              		.section	.rodata.Init_Camera.str1.4,"aMS",%progbits,1
+ 209              		.align	2
+ 210              	.LC2:
+ 211 0000 5C5C2E5C 		.ascii	"\\\\.\\riic1\000"
+ 211      72696963 
+ 211      3100
+ 212              		.text
+ 213              	.Letext0:
+ 214              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 215              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 216              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 217              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 218              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 219              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 220              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 221              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 222              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 223              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 224              		.file 12 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 225              		.file 13 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 226              		.file 14 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 227              		.file 15 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 228              		.file 16 "../src/renesas/application/common/camera/camera_mipi_imx219_b_regdata.h"
+ 229              		.file 17 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 230              		.file 18 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 231              		.file 19 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 232              		.file 20 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 233              		.file 21 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 234              		.file 22 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+DEFINED SYMBOLS
+                            *ABS*:00000000 camera_mipi_imx219_b.c
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:17     .text.RIIC_MipiWrite:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:23     .text.RIIC_MipiWrite:00000000 RIIC_MipiWrite
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:203    .data.hi2c2:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:74     .text.Init_Camera:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:80     .text.Init_Camera:00000000 Init_Camera
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:210    .rodata.Init_Camera.str1.4:00000000 .LC2
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:173    .text.Start_Camera:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:179    .text.Start_Camera:00000000 Start_Camera
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:206    .data.hi2c2:00000000 hi2c2
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:202    .data.hi2c2:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccMKkoMC.s:209    .rodata.Init_Camera.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.mipi_camera.h.25.be6225dfafda6e2e1c67275eaeb708d4
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_mipi_user.h.32.80935d64668479eae19d7b52f81717b2
+                           .group:00000000 wm4.camera_imx219_b.h.30.8c82c3cf929ab7b047a9cbaee3093a39
+                           .group:00000000 wm4.stdio.h.27.3fc80220048df77954e38daec3bb9670
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.30.bbece7fa40993a78092dcc5805132560
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.8188691c2279eac7a223caa50f6694b9
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_mmu_lld_rza2m.h.39.be55e997d8665d00d9f529dbd893c422
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.reent.h.91.b3ea049ebc5486622b61409b78486f84
+                           .group:00000000 wm4._default_fcntl.h.6.b13d56891b95175b639f824a0fd1ed77
+                           .group:00000000 wm4.time.h.8.db4619001f026d0b4874c029fef0e91f
+                           .group:00000000 wm4.time.h.2.4581ce0ffb6627cfc02162c94bf846c9
+                           .group:00000000 wm4.time.h.25.0e6a0fdbc9955f5707ed54246ed2e089
+                           .group:00000000 wm4.time.h.162.d096f2f5887c52e271c4dc33d795dc64
+                           .group:00000000 wm4.stat.h.71.d65ac61ff88c651e198008cfb38bda9c
+                           .group:00000000 wm4.fcntl.h.9.9336f33d7f5028f694c75e6e224e0cf7
+                           .group:00000000 wm4.r_devlink_wrapper.h.72.ad1de4c851513efa3aed0532ebca7ca2
+                           .group:00000000 wm4.r_rza2m_riic_lld_cfg.h.34.420dadece52c9d581310a82d03ef7a9c
+                           .group:00000000 wm4.r_rza2m_riic_lld_api.h.36.fbae5305df069aab4ee8737f6b4cc155
+                           .group:00000000 wm4.r_riic_drv_api.h.81.8cfa166374387345d2e15a569d3903b9
+                           .group:00000000 wm4.r_gpio_lld_rza2m.h.35.fd76d0816769697a06dd6f4a61c03021
+                           .group:00000000 wm4.r_gpio_drv_api.h.82.9514441e942567d0eb0b23efaff62239
+                           .group:00000000 wm4.r_riic_drv_sc_cfg.h.61.5b602d36b67415ece823db1792791a3e
+
+UNDEFINED SYMBOLS
+control
+open
+g_mipi_reg_init_table

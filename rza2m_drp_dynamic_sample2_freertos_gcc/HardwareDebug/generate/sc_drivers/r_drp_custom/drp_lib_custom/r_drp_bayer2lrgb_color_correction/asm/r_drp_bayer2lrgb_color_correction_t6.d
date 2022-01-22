@@ -1,0 +1,2 @@
+generate/sc_drivers/r_drp_custom/drp_lib_custom/r_drp_bayer2lrgb_color_correction/asm/r_drp_bayer2lrgb_color_correction_t6.o: \
+ ../generate/sc_drivers/r_drp_custom/drp_lib_custom/r_drp_bayer2lrgb_color_correction/asm/r_drp_bayer2lrgb_color_correction_t6.asm

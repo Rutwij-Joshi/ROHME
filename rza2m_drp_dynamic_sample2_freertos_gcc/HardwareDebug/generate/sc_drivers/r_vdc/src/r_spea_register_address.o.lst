@@ -1,0 +1,256 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_spea_register_address.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.global	rle_regaddr_img_synthesizer
+  17              		.global	rle_regaddr
+  18              		.global	spea_regaddr_img_synthesizer
+  19              		.global	spea_regaddr_unit_ctr
+  20              		.global	spea_regaddr_unit_update_ctrl
+  21              		.global	spea_regaddr_unit_enable_ctrl
+  22              		.section	.rodata.rle_regaddr,"a",%progbits
+  23              		.align	2
+  26              	rle_regaddr:
+  27 0000 10E003E8 		.word	-402399216
+  28 0004 20E003E8 		.word	-402399200
+  29 0008 24E003E8 		.word	-402399196
+  30 000c 2CE003E8 		.word	-402399188
+  31 0010 40E003E8 		.word	-402399168
+  32 0014 48E003E8 		.word	-402399160
+  33              		.section	.rodata.rle_regaddr_img_synthesizer,"a",%progbits
+  34              		.align	2
+  37              	rle_regaddr_img_synthesizer:
+  38 0000 0076FFFC 		.word	-50366976
+  39 0004 0876FFFC 		.word	-50366968
+  40 0008 0C76FFFC 		.word	-50366964
+  41 000c 8075FFFC 		.word	-50367104
+  42 0010 8C75FFFC 		.word	-50367092
+  43              		.section	.rodata.spea_regaddr_img_synthesizer,"a",%progbits
+  44              		.align	2
+  47              	spea_regaddr_img_synthesizer:
+  48 0000 0077FFFC 		.word	-50366720
+  49 0004 0C77FFFC 		.word	-50366708
+  50 0008 8077FFFC 		.word	-50366592
+  51 000c 8C77FFFC 		.word	-50366580
+  52              		.section	.rodata.spea_regaddr_unit_ctr,"a",%progbits
+  53              		.align	2
+  56              	spea_regaddr_unit_ctr:
+  57 0000 00E403E8 		.word	-402398208
+  58 0004 08E403E8 		.word	-402398200
+  59 0008 0CE403E8 		.word	-402398196
+  60 000c 20E403E8 		.word	-402398176
+  61 0010 28E403E8 		.word	-402398168
+  62 0014 2CE403E8 		.word	-402398164
+  63 0018 40E403E8 		.word	-402398144
+  64 001c 48E403E8 		.word	-402398136
+  65 0020 4CE403E8 		.word	-402398132
+  66 0024 60E403E8 		.word	-402398112
+  67 0028 68E403E8 		.word	-402398104
+  68 002c 6CE403E8 		.word	-402398100
+  69 0030 80E403E8 		.word	-402398080
+  70 0034 88E403E8 		.word	-402398072
+  71 0038 8CE403E8 		.word	-402398068
+  72 003c A0E403E8 		.word	-402398048
+  73 0040 A8E403E8 		.word	-402398040
+  74 0044 ACE403E8 		.word	-402398036
+  75 0048 C0E403E8 		.word	-402398016
+  76 004c C8E403E8 		.word	-402398008
+  77 0050 CCE403E8 		.word	-402398004
+  78 0054 E0E403E8 		.word	-402397984
+  79 0058 E8E403E8 		.word	-402397976
+  80 005c ECE403E8 		.word	-402397972
+  81 0060 00E503E8 		.word	-402397952
+  82 0064 08E503E8 		.word	-402397944
+  83 0068 0CE503E8 		.word	-402397940
+  84 006c 20E503E8 		.word	-402397920
+  85 0070 28E503E8 		.word	-402397912
+  86 0074 2CE503E8 		.word	-402397908
+  87 0078 40E503E8 		.word	-402397888
+  88 007c 48E503E8 		.word	-402397880
+  89 0080 4CE503E8 		.word	-402397876
+  90 0084 60E503E8 		.word	-402397856
+  91 0088 68E503E8 		.word	-402397848
+  92 008c 6CE503E8 		.word	-402397844
+  93 0090 80E503E8 		.word	-402397824
+  94 0094 88E503E8 		.word	-402397816
+  95 0098 8CE503E8 		.word	-402397812
+  96 009c A0E503E8 		.word	-402397792
+  97 00a0 A8E503E8 		.word	-402397784
+  98 00a4 ACE503E8 		.word	-402397780
+  99 00a8 C0E503E8 		.word	-402397760
+ 100 00ac C8E503E8 		.word	-402397752
+ 101 00b0 CCE503E8 		.word	-402397748
+ 102 00b4 E0E503E8 		.word	-402397728
+ 103 00b8 E8E503E8 		.word	-402397720
+ 104 00bc ECE503E8 		.word	-402397716
+ 105 00c0 00E803E8 		.word	-402397184
+ 106 00c4 08E803E8 		.word	-402397176
+ 107 00c8 0CE803E8 		.word	-402397172
+ 108 00cc 20E803E8 		.word	-402397152
+ 109 00d0 28E803E8 		.word	-402397144
+ 110 00d4 2CE803E8 		.word	-402397140
+ 111 00d8 40E803E8 		.word	-402397120
+ 112 00dc 48E803E8 		.word	-402397112
+ 113 00e0 4CE803E8 		.word	-402397108
+ 114 00e4 60E803E8 		.word	-402397088
+ 115 00e8 68E803E8 		.word	-402397080
+ 116 00ec 6CE803E8 		.word	-402397076
+ 117 00f0 80E803E8 		.word	-402397056
+ 118 00f4 88E803E8 		.word	-402397048
+ 119 00f8 8CE803E8 		.word	-402397044
+ 120 00fc A0E803E8 		.word	-402397024
+ 121 0100 A8E803E8 		.word	-402397016
+ 122 0104 ACE803E8 		.word	-402397012
+ 123 0108 C0E803E8 		.word	-402396992
+ 124 010c C8E803E8 		.word	-402396984
+ 125 0110 CCE803E8 		.word	-402396980
+ 126 0114 E0E803E8 		.word	-402396960
+ 127 0118 E8E803E8 		.word	-402396952
+ 128 011c ECE803E8 		.word	-402396948
+ 129 0120 00E903E8 		.word	-402396928
+ 130 0124 08E903E8 		.word	-402396920
+ 131 0128 0CE903E8 		.word	-402396916
+ 132 012c 20E903E8 		.word	-402396896
+ 133 0130 28E903E8 		.word	-402396888
+ 134 0134 2CE903E8 		.word	-402396884
+ 135 0138 40E903E8 		.word	-402396864
+ 136 013c 48E903E8 		.word	-402396856
+ 137 0140 4CE903E8 		.word	-402396852
+ 138 0144 60E903E8 		.word	-402396832
+ 139 0148 68E903E8 		.word	-402396824
+ 140 014c 6CE903E8 		.word	-402396820
+ 141 0150 80E903E8 		.word	-402396800
+ 142 0154 88E903E8 		.word	-402396792
+ 143 0158 8CE903E8 		.word	-402396788
+ 144 015c A0E903E8 		.word	-402396768
+ 145 0160 A8E903E8 		.word	-402396760
+ 146 0164 ACE903E8 		.word	-402396756
+ 147 0168 C0E903E8 		.word	-402396736
+ 148 016c C8E903E8 		.word	-402396728
+ 149 0170 CCE903E8 		.word	-402396724
+ 150 0174 E0E903E8 		.word	-402396704
+ 151 0178 E8E903E8 		.word	-402396696
+ 152 017c ECE903E8 		.word	-402396692
+ 153              		.section	.rodata.spea_regaddr_unit_enable_ctrl,"a",%progbits
+ 154              		.align	2
+ 157              	spea_regaddr_unit_enable_ctrl:
+ 158 0000 00E103E8 		.word	-402398976
+ 159 0004 04E103E8 		.word	-402398972
+ 160 0008 10E103E8 		.word	-402398960
+ 161 000c 14E103E8 		.word	-402398956
+ 162              		.section	.rodata.spea_regaddr_unit_update_ctrl,"a",%progbits
+ 163              		.align	2
+ 166              	spea_regaddr_unit_update_ctrl:
+ 167 0000 08E103E8 		.word	-402398968
+ 168 0004 18E103E8 		.word	-402398952
+ 169              		.text
+ 170              	.Letext0:
+ 171              		.file 1 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 172              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 173              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 174              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 175              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 176              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 177              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 178              		.file 8 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 179              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 180              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 181              		.file 11 "../generate/sc_drivers/r_vdc/src/r_vdc_register.h"
+ 182              		.file 12 "../generate/sc_drivers/r_vdc/src/r_spea_register.h"
+ 183              		.file 13 "../generate/sc_drivers/r_vdc/src/r_spea_register_address.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_spea_register_address.c
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:37     .rodata.rle_regaddr_img_synthesizer:00000000 rle_regaddr_img_synthesizer
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:26     .rodata.rle_regaddr:00000000 rle_regaddr
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:47     .rodata.spea_regaddr_img_synthesizer:00000000 spea_regaddr_img_synthesizer
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:56     .rodata.spea_regaddr_unit_ctr:00000000 spea_regaddr_unit_ctr
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:166    .rodata.spea_regaddr_unit_update_ctrl:00000000 spea_regaddr_unit_update_ctrl
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:157    .rodata.spea_regaddr_unit_enable_ctrl:00000000 spea_regaddr_unit_enable_ctrl
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:23     .rodata.rle_regaddr:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:34     .rodata.rle_regaddr_img_synthesizer:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:44     .rodata.spea_regaddr_img_synthesizer:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:53     .rodata.spea_regaddr_unit_ctr:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:154    .rodata.spea_regaddr_unit_enable_ctrl:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccRf3ZYG.s:163    .rodata.spea_regaddr_unit_update_ctrl:00000000 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_vdc_user.h.32.3f3db05b07a24f5c3abdea3809348418
+                           .group:00000000 wm4.r_vdc.h.31.7a8e28d4a80bfb6c6b4be0ab3890da8f
+                           .group:00000000 wm4.r_vdc_register.h.32.76d2530dc3b12780409c9b9c662462be
+                           .group:00000000 wm4.r_spea.h.31.97e439be2c83413163d6591ee53d8748
+                           .group:00000000 wm4.r_spea_register.h.31.b55d99a589db5e7606a0103517398cb1
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,1054 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_mmu_lld_rza2m.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.mmu_get_ttb_entry,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	mmu_get_ttb_entry:
+  23              	.LFB5:
+  24              		.file 1 "../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c"
+   1:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /*******************************************************************************
+   2:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * DISCLAIMER
+   3:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * This software is supplied by Renesas Electronics Corporation and is only
+   4:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * intended for use with Renesas products. No other uses are authorized. This
+   5:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * software is owned by Renesas Electronics Corporation and is protected under
+   6:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * all applicable laws, including copyright laws.
+   7:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   8:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+   9:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  10:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.
+  11:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS
+  12:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE
+  13:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR
+  14:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE
+  15:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  16:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Renesas reserves the right, without notice, to make changes to this software
+  17:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * and to discontinue the availability of this software. By using this software,
+  18:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * you agree to the additional terms and conditions found by accessing the
+  19:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * following link:
+  20:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * http://www.renesas.com/disclaimer
+  21:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Copyright (C) 2018 Renesas Electronics Corporation. All rights reserved.
+  22:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** *******************************************************************************/
+  23:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /*******************************************************************************
+  24:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * File Name : r_mmu_lld_rza2m.c
+  25:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description : Memory Management Unit Low Layer Driver
+  26:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+  27:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  28:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+  29:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** Includes   <System Includes> , "Project Includes"
+  30:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+  31:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** #include "r_mmu_drv_link.h"
+  32:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** #include "r_mmu_drv_sc_cfg.h"
+  33:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** #include "r_compiler_abstraction_api.h"
+  34:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  35:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+  36:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** Private global variables and functions
+  37:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+  38:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /*! Version Information */
+  39:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** static const st_drv_info_t gs_lld_info =
+  40:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+  41:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+  42:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         ((STDIO_MMU_RZ_LLD_VERSION_MAJOR << 16) + STDIO_MMU_RZ_LLD_VERSION_MINOR)
+  43:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     },
+  44:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     STDIO_MMU_RZ_LLD_BUILD_NUM,
+  45:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     STDIO_MMU_RZ_LLD_DRV_NAME
+  46:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** };
+  47:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  48:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** static uint32_t * mmu_get_ttb_entry(uint32_t address);
+  49:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  50:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  51:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+  52:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_WriteTbl
+  53:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : Write MMU entry data
+  54:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : uint32_t   vaddress  ; I : virtual address to be mapped
+  55:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** *              : uint32_t   paddress  ; I : physical address to be mapped
+  56:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** *              : uint32_t   size      ; I : size of 1M sections
+  57:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** *              : uint32_t   entry     ; I : initial data of fill pattern
+  58:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : MMU_SUCCESS      : successful
+  59:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** *                MMU_ERR_OVERFLOW : overflow of virtual or physical area
+  60:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+  61:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** e_mmu_err_t R_MMU_WriteTbl(uint32_t vaddress, uint32_t paddress, uint32_t size, uint32_t entry)
+  62:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+  63:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t * p_ttb;
+  64:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t dataindex;
+  65:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  66:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* virtual address space check */
+  67:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     dataindex = (vaddress >> 20) + size;
+  68:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     if (dataindex > 4096)
+  69:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+  70:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         return (MMU_ERR_OVERFLOW);
+  71:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+  72:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  73:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* physical address space check */
+  74:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     dataindex = (paddress >> 20) + size;
+  75:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     if (dataindex > 4096)
+  76:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+  77:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         return (MMU_ERR_OVERFLOW);
+  78:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+  79:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  80:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     p_ttb = mmu_get_ttb_entry(vaddress);
+  81:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     entry = (entry & 0x000FFFFFuL) | (paddress & 0xFFF00000uL);
+  82:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  83:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     while (0 != size)
+  84:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+  85:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         *p_ttb = entry;
+  86:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         p_ttb++;
+  87:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         entry += 0x00100000uL;
+  88:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         size--;
+  89:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+  90:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  91:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     return (MMU_SUCCESS);
+  92:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+  93:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+  94:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_WriteTbl
+  95:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+  96:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+  97:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+  98:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_ReadTbl
+  99:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : Read MMU entry data
+ 100:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : uint32_t   address  ; I : virtual address to be read
+ 101:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : MMU table entry value
+ 102:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 103:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** uint32_t R_MMU_ReadTbl(uint32_t address)
+ 104:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 105:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t * p_ttb;
+ 106:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     p_ttb = mmu_get_ttb_entry(address);
+ 107:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 108:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     return *p_ttb;
+ 109:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 110:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 111:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_ReadTbl
+ 112:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 113:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 114:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 115:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: mmu_get_ttb_entry
+ 116:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : Get TTB entry address of specified address
+ 117:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : uint32_t   address   ; I : query address
+ 118:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : TTB entry address
+ 119:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 120:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** static uint32_t * mmu_get_ttb_entry(uint32_t address)
+ 121:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+  25              		.loc 1 121 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              	.LVL0:
+  30 0000 70402DE9 		push	{r4, r5, r6, lr}
+  31              		.cfi_def_cfa_offset 16
+  32              		.cfi_offset 4, -16
+  33              		.cfi_offset 5, -12
+  34              		.cfi_offset 6, -8
+  35              		.cfi_offset 14, -4
+  36 0004 0040A0E1 		mov	r4, r0
+ 122:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t ttbcr;
+ 123:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t ttbr;
+ 124:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t mask;
+ 125:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t res;
+ 126:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 127:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     ttbcr = r_mmu_get_ttbcr();
+  37              		.loc 1 127 0
+  38 0008 FEFFFFEB 		bl	r_mmu_get_ttbcr
+  39              	.LVL1:
+  40 000c 0050A0E1 		mov	r5, r0
+  41              	.LVL2:
+ 128:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     ttbr = r_mmu_get_ttbr0();
+  42              		.loc 1 128 0
+  43 0010 FEFFFFEB 		bl	r_mmu_get_ttbr0
+  44              	.LVL3:
+ 129:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     mask = (0xFFFFC000uL) << (ttbcr&7);
+  45              		.loc 1 129 0
+  46 0014 075005E2 		and	r5, r5, #7
+  47              	.LVL4:
+  48 0018 0339A0E3 		mov	r3, #49152
+  49 001c FF3F4FE3 		movt	r3, 65535
+  50              	.LVL5:
+ 130:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     res = (ttbr & mask) + ((address >> 18) & 0xFFFFFFFCuL);
+  51              		.loc 1 130 0
+  52 0020 130500E0 		and	r0, r0, r3, lsl r5
+  53              	.LVL6:
+  54 0024 2449A0E1 		lsr	r4, r4, #18
+  55              	.LVL7:
+  56 0028 0340C4E3 		bic	r4, r4, #3
+  57              	.LVL8:
+ 131:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 132:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* Cast to an appropriate type */
+ 133:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     return ((uint32_t *) res);
+ 134:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+  58              		.loc 1 134 0
+  59 002c 040080E0 		add	r0, r0, r4
+  60              	.LVL9:
+  61 0030 7080BDE8 		pop	{r4, r5, r6, pc}
+  62              		.cfi_endproc
+  63              	.LFE5:
+  65              		.section	.text.R_MMU_WriteTbl,"ax",%progbits
+  66              		.align	2
+  67              		.global	R_MMU_WriteTbl
+  68              		.syntax unified
+  69              		.arm
+  70              		.fpu neon
+  72              	R_MMU_WriteTbl:
+  73              	.LFB3:
+  62:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t * p_ttb;
+  74              		.loc 1 62 0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 0
+  77              		@ frame_needed = 0, uses_anonymous_args = 0
+  78              	.LVL10:
+  79 0000 70402DE9 		push	{r4, r5, r6, lr}
+  80              		.cfi_def_cfa_offset 16
+  81              		.cfi_offset 4, -16
+  82              		.cfi_offset 5, -12
+  83              		.cfi_offset 6, -8
+  84              		.cfi_offset 14, -4
+  85 0004 0340A0E1 		mov	r4, r3
+  67:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     if (dataindex > 4096)
+  86              		.loc 1 67 0
+  87 0008 203A82E0 		add	r3, r2, r0, lsr #20
+  88              	.LVL11:
+  68:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+  89              		.loc 1 68 0
+  90 000c 010A53E3 		cmp	r3, #4096
+  91 0010 1100008A 		bhi	.L7
+  92 0014 0160A0E1 		mov	r6, r1
+  93 0018 0250A0E1 		mov	r5, r2
+  74:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     if (dataindex > 4096)
+  94              		.loc 1 74 0
+  95 001c 213A82E0 		add	r3, r2, r1, lsr #20
+  96              	.LVL12:
+  75:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+  97              		.loc 1 75 0
+  98 0020 010A53E3 		cmp	r3, #4096
+  99 0024 0E00008A 		bhi	.L8
+  80:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     entry = (entry & 0x000FFFFFuL) | (paddress & 0xFFF00000uL);
+ 100              		.loc 1 80 0
+ 101 0028 FEFFFFEB 		bl	mmu_get_ttb_entry
+ 102              	.LVL13:
+  81:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 103              		.loc 1 81 0
+ 104 002c 5430F3E7 		ubfx	r3, r4, #0, #20
+ 105 0030 261AA0E1 		lsr	r1, r6, #20
+ 106 0034 011AA0E1 		lsl	r1, r1, #20
+ 107 0038 013083E1 		orr	r3, r3, r1
+ 108              	.LVL14:
+  83:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 109              		.loc 1 83 0
+ 110 003c 020000EA 		b	.L5
+ 111              	.LVL15:
+ 112              	.L6:
+  85:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         p_ttb++;
+ 113              		.loc 1 85 0
+ 114 0040 043080E4 		str	r3, [r0], #4
+ 115              	.LVL16:
+  87:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         size--;
+ 116              		.loc 1 87 0
+ 117 0044 013683E2 		add	r3, r3, #1048576
+ 118              	.LVL17:
+  88:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+ 119              		.loc 1 88 0
+ 120 0048 015045E2 		sub	r5, r5, #1
+ 121              	.LVL18:
+ 122              	.L5:
+  83:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 123              		.loc 1 83 0
+ 124 004c 000055E3 		cmp	r5, #0
+ 125 0050 FAFFFF1A 		bne	.L6
+  91:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 126              		.loc 1 91 0
+ 127 0054 0000A0E3 		mov	r0, #0
+ 128              	.LVL19:
+ 129 0058 7080BDE8 		pop	{r4, r5, r6, pc}
+ 130              	.LVL20:
+ 131              	.L7:
+  70:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+ 132              		.loc 1 70 0
+ 133 005c 0000E0E3 		mvn	r0, #0
+ 134              	.LVL21:
+ 135 0060 7080BDE8 		pop	{r4, r5, r6, pc}
+ 136              	.LVL22:
+ 137              	.L8:
+  77:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+ 138              		.loc 1 77 0
+ 139 0064 0000E0E3 		mvn	r0, #0
+ 140              	.LVL23:
+  92:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 141              		.loc 1 92 0
+ 142 0068 7080BDE8 		pop	{r4, r5, r6, pc}
+ 143              		.cfi_endproc
+ 144              	.LFE3:
+ 146              		.section	.text.R_MMU_ReadTbl,"ax",%progbits
+ 147              		.align	2
+ 148              		.global	R_MMU_ReadTbl
+ 149              		.syntax unified
+ 150              		.arm
+ 151              		.fpu neon
+ 153              	R_MMU_ReadTbl:
+ 154              	.LFB4:
+ 104:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t * p_ttb;
+ 155              		.loc 1 104 0
+ 156              		.cfi_startproc
+ 157              		@ args = 0, pretend = 0, frame = 0
+ 158              		@ frame_needed = 0, uses_anonymous_args = 0
+ 159              	.LVL24:
+ 160 0000 10402DE9 		push	{r4, lr}
+ 161              		.cfi_def_cfa_offset 8
+ 162              		.cfi_offset 4, -8
+ 163              		.cfi_offset 14, -4
+ 106:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 164              		.loc 1 106 0
+ 165 0004 FEFFFFEB 		bl	mmu_get_ttb_entry
+ 166              	.LVL25:
+ 109:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 167              		.loc 1 109 0
+ 168 0008 000090E5 		ldr	r0, [r0]
+ 169              	.LVL26:
+ 170 000c 1080BDE8 		pop	{r4, pc}
+ 171              		.cfi_endproc
+ 172              	.LFE4:
+ 174              		.section	.text.R_MMU_Disable,"ax",%progbits
+ 175              		.align	2
+ 176              		.global	R_MMU_Disable
+ 177              		.syntax unified
+ 178              		.arm
+ 179              		.fpu neon
+ 181              	R_MMU_Disable:
+ 182              	.LFB7:
+ 135:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 136:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function mmu_get_ttb_entry
+ 137:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 138:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 139:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 140:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_Init
+ 141:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : Initialize MMU register
+ 142:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : none
+ 143:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : none
+ 144:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 145:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** void R_MMU_Init(void)
+ 146:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 147:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* ttbr0:RGN =b01 : outer cacheable Write-back cached, Write-allocate
+ 148:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****      * ttbr0:S   = b0 : translation table walk to non-shared memory
+ 149:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****      * ttbr0:IRGN=b01 : inner cacheability for the translation table walk is Write-back Write-alloc
+ 150:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****      */
+ 151:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t ttbr0 = (uint32_t) & (__mmu_page_table_base) | 0x48;
+ 152:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 153:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     int_t index;
+ 154:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     int_t count;
+ 155:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     int_t mmu_error;
+ 156:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 157:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     R_MMU_Disable();
+ 158:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 159:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* All area use TTBR0 entry */
+ 160:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     r_mmu_set_ttbcr(0);
+ 161:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 162:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* Set TTBR0 */
+ 163:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     r_mmu_set_ttbr0(ttbr0);
+ 164:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 165:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* All domain sets to client */
+ 166:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     r_mmu_set_dacr(0x55555555);
+ 167:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 168:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* Create MMU table from SC-configured table  */
+ 169:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     count = (sizeof(MMU_SC_TABLE)) / (sizeof(MMU_SC_TABLE[0]));
+ 170:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     for (index = 0; index < count; index++)
+ 171:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 172:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         mmu_error = R_MMU_WriteTbl(
+ 173:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****                 MMU_SC_TABLE[index].virtual_address,
+ 174:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****                 MMU_SC_TABLE[index].physical_address,
+ 175:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****                 MMU_SC_TABLE[index].page_count,
+ 176:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****                 MMU_SC_TABLE[index].page_attribute);
+ 177:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 178:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         if (MMU_SUCCESS != mmu_error)
+ 179:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         {
+ 180:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****             while (1)
+ 181:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****             {
+ 182:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****                 /* Spin here forever.. */
+ 183:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****             	R_COMPILER_Nop();
+ 184:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****             }
+ 185:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         }
+ 186:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+ 187:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 188:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 189:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_Init
+ 190:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 191:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 192:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 193:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_Disable
+ 194:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : Disable MMU
+ 195:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : none
+ 196:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : none
+ 197:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 198:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** void R_MMU_Disable(void)
+ 199:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 183              		.loc 1 199 0
+ 184              		.cfi_startproc
+ 185              		@ args = 0, pretend = 0, frame = 0
+ 186              		@ frame_needed = 0, uses_anonymous_args = 0
+ 187 0000 10402DE9 		push	{r4, lr}
+ 188              		.cfi_def_cfa_offset 8
+ 189              		.cfi_offset 4, -8
+ 190              		.cfi_offset 14, -4
+ 200:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t sctlr;
+ 201:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     sctlr = r_mmu_get_sctlr();
+ 191              		.loc 1 201 0
+ 192 0004 FEFFFFEB 		bl	r_mmu_get_sctlr
+ 193              	.LVL27:
+ 202:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     sctlr &= (~(0x0001uL));
+ 203:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     r_mmu_set_sctlr(sctlr);
+ 194              		.loc 1 203 0
+ 195 0008 0100C0E3 		bic	r0, r0, #1
+ 196              	.LVL28:
+ 197 000c FEFFFFEB 		bl	r_mmu_set_sctlr
+ 198              	.LVL29:
+ 199 0010 1080BDE8 		pop	{r4, pc}
+ 200              		.cfi_endproc
+ 201              	.LFE7:
+ 203              		.section	.text.R_MMU_Init,"ax",%progbits
+ 204              		.align	2
+ 205              		.global	R_MMU_Init
+ 206              		.syntax unified
+ 207              		.arm
+ 208              		.fpu neon
+ 210              	R_MMU_Init:
+ 211              	.LFB6:
+ 146:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     /* ttbr0:RGN =b01 : outer cacheable Write-back cached, Write-allocate
+ 212              		.loc 1 146 0
+ 213              		.cfi_startproc
+ 214              		@ args = 0, pretend = 0, frame = 0
+ 215              		@ frame_needed = 0, uses_anonymous_args = 0
+ 216 0000 10402DE9 		push	{r4, lr}
+ 217              		.cfi_def_cfa_offset 8
+ 218              		.cfi_offset 4, -8
+ 219              		.cfi_offset 14, -4
+ 151:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 220              		.loc 1 151 0
+ 221 0004 003000E3 		movw	r3, #:lower16:__mmu_page_table_base
+ 222 0008 003040E3 		movt	r3, #:upper16:__mmu_page_table_base
+ 223 000c 484083E3 		orr	r4, r3, #72
+ 224              	.LVL30:
+ 157:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 225              		.loc 1 157 0
+ 226 0010 FEFFFFEB 		bl	R_MMU_Disable
+ 227              	.LVL31:
+ 160:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 228              		.loc 1 160 0
+ 229 0014 0000A0E3 		mov	r0, #0
+ 230 0018 FEFFFFEB 		bl	r_mmu_set_ttbcr
+ 231              	.LVL32:
+ 163:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 232              		.loc 1 163 0
+ 233 001c 0400A0E1 		mov	r0, r4
+ 234 0020 FEFFFFEB 		bl	r_mmu_set_ttbr0
+ 235              	.LVL33:
+ 166:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 236              		.loc 1 166 0
+ 237 0024 550505E3 		movw	r0, #21845
+ 238 0028 550545E3 		movt	r0, 21845
+ 239 002c FEFFFFEB 		bl	r_mmu_set_dacr
+ 240              	.LVL34:
+ 170:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 241              		.loc 1 170 0
+ 242 0030 0040A0E3 		mov	r4, #0
+ 243              	.LVL35:
+ 244              	.L15:
+ 170:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 245              		.loc 1 170 0 is_stmt 0 discriminator 1
+ 246 0034 1E0054E3 		cmp	r4, #30
+ 247 0038 0C0000CA 		bgt	.L20
+ 175:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****                 MMU_SC_TABLE[index].page_attribute);
+ 248              		.loc 1 175 0 is_stmt 1
+ 249 003c 000000E3 		movw	r0, #:lower16:.LANCHOR0
+ 250 0040 000040E3 		movt	r0, #:upper16:.LANCHOR0
+ 251 0044 041280E0 		add	r1, r0, r4, lsl #4
+ 172:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****                 MMU_SC_TABLE[index].virtual_address,
+ 252              		.loc 1 172 0
+ 253 0048 0C3091E5 		ldr	r3, [r1, #12]
+ 254 004c B820D1E1 		ldrh	r2, [r1, #8]
+ 255 0050 041091E5 		ldr	r1, [r1, #4]
+ 256 0054 040290E7 		ldr	r0, [r0, r4, lsl #4]
+ 257 0058 FEFFFFEB 		bl	R_MMU_WriteTbl
+ 258              	.LVL36:
+ 178:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         {
+ 259              		.loc 1 178 0
+ 260 005c 000050E3 		cmp	r0, #0
+ 170:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 261              		.loc 1 170 0 discriminator 2
+ 262 0060 01408402 		addeq	r4, r4, #1
+ 263              	.LVL37:
+ 264 0064 F2FFFF0A 		beq	.L15
+ 265              	.L17:
+ 266              	.LBB4:
+ 267              	.LBB5:
+ 268              		.file 2 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compile
+   1:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** /**************************************************************************************************
+   2:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * DISCLAIMER
+   3:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * applicable laws, including copyright laws.
+   6:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES
+  12:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * following link:
+  15:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * http://www.renesas.com/disclaimer
+  16:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  *
+  17:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * Copyright (C) 2020 Renesas Electronics Corporation. All rights reserved.
+  18:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  **************************************************************************************************
+  19:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** /**************************************************************************************************
+  20:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * File Name    : r_compiler_abstraction_api.h
+  21:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * Description  : Provides a common API for frequently used compiler specific operations
+  22:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  **************************************************************************************************
+  23:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** #include  "r_typedefs.h"
+  24:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** 
+  25:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** #ifndef SRC_PRV_RENESAS_COMPILER_INC_R_COMPILER_ABSTRACTION_API_H_
+  26:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** #define SRC_PRV_RENESAS_COMPILER_INC_R_COMPILER_ABSTRACTION_API_H_
+  27:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** 
+  28:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** /* Macro is used to declare linkage to a function as weak so that it can be overridden by a normall
+  29:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * Update this when using a different compiler. */
+  30:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** #define R_COMPILER_WEAK __attribute__((weak))
+  31:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** 
+  32:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** #define R_COMPILER_INLINE static inline
+  33:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** 
+  34:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** extern void __enable_irq (void);
+  35:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** extern uint32_t __disable_irq (void);
+  36:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** extern void __enable_fiq (void);
+  37:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** extern void __disable_fiq (void);
+  38:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** 
+  39:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** /**************************************************************************************************
+  40:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * Function Name: R_COMPILER_Nop
+  41:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * Description  : Abstracting a compiler No Operation opcode into a C function. Update this when us
+  42:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  *                compiler.
+  43:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  * Return Value : None.
+  44:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****  **************************************************************************************************
+  45:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h **** R_COMPILER_INLINE void R_COMPILER_Nop (void)
+  46:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****     {
+  47:C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/inc\r_compiler_abstraction_api.h ****         __asm volatile ("nop");
+ 269              		.loc 2 47 0 discriminator 1
+ 270              		.syntax divided
+ 271              	@ 47 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/compiler/in
+ 272 0068 00F020E3 		nop
+ 273              	@ 0 "" 2
+ 274              		.arm
+ 275              		.syntax unified
+ 276 006c FDFFFFEA 		b	.L17
+ 277              	.LVL38:
+ 278              	.L20:
+ 279              	.LBE5:
+ 280              	.LBE4:
+ 187:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 281              		.loc 1 187 0
+ 282 0070 1080BDE8 		pop	{r4, pc}
+ 283              		.cfi_endproc
+ 284              	.LFE6:
+ 286              		.section	.text.R_MMU_Enable,"ax",%progbits
+ 287              		.align	2
+ 288              		.global	R_MMU_Enable
+ 289              		.syntax unified
+ 290              		.arm
+ 291              		.fpu neon
+ 293              	R_MMU_Enable:
+ 294              	.LFB8:
+ 204:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 205:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 206:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_Disable
+ 207:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 208:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 209:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 210:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_Enable
+ 211:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : Enable MMU
+ 212:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : none
+ 213:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : none
+ 214:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 215:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** void R_MMU_Enable(void)
+ 216:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 295              		.loc 1 216 0
+ 296              		.cfi_startproc
+ 297              		@ args = 0, pretend = 0, frame = 0
+ 298              		@ frame_needed = 0, uses_anonymous_args = 0
+ 299 0000 10402DE9 		push	{r4, lr}
+ 300              		.cfi_def_cfa_offset 8
+ 301              		.cfi_offset 4, -8
+ 302              		.cfi_offset 14, -4
+ 217:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t sctlr;
+ 218:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     sctlr = r_mmu_get_sctlr();
+ 303              		.loc 1 218 0
+ 304 0004 FEFFFFEB 		bl	r_mmu_get_sctlr
+ 305              	.LVL39:
+ 219:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     sctlr |= 0x0001uL;
+ 220:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     r_mmu_set_sctlr(sctlr);
+ 306              		.loc 1 220 0
+ 307 0008 010080E3 		orr	r0, r0, #1
+ 308              	.LVL40:
+ 309 000c FEFFFFEB 		bl	r_mmu_set_sctlr
+ 310              	.LVL41:
+ 311 0010 1080BDE8 		pop	{r4, pc}
+ 312              		.cfi_endproc
+ 313              	.LFE8:
+ 315              		.section	.text.R_MMU_VAtoPA,"ax",%progbits
+ 316              		.align	2
+ 317              		.global	R_MMU_VAtoPA
+ 318              		.syntax unified
+ 319              		.arm
+ 320              		.fpu neon
+ 322              	R_MMU_VAtoPA:
+ 323              	.LFB9:
+ 221:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 222:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 223:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_Enable
+ 224:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 225:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 226:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 227:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_VAtoPA
+ 228:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : Convert virtual address to physical address
+ 229:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : uint32_t   vaddress  ; I : virtual address to be convert
+ 230:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** *              : uint32_t * paddress  ; O : physical address
+ 231:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : MMU_SUCCESS         : successful
+ 232:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** *                MMU_ERR_TRANSLATION : translation error
+ 233:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 234:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** e_mmu_err_t R_MMU_VAtoPA(uint32_t vaddress, uint32_t * paddress)
+ 235:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 324              		.loc 1 235 0
+ 325              		.cfi_startproc
+ 326              		@ args = 0, pretend = 0, frame = 0
+ 327              		@ frame_needed = 0, uses_anonymous_args = 0
+ 328              	.LVL42:
+ 329 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 330              		.cfi_def_cfa_offset 16
+ 331              		.cfi_offset 4, -16
+ 332              		.cfi_offset 5, -12
+ 333              		.cfi_offset 6, -8
+ 334              		.cfi_offset 14, -4
+ 335 0004 0040A0E1 		mov	r4, r0
+ 336 0008 0150A0E1 		mov	r5, r1
+ 236:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     uint32_t ttb;
+ 237:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     e_mmu_err_t err;
+ 238:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 239:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     ttb = R_MMU_ReadTbl(vaddress);
+ 337              		.loc 1 239 0
+ 338 000c FEFFFFEB 		bl	R_MMU_ReadTbl
+ 339              	.LVL43:
+ 240:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     if ((ttb & (0x40000 | 0x3)) == 2)
+ 340              		.loc 1 240 0
+ 341 0010 0330A0E3 		mov	r3, #3
+ 342 0014 043040E3 		movt	r3, 4
+ 343 0018 003003E0 		and	r3, r3, r0
+ 344 001c 020053E3 		cmp	r3, #2
+ 345 0020 0600001A 		bne	.L25
+ 241:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 242:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         *paddress = (ttb & 0xfff00000uL) | (vaddress & 0xfffff);
+ 346              		.loc 1 242 0
+ 347 0024 200AA0E1 		lsr	r0, r0, #20
+ 348              	.LVL44:
+ 349 0028 000AA0E1 		lsl	r0, r0, #20
+ 350 002c 5440F3E7 		ubfx	r4, r4, #0, #20
+ 351              	.LVL45:
+ 352 0030 040080E1 		orr	r0, r0, r4
+ 353 0034 000085E5 		str	r0, [r5]
+ 354              	.LVL46:
+ 243:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         err = MMU_SUCCESS;
+ 355              		.loc 1 243 0
+ 356 0038 0000A0E3 		mov	r0, #0
+ 357 003c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 358              	.LVL47:
+ 359              	.L25:
+ 244:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+ 245:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     else
+ 246:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     {
+ 247:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****         err = MMU_ERR_TRANSLATION;
+ 360              		.loc 1 247 0
+ 361 0040 0100E0E3 		mvn	r0, #1
+ 362              	.LVL48:
+ 248:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     }
+ 249:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 250:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     return (err);
+ 251:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 363              		.loc 1 251 0
+ 364 0044 7080BDE8 		pop	{r4, r5, r6, pc}
+ 365              		.cfi_endproc
+ 366              	.LFE9:
+ 368              		.section	.text.R_MMU_TLBIALL,"ax",%progbits
+ 369              		.align	2
+ 370              		.global	R_MMU_TLBIALL
+ 371              		.syntax unified
+ 372              		.arm
+ 373              		.fpu neon
+ 375              	R_MMU_TLBIALL:
+ 376              	.LFB10:
+ 252:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 253:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_VAtoPA
+ 254:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 255:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 256:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 257:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_TLBIALL
+ 258:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : execute TLBIALL
+ 259:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : none
+ 260:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : none
+ 261:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 262:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** void R_MMU_TLBIALL( void )
+ 263:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 377              		.loc 1 263 0
+ 378              		.cfi_startproc
+ 379              		@ args = 0, pretend = 0, frame = 0
+ 380              		@ frame_needed = 0, uses_anonymous_args = 0
+ 381 0000 10402DE9 		push	{r4, lr}
+ 382              		.cfi_def_cfa_offset 8
+ 383              		.cfi_offset 4, -8
+ 384              		.cfi_offset 14, -4
+ 264:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     r_mmu_tlbiall();
+ 385              		.loc 1 264 0
+ 386 0004 FEFFFFEB 		bl	r_mmu_tlbiall
+ 387              	.LVL49:
+ 388 0008 1080BDE8 		pop	{r4, pc}
+ 389              		.cfi_endproc
+ 390              	.LFE10:
+ 392              		.section	.text.R_MMU_TLBIMVAA,"ax",%progbits
+ 393              		.align	2
+ 394              		.global	R_MMU_TLBIMVAA
+ 395              		.syntax unified
+ 396              		.arm
+ 397              		.fpu neon
+ 399              	R_MMU_TLBIMVAA:
+ 400              	.LFB11:
+ 265:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 266:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 267:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_TLBIALL
+ 268:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 269:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 270:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 271:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Function Name: R_MMU_TLBIMVAA
+ 272:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Description  : execute TLBIMVAA
+ 273:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Arguments    : vaddress: MVA to be invalidate TLB entry
+ 274:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** * Return Value : none
+ 275:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** ******************************************************************************/
+ 276:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** void R_MMU_TLBIMVAA(uint32_t vaddress)
+ 277:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 401              		.loc 1 277 0
+ 402              		.cfi_startproc
+ 403              		@ args = 0, pretend = 0, frame = 0
+ 404              		@ frame_needed = 0, uses_anonymous_args = 0
+ 405              	.LVL50:
+ 406 0000 10402DE9 		push	{r4, lr}
+ 407              		.cfi_def_cfa_offset 8
+ 408              		.cfi_offset 4, -8
+ 409              		.cfi_offset 14, -4
+ 278:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     r_mmu_tlbimvaa(vaddress);
+ 410              		.loc 1 278 0
+ 411 0004 FEFFFFEB 		bl	r_mmu_tlbimvaa
+ 412              	.LVL51:
+ 413 0008 1080BDE8 		pop	{r4, pc}
+ 414              		.cfi_endproc
+ 415              	.LFE11:
+ 417              		.section	.text.R_MMU_GetVersion,"ax",%progbits
+ 418              		.align	2
+ 419              		.global	R_MMU_GetVersion
+ 420              		.syntax unified
+ 421              		.arm
+ 422              		.fpu neon
+ 424              	R_MMU_GetVersion:
+ 425              	.LFB12:
+ 279:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 280:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /******************************************************************************
+ 281:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * End of function R_MMU_TLBIMVAA
+ 282:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  ******************************************************************************/
+ 283:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 284:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** /**
+ 285:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * @fn             R_MMU_GetVersion
+ 286:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * @brief          Obtains driver specific version information which is used for
+ 287:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  *                 reporting
+ 288:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * @param[out]     p_ver_info: driver version information is populated into
+ 289:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  *                               this structure
+ 290:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  *                               @note the structure resources are created by
+ 291:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  *                                     the application not this function.
+ 292:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  * @retval         DRV_SUCCESS  Successful operation (always)
+ 293:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****  */
+ 294:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** int_t R_MMU_GetVersion(st_ver_info_t *p_ver_info)
+ 295:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** {
+ 426              		.loc 1 295 0
+ 427              		.cfi_startproc
+ 428              		@ args = 0, pretend = 0, frame = 0
+ 429              		@ frame_needed = 0, uses_anonymous_args = 0
+ 430              		@ link register save eliminated.
+ 431              	.LVL52:
+ 432 0000 0030A0E1 		mov	r3, r0
+ 296:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     p_ver_info->lld.p_szdriver_name = gs_lld_info.p_szdriver_name;
+ 433              		.loc 1 296 0
+ 434 0004 002000E3 		movw	r2, #:lower16:.LC0
+ 435 0008 002040E3 		movt	r2, #:upper16:.LC0
+ 436 000c 142080E5 		str	r2, [r0, #20]
+ 297:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     p_ver_info->lld.version.sub.major = gs_lld_info.version.sub.major;
+ 437              		.loc 1 297 0
+ 438 0010 0120A0E3 		mov	r2, #1
+ 439 0014 BE20C0E1 		strh	r2, [r0, #14]	@ movhi
+ 298:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     p_ver_info->lld.version.sub.minor = gs_lld_info.version.sub.minor;
+ 440              		.loc 1 298 0
+ 441 0018 0320A0E3 		mov	r2, #3
+ 442 001c BC20C0E1 		strh	r2, [r0, #12]	@ movhi
+ 299:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     p_ver_info->lld.build = gs_lld_info.build;
+ 443              		.loc 1 299 0
+ 444 0020 0000A0E3 		mov	r0, #0
+ 445              	.LVL53:
+ 446 0024 100083E5 		str	r0, [r3, #16]
+ 300:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** 
+ 301:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c ****     return (DRV_SUCCESS);
+ 302:../generate/drivers/r_mmu/src/lld/r_mmu_lld_rza2m.c **** }
+ 447              		.loc 1 302 0
+ 448 0028 1EFF2FE1 		bx	lr
+ 449              		.cfi_endproc
+ 450              	.LFE12:
+ 452              		.section	.rodata.MMU_SC_TABLE,"a",%progbits
+ 453              		.align	2
+ 454              		.set	.LANCHOR0,. + 0
+ 457              	MMU_SC_TABLE:
+ 458 0000 00000000 		.word	0
+ 459 0004 00000000 		.word	0
+ 460 0008 0010     		.short	4096
+ 461 000a 0000     		.space	2
+ 462 000c F20D0800 		.word	527858
+ 463 0010 00000000 		.word	0
+ 464 0014 00000000 		.word	0
+ 465 0018 4000     		.short	64
+ 466 001a 0000     		.space	2
+ 467 001c F20D0800 		.word	527858
+ 468 0020 00000004 		.word	67108864
+ 469 0024 00000004 		.word	67108864
+ 470 0028 4000     		.short	64
+ 471 002a 0000     		.space	2
+ 472 002c F20D0800 		.word	527858
+ 473 0030 00000008 		.word	134217728
+ 474 0034 00000008 		.word	134217728
+ 475 0038 4000     		.short	64
+ 476 003a 0000     		.space	2
+ 477 003c F20D0800 		.word	527858
+ 478 0040 0000000C 		.word	201326592
+ 479 0044 0000000C 		.word	201326592
+ 480 0048 4000     		.short	64
+ 481 004a 0000     		.space	2
+ 482 004c EE1D0800 		.word	531950
+ 483 0050 00000010 		.word	268435456
+ 484 0054 00000010 		.word	268435456
+ 485 0058 4000     		.short	64
+ 486 005a 0000     		.space	2
+ 487 005c F20D0800 		.word	527858
+ 488 0060 00000014 		.word	335544320
+ 489 0064 00000014 		.word	335544320
+ 490 0068 4000     		.short	64
+ 491 006a 0000     		.space	2
+ 492 006c F20D0800 		.word	527858
+ 493 0070 00000018 		.word	402653184
+ 494 0074 00000018 		.word	402653184
+ 495 0078 7000     		.short	112
+ 496 007a 0000     		.space	2
+ 497 007c F2010800 		.word	524786
+ 498 0080 0000001F 		.word	520093696
+ 499 0084 0000001F 		.word	520093696
+ 500 0088 1000     		.short	16
+ 501 008a 0000     		.space	2
+ 502 008c F20D0000 		.word	3570
+ 503 0090 00000020 		.word	536870912
+ 504 0094 00000020 		.word	536870912
+ 505 0098 0001     		.short	256
+ 506 009a 0000     		.space	2
+ 507 009c EE1D0800 		.word	531950
+ 508 00a0 00000030 		.word	805306368
+ 509 00a4 00000030 		.word	805306368
+ 510 00a8 0001     		.short	256
+ 511 00aa 0000     		.space	2
+ 512 00ac EE1D0800 		.word	531950
+ 513 00b0 00000040 		.word	1073741824
+ 514 00b4 00000040 		.word	1073741824
+ 515 00b8 0001     		.short	256
+ 516 00ba 0000     		.space	2
+ 517 00bc EE1D0800 		.word	531950
+ 518 00c0 00000050 		.word	1342177280
+ 519 00c4 00000050 		.word	1342177280
+ 520 00c8 0001     		.short	256
+ 521 00ca 0000     		.space	2
+ 522 00cc EE1D0800 		.word	531950
+ 523 00d0 00000060 		.word	1610612736
+ 524 00d4 00000060 		.word	1610612736
+ 525 00d8 0001     		.short	256
+ 526 00da 0000     		.space	2
+ 527 00dc EE1D0800 		.word	531950
+ 528 00e0 00000070 		.word	1879048192
+ 529 00e4 00000020 		.word	536870912
+ 530 00e8 0001     		.short	256
+ 531 00ea 0000     		.space	2
+ 532 00ec E20D0800 		.word	527842
+ 533 00f0 00000080 		.word	-2147483648
+ 534 00f4 00000080 		.word	-2147483648
+ 535 00f8 0400     		.short	4
+ 536 00fa 0000     		.space	2
+ 537 00fc E64D0800 		.word	544230
+ 538 0100 00004080 		.word	-2143289344
+ 539 0104 00004080 		.word	-2143289344
+ 540 0108 1C00     		.short	28
+ 541 010a 0000     		.space	2
+ 542 010c F2010800 		.word	524786
+ 543 0110 00000082 		.word	-2113929216
+ 544 0114 00000080 		.word	-2147483648
+ 545 0118 0400     		.short	4
+ 546 011a 0000     		.space	2
+ 547 011c E24D0800 		.word	544226
+ 548 0120 00004082 		.word	-2109734912
+ 549 0124 00004082 		.word	-2109734912
+ 550 0128 5C00     		.short	92
+ 551 012a 0000     		.space	2
+ 552 012c F2010800 		.word	524786
+ 553 0130 00000088 		.word	-2013265920
+ 554 0134 00000000 		.word	0
+ 555 0138 4000     		.short	64
+ 556 013a 0000     		.space	2
+ 557 013c F20D0800 		.word	527858
+ 558 0140 0000008C 		.word	-1946157056
+ 559 0144 00000004 		.word	67108864
+ 560 0148 4000     		.short	64
+ 561 014a 0000     		.space	2
+ 562 014c F20D0800 		.word	527858
+ 563 0150 00000090 		.word	-1879048192
+ 564 0154 00000008 		.word	134217728
+ 565 0158 4000     		.short	64
+ 566 015a 0000     		.space	2
+ 567 015c F20D0800 		.word	527858
+ 568 0160 00000094 		.word	-1811939328
+ 569 0164 0000000C 		.word	201326592
+ 570 0168 4000     		.short	64
+ 571 016a 0000     		.space	2
+ 572 016c E24D0800 		.word	544226
+ 573 0170 00000098 		.word	-1744830464
+ 574 0174 00000010 		.word	268435456
+ 575 0178 4000     		.short	64
+ 576 017a 0000     		.space	2
+ 577 017c F20D0800 		.word	527858
+ 578 0180 0000009C 		.word	-1677721600
+ 579 0184 00000014 		.word	335544320
+ 580 0188 4000     		.short	64
+ 581 018a 0000     		.space	2
+ 582 018c F20D0800 		.word	527858
+ 583 0190 000000A0 		.word	-1610612736
+ 584 0194 00000030 		.word	805306368
+ 585 0198 0001     		.short	256
+ 586 019a 0000     		.space	2
+ 587 019c E20D0800 		.word	527842
+ 588 01a0 000000B0 		.word	-1342177280
+ 589 01a4 00000040 		.word	1073741824
+ 590 01a8 0001     		.short	256
+ 591 01aa 0000     		.space	2
+ 592 01ac E24D0800 		.word	544226
+ 593 01b0 000000C0 		.word	-1073741824
+ 594 01b4 00000050 		.word	1342177280
+ 595 01b8 0001     		.short	256
+ 596 01ba 0000     		.space	2
+ 597 01bc E20D0800 		.word	527842
+ 598 01c0 000000D0 		.word	-805306368
+ 599 01c4 00000060 		.word	1610612736
+ 600 01c8 0001     		.short	256
+ 601 01ca 0000     		.space	2
+ 602 01cc E24D0800 		.word	544226
+ 603 01d0 000000E0 		.word	-536870912
+ 604 01d4 000000E0 		.word	-536870912
+ 605 01d8 8000     		.short	128
+ 606 01da 0000     		.space	2
+ 607 01dc F2010800 		.word	524786
+ 608 01e0 000000E8 		.word	-402653184
+ 609 01e4 000000E8 		.word	-402653184
+ 610 01e8 8001     		.short	384
+ 611 01ea 0000     		.space	2
+ 612 01ec F20D0000 		.word	3570
+ 613              		.section	.rodata.R_MMU_GetVersion.str1.4,"aMS",%progbits,1
+ 614              		.align	2
+ 615              	.LC0:
+ 616 0000 4C4C4420 		.ascii	"LLD EBK_RZA2M MMU\000"
+ 616      45424B5F 
+ 616      525A4132 
+ 616      4D204D4D 
+ 616      5500
+ 617              		.text
+ 618              	.Letext0:
+ 619              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 620              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 621              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 622              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 623              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 624              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 625              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 626              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 627              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 628              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 629              		.file 13 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_mmu_lld_rza2m.c
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:17     .text.mmu_get_ttb_entry:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:22     .text.mmu_get_ttb_entry:00000000 mmu_get_ttb_entry
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:66     .text.R_MMU_WriteTbl:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:72     .text.R_MMU_WriteTbl:00000000 R_MMU_WriteTbl
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:147    .text.R_MMU_ReadTbl:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:153    .text.R_MMU_ReadTbl:00000000 R_MMU_ReadTbl
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:175    .text.R_MMU_Disable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:181    .text.R_MMU_Disable:00000000 R_MMU_Disable
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:204    .text.R_MMU_Init:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:210    .text.R_MMU_Init:00000000 R_MMU_Init
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:454    .rodata.MMU_SC_TABLE:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:287    .text.R_MMU_Enable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:293    .text.R_MMU_Enable:00000000 R_MMU_Enable
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:316    .text.R_MMU_VAtoPA:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:322    .text.R_MMU_VAtoPA:00000000 R_MMU_VAtoPA
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:369    .text.R_MMU_TLBIALL:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:375    .text.R_MMU_TLBIALL:00000000 R_MMU_TLBIALL
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:393    .text.R_MMU_TLBIMVAA:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:399    .text.R_MMU_TLBIMVAA:00000000 R_MMU_TLBIMVAA
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:418    .text.R_MMU_GetVersion:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:424    .text.R_MMU_GetVersion:00000000 R_MMU_GetVersion
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:615    .rodata.R_MMU_GetVersion.str1.4:00000000 .LC0
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:453    .rodata.MMU_SC_TABLE:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:457    .rodata.MMU_SC_TABLE:00000000 MMU_SC_TABLE
+C:\Users\rj7356s\AppData\Local\Temp\ccPbPIlE.s:614    .rodata.R_MMU_GetVersion.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_mmu_lld_rza2m.h.39.be55e997d8665d00d9f529dbd893c422
+                           .group:00000000 wm4.r_compiler_abstraction_api.h.26.bb21b39b83806cb7bb8838b6f825dcff
+
+UNDEFINED SYMBOLS
+r_mmu_get_ttbcr
+r_mmu_get_ttbr0
+r_mmu_get_sctlr
+r_mmu_set_sctlr
+__mmu_page_table_base
+r_mmu_set_ttbcr
+r_mmu_set_ttbr0
+r_mmu_set_dacr
+r_mmu_tlbiall
+r_mmu_tlbimvaa

@@ -1,0 +1,2149 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_ceu_driver.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.ceu_align_check,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	ceu_align_check:
+  23              	.LFB10:
+  24              		.file 1 "../generate/sc_drivers/r_ceu/src/r_ceu_driver.c"
+   1:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * following link:
+  15:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  *
+  17:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  20:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+  21:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * File Name :   r_ceu_driver.c
+  22:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @file         r_ceu_driver.c
+  23:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @version      1.12
+  24:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief        RZ/A2M CEU driver API functions
+  25:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+  26:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  27:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /******************************************************************************
+  28:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  Includes   <System Includes> , "Project Includes"
+  29:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+  30:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #include "r_typedefs.h"
+  31:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  32:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #include "r_ceu.h"
+  33:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  34:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /******************************************************************************
+  35:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  Typedef definitions
+  36:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+  37:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  38:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /******************************************************************************
+  39:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  Macro definitions
+  40:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+  41:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SW_RESET        (0x00010000u)
+  42:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAPSR_CPKIL_BIT     (0x00010000u)
+  43:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CSTSR_CPTON_BIT     (0x00000001u)
+  44:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAPSR_CE_BIT        (0x00000001u)
+  45:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  46:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /* Driver is not supported register vale */
+  47:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAPCR_FDRP_VALUE    (0u)      /* The frame drop count is 0               */
+  48:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAPCR_MTCM_VALUE    (0u)      /* Transferred to the bus in 32-byte units */
+  49:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAPCR_CTNCP_VALUE   (0u)      /* One-frame capture                       */
+  50:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAIFR_IFS_VALUE     (0u)      /* Progressive */
+  51:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAIFR_CIM_VALUE     (0u)      /* Capture of frame image (1 VD) or both-field image (2 VD) *
+  52:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAIFR_FC_VALUE      (0u)      /* Capture starts from the VD input immediately after
+  53:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                                          the CEU activation regardless of it being a top or bottom 
+  54:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CRCNTR_RVS_VALUE    (0u)      /* Switches the register plane every 2 VD */
+  55:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CRCNTR_RS_VALUE     (0u)      /* Uses plane A of the register */
+  56:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CRCNTR_RC_VALUE     (0u)      /* Uses the specified register plane in synchronization with 
+  57:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CFLCR_VMANT_VALUE   (0u)      /* Mantissa Part of Vertical Scale-Down Factor */
+  58:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CFLCR_VFRAC_VALUE   (0u)      /* Fraction Part of Vertical Scale-Down Factor */
+  59:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CFLCR_HMANT_VALUE   (0u)      /* Mantissa Part of Horizontal Scale-Down Factor */
+  60:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CFLCR_HFRAC_VALUE   (0u)      /* Fraction Part of Horizontal Scale-Down Factor */
+  61:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CMCYR_VCYL_VALUE    (0u)      /* Vertical HD Count for illegal VD is 0      */
+  62:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CMCYR_HCYL_VALUE    (0u)      /* Horizontal Cycle Count for illegal HD is 0 */
+  63:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CLFCR_LPF_VALUE     (0u)      /* Low-pass filter used (only in the horizontal direction) */
+  64:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CAMCR_FLDPOL_VALUE  (0u)      /* When the FLD signal is high-active,
+  65:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                                          the field is detected as the top field
+  66:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                                          and when low-active, the field is detected as the bottom f
+  67:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CDOCR_CBE_VALUE     (0u)      /* Normal write */
+  68:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CDOCR_CDS_VALUE     (1u)      /* Outputs data in the YCbCr422 format to the memory without 
+  69:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CFWCR_FWV_VALUE     (0u)      /* The upper limit of a write address */
+  70:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CFWCR_FWE_VALUE     (0u)      /* Firewall is not activated */
+  71:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  72:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  73:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /* Driver check value */
+  74:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define VOFST_MAX_0FFF      (0x00000FFFu)  /* VOFST MAX check   */
+  75:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define HOFST_MAX_1FFF      (0x00001FFFu)  /* HOFST MAX check   */
+  76:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define VWDTH_MAX_1920      (1920u)        /* VWDTH MAX check   */
+  77:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /* HWDTH MAX check */
+  78:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define HWDTH_MAX_5120      (5120u)        /* CEU_IMAGE_CAPTURE_MODE & 8bit  */
+  79:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define HWDTH_MAX_2560      (2560u)        /* CEU_DATA_SYNC_MODE     & 8bit  */
+  80:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define HWDTH_MAX_1280      (1280u)        /* CEU_DATA_SYNC_MODE     & 16bit */
+  81:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CHDW_MAX_1FFF       (0x00001FFFu)  /* CHDW MAX check   */
+  82:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CHDW_MAX_8188       (8188u)        /* CHDW MAX check   */
+  83:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  84:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_1   (1u)
+  85:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_2   (2u)
+  86:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_4   (4u)
+  87:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_8   (8u)
+  88:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_12  (12u)
+  89:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_16  (16u)
+  90:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_20  (20u)
+  91:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_24  (24u)
+  92:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEU_SHIFT_VALUE_28  (28u)
+  93:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  94:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CETCR_CLARE_VALUE   (0x00000000u)
+  95:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** #define CEIER_CLARE_VALUE   (0x00000000u)
+  96:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  97:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /******************************************************************************
+  98:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  Imported global variables and functions (from other files)
+  99:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 100:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 101:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /******************************************************************************
+ 102:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  Exported global variables and functions (to be accessed by other files)
+ 103:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 104:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 105:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /******************************************************************************
+ 106:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  Private global variables and functions
+ 107:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 108:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static ceu_error_t ceu_open_check_prm(const ceu_config_t * const config);
+ 109:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static ceu_error_t ceu_execute_check_prm(const void * cayr, const void * cacr, const uint32_t chdw)
+ 110:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static int32_t ceu_align_check(const uint32_t value, uint32_t align);
+ 111:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 112:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static void (*ceu_int_callback)(ceu_int_type_t interrupt_flag);
+ 113:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 114:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static ceu_jpg_t  gs_local_jpg;
+ 115:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static ceu_dtif_t gs_local_dtif;
+ 116:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static uint32_t   gs_local_hwdth;
+ 117:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 118:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 119:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_Initialize
+ 120:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU initialization processing
+ 121:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   init_func       : user func
+ 122:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   user_num        : user param
+ 123:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      None
+ 124:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 125:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** void R_CEU_Initialize(void (* const init_func)(uint32_t), const uint32_t user_num)
+ 126:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 127:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* call back function */
+ 128:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (NULL != init_func)
+ 129:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 130:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         init_func (user_num);
+ 131:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 132:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 133:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* init */
+ 134:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     gs_local_jpg   = CEU_IMAGE_CAPTURE_MODE;
+ 135:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     gs_local_dtif  = CEU_8BIT_DATA_PINS;
+ 136:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     gs_local_hwdth = 0;
+ 137:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 138:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return;
+ 139:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_Initialize() */
+ 140:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 141:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 142:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_Open
+ 143:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU config setting
+ 144:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   config       : CEU configuration
+ 145:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      Error codes of the CEU driver
+ 146:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 147:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** ceu_error_t R_CEU_Open(const ceu_config_t * const config)
+ 148:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 149:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error;
+ 150:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 151:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* param check */
+ 152:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     error = ceu_open_check_prm (config);
+ 153:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 154:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 155:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 156:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         gs_local_jpg  = config->jpg;
+ 157:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         gs_local_dtif = config->dtif;
+ 158:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 159:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Interface Control Register (CAMCR)
+ 160:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit16 FLDPOL - Sets the polarity of the field identification signal (FLD) from an extern
+ 161:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit12 DTIF - Sets the digital image input pins from which data is to be captured.
+ 162:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit9-8 DTARY[1:0] - These bits set the input order of the luminance component and chromi
+ 163:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit5-4 JPG[1:0] - These bits select the fetched data type. : b'01 (Data synchronous fetc
+ 164:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit1 VDPOL - Sets the polarity for detection of the vertical sync signal input from an e
+ 165:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit0 HDPOL - Sets the polarity for detection of the horizontal sync signal input from an
+ 166:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * other bit is reserved    : write value should always be 0.
+ 167:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 168:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 169:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CAMCR.LONG = (uint32_t) ((((((((((CAMCR_FLDPOL_VALUE << CEU_SHIFT_VALUE_16) |
+ 170:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 171:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Cast to an appropriate type */
+ 172:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->vdsel << 27u)) |    /* Cast to an appropriate type */
+ 173:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->hdsel << 26u)) |    /* Cast to an appropriate type */
+ 174:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->fldsel<< 25u)) |    /* Cast to an appropriate type */
+ 175:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dsel  << 24u)) |    /* Cast to an appropriate type */
+ 176:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dtif  << 12u)) |    /* Cast to an appropriate type */
+ 177:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dtary <<  8u)) |    /* Cast to an appropriate type */
+ 178:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->jpg   <<  4u)) |    /* Cast to an appropriate type */
+ 179:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->vdpol <<  1u)) |    /* Cast to an appropriate type */
+ 180:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->hdpol <<  0u));     /* Cast to an appropriate type */
+ 181:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 182:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (CEU_DATA_ENABLE_MODE != config->jpg)
+ 183:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 184:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Checking pointer variable */
+ 185:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (NULL != config->cap)
+ 186:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 187:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 gs_local_hwdth = config->cap->hwdth;
+ 188:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 189:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* Capture Interface Offset Register (CAMOR)
+ 190:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                  * This register is used, during Data synchronous fetch mode.
+ 191:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                  */
+ 192:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 CEU.CAMOR_A.LONG = (uint32_t) ((config->cap->vofst << 16u) | config->cap->hofst);
+ 193:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 194:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* Capture Interface Width Register (CAPWR)
+ 195:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                  * This register is used, during Data synchronous fetch mode.
+ 196:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                  */
+ 197:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 CEU.CAPWR_A.LONG = (uint32_t) ((config->cap->vwdth << 16u) | config->cap->hwdth);
+ 198:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 199:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 200:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 201:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 202:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             uint32_t vfclp = 0;
+ 203:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             uint32_t hfclp = 0;
+ 204:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 205:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (CEU_IMAGE_CAPTURE_MODE == config->jpg)
+ 206:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 207:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 vfclp = config->clp->vfclp;
+ 208:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 hfclp = config->clp->hfclp;
+ 209:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 210:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             else if (CEU_DATA_SYNC_MODE == config->jpg)
+ 211:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 212:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (CEU_8BIT_DATA_PINS == config->dtif)
+ 213:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 214:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     vfclp = config->cap->vwdth;
+ 215:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     hfclp = config->cap->hwdth / 2;
+ 216:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 217:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 218:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (CEU_16BIT_DATA_PINS == config->dtif)
+ 219:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 220:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     vfclp = config->cap->vwdth;
+ 221:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     hfclp = config->cap->hwdth;
+ 222:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 223:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 224:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             else
+ 225:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 226:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 vfclp = 0u;
+ 227:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 hfclp = 0u;
+ 228:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 229:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 230:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Capture Filter Size Clip Register (CFSZR)
+ 231:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****              this register used in Data synchronous fetch mode. */
+ 232:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             CEU.CFSZR_A.LONG = ((vfclp << 16) | hfclp);
+ 233:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 234:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 235:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Data Output Control Register (CDOCR)
+ 236:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit16 CBE - Controls the number of lines of captured data to be written to the memory.
+ 237:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit4  CDS - Sets the image format when outputting the image data captured
+ 238:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          in the YCbCr 422 format to the memory.
+ 239:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit2 COLS - Controls swapping in 32-bit units for data output from the CEU.
+ 240:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit1 COWS - Controls swapping in 16-bit units for data output from the CEU.
+ 241:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit0 COBS - Controls swapping in 8-bit units for data output from the CEU.
+ 242:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * other bit is reserved    : write value should always be 0.
+ 243:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 244:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 245:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDOCR_A.LONG = (uint32_t) (((((CDOCR_CBE_VALUE << CEU_SHIFT_VALUE_16) |
+ 246:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (CDOCR_CDS_VALUE << CEU_SHIFT_VALUE_4)) | /* Cast to an appropriate type */
+ 247:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t) (config->cols << CEU_SHIFT_VALUE_2)) | /* Cast to an appropriate type */
+ 248:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t) (config->cows << CEU_SHIFT_VALUE_1)) | /* Cast to an appropriate type */
+ 249:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t) (config->cobs) );
+ 250:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 251:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Interface Cycle Register (CMCYR)
+ 252:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * Set 0 in all bits of this register, during Data enable fetch mode.
+ 253:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 254:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CMCYR.LONG = (uint32_t) ((CMCYR_VCYL_VALUE << 16u) |
+ 255:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CMCYR_HCYL_VALUE);
+ 256:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 257:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* capture control register (CAPCR)
+ 258:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit31-24 FDRP[7:0] - the frame drop interval in continuous frame capture. : set H'00 (Si
+ 259:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit21-20 MTCM[1:0] - These bits specify the unit for transferring data to a bus bridge m
+ 260:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit16 CTNCP - Continuous capture bit : b'0 (One-frame capture)
+ 261:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * other bit is reserved    : write value should always be 0.
+ 262:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 263:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CAPCR.LONG = (uint32_t) (
+ 264:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 ((CAPCR_FDRP_VALUE << CEU_SHIFT_VALUE_24) | (CAPCR_MTCM_VALUE << CEU_SHIFT_VALUE_20
+ 265:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                         | (CAPCR_CTNCP_VALUE << CEU_SHIFT_VALUE_16));
+ 266:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 267:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Interface Input Format Register (CAIFR)
+ 268:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * this register used in Data synchronous fetch mode.
+ 269:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 270:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CAIFR.LONG = (uint32_t) (((CAIFR_IFS_VALUE << CEU_SHIFT_VALUE_8)
+ 271:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             | (CAIFR_CIM_VALUE << CEU_SHIFT_VALUE_4)) |
+ 272:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CAIFR_FC_VALUE);
+ 273:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 274:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* CEU Register Control Register (CRCNTR)
+ 275:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit4 RVS - Sets the timing to switch the register plane in both-field capture.
+ 276:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit1 RS - Specifies which register plane is used by the CEU in synchronization with VD.
+ 277:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit0 RC - Specifies switching of the register plane used by the CEU in synchronization w
+ 278:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * other bit is reserved    : write value should always be 0.
+ 279:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 280:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CRCNTR.LONG = (uint32_t) (((CRCNTR_RVS_VALUE << CEU_SHIFT_VALUE_4)
+ 281:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             | (CRCNTR_RS_VALUE << CEU_SHIFT_VALUE_1)) |
+ 282:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CRCNTR_RC_VALUE);
+ 283:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 284:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Filter Control Register (CFLCR)
+ 285:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * In data fetch mode, set CFLCR to 0.
+ 286:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 287:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CFLCR_A.LONG = (uint32_t) (
+ 288:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 (((CFLCR_VMANT_VALUE << CEU_SHIFT_VALUE_28) | (CFLCR_VFRAC_VALUE << CEU_SHIFT_VALUE
+ 289:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                         | (CFLCR_HMANT_VALUE << CEU_SHIFT_VALUE_12)) |
+ 290:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 CFLCR_HFRAC_VALUE);
+ 291:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 292:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Memory address for Bundle write */
+ 293:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDBYR_A.LONG = 0u;    /* initialize */
+ 294:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDBCR_A.LONG = 0u;    /* initialize */
+ 295:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDAYR2_A.LONG = 0u;   /* initialize */
+ 296:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDACR2_A.LONG = 0u;   /* initialize */
+ 297:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDBYR2_A.LONG = 0u;   /* initialize */
+ 298:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDBCR2_A.LONG = 0u;   /* initialize */
+ 299:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 300:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Bundle Destination Size Register (CBDSR)
+ 301:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit22-0 CBVS[22:0] -
+ 302:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          These bits select the number of lines or number of bytes for output to the memory in a bun
+ 303:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * other bit is reserved    : write value should always be 0.
+ 304:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 305:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CBDSR_A.LONG = 0u; /* sample program not support bundle write mode */
+ 306:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 307:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Low-Pass Filter Control Register (CLFCR)
+ 308:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * In data fetch mode, clear the LPF bit to B'0.
+ 309:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit0 LPF - Enables or disables operation of the low-pass filter. : set b'1
+ 310:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 311:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CLFCR_A.LONG = CLFCR_LPF_VALUE;
+ 312:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 313:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Firewall Operation Control Register (CFWCR)
+ 314:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit31-5 FWV[26:0] - These bits specify the upper limit of a write address.
+ 315:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          Specify the upper 27 bits of the 32-bit address. : set 0
+ 316:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit0 FWE - FW enable/disable. : set 0 (disable)
+ 317:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 318:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CFWCR.LONG = (uint32_t) ((CFWCR_FWV_VALUE << 5u) | CFWCR_FWE_VALUE);
+ 319:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 320:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 321:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return error;
+ 322:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 323:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_Open() */
+ 324:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 325:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 326:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_Execute
+ 327:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU Execute
+ 328:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   cayr          : Capture buffer (Y)
+ 329:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   cacr          : Capture buffer (CbCr)
+ 330:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   chdw          : stride
+ 331:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   auto_capture  : ceu_onoff_t
+ 332:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      Error codes of the CEU driver
+ 333:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 334:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** ceu_error_t R_CEU_Execute(const void * cayr, const void * cacr,
+ 335:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         const uint32_t chdw, ceu_onoff_t auto_capture)
+ 336:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 337:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error;
+ 338:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 339:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* param check */
+ 340:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     error = ceu_execute_check_prm (cayr, cacr, chdw);
+ 341:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 342:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 343:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Logical-physical conversion */
+ 344:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDAYR_A.LONG = R_CEU_CPUVAddrToSysPAddr((uint32_t) cayr);
+ 345:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 346:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Logical-physical conversion */
+ 347:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDACR_A.LONG = R_CEU_CPUVAddrToSysPAddr((uint32_t) cacr);
+ 348:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 349:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Destination Width Register (CDWDR)
+ 350:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * this register used in Data synchronous fetch mode.
+ 351:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 352:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDWDR_A.LONG = chdw;
+ 353:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 354:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if( CEU_ON == auto_capture )
+ 355:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 356:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Set CTNCP bit */
+ 357:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             CEU.CAPCR.LONG |= 0x00010000u;
+ 358:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 359:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         else
+ 360:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 361:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Clear CTNCP bit */
+ 362:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             CEU.CAPCR.LONG &= (~0x00010000u);
+ 363:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 364:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 365:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* start capture */
+ 366:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Capture Start Register (CAPSR)
+ 367:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * bit0 CE - Capture Enable : set b'1 (Starts capturing)
+ 368:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          * other bit is not change.
+ 369:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****          */
+ 370:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CAPSR.LONG |= CAPSR_CE_BIT;
+ 371:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 372:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 373:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return error;
+ 374:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 375:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_Execute() */
+ 376:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 377:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 378:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_Stop
+ 379:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU Execute
+ 380:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   None
+ 381:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      Error codes of the CEU driver
+ 382:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 383:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** ceu_error_t R_CEU_Stop(void)
+ 384:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 385:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 386:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 387:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Clear CE bit */
+ 388:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     CEU.CAPSR.LONG &= (uint32_t)~0x00000001;
+ 389:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 390:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return error;
+ 391:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_Stop() */
+ 392:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 393:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 394:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_Terminate
+ 395:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU Close
+ 396:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   quit_func  : user func
+ 397:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   user_num   : user param
+ 398:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      Error codes of the CEU driver
+ 399:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 400:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** ceu_error_t R_CEU_Terminate(void (* const quit_func)(uint32_t),
+ 401:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         const uint32_t user_num)
+ 402:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 403:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 404:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 405:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* software reset
+ 406:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * bit16 CPKIL : set 1 (Software reset of capturing)
+ 407:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * bit0 CE     : set 0 (Stops capturing)
+ 408:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      */
+ 409:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     CEU.CAPSR.LONG = CEU_SW_RESET;
+ 410:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 411:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* wait software reset complete
+ 412:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * Complete : CSTSR.CPTON = b'0 & CAPSR.CPKIL=b'0
+ 413:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * [CSTSR]
+ 414:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * bit0 CPTON - Indicates that the CEU is operating.
+ 415:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * [CAPSR]
+ 416:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * bit16 CPKIL - Write 1 to this bit to perform a software reset of capturing.
+ 417:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      */
+ 418:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     while (0u != (CEU.CSTSR.LONG & CSTSR_CPTON_BIT))
+ 419:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 420:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* wait state :"Halted" */
+ 421:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         ;
+ 422:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 423:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 424:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Wait for state change of CPKIL bit */
+ 425:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     while (0u != (CEU.CAPSR.LONG & CAPSR_CPKIL_BIT))
+ 426:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 427:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* wait state :"Normal" */
+ 428:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         ;
+ 429:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 430:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 431:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* call back function */
+ 432:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (NULL != quit_func)
+ 433:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 434:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         quit_func (user_num);
+ 435:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 436:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 437:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return error;
+ 438:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_Terminate() */
+ 439:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 440:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 441:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_InterruptEnable
+ 442:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU Interrupt Enable
+ 443:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   int_type       : Capture Event Interrupt Enable Register (CEIER)
+ 444:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   callback       : Callback func
+ 445:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      Error codes of the CEU driver
+ 446:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 447:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** void R_CEU_InterruptEnable(const ceu_int_type_t int_type, 
+ 448:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         void (* const callback)(ceu_int_type_t))
+ 449:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 450:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Callback function pointer */
+ 451:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_int_callback = callback;
+ 452:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 453:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Capture Event Interrupt Enable Register (CEIER)  */
+ 454:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     CEU.CEIER.LONG = int_type;
+ 455:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 456:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_InterruptEnable() */
+ 457:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 458:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 459:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_InterruptDisable
+ 460:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU Interrupt Disable
+ 461:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      None
+ 462:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 463:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** void R_CEU_InterruptDisable(void)
+ 464:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 465:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Callback function pointer clear */
+ 466:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_int_callback = 0;
+ 467:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 468:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Capture Event Interrupt Enable Register (CEIER) claer */
+ 469:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     CEU.CEIER.LONG = CEIER_CLARE_VALUE;
+ 470:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 471:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_InterruptDisable() */
+ 472:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 473:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 474:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: R_CEU_Isr
+ 475:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU interrupt handler
+ 476:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   int_sense       :
+ 477:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      None
+ 478:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 479:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** void R_CEU_Isr(const uint32_t int_sense) 
+ 480:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 481:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     uint32_t interrupt_flag;
+ 482:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 483:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* get interrupt flag */
+ 484:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     interrupt_flag = CEU.CETCR.LONG;
+ 485:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 486:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* clear interrupt flag
+ 487:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * Capture Event Flag Clear Register (CETCR)
+ 488:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      * To clear the bit corresponding to the interrupt source
+ 489:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      to be cleared to 0 and retain that state, write 1 to that bit.
+ 490:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****      */
+ 491:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     CEU.CETCR.LONG = CETCR_CLARE_VALUE; /* clear all */
+ 492:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 493:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Checking pointer variable */
+ 494:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (NULL != ceu_int_callback)
+ 495:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 496:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* callback func */
+ 497:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         ceu_int_callback ((ceu_int_type_t) interrupt_flag);
+ 498:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 499:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 500:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function R_CEU_Isr() */
+ 501:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 502:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 503:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: ceu_open_check_prm
+ 504:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU Open check param
+ 505:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   config       : CEU configuration
+ 506:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      Error codes of the CEU driver
+ 507:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 508:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static ceu_error_t ceu_open_check_prm(const ceu_config_t * const config)
+ 509:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 510:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 511:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 512:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Checking pointer variable */
+ 513:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (NULL != config)
+ 514:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 515:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if ((CEU_IMAGE_CAPTURE_MODE == config->jpg) || (CEU_DATA_SYNC_MODE == config->jpg))
+ 516:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 517:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Checking pointer variable */
+ 518:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (NULL == config->cap)
+ 519:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 520:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 error = CEU_ERR_PARAM;
+ 521:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 522:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 523:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 524:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 525:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 526:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 527:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 528:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (NULL != config)
+ 529:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 530:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if ((CEU_IMAGE_CAPTURE_MODE == config->jpg) || (CEU_DATA_SYNC_MODE == config->jpg))
+ 531:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 532:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* vofst max */
+ 533:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (((uint32_t) config->cap->vofst & (uint32_t) ~VOFST_MAX_0FFF) != 0u)
+ 534:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 535:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 536:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 537:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 538:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hofst max */
+ 539:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (((uint32_t) config->cap->hofst & (uint32_t) ~HOFST_MAX_1FFF) != 0u)
+ 540:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 541:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 542:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 543:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 544:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 545:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 546:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 547:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 548:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 549:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 550:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (NULL != config)
+ 551:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 552:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if ((CEU_IMAGE_CAPTURE_MODE == config->jpg) || (CEU_DATA_SYNC_MODE == config->jpg))
+ 553:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 554:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* vwdth max */
+ 555:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (config->cap->vwdth > VWDTH_MAX_1920)
+ 556:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 557:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 558:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 559:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 560:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* vwdth align 4 */
+ 561:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (ceu_align_check (config->cap->vwdth, 4u) != 0)
+ 562:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 563:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 564:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 565:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 566:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 567:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 568:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 569:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 570:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 571:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 572:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (NULL != config)
+ 573:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 574:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* CEU_IMAGE_CAPTURE_MODE & 8bit */
+ 575:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if ((CEU_IMAGE_CAPTURE_MODE == config->jpg) && (CEU_8BIT_DATA_PINS == config->dtif))
+ 576:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 577:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth max */
+ 578:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (config->cap->hwdth > HWDTH_MAX_5120)
+ 579:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 580:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 581:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 582:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 583:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth align 8 */
+ 584:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (ceu_align_check (config->cap->hwdth, 8u) != 0)
+ 585:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 586:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 587:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 588:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 589:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 590:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* CEU_DATA_SYNC_MODE & 8bit */
+ 591:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if ((CEU_DATA_SYNC_MODE == config->jpg) && (CEU_8BIT_DATA_PINS == config->dtif))
+ 592:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 593:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth max */
+ 594:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (config->cap->hwdth > HWDTH_MAX_2560)
+ 595:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 596:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 597:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 598:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 599:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth align 4 */
+ 600:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (ceu_align_check (config->cap->hwdth, 4u) != 0)
+ 601:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 602:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 603:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 604:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 605:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 606:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 607:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 608:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (NULL != config)
+ 609:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 610:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* CEU_IMAGE_CAPTURE_MODE & 16bit */
+ 611:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if ((CEU_IMAGE_CAPTURE_MODE == config->jpg) && (CEU_16BIT_DATA_PINS == config->dtif))
+ 612:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 613:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth max */
+ 614:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (config->cap->hwdth > HWDTH_MAX_2560)
+ 615:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 616:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 617:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 618:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 619:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth align 4 */
+ 620:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (ceu_align_check (config->cap->hwdth, 4u) != 0)
+ 621:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 622:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 623:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 624:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 625:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 626:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 627:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 628:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (NULL != config)
+ 629:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 630:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* CEU_DATA_SYNC_MODE & 16bit */
+ 631:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if ((CEU_DATA_SYNC_MODE == config->jpg) && (CEU_16BIT_DATA_PINS == config->dtif))
+ 632:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 633:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth max */
+ 634:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (config->cap->hwdth > HWDTH_MAX_1280)
+ 635:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 636:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 637:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 638:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 639:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hwdth align 2 */
+ 640:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (ceu_align_check (config->cap->hwdth, 2u) != 0)
+ 641:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 642:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 643:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 644:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 645:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 646:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 647:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 648:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 649:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 650:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 651:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (NULL != config)
+ 652:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 653:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (CEU_IMAGE_CAPTURE_MODE == config->jpg)
+ 654:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 655:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* Checking pointer variable */
+ 656:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (NULL == config->clp)
+ 657:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 658:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 659:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 660:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 661:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 662:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 663:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 664:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 665:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 666:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 667:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (NULL != config)
+ 668:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 669:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (CEU_IMAGE_CAPTURE_MODE == config->jpg)
+ 670:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 671:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* vfclp align 4 */
+ 672:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (ceu_align_check (config->clp->vfclp, 4u) != 0)
+ 673:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 674:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 675:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 676:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 677:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 /* hfclp align 4 */
+ 678:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (ceu_align_check (config->clp->hfclp, 4u) != 0)
+ 679:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 680:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 681:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 682:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 683:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 684:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 685:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return error;
+ 686:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function ceu_open_check_prm() */
+ 687:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 688:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 689:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: ceu_execute_check_prm
+ 690:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       CEU Execute check param
+ 691:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   cayr       : Capture buffer (Y)
+ 692:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   cacr       : Capture buffer (CbCr)
+ 693:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   chdw       : stride
+ 694:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      Error codes of the CEU driver
+ 695:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 696:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static ceu_error_t ceu_execute_check_prm(const void * cayr, const void * cacr, const uint32_t chdw)
+ 697:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+ 698:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 699:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 700:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_IMAGE_CAPTURE_MODE == gs_local_jpg)
+ 701:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 702:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* Checking pointer variable */
+ 703:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if ((NULL == cayr) || (NULL == cacr))
+ 704:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 705:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             error = CEU_ERR_PARAM;
+ 706:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 707:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 708:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* cayr align 4 */
+ 709:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (ceu_align_check ((uint32_t) cayr, 4u) != 0)
+ 710:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 711:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             error = CEU_ERR_PARAM;
+ 712:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 713:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 714:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* cacr align 4 */
+ 715:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (ceu_align_check ((uint32_t) cacr, 4u) != 0)
+ 716:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 717:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             error = CEU_ERR_PARAM;
+ 718:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 719:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 720:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* chdw max */
+ 721:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (chdw > CHDW_MAX_8188)
+ 722:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 723:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             error = CEU_ERR_PARAM;
+ 724:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 725:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 726:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         /* chdw align 4 */
+ 727:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (ceu_align_check ((uint32_t) chdw, 4u) != 0)
+ 728:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 729:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             error = CEU_ERR_PARAM;
+ 730:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 731:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 732:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 733:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 734:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 735:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (CEU_DATA_SYNC_MODE == gs_local_jpg)
+ 736:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 737:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Checking pointer variable */
+ 738:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (NULL == cayr)
+ 739:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 740:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 error = CEU_ERR_PARAM;
+ 741:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 742:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 743:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* cayr align 4 */
+ 744:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (ceu_align_check ((uint32_t) cayr, 4u) != 0)
+ 745:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 746:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 error = CEU_ERR_PARAM;
+ 747:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 748:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 749:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (CEU_16BIT_DATA_PINS == gs_local_dtif)
+ 750:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 751:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if ((gs_local_hwdth * 2) != chdw)
+ 752:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 753:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 754:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 755:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 756:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 757:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (CEU_8BIT_DATA_PINS == gs_local_dtif)
+ 758:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 759:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 if (gs_local_hwdth != chdw)
+ 760:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 761:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     error = CEU_ERR_PARAM;
+ 762:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 763:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 764:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 765:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 766:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 767:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 768:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 769:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         if (CEU_DATA_ENABLE_MODE == gs_local_jpg)
+ 770:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 771:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* Checking pointer variable */
+ 772:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (NULL == cayr)
+ 773:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 774:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 error = CEU_ERR_PARAM;
+ 775:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 776:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 777:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             /* cayr align 4 */
+ 778:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             if (ceu_align_check ((uint32_t) cayr, 32u) != 0)
+ 779:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 780:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 error = CEU_ERR_PARAM;
+ 781:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 782:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 783:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 784:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 785:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return error;
+ 786:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function ceu_execute_check_prm() */
+ 787:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 788:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** /**************************************************************************//**
+ 789:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * Function Name: ceu_align_check
+ 790:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @brief       align check
+ 791:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   value       : check value
+ 792:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @param[in]   align       : align value
+ 793:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  * @retval      OK(0) NG(-1)
+ 794:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****  ******************************************************************************/
+ 795:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** static int32_t ceu_align_check(const uint32_t value, uint32_t align)
+ 796:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** {
+  25              		.loc 1 796 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              		@ link register save eliminated.
+  30              	.LVL0:
+ 797:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     int32_t error;
+ 798:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 799:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     align -= 1u;
+  31              		.loc 1 799 0
+  32 0000 011041E2 		sub	r1, r1, #1
+  33              	.LVL1:
+ 800:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if ((value & align) != 0)
+  34              		.loc 1 800 0
+  35 0004 000011E1 		tst	r1, r0
+  36 0008 0100001A 		bne	.L4
+ 801:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 802:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         error = -1;
+ 803:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 804:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     else
+ 805:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 806:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         error = 0;
+  37              		.loc 1 806 0
+  38 000c 0000A0E3 		mov	r0, #0
+  39              	.LVL2:
+ 807:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 808:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 809:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     return error;
+ 810:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** } /* End of function ceu_align_check() */
+  40              		.loc 1 810 0
+  41 0010 1EFF2FE1 		bx	lr
+  42              	.LVL3:
+  43              	.L4:
+ 802:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+  44              		.loc 1 802 0
+  45 0014 0000E0E3 		mvn	r0, #0
+  46              	.LVL4:
+  47 0018 1EFF2FE1 		bx	lr
+  48              		.cfi_endproc
+  49              	.LFE10:
+  51              		.section	.text.ceu_open_check_prm,"ax",%progbits
+  52              		.align	2
+  53              		.syntax unified
+  54              		.arm
+  55              		.fpu neon
+  57              	ceu_open_check_prm:
+  58              	.LFB8:
+ 509:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+  59              		.loc 1 509 0
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 0
+  62              		@ frame_needed = 0, uses_anonymous_args = 0
+  63              	.LVL5:
+  64 0000 70402DE9 		push	{r4, r5, r6, lr}
+  65              		.cfi_def_cfa_offset 16
+  66              		.cfi_offset 4, -16
+  67              		.cfi_offset 5, -12
+  68              		.cfi_offset 6, -8
+  69              		.cfi_offset 14, -4
+  70              	.LVL6:
+ 513:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+  71              		.loc 1 513 0
+  72 0004 004050E2 		subs	r4, r0, #0
+  73 0008 5000000A 		beq	.L22
+ 515:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+  74              		.loc 1 515 0
+  75 000c 0830D4E5 		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+  76 0010 010053E3 		cmp	r3, #1
+  77 0014 4800009A 		bls	.L41
+ 510:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+  78              		.loc 1 510 0
+  79 0018 0050A0E3 		mov	r5, #0
+  80              	.L6:
+  81              	.LVL7:
+ 525:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+  82              		.loc 1 525 0
+  83 001c 000055E3 		cmp	r5, #0
+  84 0020 0400001A 		bne	.L7
+ 528:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+  85              		.loc 1 528 0
+  86 0024 000054E3 		cmp	r4, #0
+  87 0028 0200000A 		beq	.L7
+ 530:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+  88              		.loc 1 530 0
+  89 002c 0830D4E5 		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+  90 0030 010053E3 		cmp	r3, #1
+  91 0034 4900009A 		bls	.L42
+  92              	.LVL8:
+  93              	.L7:
+ 547:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+  94              		.loc 1 547 0
+  95 0038 000055E3 		cmp	r5, #0
+  96 003c 0400001A 		bne	.L9
+ 550:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+  97              		.loc 1 550 0
+  98 0040 000054E3 		cmp	r4, #0
+  99 0044 0200000A 		beq	.L9
+ 552:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 100              		.loc 1 552 0
+ 101 0048 0830D4E5 		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+ 102 004c 010053E3 		cmp	r3, #1
+ 103 0050 4E00009A 		bls	.L43
+ 104              	.LVL9:
+ 105              	.L9:
+ 569:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 106              		.loc 1 569 0
+ 107 0054 000055E3 		cmp	r5, #0
+ 108 0058 1900001A 		bne	.L11
+ 572:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 109              		.loc 1 572 0
+ 110 005c 000054E3 		cmp	r4, #0
+ 111 0060 0C00000A 		beq	.L12
+ 575:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 112              		.loc 1 575 0
+ 113 0064 B860D4E1 		ldrh	r6, [r4, #8]
+ 114 0068 000056E3 		cmp	r6, #0
+ 115 006c 0700001A 		bne	.L13
+ 578:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 116              		.loc 1 578 0
+ 117 0070 003094E5 		ldr	r3, [r4]
+ 118 0074 0C0093E5 		ldr	r0, [r3, #12]
+ 119 0078 050B50E3 		cmp	r0, #5120
+ 580:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 120              		.loc 1 580 0
+ 121 007c 0150A083 		movhi	r5, #1
+ 122              	.LVL10:
+ 123              	.L14:
+ 584:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 124              		.loc 1 584 0
+ 125 0080 0810A0E3 		mov	r1, #8
+ 126 0084 FEFFFFEB 		bl	ceu_align_check
+ 127              	.LVL11:
+ 128 0088 000050E3 		cmp	r0, #0
+ 586:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 129              		.loc 1 586 0
+ 130 008c 0150A013 		movne	r5, #1
+ 131              	.LVL12:
+ 132              	.L13:
+ 591:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 133              		.loc 1 591 0
+ 134 0090 010056E3 		cmp	r6, #1
+ 135 0094 4600000A 		beq	.L44
+ 136              	.LVL13:
+ 137              	.L12:
+ 608:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 138              		.loc 1 608 0
+ 139 0098 000054E3 		cmp	r4, #0
+ 140 009c 0200000A 		beq	.L16
+ 611:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 141              		.loc 1 611 0
+ 142 00a0 B830D4E1 		ldrh	r3, [r4, #8]
+ 143 00a4 010C53E3 		cmp	r3, #256
+ 144 00a8 4A00000A 		beq	.L45
+ 145              	.LVL14:
+ 146              	.L16:
+ 628:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 147              		.loc 1 628 0
+ 148 00ac 000054E3 		cmp	r4, #0
+ 149 00b0 0300000A 		beq	.L11
+ 631:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 150              		.loc 1 631 0
+ 151 00b4 B820D4E1 		ldrh	r2, [r4, #8]
+ 152 00b8 013100E3 		movw	r3, #257
+ 153 00bc 030052E1 		cmp	r2, r3
+ 154 00c0 4D00000A 		beq	.L46
+ 155              	.LVL15:
+ 156              	.L11:
+ 648:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 157              		.loc 1 648 0
+ 158 00c4 000055E3 		cmp	r5, #0
+ 159 00c8 0700001A 		bne	.L19
+ 651:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 160              		.loc 1 651 0
+ 161 00cc 000054E3 		cmp	r4, #0
+ 162 00d0 0500000A 		beq	.L19
+ 653:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 163              		.loc 1 653 0
+ 164 00d4 0830D4E5 		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+ 165 00d8 000053E3 		cmp	r3, #0
+ 166 00dc 0200001A 		bne	.L19
+ 656:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 167              		.loc 1 656 0
+ 168 00e0 043094E5 		ldr	r3, [r4, #4]
+ 169 00e4 000053E3 		cmp	r3, #0
+ 170 00e8 4C00000A 		beq	.L47
+ 171              	.LVL16:
+ 172              	.L19:
+ 664:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 173              		.loc 1 664 0
+ 174 00ec 000055E3 		cmp	r5, #0
+ 175 00f0 0F00001A 		bne	.L20
+ 667:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 176              		.loc 1 667 0
+ 177 00f4 000054E3 		cmp	r4, #0
+ 178 00f8 0D00000A 		beq	.L20
+ 669:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 179              		.loc 1 669 0
+ 180 00fc 0830D4E5 		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+ 181 0100 000053E3 		cmp	r3, #0
+ 182 0104 0A00001A 		bne	.L20
+ 672:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 183              		.loc 1 672 0
+ 184 0108 044094E5 		ldr	r4, [r4, #4]
+ 185              	.LVL17:
+ 186 010c 0410A0E3 		mov	r1, #4
+ 187 0110 000094E5 		ldr	r0, [r4]
+ 188 0114 FEFFFFEB 		bl	ceu_align_check
+ 189              	.LVL18:
+ 190 0118 000050E3 		cmp	r0, #0
+ 674:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 191              		.loc 1 674 0
+ 192 011c 0150A013 		movne	r5, #1
+ 193              	.LVL19:
+ 194              	.L21:
+ 678:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 195              		.loc 1 678 0
+ 196 0120 0410A0E3 		mov	r1, #4
+ 197 0124 040094E5 		ldr	r0, [r4, #4]
+ 198 0128 FEFFFFEB 		bl	ceu_align_check
+ 199              	.LVL20:
+ 200 012c 000050E3 		cmp	r0, #0
+ 680:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 201              		.loc 1 680 0
+ 202 0130 0150A013 		movne	r5, #1
+ 203              	.LVL21:
+ 204              	.L20:
+ 686:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 205              		.loc 1 686 0
+ 206 0134 0500A0E1 		mov	r0, r5
+ 207 0138 7080BDE8 		pop	{r4, r5, r6, pc}
+ 208              	.LVL22:
+ 209              	.L41:
+ 518:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 210              		.loc 1 518 0
+ 211 013c 003094E5 		ldr	r3, [r4]
+ 212 0140 000053E3 		cmp	r3, #0
+ 213 0144 0300000A 		beq	.L24
+ 510:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 214              		.loc 1 510 0
+ 215 0148 0050A0E3 		mov	r5, #0
+ 216 014c B2FFFFEA 		b	.L6
+ 217              	.L22:
+ 218 0150 0050A0E3 		mov	r5, #0
+ 219 0154 B0FFFFEA 		b	.L6
+ 220              	.L24:
+ 520:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 221              		.loc 1 520 0
+ 222 0158 0150A0E3 		mov	r5, #1
+ 223 015c AEFFFFEA 		b	.L6
+ 224              	.LVL23:
+ 225              	.L42:
+ 533:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 226              		.loc 1 533 0
+ 227 0160 002094E5 		ldr	r2, [r4]
+ 228 0164 003092E5 		ldr	r3, [r2]
+ 229 0168 FF3EC3E3 		bic	r3, r3, #4080
+ 230 016c 0F30C3E3 		bic	r3, r3, #15
+ 231 0170 000053E3 		cmp	r3, #0
+ 535:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 232              		.loc 1 535 0
+ 233 0174 0150A013 		movne	r5, #1
+ 234              	.LVL24:
+ 235              	.L8:
+ 539:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 236              		.loc 1 539 0
+ 237 0178 083092E5 		ldr	r3, [r2, #8]
+ 238 017c 7F3DC3E3 		bic	r3, r3, #8128
+ 239 0180 3F30C3E3 		bic	r3, r3, #63
+ 240 0184 000053E3 		cmp	r3, #0
+ 541:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 241              		.loc 1 541 0
+ 242 0188 0150A013 		movne	r5, #1
+ 243              	.LVL25:
+ 244 018c A9FFFFEA 		b	.L7
+ 245              	.LVL26:
+ 246              	.L43:
+ 555:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 247              		.loc 1 555 0
+ 248 0190 003094E5 		ldr	r3, [r4]
+ 249 0194 040093E5 		ldr	r0, [r3, #4]
+ 250              	.LVL27:
+ 251 0198 1E0D50E3 		cmp	r0, #1920
+ 557:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 252              		.loc 1 557 0
+ 253 019c 0150A083 		movhi	r5, #1
+ 254              	.LVL28:
+ 255              	.L10:
+ 561:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 256              		.loc 1 561 0
+ 257 01a0 0410A0E3 		mov	r1, #4
+ 258 01a4 FEFFFFEB 		bl	ceu_align_check
+ 259              	.LVL29:
+ 260 01a8 000050E3 		cmp	r0, #0
+ 563:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 261              		.loc 1 563 0
+ 262 01ac 0150A013 		movne	r5, #1
+ 263              	.LVL30:
+ 264 01b0 A7FFFFEA 		b	.L9
+ 265              	.LVL31:
+ 266              	.L44:
+ 594:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 267              		.loc 1 594 0
+ 268 01b4 003094E5 		ldr	r3, [r4]
+ 269 01b8 0C0093E5 		ldr	r0, [r3, #12]
+ 270 01bc 0A0C50E3 		cmp	r0, #2560
+ 596:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 271              		.loc 1 596 0
+ 272 01c0 0150A083 		movhi	r5, #1
+ 273              	.LVL32:
+ 274              	.L15:
+ 600:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 275              		.loc 1 600 0
+ 276 01c4 0410A0E3 		mov	r1, #4
+ 277 01c8 FEFFFFEB 		bl	ceu_align_check
+ 278              	.LVL33:
+ 279 01cc 000050E3 		cmp	r0, #0
+ 602:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 280              		.loc 1 602 0
+ 281 01d0 0150A013 		movne	r5, #1
+ 282              	.LVL34:
+ 283 01d4 AFFFFFEA 		b	.L12
+ 284              	.LVL35:
+ 285              	.L45:
+ 614:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 286              		.loc 1 614 0
+ 287 01d8 003094E5 		ldr	r3, [r4]
+ 288 01dc 0C0093E5 		ldr	r0, [r3, #12]
+ 289 01e0 0A0C50E3 		cmp	r0, #2560
+ 616:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 290              		.loc 1 616 0
+ 291 01e4 0150A083 		movhi	r5, #1
+ 292              	.LVL36:
+ 293              	.L17:
+ 620:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 294              		.loc 1 620 0
+ 295 01e8 0410A0E3 		mov	r1, #4
+ 296 01ec FEFFFFEB 		bl	ceu_align_check
+ 297              	.LVL37:
+ 298 01f0 000050E3 		cmp	r0, #0
+ 622:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 299              		.loc 1 622 0
+ 300 01f4 0150A013 		movne	r5, #1
+ 301              	.LVL38:
+ 302 01f8 ABFFFFEA 		b	.L16
+ 303              	.LVL39:
+ 304              	.L46:
+ 634:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 305              		.loc 1 634 0
+ 306 01fc 003094E5 		ldr	r3, [r4]
+ 307 0200 0C0093E5 		ldr	r0, [r3, #12]
+ 308 0204 050C50E3 		cmp	r0, #1280
+ 636:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 309              		.loc 1 636 0
+ 310 0208 0150A083 		movhi	r5, #1
+ 311              	.LVL40:
+ 312              	.L18:
+ 640:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 313              		.loc 1 640 0
+ 314 020c 0210A0E3 		mov	r1, #2
+ 315 0210 FEFFFFEB 		bl	ceu_align_check
+ 316              	.LVL41:
+ 317 0214 000050E3 		cmp	r0, #0
+ 642:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 318              		.loc 1 642 0
+ 319 0218 0150A013 		movne	r5, #1
+ 320              	.LVL42:
+ 321 021c A8FFFFEA 		b	.L11
+ 322              	.LVL43:
+ 323              	.L47:
+ 658:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 324              		.loc 1 658 0
+ 325 0220 0150A0E3 		mov	r5, #1
+ 326              	.LVL44:
+ 327 0224 B0FFFFEA 		b	.L19
+ 328              		.cfi_endproc
+ 329              	.LFE8:
+ 331              		.section	.text.ceu_execute_check_prm,"ax",%progbits
+ 332              		.align	2
+ 333              		.syntax unified
+ 334              		.arm
+ 335              		.fpu neon
+ 337              	ceu_execute_check_prm:
+ 338              	.LFB9:
+ 697:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 339              		.loc 1 697 0
+ 340              		.cfi_startproc
+ 341              		@ args = 0, pretend = 0, frame = 0
+ 342              		@ frame_needed = 0, uses_anonymous_args = 0
+ 343              	.LVL45:
+ 344 0000 F0412DE9 		push	{r4, r5, r6, r7, r8, lr}
+ 345              		.cfi_def_cfa_offset 24
+ 346              		.cfi_offset 4, -24
+ 347              		.cfi_offset 5, -20
+ 348              		.cfi_offset 6, -16
+ 349              		.cfi_offset 7, -12
+ 350              		.cfi_offset 8, -8
+ 351              		.cfi_offset 14, -4
+ 352 0004 0060A0E1 		mov	r6, r0
+ 353 0008 0270A0E1 		mov	r7, r2
+ 354              	.LVL46:
+ 700:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 355              		.loc 1 700 0
+ 356 000c 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 357 0010 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 358 0014 0050D3E5 		ldrb	r5, [r3]	@ zero_extendqisi2
+ 359 0018 000055E3 		cmp	r5, #0
+ 360 001c 1900001A 		bne	.L60
+ 361 0020 0180A0E1 		mov	r8, r1
+ 703:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 362              		.loc 1 703 0
+ 363 0024 000051E3 		cmp	r1, #0
+ 364 0028 00005013 		cmpne	r0, #0
+ 365 002c 1300000A 		beq	.L61
+ 698:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 366              		.loc 1 698 0
+ 367 0030 0040A0E3 		mov	r4, #0
+ 368              	.L50:
+ 369              	.LVL47:
+ 709:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 370              		.loc 1 709 0
+ 371 0034 0410A0E3 		mov	r1, #4
+ 372              	.LVL48:
+ 373 0038 0600A0E1 		mov	r0, r6
+ 374              	.LVL49:
+ 375 003c FEFFFFEB 		bl	ceu_align_check
+ 376              	.LVL50:
+ 377 0040 000050E3 		cmp	r0, #0
+ 711:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 378              		.loc 1 711 0
+ 379 0044 0140A013 		movne	r4, #1
+ 380              	.LVL51:
+ 381              	.L51:
+ 715:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 382              		.loc 1 715 0
+ 383 0048 0410A0E3 		mov	r1, #4
+ 384 004c 0800A0E1 		mov	r0, r8
+ 385 0050 FEFFFFEB 		bl	ceu_align_check
+ 386              	.LVL52:
+ 387 0054 000050E3 		cmp	r0, #0
+ 717:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 388              		.loc 1 717 0
+ 389 0058 0140A013 		movne	r4, #1
+ 390              	.LVL53:
+ 391              	.L52:
+ 721:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 392              		.loc 1 721 0
+ 393 005c FC3F01E3 		movw	r3, #8188
+ 394 0060 030057E1 		cmp	r7, r3
+ 723:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 395              		.loc 1 723 0
+ 396 0064 0140A083 		movhi	r4, #1
+ 397              	.LVL54:
+ 398              	.L53:
+ 727:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 399              		.loc 1 727 0
+ 400 0068 0410A0E3 		mov	r1, #4
+ 401 006c 0700A0E1 		mov	r0, r7
+ 402 0070 FEFFFFEB 		bl	ceu_align_check
+ 403              	.LVL55:
+ 404 0074 000050E3 		cmp	r0, #0
+ 729:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 405              		.loc 1 729 0
+ 406 0078 0140A013 		movne	r4, #1
+ 407              	.LVL56:
+ 408 007c 020000EA 		b	.L49
+ 409              	.LVL57:
+ 410              	.L61:
+ 705:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 411              		.loc 1 705 0
+ 412 0080 0140A0E3 		mov	r4, #1
+ 413 0084 EAFFFFEA 		b	.L50
+ 414              	.L60:
+ 698:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 415              		.loc 1 698 0
+ 416 0088 0040A0E3 		mov	r4, #0
+ 417              	.LVL58:
+ 418              	.L49:
+ 733:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 419              		.loc 1 733 0
+ 420 008c 000054E3 		cmp	r4, #0
+ 421 0090 0100001A 		bne	.L54
+ 735:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 422              		.loc 1 735 0
+ 423 0094 010055E3 		cmp	r5, #1
+ 424 0098 0500000A 		beq	.L73
+ 425              	.LVL59:
+ 426              	.L54:
+ 767:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 427              		.loc 1 767 0
+ 428 009c 000054E3 		cmp	r4, #0
+ 429 00a0 0100001A 		bne	.L58
+ 769:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 430              		.loc 1 769 0
+ 431 00a4 020055E3 		cmp	r5, #2
+ 432 00a8 1D00000A 		beq	.L74
+ 433              	.LVL60:
+ 434              	.L58:
+ 786:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 435              		.loc 1 786 0
+ 436 00ac 0400A0E1 		mov	r0, r4
+ 437 00b0 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 438              	.L73:
+ 738:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 439              		.loc 1 738 0
+ 440 00b4 000056E3 		cmp	r6, #0
+ 441 00b8 1100000A 		beq	.L75
+ 442              	.LVL61:
+ 443              	.L55:
+ 744:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 444              		.loc 1 744 0
+ 445 00bc 0410A0E3 		mov	r1, #4
+ 446 00c0 0600A0E1 		mov	r0, r6
+ 447 00c4 FEFFFFEB 		bl	ceu_align_check
+ 448              	.LVL62:
+ 449 00c8 000050E3 		cmp	r0, #0
+ 746:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 450              		.loc 1 746 0
+ 451 00cc 0140A013 		movne	r4, #1
+ 452              	.LVL63:
+ 453              	.L56:
+ 749:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 454              		.loc 1 749 0
+ 455 00d0 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 456 00d4 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 457 00d8 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 458 00dc 010053E3 		cmp	r3, #1
+ 459 00e0 0900000A 		beq	.L76
+ 460              	.LVL64:
+ 461              	.L57:
+ 757:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 462              		.loc 1 757 0
+ 463 00e4 000053E3 		cmp	r3, #0
+ 464 00e8 EBFFFF1A 		bne	.L54
+ 759:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 465              		.loc 1 759 0
+ 466 00ec 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 467 00f0 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 468 00f4 003093E5 		ldr	r3, [r3]
+ 469 00f8 030057E1 		cmp	r7, r3
+ 761:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 470              		.loc 1 761 0
+ 471 00fc 0140A013 		movne	r4, #1
+ 472              	.LVL65:
+ 473 0100 E5FFFFEA 		b	.L54
+ 474              	.LVL66:
+ 475              	.L75:
+ 740:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 476              		.loc 1 740 0
+ 477 0104 0140A0E3 		mov	r4, #1
+ 478              	.LVL67:
+ 479 0108 EBFFFFEA 		b	.L55
+ 480              	.LVL68:
+ 481              	.L76:
+ 751:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 482              		.loc 1 751 0
+ 483 010c 002000E3 		movw	r2, #:lower16:.LANCHOR2
+ 484 0110 002040E3 		movt	r2, #:upper16:.LANCHOR2
+ 485 0114 002092E5 		ldr	r2, [r2]
+ 486 0118 820057E1 		cmp	r7, r2, lsl #1
+ 753:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 487              		.loc 1 753 0
+ 488 011c 0140A013 		movne	r4, #1
+ 489              	.LVL69:
+ 490 0120 EFFFFFEA 		b	.L57
+ 491              	.LVL70:
+ 492              	.L74:
+ 772:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 493              		.loc 1 772 0
+ 494 0124 000056E3 		cmp	r6, #0
+ 495 0128 0500000A 		beq	.L77
+ 496              	.LVL71:
+ 497              	.L59:
+ 778:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 498              		.loc 1 778 0
+ 499 012c 2010A0E3 		mov	r1, #32
+ 500 0130 0600A0E1 		mov	r0, r6
+ 501 0134 FEFFFFEB 		bl	ceu_align_check
+ 502              	.LVL72:
+ 503 0138 000050E3 		cmp	r0, #0
+ 780:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 504              		.loc 1 780 0
+ 505 013c 0140A013 		movne	r4, #1
+ 506              	.LVL73:
+ 507 0140 D9FFFFEA 		b	.L58
+ 508              	.LVL74:
+ 509              	.L77:
+ 774:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 510              		.loc 1 774 0
+ 511 0144 0140A0E3 		mov	r4, #1
+ 512              	.LVL75:
+ 513 0148 F7FFFFEA 		b	.L59
+ 514              		.cfi_endproc
+ 515              	.LFE9:
+ 517              		.section	.text.R_CEU_Initialize,"ax",%progbits
+ 518              		.align	2
+ 519              		.global	R_CEU_Initialize
+ 520              		.syntax unified
+ 521              		.arm
+ 522              		.fpu neon
+ 524              	R_CEU_Initialize:
+ 525              	.LFB0:
+ 126:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* call back function */
+ 526              		.loc 1 126 0
+ 527              		.cfi_startproc
+ 528              		@ args = 0, pretend = 0, frame = 0
+ 529              		@ frame_needed = 0, uses_anonymous_args = 0
+ 530              	.LVL76:
+ 531 0000 10402DE9 		push	{r4, lr}
+ 532              		.cfi_def_cfa_offset 8
+ 533              		.cfi_offset 4, -8
+ 534              		.cfi_offset 14, -4
+ 128:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 535              		.loc 1 128 0
+ 536 0004 003050E2 		subs	r3, r0, #0
+ 537 0008 0100000A 		beq	.L79
+ 538 000c 0100A0E1 		mov	r0, r1
+ 539              	.LVL77:
+ 130:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 540              		.loc 1 130 0
+ 541 0010 33FF2FE1 		blx	r3
+ 542              	.LVL78:
+ 543              	.L79:
+ 134:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     gs_local_dtif  = CEU_8BIT_DATA_PINS;
+ 544              		.loc 1 134 0
+ 545 0014 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 546 0018 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 547 001c 0020A0E3 		mov	r2, #0
+ 548 0020 0020C3E5 		strb	r2, [r3]
+ 135:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     gs_local_hwdth = 0;
+ 549              		.loc 1 135 0
+ 550 0024 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 551 0028 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 552 002c 0020C3E5 		strb	r2, [r3]
+ 136:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 553              		.loc 1 136 0
+ 554 0030 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 555 0034 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 556 0038 002083E5 		str	r2, [r3]
+ 557 003c 1080BDE8 		pop	{r4, pc}
+ 558              		.cfi_endproc
+ 559              	.LFE0:
+ 561              		.section	.text.R_CEU_Open,"ax",%progbits
+ 562              		.align	2
+ 563              		.global	R_CEU_Open
+ 564              		.syntax unified
+ 565              		.arm
+ 566              		.fpu neon
+ 568              	R_CEU_Open:
+ 569              	.LFB1:
+ 148:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error;
+ 570              		.loc 1 148 0
+ 571              		.cfi_startproc
+ 572              		@ args = 0, pretend = 0, frame = 0
+ 573              		@ frame_needed = 0, uses_anonymous_args = 0
+ 574              	.LVL79:
+ 575 0000 10402DE9 		push	{r4, lr}
+ 576              		.cfi_def_cfa_offset 8
+ 577              		.cfi_offset 4, -8
+ 578              		.cfi_offset 14, -4
+ 579 0004 0040A0E1 		mov	r4, r0
+ 152:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 580              		.loc 1 152 0
+ 581 0008 FEFFFFEB 		bl	ceu_open_check_prm
+ 582              	.LVL80:
+ 154:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 583              		.loc 1 154 0
+ 584 000c 000050E3 		cmp	r0, #0
+ 585              	.LVL81:
+ 586 0010 1080BD18 		popne	{r4, pc}
+ 156:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         gs_local_dtif = config->dtif;
+ 587              		.loc 1 156 0
+ 588 0014 0810D4E5 		ldrb	r1, [r4, #8]	@ zero_extendqisi2
+ 589 0018 002000E3 		movw	r2, #:lower16:.LANCHOR0
+ 590 001c 002040E3 		movt	r2, #:upper16:.LANCHOR0
+ 591 0020 0010C2E5 		strb	r1, [r2]
+ 157:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 592              		.loc 1 157 0
+ 593 0024 09C0D4E5 		ldrb	ip, [r4, #9]	@ zero_extendqisi2
+ 594 0028 002000E3 		movw	r2, #:lower16:.LANCHOR1
+ 595 002c 002040E3 		movt	r2, #:upper16:.LANCHOR1
+ 596 0030 00C0C2E5 		strb	ip, [r2]
+ 172:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->hdsel << 26u)) |    /* Cast to an appropriate type */
+ 597              		.loc 1 172 0
+ 598 0034 1020D4E5 		ldrb	r2, [r4, #16]	@ zero_extendqisi2
+ 173:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->fldsel<< 25u)) |    /* Cast to an appropriate type */
+ 599              		.loc 1 173 0
+ 600 0038 0F30D4E5 		ldrb	r3, [r4, #15]	@ zero_extendqisi2
+ 601 003c 033DA0E1 		lsl	r3, r3, #26
+ 172:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->hdsel << 26u)) |    /* Cast to an appropriate type */
+ 602              		.loc 1 172 0
+ 603 0040 823D83E1 		orr	r3, r3, r2, lsl #27
+ 174:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dsel  << 24u)) |    /* Cast to an appropriate type */
+ 604              		.loc 1 174 0
+ 605 0044 0E20D4E5 		ldrb	r2, [r4, #14]	@ zero_extendqisi2
+ 173:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->fldsel<< 25u)) |    /* Cast to an appropriate type */
+ 606              		.loc 1 173 0
+ 607 0048 823C83E1 		orr	r3, r3, r2, lsl #25
+ 175:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dtif  << 12u)) |    /* Cast to an appropriate type */
+ 608              		.loc 1 175 0
+ 609 004c 0D20D4E5 		ldrb	r2, [r4, #13]	@ zero_extendqisi2
+ 174:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dsel  << 24u)) |    /* Cast to an appropriate type */
+ 610              		.loc 1 174 0
+ 611 0050 023C83E1 		orr	r3, r3, r2, lsl #24
+ 175:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dtif  << 12u)) |    /* Cast to an appropriate type */
+ 612              		.loc 1 175 0
+ 613 0054 0C3683E1 		orr	r3, r3, ip, lsl #12
+ 177:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->jpg   <<  4u)) |    /* Cast to an appropriate type */
+ 614              		.loc 1 177 0
+ 615 0058 0C20D4E5 		ldrb	r2, [r4, #12]	@ zero_extendqisi2
+ 176:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->dtary <<  8u)) |    /* Cast to an appropriate type */
+ 616              		.loc 1 176 0
+ 617 005c 023483E1 		orr	r3, r3, r2, lsl #8
+ 177:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->jpg   <<  4u)) |    /* Cast to an appropriate type */
+ 618              		.loc 1 177 0
+ 619 0060 013283E1 		orr	r3, r3, r1, lsl #4
+ 179:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->hdpol <<  0u));     /* Cast to an appropriate type */
+ 620              		.loc 1 179 0
+ 621 0064 0A20D4E5 		ldrb	r2, [r4, #10]	@ zero_extendqisi2
+ 178:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t)(config->vdpol <<  1u)) |    /* Cast to an appropriate type */
+ 622              		.loc 1 178 0
+ 623 0068 823083E1 		orr	r3, r3, r2, lsl #1
+ 180:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 624              		.loc 1 180 0
+ 625 006c 0B20D4E5 		ldrb	r2, [r4, #11]	@ zero_extendqisi2
+ 169:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 626              		.loc 1 169 0
+ 627 0070 023083E1 		orr	r3, r3, r2
+ 628 0074 0020A0E3 		mov	r2, #0
+ 629 0078 21284EE3 		movt	r2, 59425
+ 630 007c 083082E5 		str	r3, [r2, #8]
+ 182:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 631              		.loc 1 182 0
+ 632 0080 0830D4E5 		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+ 633 0084 020053E3 		cmp	r3, #2
+ 634 0088 1100000A 		beq	.L83
+ 185:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 635              		.loc 1 185 0
+ 636 008c 003094E5 		ldr	r3, [r4]
+ 637 0090 000053E3 		cmp	r3, #0
+ 638 0094 0E00000A 		beq	.L83
+ 187:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 639              		.loc 1 187 0
+ 640 0098 0C1093E5 		ldr	r1, [r3, #12]
+ 641 009c 002000E3 		movw	r2, #:lower16:.LANCHOR2
+ 642 00a0 002040E3 		movt	r2, #:upper16:.LANCHOR2
+ 643 00a4 001082E5 		str	r1, [r2]
+ 192:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 644              		.loc 1 192 0
+ 645 00a8 001093E5 		ldr	r1, [r3]
+ 646 00ac 082093E5 		ldr	r2, [r3, #8]
+ 647 00b0 012882E1 		orr	r2, r2, r1, lsl #16
+ 648 00b4 0030A0E3 		mov	r3, #0
+ 649 00b8 21384EE3 		movt	r3, 59425
+ 650 00bc 102083E5 		str	r2, [r3, #16]
+ 197:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 651              		.loc 1 197 0
+ 652 00c0 001094E5 		ldr	r1, [r4]
+ 653 00c4 04C091E5 		ldr	ip, [r1, #4]
+ 654 00c8 0C2091E5 		ldr	r2, [r1, #12]
+ 655 00cc 0C2882E1 		orr	r2, r2, ip, lsl #16
+ 656 00d0 142083E5 		str	r2, [r3, #20]
+ 657              	.L83:
+ 658              	.LVL82:
+ 659              	.LBB2:
+ 205:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 660              		.loc 1 205 0
+ 661 00d4 0830D4E5 		ldrb	r3, [r4, #8]	@ zero_extendqisi2
+ 662 00d8 000053E3 		cmp	r3, #0
+ 663 00dc 1E00001A 		bne	.L84
+ 207:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 hfclp = config->clp->hfclp;
+ 664              		.loc 1 207 0
+ 665 00e0 043094E5 		ldr	r3, [r4, #4]
+ 666 00e4 002093E5 		ldr	r2, [r3]
+ 667              	.LVL83:
+ 208:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 668              		.loc 1 208 0
+ 669 00e8 043093E5 		ldr	r3, [r3, #4]
+ 670              	.LVL84:
+ 671              	.L85:
+ 232:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 672              		.loc 1 232 0
+ 673 00ec 022883E1 		orr	r2, r3, r2, lsl #16
+ 674              	.LVL85:
+ 675 00f0 0030A0E3 		mov	r3, #0
+ 676              	.LVL86:
+ 677 00f4 21384EE3 		movt	r3, 59425
+ 678 00f8 342083E5 		str	r2, [r3, #52]
+ 679              	.LBE2:
+ 247:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t) (config->cows << CEU_SHIFT_VALUE_1)) | /* Cast to an appropriate type */
+ 680              		.loc 1 247 0
+ 681 00fc 1110D4E5 		ldrb	r1, [r4, #17]	@ zero_extendqisi2
+ 248:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t) (config->cobs) );
+ 682              		.loc 1 248 0
+ 683 0100 1220D4E5 		ldrb	r2, [r4, #18]	@ zero_extendqisi2
+ 684 0104 8220A0E1 		lsl	r2, r2, #1
+ 247:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (uint32_t) (config->cows << CEU_SHIFT_VALUE_1)) | /* Cast to an appropriate type */
+ 685              		.loc 1 247 0
+ 686 0108 012182E1 		orr	r2, r2, r1, lsl #2
+ 249:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 687              		.loc 1 249 0
+ 688 010c 1310D4E5 		ldrb	r1, [r4, #19]	@ zero_extendqisi2
+ 245:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             (CDOCR_CDS_VALUE << CEU_SHIFT_VALUE_4)) | /* Cast to an appropriate type */
+ 689              		.loc 1 245 0
+ 690 0110 012082E1 		orr	r2, r2, r1
+ 691 0114 102082E3 		orr	r2, r2, #16
+ 692 0118 642083E5 		str	r2, [r3, #100]
+ 254:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CMCYR_HCYL_VALUE);
+ 693              		.loc 1 254 0
+ 694 011c 0020A0E3 		mov	r2, #0
+ 695 0120 0C2083E5 		str	r2, [r3, #12]
+ 263:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 ((CAPCR_FDRP_VALUE << CEU_SHIFT_VALUE_24) | (CAPCR_MTCM_VALUE << CEU_SHIFT_VALUE_20
+ 696              		.loc 1 263 0
+ 697 0124 042083E5 		str	r2, [r3, #4]
+ 270:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             | (CAIFR_CIM_VALUE << CEU_SHIFT_VALUE_4)) |
+ 698              		.loc 1 270 0
+ 699 0128 182083E5 		str	r2, [r3, #24]
+ 280:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             | (CRCNTR_RS_VALUE << CEU_SHIFT_VALUE_1)) |
+ 700              		.loc 1 280 0
+ 701 012c 282083E5 		str	r2, [r3, #40]
+ 287:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 (((CFLCR_VMANT_VALUE << CEU_SHIFT_VALUE_28) | (CFLCR_VFRAC_VALUE << CEU_SHIFT_VALUE
+ 702              		.loc 1 287 0
+ 703 0130 302083E5 		str	r2, [r3, #48]
+ 293:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDBCR_A.LONG = 0u;    /* initialize */
+ 704              		.loc 1 293 0
+ 705 0134 442083E5 		str	r2, [r3, #68]
+ 294:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDAYR2_A.LONG = 0u;   /* initialize */
+ 706              		.loc 1 294 0
+ 707 0138 482083E5 		str	r2, [r3, #72]
+ 295:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDACR2_A.LONG = 0u;   /* initialize */
+ 708              		.loc 1 295 0
+ 709 013c 902083E5 		str	r2, [r3, #144]
+ 296:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDBYR2_A.LONG = 0u;   /* initialize */
+ 710              		.loc 1 296 0
+ 711 0140 942083E5 		str	r2, [r3, #148]
+ 297:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         CEU.CDBCR2_A.LONG = 0u;   /* initialize */
+ 712              		.loc 1 297 0
+ 713 0144 982083E5 		str	r2, [r3, #152]
+ 298:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 714              		.loc 1 298 0
+ 715 0148 9C2083E5 		str	r2, [r3, #156]
+ 305:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 716              		.loc 1 305 0
+ 717 014c 4C2083E5 		str	r2, [r3, #76]
+ 311:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 718              		.loc 1 311 0
+ 719 0150 602083E5 		str	r2, [r3, #96]
+ 318:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 720              		.loc 1 318 0
+ 721 0154 5C2083E5 		str	r2, [r3, #92]
+ 323:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 722              		.loc 1 323 0
+ 723 0158 1080BDE8 		pop	{r4, pc}
+ 724              	.LVL87:
+ 725              	.L84:
+ 726              	.LBB3:
+ 210:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             {
+ 727              		.loc 1 210 0
+ 728 015c 010053E3 		cmp	r3, #1
+ 227:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             }
+ 729              		.loc 1 227 0
+ 730 0160 0030A013 		movne	r3, #0
+ 226:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 hfclp = 0u;
+ 731              		.loc 1 226 0
+ 732 0164 0320A011 		movne	r2, r3
+ 733 0168 DFFFFF1A 		bne	.L85
+ 734              	.L90:
+ 212:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 735              		.loc 1 212 0
+ 736 016c 09C0D4E5 		ldrb	ip, [r4, #9]	@ zero_extendqisi2
+ 737 0170 00005CE3 		cmp	ip, #0
+ 738 0174 0800001A 		bne	.L88
+ 214:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     hfclp = config->cap->hwdth / 2;
+ 739              		.loc 1 214 0
+ 740 0178 003094E5 		ldr	r3, [r4]
+ 741 017c 042093E5 		ldr	r2, [r3, #4]
+ 742              	.LVL88:
+ 215:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 743              		.loc 1 215 0
+ 744 0180 0C1093E5 		ldr	r1, [r3, #12]
+ 745 0184 A130A0E1 		lsr	r3, r1, #1
+ 746              	.LVL89:
+ 747              	.L86:
+ 218:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 {
+ 748              		.loc 1 218 0
+ 749 0188 01005CE3 		cmp	ip, #1
+ 220:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                     hfclp = config->cap->hwdth;
+ 750              		.loc 1 220 0
+ 751 018c 00309405 		ldreq	r3, [r4]
+ 752              	.LVL90:
+ 753 0190 04209305 		ldreq	r2, [r3, #4]
+ 754              	.LVL91:
+ 221:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****                 }
+ 755              		.loc 1 221 0
+ 756 0194 0C309305 		ldreq	r3, [r3, #12]
+ 757              	.LVL92:
+ 758 0198 D3FFFFEA 		b	.L85
+ 759              	.LVL93:
+ 760              	.L88:
+ 203:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 761              		.loc 1 203 0
+ 762 019c 0030A0E3 		mov	r3, #0
+ 202:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****             uint32_t hfclp = 0;
+ 763              		.loc 1 202 0
+ 764 01a0 0320A0E1 		mov	r2, r3
+ 765 01a4 F7FFFFEA 		b	.L86
+ 766              	.LBE3:
+ 767              		.cfi_endproc
+ 768              	.LFE1:
+ 770              		.section	.text.R_CEU_Execute,"ax",%progbits
+ 771              		.align	2
+ 772              		.global	R_CEU_Execute
+ 773              		.syntax unified
+ 774              		.arm
+ 775              		.fpu neon
+ 777              	R_CEU_Execute:
+ 778              	.LFB2:
+ 336:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error;
+ 779              		.loc 1 336 0
+ 780              		.cfi_startproc
+ 781              		@ args = 0, pretend = 0, frame = 0
+ 782              		@ frame_needed = 0, uses_anonymous_args = 0
+ 783              	.LVL94:
+ 784 0000 F0412DE9 		push	{r4, r5, r6, r7, r8, lr}
+ 785              		.cfi_def_cfa_offset 24
+ 786              		.cfi_offset 4, -24
+ 787              		.cfi_offset 5, -20
+ 788              		.cfi_offset 6, -16
+ 789              		.cfi_offset 7, -12
+ 790              		.cfi_offset 8, -8
+ 791              		.cfi_offset 14, -4
+ 792 0004 0040A0E1 		mov	r4, r0
+ 793 0008 0180A0E1 		mov	r8, r1
+ 794 000c 0270A0E1 		mov	r7, r2
+ 795 0010 0360A0E1 		mov	r6, r3
+ 340:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     if (CEU_OK == error)
+ 796              		.loc 1 340 0
+ 797 0014 FEFFFFEB 		bl	ceu_execute_check_prm
+ 798              	.LVL95:
+ 341:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 799              		.loc 1 341 0
+ 800 0018 005050E2 		subs	r5, r0, #0
+ 801 001c 0100000A 		beq	.L96
+ 802              	.LVL96:
+ 803              	.L92:
+ 375:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 804              		.loc 1 375 0
+ 805 0020 0500A0E1 		mov	r0, r5
+ 806 0024 F081BDE8 		pop	{r4, r5, r6, r7, r8, pc}
+ 807              	.LVL97:
+ 808              	.L96:
+ 344:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 809              		.loc 1 344 0
+ 810 0028 0400A0E1 		mov	r0, r4
+ 811              	.LVL98:
+ 812 002c FEFFFFEB 		bl	R_CEU_CPUVAddrToSysPAddr
+ 813              	.LVL99:
+ 814 0030 0040A0E3 		mov	r4, #0
+ 815              	.LVL100:
+ 816 0034 21484EE3 		movt	r4, 59425
+ 817 0038 3C0084E5 		str	r0, [r4, #60]
+ 347:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 818              		.loc 1 347 0
+ 819 003c 0800A0E1 		mov	r0, r8
+ 820 0040 FEFFFFEB 		bl	R_CEU_CPUVAddrToSysPAddr
+ 821              	.LVL101:
+ 822 0044 400084E5 		str	r0, [r4, #64]
+ 352:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 823              		.loc 1 352 0
+ 824 0048 387084E5 		str	r7, [r4, #56]
+ 354:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         {
+ 825              		.loc 1 354 0
+ 826 004c 010056E3 		cmp	r6, #1
+ 827 0050 0A00000A 		beq	.L97
+ 362:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 828              		.loc 1 362 0
+ 829 0054 0030A0E3 		mov	r3, #0
+ 830 0058 21384EE3 		movt	r3, 59425
+ 831 005c 042093E5 		ldr	r2, [r3, #4]
+ 832 0060 0128C2E3 		bic	r2, r2, #65536
+ 833 0064 042083E5 		str	r2, [r3, #4]
+ 834              	.L94:
+ 370:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 835              		.loc 1 370 0
+ 836 0068 0030A0E3 		mov	r3, #0
+ 837 006c 21384EE3 		movt	r3, 59425
+ 838 0070 002093E5 		ldr	r2, [r3]
+ 839 0074 012082E3 		orr	r2, r2, #1
+ 840 0078 002083E5 		str	r2, [r3]
+ 841 007c E7FFFFEA 		b	.L92
+ 842              	.L97:
+ 357:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****         }
+ 843              		.loc 1 357 0
+ 844 0080 0030A0E3 		mov	r3, #0
+ 845 0084 21384EE3 		movt	r3, 59425
+ 846 0088 042093E5 		ldr	r2, [r3, #4]
+ 847 008c 012882E3 		orr	r2, r2, #65536
+ 848 0090 042083E5 		str	r2, [r3, #4]
+ 849 0094 F3FFFFEA 		b	.L94
+ 850              		.cfi_endproc
+ 851              	.LFE2:
+ 853              		.section	.text.R_CEU_Stop,"ax",%progbits
+ 854              		.align	2
+ 855              		.global	R_CEU_Stop
+ 856              		.syntax unified
+ 857              		.arm
+ 858              		.fpu neon
+ 860              	R_CEU_Stop:
+ 861              	.LFB3:
+ 384:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 862              		.loc 1 384 0
+ 863              		.cfi_startproc
+ 864              		@ args = 0, pretend = 0, frame = 0
+ 865              		@ frame_needed = 0, uses_anonymous_args = 0
+ 866              		@ link register save eliminated.
+ 867              	.LVL102:
+ 388:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 868              		.loc 1 388 0
+ 869 0000 0030A0E3 		mov	r3, #0
+ 870 0004 21384EE3 		movt	r3, 59425
+ 871 0008 002093E5 		ldr	r2, [r3]
+ 872 000c 0120C2E3 		bic	r2, r2, #1
+ 873 0010 002083E5 		str	r2, [r3]
+ 391:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 874              		.loc 1 391 0
+ 875 0014 0000A0E3 		mov	r0, #0
+ 876 0018 1EFF2FE1 		bx	lr
+ 877              		.cfi_endproc
+ 878              	.LFE3:
+ 880              		.section	.text.R_CEU_Terminate,"ax",%progbits
+ 881              		.align	2
+ 882              		.global	R_CEU_Terminate
+ 883              		.syntax unified
+ 884              		.arm
+ 885              		.fpu neon
+ 887              	R_CEU_Terminate:
+ 888              	.LFB4:
+ 402:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 889              		.loc 1 402 0
+ 890              		.cfi_startproc
+ 891              		@ args = 0, pretend = 0, frame = 0
+ 892              		@ frame_needed = 0, uses_anonymous_args = 0
+ 893              	.LVL103:
+ 409:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 894              		.loc 1 409 0
+ 895 0000 0030A0E3 		mov	r3, #0
+ 896 0004 21384EE3 		movt	r3, 59425
+ 897 0008 0128A0E3 		mov	r2, #65536
+ 898 000c 002083E5 		str	r2, [r3]
+ 899              	.L100:
+ 418:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 900              		.loc 1 418 0 discriminator 1
+ 901 0010 0030A0E3 		mov	r3, #0
+ 902 0014 21384EE3 		movt	r3, 59425
+ 903 0018 7C3093E5 		ldr	r3, [r3, #124]
+ 904 001c 010013E3 		tst	r3, #1
+ 905 0020 FAFFFF1A 		bne	.L100
+ 906              	.L101:
+ 425:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 907              		.loc 1 425 0 discriminator 1
+ 908 0024 0030A0E3 		mov	r3, #0
+ 909 0028 21384EE3 		movt	r3, 59425
+ 910 002c 003093E5 		ldr	r3, [r3]
+ 911 0030 010813E3 		tst	r3, #65536
+ 912 0034 FAFFFF1A 		bne	.L101
+ 432:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 913              		.loc 1 432 0
+ 914 0038 000050E3 		cmp	r0, #0
+ 915 003c 0500000A 		beq	.L104
+ 402:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     ceu_error_t error = CEU_OK;
+ 916              		.loc 1 402 0
+ 917 0040 10402DE9 		push	{r4, lr}
+ 918              		.cfi_def_cfa_offset 8
+ 919              		.cfi_offset 4, -8
+ 920              		.cfi_offset 14, -4
+ 921 0044 0030A0E1 		mov	r3, r0
+ 434:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 922              		.loc 1 434 0
+ 923 0048 0100A0E1 		mov	r0, r1
+ 924              	.LVL104:
+ 925 004c 33FF2FE1 		blx	r3
+ 926              	.LVL105:
+ 438:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 927              		.loc 1 438 0
+ 928 0050 0000A0E3 		mov	r0, #0
+ 929 0054 1080BDE8 		pop	{r4, pc}
+ 930              	.LVL106:
+ 931              	.L104:
+ 932              		.cfi_def_cfa_offset 0
+ 933              		.cfi_restore 4
+ 934              		.cfi_restore 14
+ 935 0058 0000A0E3 		mov	r0, #0
+ 936              	.LVL107:
+ 937 005c 1EFF2FE1 		bx	lr
+ 938              		.cfi_endproc
+ 939              	.LFE4:
+ 941              		.section	.text.R_CEU_InterruptEnable,"ax",%progbits
+ 942              		.align	2
+ 943              		.global	R_CEU_InterruptEnable
+ 944              		.syntax unified
+ 945              		.arm
+ 946              		.fpu neon
+ 948              	R_CEU_InterruptEnable:
+ 949              	.LFB5:
+ 449:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Callback function pointer */
+ 950              		.loc 1 449 0
+ 951              		.cfi_startproc
+ 952              		@ args = 0, pretend = 0, frame = 0
+ 953              		@ frame_needed = 0, uses_anonymous_args = 0
+ 954              		@ link register save eliminated.
+ 955              	.LVL108:
+ 451:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 956              		.loc 1 451 0
+ 957 0000 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 958 0004 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 959 0008 001083E5 		str	r1, [r3]
+ 454:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 960              		.loc 1 454 0
+ 961 000c 0030A0E3 		mov	r3, #0
+ 962 0010 21384EE3 		movt	r3, 59425
+ 963 0014 700083E5 		str	r0, [r3, #112]
+ 964 0018 1EFF2FE1 		bx	lr
+ 965              		.cfi_endproc
+ 966              	.LFE5:
+ 968              		.section	.text.R_CEU_InterruptDisable,"ax",%progbits
+ 969              		.align	2
+ 970              		.global	R_CEU_InterruptDisable
+ 971              		.syntax unified
+ 972              		.arm
+ 973              		.fpu neon
+ 975              	R_CEU_InterruptDisable:
+ 976              	.LFB6:
+ 464:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     /* Callback function pointer clear */
+ 977              		.loc 1 464 0
+ 978              		.cfi_startproc
+ 979              		@ args = 0, pretend = 0, frame = 0
+ 980              		@ frame_needed = 0, uses_anonymous_args = 0
+ 981              		@ link register save eliminated.
+ 466:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 982              		.loc 1 466 0
+ 983 0000 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 984 0004 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 985 0008 0020A0E3 		mov	r2, #0
+ 986 000c 002083E5 		str	r2, [r3]
+ 469:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 987              		.loc 1 469 0
+ 988 0010 0230A0E1 		mov	r3, r2
+ 989 0014 21384EE3 		movt	r3, 59425
+ 990 0018 702083E5 		str	r2, [r3, #112]
+ 991 001c 1EFF2FE1 		bx	lr
+ 992              		.cfi_endproc
+ 993              	.LFE6:
+ 995              		.section	.text.R_CEU_Isr,"ax",%progbits
+ 996              		.align	2
+ 997              		.global	R_CEU_Isr
+ 998              		.syntax unified
+ 999              		.arm
+ 1000              		.fpu neon
+ 1002              	R_CEU_Isr:
+ 1003              	.LFB7:
+ 480:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     uint32_t interrupt_flag;
+ 1004              		.loc 1 480 0
+ 1005              		.cfi_startproc
+ 1006              		@ args = 0, pretend = 0, frame = 0
+ 1007              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1008              	.LVL109:
+ 484:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 1009              		.loc 1 484 0
+ 1010 0000 0030A0E3 		mov	r3, #0
+ 1011 0004 21384EE3 		movt	r3, 59425
+ 1012 0008 740093E5 		ldr	r0, [r3, #116]
+ 1013              	.LVL110:
+ 491:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c **** 
+ 1014              		.loc 1 491 0
+ 1015 000c 0020A0E3 		mov	r2, #0
+ 1016 0010 742083E5 		str	r2, [r3, #116]
+ 494:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     {
+ 1017              		.loc 1 494 0
+ 1018 0014 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 1019 0018 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 1020 001c 003093E5 		ldr	r3, [r3]
+ 1021 0020 020053E1 		cmp	r3, r2
+ 1022 0024 1EFF2F01 		bxeq	lr
+ 480:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     uint32_t interrupt_flag;
+ 1023              		.loc 1 480 0
+ 1024 0028 10402DE9 		push	{r4, lr}
+ 1025              		.cfi_def_cfa_offset 8
+ 1026              		.cfi_offset 4, -8
+ 1027              		.cfi_offset 14, -4
+ 497:../generate/sc_drivers/r_ceu/src/r_ceu_driver.c ****     }
+ 1028              		.loc 1 497 0
+ 1029 002c 33FF2FE1 		blx	r3
+ 1030              	.LVL111:
+ 1031 0030 1080BDE8 		pop	{r4, pc}
+ 1032              		.cfi_endproc
+ 1033              	.LFE7:
+ 1035              		.section	.bss.ceu_int_callback,"aw",%nobits
+ 1036              		.align	2
+ 1037              		.set	.LANCHOR3,. + 0
+ 1040              	ceu_int_callback:
+ 1041 0000 00000000 		.space	4
+ 1042              		.section	.bss.gs_local_dtif,"aw",%nobits
+ 1043              		.set	.LANCHOR1,. + 0
+ 1046              	gs_local_dtif:
+ 1047 0000 00       		.space	1
+ 1048              		.section	.bss.gs_local_hwdth,"aw",%nobits
+ 1049              		.align	2
+ 1050              		.set	.LANCHOR2,. + 0
+ 1053              	gs_local_hwdth:
+ 1054 0000 00000000 		.space	4
+ 1055              		.section	.bss.gs_local_jpg,"aw",%nobits
+ 1056              		.set	.LANCHOR0,. + 0
+ 1059              	gs_local_jpg:
+ 1060 0000 00       		.space	1
+ 1061              		.text
+ 1062              	.Letext0:
+ 1063              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1064              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1065              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1066              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1067              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 1068              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1069              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1070              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 1071              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 1072              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_ceu_driver.c
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:17     .text.ceu_align_check:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:22     .text.ceu_align_check:00000000 ceu_align_check
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:52     .text.ceu_open_check_prm:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:57     .text.ceu_open_check_prm:00000000 ceu_open_check_prm
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:332    .text.ceu_execute_check_prm:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:337    .text.ceu_execute_check_prm:00000000 ceu_execute_check_prm
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1056   .bss.gs_local_jpg:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1043   .bss.gs_local_dtif:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1050   .bss.gs_local_hwdth:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:518    .text.R_CEU_Initialize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:524    .text.R_CEU_Initialize:00000000 R_CEU_Initialize
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:562    .text.R_CEU_Open:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:568    .text.R_CEU_Open:00000000 R_CEU_Open
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:771    .text.R_CEU_Execute:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:777    .text.R_CEU_Execute:00000000 R_CEU_Execute
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:854    .text.R_CEU_Stop:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:860    .text.R_CEU_Stop:00000000 R_CEU_Stop
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:881    .text.R_CEU_Terminate:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:887    .text.R_CEU_Terminate:00000000 R_CEU_Terminate
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:942    .text.R_CEU_InterruptEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:948    .text.R_CEU_InterruptEnable:00000000 R_CEU_InterruptEnable
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1037   .bss.ceu_int_callback:00000000 .LANCHOR3
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:969    .text.R_CEU_InterruptDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:975    .text.R_CEU_InterruptDisable:00000000 R_CEU_InterruptDisable
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:996    .text.R_CEU_Isr:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1002   .text.R_CEU_Isr:00000000 R_CEU_Isr
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1036   .bss.ceu_int_callback:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1040   .bss.ceu_int_callback:00000000 ceu_int_callback
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1046   .bss.gs_local_dtif:00000000 gs_local_dtif
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1047   .bss.gs_local_dtif:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1049   .bss.gs_local_hwdth:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1053   .bss.gs_local_hwdth:00000000 gs_local_hwdth
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1059   .bss.gs_local_jpg:00000000 gs_local_jpg
+C:\Users\rj7356s\AppData\Local\Temp\ccQg70qI.s:1060   .bss.gs_local_jpg:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_ceu_user.h.33.bdfe449297742e9a8f6e2695bf6d16b4
+
+UNDEFINED SYMBOLS
+R_CEU_CPUVAddrToSysPAddr

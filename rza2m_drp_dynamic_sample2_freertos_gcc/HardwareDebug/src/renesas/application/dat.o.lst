@@ -1,0 +1,153 @@
+   1              	# 1 "../src/renesas/application/dat.asm"
+   1              	@/*******************************************************************************
+   0              	
+   0              	
+   0              	
+   2              	@* DISCLAIMER
+   3              	@* This software is supplied by Renesas Electronics Corporation and is only
+   4              	@* intended for use with Renesas products. No other uses are authorized. This
+   5              	@* software is owned by Renesas Electronics Corporation and is protected under
+   6              	@* all applicable laws, including copyright laws.
+   7              	@* THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   8              	@* THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+   9              	@* LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  10              	@* AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.
+  11              	@* TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS
+  12              	@* ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE
+  13              	@* FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR
+  14              	@* ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE
+  15              	@* BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  16              	@* Renesas reserves the right, without notice, to make changes to this software
+  17              	@* and to discontinue the availability of this software. By using this software,
+  18              	@* you agree to the additional terms and conditions found by accessing the
+  19              	@* following link:
+  20              	@* http://www.renesas.com/disclaimer
+  21              	@* Copyright (C) 2018 Renesas Electronics Corporation. All rights reserved.
+  22              	@*******************************************************************************/
+  23              	.section ".rodata"
+  24              	
+  25              	@.balign 32
+  26              	@.global g_drp_lib_isp_bayer2grayscale_6
+  27              	@g_drp_lib_isp_bayer2grayscale_6:
+  28              	@.incbin "r_drp_simple_isp_bayer2grayscale_6.dat"
+  29              	
+  30              	@.balign 32
+  31              	@.global g_drp_lib_lrgb2l_gaussian_blur
+  32              	@g_drp_lib_lrgb2l_gaussian_blur:
+  33              	@.incbin "g_drp_lib_lrgb2l_gaussian_blur.dat"
+  34              	
+  35              	@.balign 32
+  36              	@.global g_drp_lib_find_contours_crop_t2
+  37              	@g_drp_lib_find_contours_crop_t2:
+  38              	@.incbin "r_drp_find_contours_crop_t2.dat"
+  39              	
+  40              	.balign 32
+  41              	.global g_drp_lib_bayer2grayscale
+  42              	g_drp_lib_bayer2grayscale:
+  43 0000 40000000 	.incbin "r_drp_bayer2grayscale.dat"
+  43      646B3263 
+  43      02000200 
+  43      01000000 
+  43      00000000 
+  44              	
+  45              	.balign 32
+  46              	.global g_drp_lib_thinning
+  47              	g_drp_lib_thinning:
+  48 e9a0 40000000 	.incbin "r_drp_thinning.dat"
+  48      646B3263 
+  48      02000200 
+  48      01000000 
+  48      00000000 
+  49              	
+  50              	.balign 32
+  51              	.global g_drp_lib_median_blur
+  52              	g_drp_lib_median_blur:
+  53 2bc40 40000000 	.incbin "r_drp_median_blur.dat"
+  53      646B3263 
+  53      02000200 
+  53      01000000 
+  53      00000000 
+  54              	
+  55              	.balign 32
+  56              	.global g_drp_lib_binarization_adaptive
+  57              	g_drp_lib_binarization_adaptive:
+  58 39c20 40000000 	.incbin "r_drp_binarization_adaptive.dat"
+  58      646B3263 
+  58      02000200 
+  58      01000000 
+  58      00000000 
+  59              	
+  60              	.balign 32
+  61              	.global g_drp_lib_dilate
+  62              	g_drp_lib_dilate:
+  63 73060 40000000 	.incbin "r_drp_dilate.dat"
+  63      646B3263 
+  63      02000200 
+  63      01000000 
+  63      00000000 
+  64              	
+  65              	.balign 32
+  66              	.global g_drp_lib_erode
+  67              	g_drp_lib_erode:
+  68 80c60 40000000 	.incbin "r_drp_erode.dat"
+  68      646B3263 
+  68      02000200 
+  68      01000000 
+  68      00000000 
+  69              	
+  70              	.balign 32
+  71              	.global g_drp_lib_find_contours
+  72              	g_drp_lib_find_contours:
+  73 8f820 40000000 	.incbin "r_drp_find_contours.dat"
+  73      646B3263 
+  73      02000200 
+  73      01000000 
+  73      00000000 
+  74              	
+  75              	@.balign 32
+  76              	@.global g_drp_lib_canny_hysterisis
+  77              	@g_drp_lib_canny_hysterisis:
+  78              	@.incbin "r_drp_canny_hysterisis.dat"
+  79              	
+  80              	@.balign 32
+  81              	@.global g_drp_lib_canny_calculate
+  82              	@g_drp_lib_canny_calculate:
+  83              	@.incbin "r_drp_canny_calculate.dat"
+  84              	
+  85              	.balign 32
+  86              	.global g_drp_lib_sobel
+  87              	g_drp_lib_sobel:
+  88 c1780 40000000 	.incbin "r_drp_sobel.dat"
+  88      646B3263 
+  88      02000200 
+  88      01000000 
+  88      00000000 
+  89              	
+  90              	@.balign 32
+  91              	@.global g_drp_lib_gaussian_blur
+  92              	@g_drp_lib_gaussian_blur:
+  93              	@.incbin "r_drp_gaussian_blur.dat"
+  94              	
+  95              	@.balign 32
+  96              	@.global g_drp_lib_cropping
+  97              	@g_drp_lib_cropping:
+  98              	@.incbin "r_drp_cropping.dat"
+  99              	
+ 100              	@.balign 32
+ 101              	@.global g_drp_lib_resize_bilinear
+ 102              	@g_drp_lib_resize_bilinear:
+ 103              	@.incbin "r_drp_resize_bilinear.dat"
+ 104              	
+ 105              	.end
+DEFINED SYMBOLS
+../src/renesas/application/dat.asm:40     .rodata:00000000 $d
+../src/renesas/application/dat.asm:42     .rodata:00000000 g_drp_lib_bayer2grayscale
+../src/renesas/application/dat.asm:47     .rodata:0000e9a0 g_drp_lib_thinning
+../src/renesas/application/dat.asm:52     .rodata:0002bc40 g_drp_lib_median_blur
+../src/renesas/application/dat.asm:57     .rodata:00039c20 g_drp_lib_binarization_adaptive
+../src/renesas/application/dat.asm:62     .rodata:00073060 g_drp_lib_dilate
+../src/renesas/application/dat.asm:67     .rodata:00080c60 g_drp_lib_erode
+../src/renesas/application/dat.asm:72     .rodata:0008f820 g_drp_lib_find_contours
+../src/renesas/application/dat.asm:87     .rodata:000c1780 g_drp_lib_sobel
+
+NO UNDEFINED SYMBOLS
