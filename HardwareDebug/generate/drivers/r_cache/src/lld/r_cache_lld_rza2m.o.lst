@@ -1,0 +1,1897 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_cache_lld_rza2m.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.cache_l2_sync,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	cache_l2_sync:
+  23              	.LFB25:
+  24              		.file 1 "../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c"
+   1:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+   2:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * DISCLAIMER
+   3:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * This software is supplied by Renesas Electronics Corporation and is only
+   4:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * intended for use with Renesas products. No other uses are authorized. This
+   5:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * software is owned by Renesas Electronics Corporation and is protected under
+   6:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * all applicable laws, including copyright laws.
+   7:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   8:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+   9:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  10:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.
+  11:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS
+  12:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE
+  13:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR
+  14:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE
+  15:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  16:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Renesas reserves the right, without notice, to make changes to this software
+  17:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * and to discontinue the availability of this software. By using this software,
+  18:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * you agree to the additional terms and conditions found by accessing the
+  19:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * following link:
+  20:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * http://www.renesas.com/disclaimer
+  21:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Copyright (C) 2018 Renesas Electronics Corporation. All rights reserved.
+  22:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+  23:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+  24:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * File Name    : r_cache_lld_rza2m.c
+  25:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Version      : 1.0
+  26:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Declaration of the Cortex-A9 Cache API function.
+  27:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+  28:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  29:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /******************************************************************************
+  30:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** Includes   <System Includes> , "Project Includes"
+  31:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** ******************************************************************************/
+  32:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #include <stdint.h>
+  33:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #include "iodefine.h"
+  34:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #include "iobitmask.h"
+  35:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #include "rza_io_regrw.h"
+  36:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #include "r_cache_lld_rza2m.h"
+  37:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #include "r_cache_l1_rza2m_asm.h"
+  38:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #include "r_cache_rza2_config.h"
+  39:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  40:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /******************************************************************************
+  41:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** Typedef definitions
+  42:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** ******************************************************************************/
+  43:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  44:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /******************************************************************************
+  45:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** Macro definitions
+  46:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** ******************************************************************************/
+  47:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_ADDR_MAX                (0xFFFFFFFFuLL)
+  48:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_ADDR_MASK               (0xFFFFFFFFuLL)
+  49:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  50:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_L1_OP_D_INV_ALL         (0)
+  51:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_L1_OP_D_CLEAN_ALL       (1)
+  52:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_L1_OP_D_CLEAN_INV_ALL   (2)
+  53:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  54:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_CA9_LINE_SIZE           (0x20u)
+  55:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_CA9_LINE_MASK           (0xFFFFFFE0u)
+  56:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  57:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_PL310_ALLWAYBITS_8      (0x00FFu)
+  58:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  59:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_PL310_CACHE_LINE_SIZE   (0x20u)
+  60:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_PL310_CACHE_LINE_MASK   (0xFFFFFFE0u)
+  61:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  62:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #define CACHE_PRV_PL310_ALLINT            (0x1FFu)
+  63:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  64:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /******************************************************************************
+  65:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** Imported global variables and functions (from other files)
+  66:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** ******************************************************************************/
+  67:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  68:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /******************************************************************************
+  69:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** Exported global variables and functions (to be accessed by other files)
+  70:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** ******************************************************************************/
+  71:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  72:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /******************************************************************************
+  73:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** Private global variables and functions
+  74:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** ******************************************************************************/
+  75:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*! Version Information */
+  76:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** static const st_drv_info_t gs_lld_info =
+  77:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+  78:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+  79:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         ((STDIO_CACHE_RZ_LLD_VERSION_MAJOR << 16) + STDIO_CACHE_RZ_LLD_VERSION_MINOR)
+  80:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     },
+  81:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     STDIO_CACHE_RZ_LLD_BUILD_NUM,
+  82:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     STDIO_CACHE_RZ_LLD_DRV_NAME
+  83:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** };
+  84:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  85:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** static void cache_l2_sync(void);
+  86:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+  87:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+  88:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1Init
+  89:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Initialize Cortex-A9 cache.
+  90:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+  91:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+  92:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Note         : Invalidate data cache must be executed by reset handler before
+  93:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                processing of this function.
+  94:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+  95:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1Init(void)
+  96:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+  97:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Enable I,D cache */
+  98:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L1DataEnable();
+  99:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L1InstEnable();
+ 100:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 101:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Enable branch prediction */
+ 102:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L1BtacEnable();
+ 103:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 104:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Enable prefetch */
+ 105:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L1PrefetchEnable();
+ 106:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 107:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_cache_init();
+ 108:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 109:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 110:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 111:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1Init
+ 112:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 113:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 114:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 115:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1InstInvalidAll
+ 116:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Invalidate whole of the Cortex-A9 cache.
+ 117:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 118:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 119:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 120:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1InstInvalidAll(void)
+ 121:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 122:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_i_inv_all();
+ 123:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 124:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 125:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 126:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1InstInvalidAll
+ 127:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 128:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 129:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 130:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataInvalidAll
+ 131:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Invalidate whole of the Cortex-A9 cache.
+ 132:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 133:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 134:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 135:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1DataInvalidAll(void)
+ 136:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 137:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_cache_operation(CACHE_PRV_L1_OP_D_INV_ALL);
+ 138:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 139:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 140:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 141:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataInvalidAll
+ 142:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 143:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 144:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 145:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataCleanAll
+ 146:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Clean whole of the Cortex-A9 cache.
+ 147:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 148:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 149:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 150:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1DataCleanAll(void)
+ 151:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 152:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_cache_operation(CACHE_PRV_L1_OP_D_CLEAN_ALL);
+ 153:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 154:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 155:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 156:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataCleanAll
+ 157:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 158:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 159:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 160:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataCleanInvalidAll
+ 161:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Clean&invalidate whole of the Cortex-A9 cache.
+ 162:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 163:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 164:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 165:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1DataCleanInvalidAll(void)
+ 166:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 167:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_cache_operation(CACHE_PRV_L1_OP_D_CLEAN_INV_ALL);
+ 168:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 169:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 170:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 171:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataCleanInvalidAll
+ 172:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 173:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 174:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 175:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataInvalidLine
+ 176:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Apply invalidate operation to the cache lines which is included
+ 177:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                in the specified address range.
+ 178:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : line_addr -
+ 179:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                    Starting address of cache operation (virtual address).
+ 180:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                size -
+ 181:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                    The byte size from line_addr. 
+ 182:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : DRV_SUCCESS : successful
+ 183:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                DRV_ERROR   : address overflow
+ 184:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 185:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** e_err_code_t R_CACHE_L1DataInvalidLine(void* line_addr, uint32_t size)
+ 186:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 187:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     e_err_code_t ret   = DRV_SUCCESS;
+ 188:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 189:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting void type address to uint32_t is valid because there is no loss of information. */
+ 190:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t addr     = (((uint32_t)line_addr) & CACHE_PRV_CA9_LINE_MASK);
+ 191:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 192:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting void type address to uint64_t is valid because there is no loss of information. */
+ 193:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint64_t end_addr = ((uint64_t)((uint32_t)line_addr) & CACHE_PRV_ADDR_MASK) + ((uint64_t)size);
+ 194:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 195:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     if (CACHE_PRV_ADDR_MAX < end_addr)
+ 196:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 197:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         ret = DRV_ERROR;
+ 198:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 199:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     else
+ 200:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 201:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         for ( ; addr < end_addr; addr += CACHE_PRV_CA9_LINE_SIZE)
+ 202:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 203:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****             r_cache_l1_d_inv_mva(addr);
+ 204:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         }
+ 205:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 206:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return ret;
+ 207:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 208:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 209:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataInvalidLine
+ 210:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 211:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 212:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 213:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataCleanLine
+ 214:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Apply clean operation to the cache lines which is included
+ 215:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                in the specified address range.
+ 216:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : line_addr -
+ 217:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                    Starting address of cache operation (virtual address).
+ 218:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                size -
+ 219:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                    The byte size from line_addr. 
+ 220:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : DRV_SUCCESS : successful
+ 221:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                DRV_ERROR   : address overflow
+ 222:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 223:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** e_err_code_t R_CACHE_L1DataCleanLine(void* line_addr, uint32_t size)
+ 224:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 225:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     e_err_code_t ret   = DRV_SUCCESS;
+ 226:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 227:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting void type address to uint32_t is valid because there is no loss of information. */
+ 228:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t addr     = (((uint32_t)line_addr) & CACHE_PRV_CA9_LINE_MASK);
+ 229:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 230:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting void type address to uint64_t is valid because there is no loss of information. */
+ 231:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint64_t end_addr = ((uint64_t)((uint32_t)line_addr) & CACHE_PRV_ADDR_MASK) + ((uint64_t)size);
+ 232:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 233:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     if (CACHE_PRV_ADDR_MAX < end_addr)
+ 234:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 235:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         ret = DRV_ERROR;
+ 236:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 237:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     else
+ 238:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 239:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         for ( ; addr < end_addr; addr += CACHE_PRV_CA9_LINE_SIZE)
+ 240:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 241:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****             r_cache_l1_d_clean_mva(addr);
+ 242:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         }
+ 243:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 244:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return ret;
+ 245:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 246:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 247:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataCleanLine
+ 248:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 249:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 250:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 251:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataCleanInvalidLine
+ 252:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Apply clean&invalidate operation to the cache lines which is
+ 253:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                included in the specified address range.
+ 254:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : line_addr -
+ 255:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                    Starting address of cache operation (virtual address).
+ 256:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                size -
+ 257:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                    The byte size from line_addr. 
+ 258:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : DRV_SUCCESS : successful
+ 259:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *                DRV_ERROR   : address overflow
+ 260:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 261:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** e_err_code_t R_CACHE_L1DataCleanInvalidLine(void* line_addr, uint32_t size)
+ 262:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 263:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     e_err_code_t ret   = DRV_SUCCESS;
+ 264:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 265:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting void type address to uint32_t is valid because there is no loss of information. */
+ 266:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t addr     = (((uint32_t)line_addr) & CACHE_PRV_CA9_LINE_MASK);
+ 267:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 268:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting void type address to uint64_t is valid because there is no loss of information. */
+ 269:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint64_t end_addr = ((uint64_t)((uint32_t)line_addr) & CACHE_PRV_ADDR_MASK) + ((uint64_t)size);
+ 270:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 271:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     if (CACHE_PRV_ADDR_MAX < end_addr)
+ 272:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 273:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         ret = DRV_ERROR;
+ 274:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 275:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     else
+ 276:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 277:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         for ( ; addr < end_addr; addr += CACHE_PRV_CA9_LINE_SIZE)
+ 278:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 279:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****             r_cache_l1_d_clean_inv_mva(addr);
+ 280:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         }
+ 281:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 282:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return ret;
+ 283:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 284:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 285:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataCleanInvalidLine
+ 286:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 287:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 288:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 289:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1InstEnable
+ 290:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Enable the Cortex-A9 L1 cache.
+ 291:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 292:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 293:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 294:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1InstEnable(void)
+ 295:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 296:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_i_enable();
+ 297:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 298:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 299:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 300:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1InstEnable
+ 301:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 302:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 303:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 304:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1InstDisable
+ 305:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Disable the Cortex-A9 L1 instruction cache.
+ 306:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 307:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 308:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 309:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1InstDisable(void)
+ 310:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 311:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_i_disable();
+ 312:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 313:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 314:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 315:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1InstDisable
+ 316:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 317:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 318:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 319:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataEnable
+ 320:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Enable the Cortex-A9 L1 data cache.
+ 321:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 322:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 323:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 324:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1DataEnable(void)
+ 325:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 326:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_enable();
+ 327:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 328:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 329:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 330:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataEnable
+ 331:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 332:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 333:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 334:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1DataDisable
+ 335:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Disable the Cortex-A9 L1 data cache.
+ 336:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 337:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 338:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 339:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1DataDisable(void)
+ 340:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 341:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_disable();
+ 342:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 343:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 344:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 345:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1DataDisable
+ 346:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 347:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 348:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 349:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1BtacEnable
+ 350:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Enable the Cortex-A9 branch prediction.
+ 351:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 352:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 353:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 354:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1BtacEnable(void)
+ 355:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 356:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_btac_enable();
+ 357:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 358:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 359:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 360:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1BtacEnable
+ 361:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 362:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 363:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 364:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1BtacDisable
+ 365:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Disable the Cortex-A9 branch prediction.
+ 366:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 367:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 368:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 369:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1BtacDisable(void)
+ 370:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 371:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_btac_disable();
+ 372:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 373:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 374:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 375:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1BtacDisable
+ 376:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 377:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 378:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 379:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1BtacInvalidate
+ 380:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Invalidate the Cortex-A9 branch predictor.
+ 381:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 382:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 383:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 384:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1BtacInvalidate(void)
+ 385:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 386:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_btac_inv();
+ 387:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 388:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 389:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 390:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1BtacInvalidate
+ 391:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 392:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 393:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 394:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1PrefetchEnable
+ 395:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Enable the Cortex-A9 instruction and data prefetching.
+ 396:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 397:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 398:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 399:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1PrefetchEnable(void)
+ 400:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 401:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_prefetch_enable();
+ 402:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 403:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 404:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 405:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1PrefetchEnable
+ 406:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 407:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 408:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 409:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L1PrefetchDisable
+ 410:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Disable the Cortex-A9 instruction and data prefetching.
+ 411:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 412:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 413:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 414:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L1PrefetchDisable(void)
+ 415:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 416:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_prefetch_disable();
+ 417:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 418:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 419:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 420:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L1PrefetchDisable
+ 421:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 422:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 423:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 424:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2Init
+ 425:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Initialize PL310.
+ 426:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 427:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 428:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 429:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2Init(void)
+ 430:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 431:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* You must disable the L2 cache by writing to the Control Register 1 before
+ 432:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      * writing to the Auxiliary, Tag RAM Latency, or Data RAM Latency Control
+ 433:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      * Register.
+ 434:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      */
+ 435:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L2CacheDisable();
+ 436:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 437:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* 1. Write to the Auxiliary, Tag RAM Latency, Data RAM Latency, Prefetch,
+ 438:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      *    and Power Control registers using a read-modify-write to set up global
+ 439:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      * configurations:
+ 440:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      */
+ 441:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L2PrefetchEnable();
+ 442:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 443:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* 2. Secure write to the Invalidate by Way, offset 0x77C, to invalidate all
+ 444:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      * entries in cache:
+ 445:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      */
+ 446:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L2InvalidAll();
+ 447:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 448:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* 3. Write to the Lockdown D and Lockdown I Register 9 if required. */
+ 449:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* use default */
+ 450:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 451:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* 4. Write to interrupt clear register to clear any residual raw interrupts set. */
+ 452:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG2_INT_CLEAR.LONG, CACHE_PRV_PL310_ALLINT, IOREG_NONSHIFT_ACCESS, I
+ 453:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 454:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* 5. Write to the Interrupt Mask Register if you want to enable interrupts. */
+ 455:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* do nothing */
+ 456:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 457:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* 6. Write to Control Register 1 with the LSB set to 1 to enable the cache.
+ 458:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****      */
+ 459:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L2CacheEnable();
+ 460:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 461:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 462:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 463:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2Init
+ 464:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 465:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 466:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 467:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2CacheEnable
+ 468:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Enable the PL310 L2 cache.
+ 469:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 470:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 471:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 472:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2CacheEnable(void)
+ 473:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 474:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 475:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG1_CONTROL.LONG, 1, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK_ACCESS);
+ 476:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 477:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 478:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 479:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 480:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2CacheEnable
+ 481:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 482:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 483:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 484:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2CacheDisable
+ 485:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Disable the PL310 L2 cache.
+ 486:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 487:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 488:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 489:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2CacheDisable(void)
+ 490:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 491:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 492:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG1_CONTROL.LONG, 0, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK_ACCESS);
+ 493:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 494:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 495:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 496:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 497:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2CacheDisable
+ 498:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 499:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 500:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 501:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2PrefetchEnable
+ 502:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Enable the PL310 instruction and data prefetching.
+ 503:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 504:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 505:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 506:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2PrefetchEnable(void)
+ 507:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 508:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 509:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 510:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 511:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 = RZA_IO_RegRead_32(&pl310.REG15_PREFETCH_CTRL.LONG, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK
+ 512:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 513:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #if   defined(PL310_CFG_DOUBLE_LINE_FILL) && (PL310_CFG_DOUBLE_LINE_FILL==1)
+ 514:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 |=   (1u << PL310_REG15_PREFETCH_CTRL_Doublelinefillenable_SHIFT);
+ 515:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #elif defined(PL310_CFG_DOUBLE_LINE_FILL) && (PL310_CFG_DOUBLE_LINE_FILL==0)
+ 516:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 &= (~(1u << PL310_REG15_PREFETCH_CTRL_Doublelinefillenable_SHIFT));
+ 517:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #endif/*PL310_CFG_DOUBLE_LINE_FILL*/
+ 518:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 519:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #if   defined(PL310_CFG_INSTRUCTION_PREFETCH) && (PL310_CFG_INSTRUCTION_PREFETCH==1)
+ 520:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 |=    (1u << PL310_REG15_PREFETCH_CTRL_Instructionprefetchenable_SHIFT);
+ 521:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #elif defined(PL310_CFG_INSTRUCTION_PREFETCH) && (PL310_CFG_INSTRUCTION_PREFETCH==0)
+ 522:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 &=  (~(1u << PL310_REG15_PREFETCH_CTRL_Instructionprefetchenable_SHIFT));
+ 523:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #endif/*PL310_CFG_INSTRUCTION_PREFETCH*/
+ 524:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 525:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #if   defined(PL310_CFG_DATA_PREFETCH) && (PL310_CFG_DATA_PREFETCH==1)
+ 526:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 |=   (1u << PL310_REG15_PREFETCH_CTRL_Dataprefetchenable_SHIFT);
+ 527:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #elif defined(PL310_CFG_DATA_PREFETCH) && (PL310_CFG_DATA_PREFETCH==0)
+ 528:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 &= (~(1u << PL310_REG15_PREFETCH_CTRL_Dataprefetchenable_SHIFT));
+ 529:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** #endif/*PL310_CFG_DATA_PREFETCH*/
+ 530:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 531:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 532:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG15_PREFETCH_CTRL.LONG, reg32, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK
+ 533:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 534:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 535:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 536:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 537:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2PrefetchEnable
+ 538:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 539:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 540:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 541:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2PrefetchDisable
+ 542:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Disable the PL310 instruction and data prefetching.
+ 543:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 544:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 545:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 546:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2PrefetchDisable(void)
+ 547:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 548:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 549:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 550:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 551:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 = RZA_IO_RegRead_32(&pl310.REG15_PREFETCH_CTRL.LONG, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK
+ 552:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 553:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 &= (~(1u << PL310_REG15_PREFETCH_CTRL_Doublelinefillenable_SHIFT));
+ 554:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 &= (~(1u << PL310_REG15_PREFETCH_CTRL_Instructionprefetchenable_SHIFT));
+ 555:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     reg32 &= (~(1u << PL310_REG15_PREFETCH_CTRL_Dataprefetchenable_SHIFT));
+ 556:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 557:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 558:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG15_PREFETCH_CTRL.LONG, reg32, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK
+ 559:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 560:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 561:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 562:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 563:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2PrefetchDisable
+ 564:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 565:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 566:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 567:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2InvalidAll
+ 568:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Invalidate whole of the PL310 cache.
+ 569:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 570:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 571:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 572:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2InvalidAll(void)
+ 573:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 574:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 575:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 576:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 577:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG7_INV_WAY.LONG,
+ 578:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        CACHE_PRV_PL310_ALLWAYBITS_8,
+ 579:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        PL310_REG7_INV_WAY_Way_bits_SHIFT,
+ 580:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        PL310_REG7_INV_WAY_Way_bits);
+ 581:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 582:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Wait until complete background operation */
+ 583:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     do
+ 584:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 585:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte un
+ 586:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         reg32 = RZA_IO_RegRead_32(&pl310.REG7_INV_WAY.LONG,
+ 587:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_INV_WAY_Way_bits_SHIFT,
+ 588:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_INV_WAY_Way_bits);
+ 589:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     } while (0 != reg32);
+ 590:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 591:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 592:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 593:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 594:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 595:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2InvalidAll
+ 596:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 597:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 598:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 599:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2CleanAll
+ 600:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Clean whole of the PL310 cache.
+ 601:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 602:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 603:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 604:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2CleanAll(void)
+ 605:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 606:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 607:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 608:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 609:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG7_CLEAN_WAY.LONG,
+ 610:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        CACHE_PRV_PL310_ALLWAYBITS_8,
+ 611:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        PL310_REG7_CLEAN_WAY_Way_bits_SHIFT,
+ 612:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        PL310_REG7_CLEAN_WAY_Way_bits);
+ 613:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 614:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Wait until complete background operation */
+ 615:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     do
+ 616:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 617:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte un
+ 618:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         reg32 = RZA_IO_RegRead_32(&pl310.REG7_CLEAN_WAY.LONG,
+ 619:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_CLEAN_WAY_Way_bits_SHIFT,
+ 620:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_CLEAN_WAY_Way_bits);
+ 621:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     } while (0 != reg32);
+ 622:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 623:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 624:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 625:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 626:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 627:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2CleanAll
+ 628:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 629:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 630:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 631:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_L2CleanInvalidAll
+ 632:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Clean&invalidate whole of the PL310 cache.
+ 633:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 634:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 635:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 636:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** void R_CACHE_L2CleanInvalidAll(void)
+ 637:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 638:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 639:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 640:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 641:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG7_CLEAN_INV_WAY.LONG,
+ 642:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        CACHE_PRV_PL310_ALLWAYBITS_8,
+ 643:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        PL310_REG7_CLEAN_INV_WAY_Way_bits_SHIFT,
+ 644:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        PL310_REG7_CLEAN_INV_WAY_Way_bits);
+ 645:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 646:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Wait until complete background operation */
+ 647:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     do
+ 648:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 649:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte un
+ 650:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         reg32 = RZA_IO_RegRead_32(&pl310.REG7_CLEAN_INV_WAY.LONG,
+ 651:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_CLEAN_INV_WAY_Way_bits_SHIFT,
+ 652:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_CLEAN_INV_WAY_Way_bits);
+ 653:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     } while (0 != reg32);
+ 654:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 655:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 656:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 657:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 658:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 659:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function R_CACHE_L2CleanInvalidAll
+ 660:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 661:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 662:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 663:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: cache_l2_sync
+ 664:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Perform a cache sync operation.
+ 665:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : none
+ 666:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : none
+ 667:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 668:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** static void cache_l2_sync(void)
+ 669:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+  25              		.loc 1 669 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29 0000 10402DE9 		push	{r4, lr}
+  30              		.cfi_def_cfa_offset 8
+  31              		.cfi_offset 4, -8
+  32              		.cfi_offset 14, -4
+ 670:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 671:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 672:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 673:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     RZA_IO_RegWrite_32(&pl310.REG7_CACHE_SYNC.LONG, 0, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK_ACCESS)
+  33              		.loc 1 673 0
+  34 0004 0030E0E3 		mvn	r3, #0
+  35 0008 0020A0E3 		mov	r2, #0
+  36 000c 0210A0E1 		mov	r1, r2
+  37 0010 300703E3 		movw	r0, #14128
+  38 0014 000F41E3 		movt	r0, 7936
+  39 0018 FEFFFFEB 		bl	RZA_IO_RegWrite_32
+  40              	.LVL0:
+  41              	.L2:
+ 674:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 675:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     do
+ 676:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 677:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte un
+ 678:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         reg32 = RZA_IO_RegRead_32(&pl310.REG7_CACHE_SYNC.LONG, IOREG_NONSHIFT_ACCESS, IOREG_NONMASK
+  42              		.loc 1 678 0 discriminator 1
+  43 001c 0020E0E3 		mvn	r2, #0
+  44 0020 0010A0E3 		mov	r1, #0
+  45 0024 300703E3 		movw	r0, #14128
+  46 0028 000F41E3 		movt	r0, 7936
+  47 002c FEFFFFEB 		bl	RZA_IO_RegRead_32
+  48              	.LVL1:
+ 679:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     } while (0 != reg32);
+  49              		.loc 1 679 0 discriminator 1
+  50 0030 000050E3 		cmp	r0, #0
+  51 0034 F8FFFF1A 		bne	.L2
+ 680:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 681:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 682:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+  52              		.loc 1 682 0
+  53 0038 1080BDE8 		pop	{r4, pc}
+  54              		.cfi_endproc
+  55              	.LFE25:
+  57              		.section	.text.R_CACHE_L1InstInvalidAll,"ax",%progbits
+  58              		.align	2
+  59              		.global	R_CACHE_L1InstInvalidAll
+  60              		.syntax unified
+  61              		.arm
+  62              		.fpu neon
+  64              	R_CACHE_L1InstInvalidAll:
+  65              	.LFB1:
+ 121:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_i_inv_all();
+  66              		.loc 1 121 0
+  67              		.cfi_startproc
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 0, uses_anonymous_args = 0
+  70 0000 10402DE9 		push	{r4, lr}
+  71              		.cfi_def_cfa_offset 8
+  72              		.cfi_offset 4, -8
+  73              		.cfi_offset 14, -4
+ 122:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+  74              		.loc 1 122 0
+  75 0004 FEFFFFEB 		bl	r_cache_l1_i_inv_all
+  76              	.LVL2:
+  77 0008 1080BDE8 		pop	{r4, pc}
+  78              		.cfi_endproc
+  79              	.LFE1:
+  81              		.section	.text.R_CACHE_L1DataInvalidAll,"ax",%progbits
+  82              		.align	2
+  83              		.global	R_CACHE_L1DataInvalidAll
+  84              		.syntax unified
+  85              		.arm
+  86              		.fpu neon
+  88              	R_CACHE_L1DataInvalidAll:
+  89              	.LFB2:
+ 136:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_cache_operation(CACHE_PRV_L1_OP_D_INV_ALL);
+  90              		.loc 1 136 0
+  91              		.cfi_startproc
+  92              		@ args = 0, pretend = 0, frame = 0
+  93              		@ frame_needed = 0, uses_anonymous_args = 0
+  94 0000 10402DE9 		push	{r4, lr}
+  95              		.cfi_def_cfa_offset 8
+  96              		.cfi_offset 4, -8
+  97              		.cfi_offset 14, -4
+ 137:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+  98              		.loc 1 137 0
+  99 0004 0000A0E3 		mov	r0, #0
+ 100 0008 FEFFFFEB 		bl	r_cache_l1_d_cache_operation
+ 101              	.LVL3:
+ 102 000c 1080BDE8 		pop	{r4, pc}
+ 103              		.cfi_endproc
+ 104              	.LFE2:
+ 106              		.section	.text.R_CACHE_L1DataCleanAll,"ax",%progbits
+ 107              		.align	2
+ 108              		.global	R_CACHE_L1DataCleanAll
+ 109              		.syntax unified
+ 110              		.arm
+ 111              		.fpu neon
+ 113              	R_CACHE_L1DataCleanAll:
+ 114              	.LFB3:
+ 151:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_cache_operation(CACHE_PRV_L1_OP_D_CLEAN_ALL);
+ 115              		.loc 1 151 0
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 0, uses_anonymous_args = 0
+ 119 0000 10402DE9 		push	{r4, lr}
+ 120              		.cfi_def_cfa_offset 8
+ 121              		.cfi_offset 4, -8
+ 122              		.cfi_offset 14, -4
+ 152:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 123              		.loc 1 152 0
+ 124 0004 0100A0E3 		mov	r0, #1
+ 125 0008 FEFFFFEB 		bl	r_cache_l1_d_cache_operation
+ 126              	.LVL4:
+ 127 000c 1080BDE8 		pop	{r4, pc}
+ 128              		.cfi_endproc
+ 129              	.LFE3:
+ 131              		.section	.text.R_CACHE_L1DataCleanInvalidAll,"ax",%progbits
+ 132              		.align	2
+ 133              		.global	R_CACHE_L1DataCleanInvalidAll
+ 134              		.syntax unified
+ 135              		.arm
+ 136              		.fpu neon
+ 138              	R_CACHE_L1DataCleanInvalidAll:
+ 139              	.LFB4:
+ 166:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_cache_operation(CACHE_PRV_L1_OP_D_CLEAN_INV_ALL);
+ 140              		.loc 1 166 0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144 0000 10402DE9 		push	{r4, lr}
+ 145              		.cfi_def_cfa_offset 8
+ 146              		.cfi_offset 4, -8
+ 147              		.cfi_offset 14, -4
+ 167:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 148              		.loc 1 167 0
+ 149 0004 0200A0E3 		mov	r0, #2
+ 150 0008 FEFFFFEB 		bl	r_cache_l1_d_cache_operation
+ 151              	.LVL5:
+ 152 000c 1080BDE8 		pop	{r4, pc}
+ 153              		.cfi_endproc
+ 154              	.LFE4:
+ 156              		.section	.text.R_CACHE_L1DataInvalidLine,"ax",%progbits
+ 157              		.align	2
+ 158              		.global	R_CACHE_L1DataInvalidLine
+ 159              		.syntax unified
+ 160              		.arm
+ 161              		.fpu neon
+ 163              	R_CACHE_L1DataInvalidLine:
+ 164              	.LFB5:
+ 186:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     e_err_code_t ret   = DRV_SUCCESS;
+ 165              		.loc 1 186 0
+ 166              		.cfi_startproc
+ 167              		@ args = 0, pretend = 0, frame = 0
+ 168              		@ frame_needed = 0, uses_anonymous_args = 0
+ 169              	.LVL6:
+ 170 0000 D0402DE9 		push	{r4, r6, r7, lr}
+ 171              		.cfi_def_cfa_offset 16
+ 172              		.cfi_offset 4, -16
+ 173              		.cfi_offset 6, -12
+ 174              		.cfi_offset 7, -8
+ 175              		.cfi_offset 14, -4
+ 176              	.LVL7:
+ 190:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 177              		.loc 1 190 0
+ 178 0004 1F40C0E3 		bic	r4, r0, #31
+ 179              	.LVL8:
+ 193:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 180              		.loc 1 193 0
+ 181 0008 0070A0E3 		mov	r7, #0
+ 182 000c 006091E0 		adds	r6, r1, r0
+ 183 0010 0070A7E2 		adc	r7, r7, #0
+ 184              	.LVL9:
+ 195:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 185              		.loc 1 195 0
+ 186 0014 0020E0E3 		mvn	r2, #0
+ 187 0018 0030A0E3 		mov	r3, #0
+ 188 001c 030057E1 		cmp	r7, r3
+ 189 0020 02005601 		cmpeq	r6, r2
+ 190 0024 0400009A 		bls	.L14
+ 197:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 191              		.loc 1 197 0
+ 192 0028 0000E0E3 		mvn	r0, #0
+ 193              	.LVL10:
+ 207:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 194              		.loc 1 207 0
+ 195 002c D080BDE8 		pop	{r4, r6, r7, pc}
+ 196              	.LVL11:
+ 197              	.L15:
+ 203:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         }
+ 198              		.loc 1 203 0 discriminator 2
+ 199 0030 0400A0E1 		mov	r0, r4
+ 200 0034 FEFFFFEB 		bl	r_cache_l1_d_inv_mva
+ 201              	.LVL12:
+ 201:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 202              		.loc 1 201 0 discriminator 2
+ 203 0038 204084E2 		add	r4, r4, #32
+ 204              	.LVL13:
+ 205              	.L14:
+ 201:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 206              		.loc 1 201 0 is_stmt 0 discriminator 1
+ 207 003c 0030A0E3 		mov	r3, #0
+ 208 0040 030057E1 		cmp	r7, r3
+ 209 0044 04005601 		cmpeq	r6, r4
+ 210 0048 F8FFFF8A 		bhi	.L15
+ 187:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 211              		.loc 1 187 0 is_stmt 1
+ 212 004c 0000A0E3 		mov	r0, #0
+ 213 0050 D080BDE8 		pop	{r4, r6, r7, pc}
+ 214              		.cfi_endproc
+ 215              	.LFE5:
+ 217              		.section	.text.R_CACHE_L1DataCleanLine,"ax",%progbits
+ 218              		.align	2
+ 219              		.global	R_CACHE_L1DataCleanLine
+ 220              		.syntax unified
+ 221              		.arm
+ 222              		.fpu neon
+ 224              	R_CACHE_L1DataCleanLine:
+ 225              	.LFB6:
+ 224:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     e_err_code_t ret   = DRV_SUCCESS;
+ 226              		.loc 1 224 0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 0
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 230              	.LVL14:
+ 231 0000 D0402DE9 		push	{r4, r6, r7, lr}
+ 232              		.cfi_def_cfa_offset 16
+ 233              		.cfi_offset 4, -16
+ 234              		.cfi_offset 6, -12
+ 235              		.cfi_offset 7, -8
+ 236              		.cfi_offset 14, -4
+ 237              	.LVL15:
+ 228:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 238              		.loc 1 228 0
+ 239 0004 1F40C0E3 		bic	r4, r0, #31
+ 240              	.LVL16:
+ 231:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 241              		.loc 1 231 0
+ 242 0008 0070A0E3 		mov	r7, #0
+ 243 000c 006091E0 		adds	r6, r1, r0
+ 244 0010 0070A7E2 		adc	r7, r7, #0
+ 245              	.LVL17:
+ 233:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 246              		.loc 1 233 0
+ 247 0014 0020E0E3 		mvn	r2, #0
+ 248 0018 0030A0E3 		mov	r3, #0
+ 249 001c 030057E1 		cmp	r7, r3
+ 250 0020 02005601 		cmpeq	r6, r2
+ 251 0024 0400009A 		bls	.L20
+ 235:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 252              		.loc 1 235 0
+ 253 0028 0000E0E3 		mvn	r0, #0
+ 254              	.LVL18:
+ 245:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 255              		.loc 1 245 0
+ 256 002c D080BDE8 		pop	{r4, r6, r7, pc}
+ 257              	.LVL19:
+ 258              	.L21:
+ 241:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         }
+ 259              		.loc 1 241 0 discriminator 2
+ 260 0030 0400A0E1 		mov	r0, r4
+ 261 0034 FEFFFFEB 		bl	r_cache_l1_d_clean_mva
+ 262              	.LVL20:
+ 239:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 263              		.loc 1 239 0 discriminator 2
+ 264 0038 204084E2 		add	r4, r4, #32
+ 265              	.LVL21:
+ 266              	.L20:
+ 239:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 267              		.loc 1 239 0 is_stmt 0 discriminator 1
+ 268 003c 0030A0E3 		mov	r3, #0
+ 269 0040 030057E1 		cmp	r7, r3
+ 270 0044 04005601 		cmpeq	r6, r4
+ 271 0048 F8FFFF8A 		bhi	.L21
+ 225:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 272              		.loc 1 225 0 is_stmt 1
+ 273 004c 0000A0E3 		mov	r0, #0
+ 274 0050 D080BDE8 		pop	{r4, r6, r7, pc}
+ 275              		.cfi_endproc
+ 276              	.LFE6:
+ 278              		.section	.text.R_CACHE_L1DataCleanInvalidLine,"ax",%progbits
+ 279              		.align	2
+ 280              		.global	R_CACHE_L1DataCleanInvalidLine
+ 281              		.syntax unified
+ 282              		.arm
+ 283              		.fpu neon
+ 285              	R_CACHE_L1DataCleanInvalidLine:
+ 286              	.LFB7:
+ 262:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     e_err_code_t ret   = DRV_SUCCESS;
+ 287              		.loc 1 262 0
+ 288              		.cfi_startproc
+ 289              		@ args = 0, pretend = 0, frame = 0
+ 290              		@ frame_needed = 0, uses_anonymous_args = 0
+ 291              	.LVL22:
+ 292 0000 D0402DE9 		push	{r4, r6, r7, lr}
+ 293              		.cfi_def_cfa_offset 16
+ 294              		.cfi_offset 4, -16
+ 295              		.cfi_offset 6, -12
+ 296              		.cfi_offset 7, -8
+ 297              		.cfi_offset 14, -4
+ 298              	.LVL23:
+ 266:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 299              		.loc 1 266 0
+ 300 0004 1F40C0E3 		bic	r4, r0, #31
+ 301              	.LVL24:
+ 269:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 302              		.loc 1 269 0
+ 303 0008 0070A0E3 		mov	r7, #0
+ 304 000c 006091E0 		adds	r6, r1, r0
+ 305 0010 0070A7E2 		adc	r7, r7, #0
+ 306              	.LVL25:
+ 271:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     {
+ 307              		.loc 1 271 0
+ 308 0014 0020E0E3 		mvn	r2, #0
+ 309 0018 0030A0E3 		mov	r3, #0
+ 310 001c 030057E1 		cmp	r7, r3
+ 311 0020 02005601 		cmpeq	r6, r2
+ 312 0024 0400009A 		bls	.L26
+ 273:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     }
+ 313              		.loc 1 273 0
+ 314 0028 0000E0E3 		mvn	r0, #0
+ 315              	.LVL26:
+ 283:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 316              		.loc 1 283 0
+ 317 002c D080BDE8 		pop	{r4, r6, r7, pc}
+ 318              	.LVL27:
+ 319              	.L27:
+ 279:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         }
+ 320              		.loc 1 279 0 discriminator 2
+ 321 0030 0400A0E1 		mov	r0, r4
+ 322 0034 FEFFFFEB 		bl	r_cache_l1_d_clean_inv_mva
+ 323              	.LVL28:
+ 277:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 324              		.loc 1 277 0 discriminator 2
+ 325 0038 204084E2 		add	r4, r4, #32
+ 326              	.LVL29:
+ 327              	.L26:
+ 277:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****         {
+ 328              		.loc 1 277 0 is_stmt 0 discriminator 1
+ 329 003c 0030A0E3 		mov	r3, #0
+ 330 0040 030057E1 		cmp	r7, r3
+ 331 0044 04005601 		cmpeq	r6, r4
+ 332 0048 F8FFFF8A 		bhi	.L27
+ 263:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 333              		.loc 1 263 0 is_stmt 1
+ 334 004c 0000A0E3 		mov	r0, #0
+ 335 0050 D080BDE8 		pop	{r4, r6, r7, pc}
+ 336              		.cfi_endproc
+ 337              	.LFE7:
+ 339              		.section	.text.R_CACHE_L1InstEnable,"ax",%progbits
+ 340              		.align	2
+ 341              		.global	R_CACHE_L1InstEnable
+ 342              		.syntax unified
+ 343              		.arm
+ 344              		.fpu neon
+ 346              	R_CACHE_L1InstEnable:
+ 347              	.LFB8:
+ 295:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_i_enable();
+ 348              		.loc 1 295 0
+ 349              		.cfi_startproc
+ 350              		@ args = 0, pretend = 0, frame = 0
+ 351              		@ frame_needed = 0, uses_anonymous_args = 0
+ 352 0000 10402DE9 		push	{r4, lr}
+ 353              		.cfi_def_cfa_offset 8
+ 354              		.cfi_offset 4, -8
+ 355              		.cfi_offset 14, -4
+ 296:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 356              		.loc 1 296 0
+ 357 0004 FEFFFFEB 		bl	r_cache_l1_i_enable
+ 358              	.LVL30:
+ 359 0008 1080BDE8 		pop	{r4, pc}
+ 360              		.cfi_endproc
+ 361              	.LFE8:
+ 363              		.section	.text.R_CACHE_L1InstDisable,"ax",%progbits
+ 364              		.align	2
+ 365              		.global	R_CACHE_L1InstDisable
+ 366              		.syntax unified
+ 367              		.arm
+ 368              		.fpu neon
+ 370              	R_CACHE_L1InstDisable:
+ 371              	.LFB9:
+ 310:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_i_disable();
+ 372              		.loc 1 310 0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 376 0000 10402DE9 		push	{r4, lr}
+ 377              		.cfi_def_cfa_offset 8
+ 378              		.cfi_offset 4, -8
+ 379              		.cfi_offset 14, -4
+ 311:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 380              		.loc 1 311 0
+ 381 0004 FEFFFFEB 		bl	r_cache_l1_i_disable
+ 382              	.LVL31:
+ 383 0008 1080BDE8 		pop	{r4, pc}
+ 384              		.cfi_endproc
+ 385              	.LFE9:
+ 387              		.section	.text.R_CACHE_L1DataEnable,"ax",%progbits
+ 388              		.align	2
+ 389              		.global	R_CACHE_L1DataEnable
+ 390              		.syntax unified
+ 391              		.arm
+ 392              		.fpu neon
+ 394              	R_CACHE_L1DataEnable:
+ 395              	.LFB10:
+ 325:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_enable();
+ 396              		.loc 1 325 0
+ 397              		.cfi_startproc
+ 398              		@ args = 0, pretend = 0, frame = 0
+ 399              		@ frame_needed = 0, uses_anonymous_args = 0
+ 400 0000 10402DE9 		push	{r4, lr}
+ 401              		.cfi_def_cfa_offset 8
+ 402              		.cfi_offset 4, -8
+ 403              		.cfi_offset 14, -4
+ 326:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 404              		.loc 1 326 0
+ 405 0004 FEFFFFEB 		bl	r_cache_l1_d_enable
+ 406              	.LVL32:
+ 407 0008 1080BDE8 		pop	{r4, pc}
+ 408              		.cfi_endproc
+ 409              	.LFE10:
+ 411              		.section	.text.R_CACHE_L1DataDisable,"ax",%progbits
+ 412              		.align	2
+ 413              		.global	R_CACHE_L1DataDisable
+ 414              		.syntax unified
+ 415              		.arm
+ 416              		.fpu neon
+ 418              	R_CACHE_L1DataDisable:
+ 419              	.LFB11:
+ 340:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_d_disable();
+ 420              		.loc 1 340 0
+ 421              		.cfi_startproc
+ 422              		@ args = 0, pretend = 0, frame = 0
+ 423              		@ frame_needed = 0, uses_anonymous_args = 0
+ 424 0000 10402DE9 		push	{r4, lr}
+ 425              		.cfi_def_cfa_offset 8
+ 426              		.cfi_offset 4, -8
+ 427              		.cfi_offset 14, -4
+ 341:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 428              		.loc 1 341 0
+ 429 0004 FEFFFFEB 		bl	r_cache_l1_d_disable
+ 430              	.LVL33:
+ 431 0008 1080BDE8 		pop	{r4, pc}
+ 432              		.cfi_endproc
+ 433              	.LFE11:
+ 435              		.section	.text.R_CACHE_L1BtacEnable,"ax",%progbits
+ 436              		.align	2
+ 437              		.global	R_CACHE_L1BtacEnable
+ 438              		.syntax unified
+ 439              		.arm
+ 440              		.fpu neon
+ 442              	R_CACHE_L1BtacEnable:
+ 443              	.LFB12:
+ 355:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_btac_enable();
+ 444              		.loc 1 355 0
+ 445              		.cfi_startproc
+ 446              		@ args = 0, pretend = 0, frame = 0
+ 447              		@ frame_needed = 0, uses_anonymous_args = 0
+ 448 0000 10402DE9 		push	{r4, lr}
+ 449              		.cfi_def_cfa_offset 8
+ 450              		.cfi_offset 4, -8
+ 451              		.cfi_offset 14, -4
+ 356:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 452              		.loc 1 356 0
+ 453 0004 FEFFFFEB 		bl	r_cache_l1_btac_enable
+ 454              	.LVL34:
+ 455 0008 1080BDE8 		pop	{r4, pc}
+ 456              		.cfi_endproc
+ 457              	.LFE12:
+ 459              		.section	.text.R_CACHE_L1BtacDisable,"ax",%progbits
+ 460              		.align	2
+ 461              		.global	R_CACHE_L1BtacDisable
+ 462              		.syntax unified
+ 463              		.arm
+ 464              		.fpu neon
+ 466              	R_CACHE_L1BtacDisable:
+ 467              	.LFB13:
+ 370:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_btac_disable();
+ 468              		.loc 1 370 0
+ 469              		.cfi_startproc
+ 470              		@ args = 0, pretend = 0, frame = 0
+ 471              		@ frame_needed = 0, uses_anonymous_args = 0
+ 472 0000 10402DE9 		push	{r4, lr}
+ 473              		.cfi_def_cfa_offset 8
+ 474              		.cfi_offset 4, -8
+ 475              		.cfi_offset 14, -4
+ 371:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 476              		.loc 1 371 0
+ 477 0004 FEFFFFEB 		bl	r_cache_l1_btac_disable
+ 478              	.LVL35:
+ 479 0008 1080BDE8 		pop	{r4, pc}
+ 480              		.cfi_endproc
+ 481              	.LFE13:
+ 483              		.section	.text.R_CACHE_L1BtacInvalidate,"ax",%progbits
+ 484              		.align	2
+ 485              		.global	R_CACHE_L1BtacInvalidate
+ 486              		.syntax unified
+ 487              		.arm
+ 488              		.fpu neon
+ 490              	R_CACHE_L1BtacInvalidate:
+ 491              	.LFB14:
+ 385:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_btac_inv();
+ 492              		.loc 1 385 0
+ 493              		.cfi_startproc
+ 494              		@ args = 0, pretend = 0, frame = 0
+ 495              		@ frame_needed = 0, uses_anonymous_args = 0
+ 496 0000 10402DE9 		push	{r4, lr}
+ 497              		.cfi_def_cfa_offset 8
+ 498              		.cfi_offset 4, -8
+ 499              		.cfi_offset 14, -4
+ 386:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 500              		.loc 1 386 0
+ 501 0004 FEFFFFEB 		bl	r_cache_l1_btac_inv
+ 502              	.LVL36:
+ 503 0008 1080BDE8 		pop	{r4, pc}
+ 504              		.cfi_endproc
+ 505              	.LFE14:
+ 507              		.section	.text.R_CACHE_L1PrefetchEnable,"ax",%progbits
+ 508              		.align	2
+ 509              		.global	R_CACHE_L1PrefetchEnable
+ 510              		.syntax unified
+ 511              		.arm
+ 512              		.fpu neon
+ 514              	R_CACHE_L1PrefetchEnable:
+ 515              	.LFB15:
+ 400:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_prefetch_enable();
+ 516              		.loc 1 400 0
+ 517              		.cfi_startproc
+ 518              		@ args = 0, pretend = 0, frame = 0
+ 519              		@ frame_needed = 0, uses_anonymous_args = 0
+ 520 0000 10402DE9 		push	{r4, lr}
+ 521              		.cfi_def_cfa_offset 8
+ 522              		.cfi_offset 4, -8
+ 523              		.cfi_offset 14, -4
+ 401:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 524              		.loc 1 401 0
+ 525 0004 FEFFFFEB 		bl	r_cache_l1_prefetch_enable
+ 526              	.LVL37:
+ 527 0008 1080BDE8 		pop	{r4, pc}
+ 528              		.cfi_endproc
+ 529              	.LFE15:
+ 531              		.section	.text.R_CACHE_L1Init,"ax",%progbits
+ 532              		.align	2
+ 533              		.global	R_CACHE_L1Init
+ 534              		.syntax unified
+ 535              		.arm
+ 536              		.fpu neon
+ 538              	R_CACHE_L1Init:
+ 539              	.LFB0:
+  96:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Enable I,D cache */
+ 540              		.loc 1 96 0
+ 541              		.cfi_startproc
+ 542              		@ args = 0, pretend = 0, frame = 0
+ 543              		@ frame_needed = 0, uses_anonymous_args = 0
+ 544 0000 10402DE9 		push	{r4, lr}
+ 545              		.cfi_def_cfa_offset 8
+ 546              		.cfi_offset 4, -8
+ 547              		.cfi_offset 14, -4
+  98:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     R_CACHE_L1InstEnable();
+ 548              		.loc 1 98 0
+ 549 0004 FEFFFFEB 		bl	R_CACHE_L1DataEnable
+ 550              	.LVL38:
+  99:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 551              		.loc 1 99 0
+ 552 0008 FEFFFFEB 		bl	R_CACHE_L1InstEnable
+ 553              	.LVL39:
+ 102:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 554              		.loc 1 102 0
+ 555 000c FEFFFFEB 		bl	R_CACHE_L1BtacEnable
+ 556              	.LVL40:
+ 105:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 557              		.loc 1 105 0
+ 558 0010 FEFFFFEB 		bl	R_CACHE_L1PrefetchEnable
+ 559              	.LVL41:
+ 107:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 560              		.loc 1 107 0
+ 561 0014 FEFFFFEB 		bl	r_cache_l1_cache_init
+ 562              	.LVL42:
+ 563 0018 1080BDE8 		pop	{r4, pc}
+ 564              		.cfi_endproc
+ 565              	.LFE0:
+ 567              		.section	.text.R_CACHE_L1PrefetchDisable,"ax",%progbits
+ 568              		.align	2
+ 569              		.global	R_CACHE_L1PrefetchDisable
+ 570              		.syntax unified
+ 571              		.arm
+ 572              		.fpu neon
+ 574              	R_CACHE_L1PrefetchDisable:
+ 575              	.LFB16:
+ 415:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     r_cache_l1_prefetch_disable();
+ 576              		.loc 1 415 0
+ 577              		.cfi_startproc
+ 578              		@ args = 0, pretend = 0, frame = 0
+ 579              		@ frame_needed = 0, uses_anonymous_args = 0
+ 580 0000 10402DE9 		push	{r4, lr}
+ 581              		.cfi_def_cfa_offset 8
+ 582              		.cfi_offset 4, -8
+ 583              		.cfi_offset 14, -4
+ 416:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 584              		.loc 1 416 0
+ 585 0004 FEFFFFEB 		bl	r_cache_l1_prefetch_disable
+ 586              	.LVL43:
+ 587 0008 1080BDE8 		pop	{r4, pc}
+ 588              		.cfi_endproc
+ 589              	.LFE16:
+ 591              		.section	.text.R_CACHE_L2CacheEnable,"ax",%progbits
+ 592              		.align	2
+ 593              		.global	R_CACHE_L2CacheEnable
+ 594              		.syntax unified
+ 595              		.arm
+ 596              		.fpu neon
+ 598              	R_CACHE_L2CacheEnable:
+ 599              	.LFB18:
+ 473:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 600              		.loc 1 473 0
+ 601              		.cfi_startproc
+ 602              		@ args = 0, pretend = 0, frame = 0
+ 603              		@ frame_needed = 0, uses_anonymous_args = 0
+ 604 0000 10402DE9 		push	{r4, lr}
+ 605              		.cfi_def_cfa_offset 8
+ 606              		.cfi_offset 4, -8
+ 607              		.cfi_offset 14, -4
+ 475:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 608              		.loc 1 475 0
+ 609 0004 0030E0E3 		mvn	r3, #0
+ 610 0008 0020A0E3 		mov	r2, #0
+ 611 000c 0110A0E3 		mov	r1, #1
+ 612 0010 310CA0E3 		mov	r0, #12544
+ 613 0014 000F41E3 		movt	r0, 7936
+ 614 0018 FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 615              	.LVL44:
+ 476:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 616              		.loc 1 476 0
+ 617 001c FEFFFFEB 		bl	cache_l2_sync
+ 618              	.LVL45:
+ 619 0020 1080BDE8 		pop	{r4, pc}
+ 620              		.cfi_endproc
+ 621              	.LFE18:
+ 623              		.section	.text.R_CACHE_L2CacheDisable,"ax",%progbits
+ 624              		.align	2
+ 625              		.global	R_CACHE_L2CacheDisable
+ 626              		.syntax unified
+ 627              		.arm
+ 628              		.fpu neon
+ 630              	R_CACHE_L2CacheDisable:
+ 631              	.LFB19:
+ 490:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* Casting the pointer to a uint32_t type is valid because "unsigned long" is same 4byte unsign
+ 632              		.loc 1 490 0
+ 633              		.cfi_startproc
+ 634              		@ args = 0, pretend = 0, frame = 0
+ 635              		@ frame_needed = 0, uses_anonymous_args = 0
+ 636 0000 10402DE9 		push	{r4, lr}
+ 637              		.cfi_def_cfa_offset 8
+ 638              		.cfi_offset 4, -8
+ 639              		.cfi_offset 14, -4
+ 492:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 640              		.loc 1 492 0
+ 641 0004 0030E0E3 		mvn	r3, #0
+ 642 0008 0020A0E3 		mov	r2, #0
+ 643 000c 0210A0E1 		mov	r1, r2
+ 644 0010 310CA0E3 		mov	r0, #12544
+ 645 0014 000F41E3 		movt	r0, 7936
+ 646 0018 FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 647              	.LVL46:
+ 493:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 648              		.loc 1 493 0
+ 649 001c FEFFFFEB 		bl	cache_l2_sync
+ 650              	.LVL47:
+ 651 0020 1080BDE8 		pop	{r4, pc}
+ 652              		.cfi_endproc
+ 653              	.LFE19:
+ 655              		.section	.text.R_CACHE_L2PrefetchEnable,"ax",%progbits
+ 656              		.align	2
+ 657              		.global	R_CACHE_L2PrefetchEnable
+ 658              		.syntax unified
+ 659              		.arm
+ 660              		.fpu neon
+ 662              	R_CACHE_L2PrefetchEnable:
+ 663              	.LFB20:
+ 507:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 664              		.loc 1 507 0
+ 665              		.cfi_startproc
+ 666              		@ args = 0, pretend = 0, frame = 0
+ 667              		@ frame_needed = 0, uses_anonymous_args = 0
+ 668 0000 10402DE9 		push	{r4, lr}
+ 669              		.cfi_def_cfa_offset 8
+ 670              		.cfi_offset 4, -8
+ 671              		.cfi_offset 14, -4
+ 511:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 672              		.loc 1 511 0
+ 673 0004 604F03E3 		movw	r4, #16224
+ 674 0008 004F41E3 		movt	r4, 7936
+ 675 000c 0020E0E3 		mvn	r2, #0
+ 676 0010 0010A0E3 		mov	r1, #0
+ 677 0014 0400A0E1 		mov	r0, r4
+ 678 0018 FEFFFFEB 		bl	RZA_IO_RegRead_32
+ 679              	.LVL48:
+ 532:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 680              		.loc 1 532 0
+ 681 001c 0030E0E3 		mvn	r3, #0
+ 682 0020 0020A0E3 		mov	r2, #0
+ 683 0024 0712C0E3 		bic	r1, r0, #1879048192
+ 684              	.LVL49:
+ 685 0028 0400A0E1 		mov	r0, r4
+ 686 002c FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 687              	.LVL50:
+ 533:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 688              		.loc 1 533 0
+ 689 0030 FEFFFFEB 		bl	cache_l2_sync
+ 690              	.LVL51:
+ 691 0034 1080BDE8 		pop	{r4, pc}
+ 692              		.cfi_endproc
+ 693              	.LFE20:
+ 695              		.section	.text.R_CACHE_L2PrefetchDisable,"ax",%progbits
+ 696              		.align	2
+ 697              		.global	R_CACHE_L2PrefetchDisable
+ 698              		.syntax unified
+ 699              		.arm
+ 700              		.fpu neon
+ 702              	R_CACHE_L2PrefetchDisable:
+ 703              	.LFB21:
+ 547:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 704              		.loc 1 547 0
+ 705              		.cfi_startproc
+ 706              		@ args = 0, pretend = 0, frame = 0
+ 707              		@ frame_needed = 0, uses_anonymous_args = 0
+ 708 0000 10402DE9 		push	{r4, lr}
+ 709              		.cfi_def_cfa_offset 8
+ 710              		.cfi_offset 4, -8
+ 711              		.cfi_offset 14, -4
+ 551:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 712              		.loc 1 551 0
+ 713 0004 604F03E3 		movw	r4, #16224
+ 714 0008 004F41E3 		movt	r4, 7936
+ 715 000c 0020E0E3 		mvn	r2, #0
+ 716 0010 0010A0E3 		mov	r1, #0
+ 717 0014 0400A0E1 		mov	r0, r4
+ 718 0018 FEFFFFEB 		bl	RZA_IO_RegRead_32
+ 719              	.LVL52:
+ 558:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 720              		.loc 1 558 0
+ 721 001c 0030E0E3 		mvn	r3, #0
+ 722 0020 0020A0E3 		mov	r2, #0
+ 723 0024 0712C0E3 		bic	r1, r0, #1879048192
+ 724              	.LVL53:
+ 725 0028 0400A0E1 		mov	r0, r4
+ 726 002c FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 727              	.LVL54:
+ 559:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 728              		.loc 1 559 0
+ 729 0030 FEFFFFEB 		bl	cache_l2_sync
+ 730              	.LVL55:
+ 731 0034 1080BDE8 		pop	{r4, pc}
+ 732              		.cfi_endproc
+ 733              	.LFE21:
+ 735              		.section	.text.R_CACHE_L2InvalidAll,"ax",%progbits
+ 736              		.align	2
+ 737              		.global	R_CACHE_L2InvalidAll
+ 738              		.syntax unified
+ 739              		.arm
+ 740              		.fpu neon
+ 742              	R_CACHE_L2InvalidAll:
+ 743              	.LFB22:
+ 573:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 744              		.loc 1 573 0
+ 745              		.cfi_startproc
+ 746              		@ args = 0, pretend = 0, frame = 0
+ 747              		@ frame_needed = 0, uses_anonymous_args = 0
+ 748 0000 10402DE9 		push	{r4, lr}
+ 749              		.cfi_def_cfa_offset 8
+ 750              		.cfi_offset 4, -8
+ 751              		.cfi_offset 14, -4
+ 577:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        CACHE_PRV_PL310_ALLWAYBITS_8,
+ 752              		.loc 1 577 0
+ 753 0004 FF30A0E3 		mov	r3, #255
+ 754 0008 0020A0E3 		mov	r2, #0
+ 755 000c 0310A0E1 		mov	r1, r3
+ 756 0010 7C0703E3 		movw	r0, #14204
+ 757 0014 000F41E3 		movt	r0, 7936
+ 758 0018 FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 759              	.LVL56:
+ 760              	.L59:
+ 586:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_INV_WAY_Way_bits_SHIFT,
+ 761              		.loc 1 586 0 discriminator 1
+ 762 001c FF20A0E3 		mov	r2, #255
+ 763 0020 0010A0E3 		mov	r1, #0
+ 764 0024 7C0703E3 		movw	r0, #14204
+ 765 0028 000F41E3 		movt	r0, 7936
+ 766 002c FEFFFFEB 		bl	RZA_IO_RegRead_32
+ 767              	.LVL57:
+ 589:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 768              		.loc 1 589 0 discriminator 1
+ 769 0030 000050E3 		cmp	r0, #0
+ 770 0034 F8FFFF1A 		bne	.L59
+ 590:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 771              		.loc 1 590 0
+ 772 0038 FEFFFFEB 		bl	cache_l2_sync
+ 773              	.LVL58:
+ 774 003c 1080BDE8 		pop	{r4, pc}
+ 775              		.cfi_endproc
+ 776              	.LFE22:
+ 778              		.section	.text.R_CACHE_L2Init,"ax",%progbits
+ 779              		.align	2
+ 780              		.global	R_CACHE_L2Init
+ 781              		.syntax unified
+ 782              		.arm
+ 783              		.fpu neon
+ 785              	R_CACHE_L2Init:
+ 786              	.LFB17:
+ 430:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     /* You must disable the L2 cache by writing to the Control Register 1 before
+ 787              		.loc 1 430 0
+ 788              		.cfi_startproc
+ 789              		@ args = 0, pretend = 0, frame = 0
+ 790              		@ frame_needed = 0, uses_anonymous_args = 0
+ 791 0000 10402DE9 		push	{r4, lr}
+ 792              		.cfi_def_cfa_offset 8
+ 793              		.cfi_offset 4, -8
+ 794              		.cfi_offset 14, -4
+ 435:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 795              		.loc 1 435 0
+ 796 0004 FEFFFFEB 		bl	R_CACHE_L2CacheDisable
+ 797              	.LVL59:
+ 441:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 798              		.loc 1 441 0
+ 799 0008 FEFFFFEB 		bl	R_CACHE_L2PrefetchEnable
+ 800              	.LVL60:
+ 446:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 801              		.loc 1 446 0
+ 802 000c FEFFFFEB 		bl	R_CACHE_L2InvalidAll
+ 803              	.LVL61:
+ 452:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 804              		.loc 1 452 0
+ 805 0010 0030E0E3 		mvn	r3, #0
+ 806 0014 0020A0E3 		mov	r2, #0
+ 807 0018 FF1100E3 		movw	r1, #511
+ 808 001c 200203E3 		movw	r0, #12832
+ 809 0020 000F41E3 		movt	r0, 7936
+ 810 0024 FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 811              	.LVL62:
+ 459:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return;
+ 812              		.loc 1 459 0
+ 813 0028 FEFFFFEB 		bl	R_CACHE_L2CacheEnable
+ 814              	.LVL63:
+ 815 002c 1080BDE8 		pop	{r4, pc}
+ 816              		.cfi_endproc
+ 817              	.LFE17:
+ 819              		.section	.text.R_CACHE_L2CleanAll,"ax",%progbits
+ 820              		.align	2
+ 821              		.global	R_CACHE_L2CleanAll
+ 822              		.syntax unified
+ 823              		.arm
+ 824              		.fpu neon
+ 826              	R_CACHE_L2CleanAll:
+ 827              	.LFB23:
+ 605:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 828              		.loc 1 605 0
+ 829              		.cfi_startproc
+ 830              		@ args = 0, pretend = 0, frame = 0
+ 831              		@ frame_needed = 0, uses_anonymous_args = 0
+ 832 0000 10402DE9 		push	{r4, lr}
+ 833              		.cfi_def_cfa_offset 8
+ 834              		.cfi_offset 4, -8
+ 835              		.cfi_offset 14, -4
+ 609:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        CACHE_PRV_PL310_ALLWAYBITS_8,
+ 836              		.loc 1 609 0
+ 837 0004 FF30A0E3 		mov	r3, #255
+ 838 0008 0020A0E3 		mov	r2, #0
+ 839 000c 0310A0E1 		mov	r1, r3
+ 840 0010 BC0703E3 		movw	r0, #14268
+ 841 0014 000F41E3 		movt	r0, 7936
+ 842 0018 FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 843              	.LVL64:
+ 844              	.L64:
+ 618:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_CLEAN_WAY_Way_bits_SHIFT,
+ 845              		.loc 1 618 0 discriminator 1
+ 846 001c FF20A0E3 		mov	r2, #255
+ 847 0020 0010A0E3 		mov	r1, #0
+ 848 0024 BC0703E3 		movw	r0, #14268
+ 849 0028 000F41E3 		movt	r0, 7936
+ 850 002c FEFFFFEB 		bl	RZA_IO_RegRead_32
+ 851              	.LVL65:
+ 621:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 852              		.loc 1 621 0 discriminator 1
+ 853 0030 000050E3 		cmp	r0, #0
+ 854 0034 F8FFFF1A 		bne	.L64
+ 622:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 855              		.loc 1 622 0
+ 856 0038 FEFFFFEB 		bl	cache_l2_sync
+ 857              	.LVL66:
+ 858 003c 1080BDE8 		pop	{r4, pc}
+ 859              		.cfi_endproc
+ 860              	.LFE23:
+ 862              		.section	.text.R_CACHE_L2CleanInvalidAll,"ax",%progbits
+ 863              		.align	2
+ 864              		.global	R_CACHE_L2CleanInvalidAll
+ 865              		.syntax unified
+ 866              		.arm
+ 867              		.fpu neon
+ 869              	R_CACHE_L2CleanInvalidAll:
+ 870              	.LFB24:
+ 637:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     uint32_t reg32;
+ 871              		.loc 1 637 0
+ 872              		.cfi_startproc
+ 873              		@ args = 0, pretend = 0, frame = 0
+ 874              		@ frame_needed = 0, uses_anonymous_args = 0
+ 875 0000 10402DE9 		push	{r4, lr}
+ 876              		.cfi_def_cfa_offset 8
+ 877              		.cfi_offset 4, -8
+ 878              		.cfi_offset 14, -4
+ 641:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                        CACHE_PRV_PL310_ALLWAYBITS_8,
+ 879              		.loc 1 641 0
+ 880 0004 FF30A0E3 		mov	r3, #255
+ 881 0008 0020A0E3 		mov	r2, #0
+ 882 000c 0310A0E1 		mov	r1, r3
+ 883 0010 FC0703E3 		movw	r0, #14332
+ 884 0014 000F41E3 		movt	r0, 7936
+ 885 0018 FEFFFFEB 		bl	RZA_IO_RegWrite_32
+ 886              	.LVL67:
+ 887              	.L67:
+ 650:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****                                   PL310_REG7_CLEAN_INV_WAY_Way_bits_SHIFT,
+ 888              		.loc 1 650 0 discriminator 1
+ 889 001c FF20A0E3 		mov	r2, #255
+ 890 0020 0010A0E3 		mov	r1, #0
+ 891 0024 FC0703E3 		movw	r0, #14332
+ 892 0028 000F41E3 		movt	r0, 7936
+ 893 002c FEFFFFEB 		bl	RZA_IO_RegRead_32
+ 894              	.LVL68:
+ 653:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     cache_l2_sync();
+ 895              		.loc 1 653 0 discriminator 1
+ 896 0030 000050E3 		cmp	r0, #0
+ 897 0034 F8FFFF1A 		bne	.L67
+ 654:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 898              		.loc 1 654 0
+ 899 0038 FEFFFFEB 		bl	cache_l2_sync
+ 900              	.LVL69:
+ 901 003c 1080BDE8 		pop	{r4, pc}
+ 902              		.cfi_endproc
+ 903              	.LFE24:
+ 905              		.section	.text.R_CACHE_GetVersion,"ax",%progbits
+ 906              		.align	2
+ 907              		.global	R_CACHE_GetVersion
+ 908              		.syntax unified
+ 909              		.arm
+ 910              		.fpu neon
+ 912              	R_CACHE_GetVersion:
+ 913              	.LFB26:
+ 683:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 684:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** End of function cache_l2_sync
+ 685:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 686:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 687:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** /*******************************************************************************
+ 688:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Function Name: R_CACHE_GetVersion
+ 689:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Description  : Gets the version number of this low-level driver
+ 690:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Arguments    : p_ver_info[out] - returns the driver information
+ 691:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** * Return Value : DRV_SUCCESS Always returned
+ 692:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** *******************************************************************************/
+ 693:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** int_t R_CACHE_GetVersion(st_ver_info_t *p_ver_info)
+ 694:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** {
+ 914              		.loc 1 694 0
+ 915              		.cfi_startproc
+ 916              		@ args = 0, pretend = 0, frame = 0
+ 917              		@ frame_needed = 0, uses_anonymous_args = 0
+ 918              		@ link register save eliminated.
+ 919              	.LVL70:
+ 920 0000 0030A0E1 		mov	r3, r0
+ 695:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     p_ver_info->lld.p_szdriver_name = gs_lld_info.p_szdriver_name;
+ 921              		.loc 1 695 0
+ 922 0004 002000E3 		movw	r2, #:lower16:.LC0
+ 923 0008 002040E3 		movt	r2, #:upper16:.LC0
+ 924 000c 142080E5 		str	r2, [r0, #20]
+ 696:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     p_ver_info->lld.version.sub.major = gs_lld_info.version.sub.major;
+ 925              		.loc 1 696 0
+ 926 0010 0120A0E3 		mov	r2, #1
+ 927 0014 BE20C0E1 		strh	r2, [r0, #14]	@ movhi
+ 697:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     p_ver_info->lld.version.sub.minor = gs_lld_info.version.sub.minor;
+ 928              		.loc 1 697 0
+ 929 0018 0320A0E3 		mov	r2, #3
+ 930 001c BC20C0E1 		strh	r2, [r0, #12]	@ movhi
+ 698:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     p_ver_info->lld.build = gs_lld_info.build;
+ 931              		.loc 1 698 0
+ 932 0020 0000A0E3 		mov	r0, #0
+ 933              	.LVL71:
+ 934 0024 100083E5 		str	r0, [r3, #16]
+ 699:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** 
+ 700:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c ****     return (DRV_SUCCESS);
+ 701:../generate/drivers/r_cache/src/lld/r_cache_lld_rza2m.c **** }
+ 935              		.loc 1 701 0
+ 936 0028 1EFF2FE1 		bx	lr
+ 937              		.cfi_endproc
+ 938              	.LFE26:
+ 940              		.section	.rodata.R_CACHE_GetVersion.str1.4,"aMS",%progbits,1
+ 941              		.align	2
+ 942              	.LC0:
+ 943 0000 4C4C4420 		.ascii	"LLD EBK_RZA2M CACHE\000"
+ 943      45424B5F 
+ 943      525A4132 
+ 943      4D204341 
+ 943      43484500 
+ 944              		.text
+ 945              	.Letext0:
+ 946              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 947              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 948              		.file 4 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 949              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 950              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 951              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 952              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 953              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 954              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 955              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 956              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 957              		.file 13 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_cache_lld_rza2m.c
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:17     .text.cache_l2_sync:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:22     .text.cache_l2_sync:00000000 cache_l2_sync
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:58     .text.R_CACHE_L1InstInvalidAll:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:64     .text.R_CACHE_L1InstInvalidAll:00000000 R_CACHE_L1InstInvalidAll
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:82     .text.R_CACHE_L1DataInvalidAll:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:88     .text.R_CACHE_L1DataInvalidAll:00000000 R_CACHE_L1DataInvalidAll
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:107    .text.R_CACHE_L1DataCleanAll:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:113    .text.R_CACHE_L1DataCleanAll:00000000 R_CACHE_L1DataCleanAll
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:132    .text.R_CACHE_L1DataCleanInvalidAll:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:138    .text.R_CACHE_L1DataCleanInvalidAll:00000000 R_CACHE_L1DataCleanInvalidAll
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:157    .text.R_CACHE_L1DataInvalidLine:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:163    .text.R_CACHE_L1DataInvalidLine:00000000 R_CACHE_L1DataInvalidLine
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:218    .text.R_CACHE_L1DataCleanLine:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:224    .text.R_CACHE_L1DataCleanLine:00000000 R_CACHE_L1DataCleanLine
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:279    .text.R_CACHE_L1DataCleanInvalidLine:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:285    .text.R_CACHE_L1DataCleanInvalidLine:00000000 R_CACHE_L1DataCleanInvalidLine
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:340    .text.R_CACHE_L1InstEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:346    .text.R_CACHE_L1InstEnable:00000000 R_CACHE_L1InstEnable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:364    .text.R_CACHE_L1InstDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:370    .text.R_CACHE_L1InstDisable:00000000 R_CACHE_L1InstDisable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:388    .text.R_CACHE_L1DataEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:394    .text.R_CACHE_L1DataEnable:00000000 R_CACHE_L1DataEnable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:412    .text.R_CACHE_L1DataDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:418    .text.R_CACHE_L1DataDisable:00000000 R_CACHE_L1DataDisable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:436    .text.R_CACHE_L1BtacEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:442    .text.R_CACHE_L1BtacEnable:00000000 R_CACHE_L1BtacEnable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:460    .text.R_CACHE_L1BtacDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:466    .text.R_CACHE_L1BtacDisable:00000000 R_CACHE_L1BtacDisable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:484    .text.R_CACHE_L1BtacInvalidate:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:490    .text.R_CACHE_L1BtacInvalidate:00000000 R_CACHE_L1BtacInvalidate
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:508    .text.R_CACHE_L1PrefetchEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:514    .text.R_CACHE_L1PrefetchEnable:00000000 R_CACHE_L1PrefetchEnable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:532    .text.R_CACHE_L1Init:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:538    .text.R_CACHE_L1Init:00000000 R_CACHE_L1Init
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:568    .text.R_CACHE_L1PrefetchDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:574    .text.R_CACHE_L1PrefetchDisable:00000000 R_CACHE_L1PrefetchDisable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:592    .text.R_CACHE_L2CacheEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:598    .text.R_CACHE_L2CacheEnable:00000000 R_CACHE_L2CacheEnable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:624    .text.R_CACHE_L2CacheDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:630    .text.R_CACHE_L2CacheDisable:00000000 R_CACHE_L2CacheDisable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:656    .text.R_CACHE_L2PrefetchEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:662    .text.R_CACHE_L2PrefetchEnable:00000000 R_CACHE_L2PrefetchEnable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:696    .text.R_CACHE_L2PrefetchDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:702    .text.R_CACHE_L2PrefetchDisable:00000000 R_CACHE_L2PrefetchDisable
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:736    .text.R_CACHE_L2InvalidAll:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:742    .text.R_CACHE_L2InvalidAll:00000000 R_CACHE_L2InvalidAll
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:779    .text.R_CACHE_L2Init:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:785    .text.R_CACHE_L2Init:00000000 R_CACHE_L2Init
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:820    .text.R_CACHE_L2CleanAll:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:826    .text.R_CACHE_L2CleanAll:00000000 R_CACHE_L2CleanAll
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:863    .text.R_CACHE_L2CleanInvalidAll:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:869    .text.R_CACHE_L2CleanInvalidAll:00000000 R_CACHE_L2CleanInvalidAll
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:906    .text.R_CACHE_GetVersion:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:912    .text.R_CACHE_GetVersion:00000000 R_CACHE_GetVersion
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:942    .rodata.R_CACHE_GetVersion.str1.4:00000000 .LC0
+C:\Users\rj7356s\AppData\Local\Temp\cc2pWOtU.s:941    .rodata.R_CACHE_GetVersion.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.iobitmask.h.29.773e8f8428b0c21e1206a8c47a6d3927
+                           .group:00000000 wm4.adc_iobitmask.h.29.48ba2821c8a4fc20022447ad9316d399
+                           .group:00000000 wm4.bsc_iobitmask.h.29.115d15c4ad4b48e00598dcd62d33c637
+                           .group:00000000 wm4.ceu_iobitmask.h.29.413b5b68bb3c2148786493166a57173e
+                           .group:00000000 wm4.cpg_iobitmask.h.29.128911f0454a5339c74031b8d73e8fed
+                           .group:00000000 wm4.csi2link_iobitmask.h.29.701c130cb17627664fe7c147084057cf
+                           .group:00000000 wm4.dmac_iobitmask.h.29.98850e876107975c53dc0bb8ebb53eb5
+                           .group:00000000 wm4.drpk_iobitmask.h.29.167e7cf6b1feb4d38b8903a46d8c35ac
+                           .group:00000000 wm4.drw_iobitmask.h.29.71d46f2244f6e7ae6117fe6c41c5567d
+                           .group:00000000 wm4.edmac_iobitmask.h.29.4e406d859155ba914663e1cf61cad89a
+                           .group:00000000 wm4.eptpc_iobitmask.h.29.64bcd0a67db3a886572992ae6da8898c
+                           .group:00000000 wm4.etherc_iobitmask.h.29.07b13cb10c426023658e5c51f952b6de
+                           .group:00000000 wm4.gpio_iobitmask.h.29.ea8c1464682eb61f2d0763b97ed530f9
+                           .group:00000000 wm4.gpt_iobitmask.h.29.94173800a704c5ba32e348ba97cd23cf
+                           .group:00000000 wm4.hyper_iobitmask.h.29.f09febbc7b835674abe34ae75f3c700d
+                           .group:00000000 wm4.imr2_iobitmask.h.29.fff702c4c9409266054e806327fa236b
+                           .group:00000000 wm4.intc_iobitmask.h.29.6d3be2e47bf3d7eb7e91eeddcab863af
+                           .group:00000000 wm4.irda_iobitmask.h.29.6f43dde454e599a1d4a8be2978ac9459
+                           .group:00000000 wm4.jcu_iobitmask.h.29.9fd48851a81ff31733aa19b29e4846ad
+                           .group:00000000 wm4.lvds_iobitmask.h.29.4a6f69c8911426fa05f0b05eab5f5e15
+                           .group:00000000 wm4.mtu_iobitmask.h.29.0dfead439d92d73e6bac91e937399f90
+                           .group:00000000 wm4.nandc_iobitmask.h.29.26dc88335e3fd43a64a25f5ba82d9db4
+                           .group:00000000 wm4.octa_iobitmask.h.29.75dc3e3c70ac86c7551744de3991f583
+                           .group:00000000 wm4.ostm_iobitmask.h.29.38ee9f4e1711e17bd3f38545ba631cde
+                           .group:00000000 wm4.pl310_iobitmask.h.29.c1ef5625c0a9d67f24e89fe2fd7e4886
+                           .group:00000000 wm4.pmg_iobitmask.h.29.d20cb8352080a58cf6cbf526935d968e
+                           .group:00000000 wm4.poe3_iobitmask.h.29.3a3444cc2dbf606e2370573e16d57254
+                           .group:00000000 wm4.poeg_iobitmask.h.29.5601eb8cf1161926d683c0720340f85d
+                           .group:00000000 wm4.prr_iobitmask.h.29.52f8479a52e2236c122b5956e4bdbfce
+                           .group:00000000 wm4.ptpedmac_iobitmask.h.29.494dcb2240ebba7fa20d0c2ab02007f7
+                           .group:00000000 wm4.rcanfd_iobitmask.h.29.d172f89cbc4f253e32a4e10346bdc9f6
+                           .group:00000000 wm4.rcan_iobitmask.h.29.c6f8b9b62e8fdc007f8b5f40c1f7e95d
+                           .group:00000000 wm4.riic_iobitmask.h.29.faa52a36e584704b50a2c22ab62c84de
+                           .group:00000000 wm4.rspi_iobitmask.h.29.2e257f44186c83ca40dbb0db2548623b
+                           .group:00000000 wm4.rtc_iobitmask.h.29.2c82d3237997f1de7d2ac9d93855f3da
+                           .group:00000000 wm4.scifa_iobitmask.h.29.c7af830569e0d6a26f3d66e3adc293d7
+                           .group:00000000 wm4.scim_iobitmask.h.29.3b5e9d8b03a11c94acd93de96d2037f6
+                           .group:00000000 wm4.sdmmc_iobitmask.h.29.21d47a25c0df1ed3d24cd6232ec3b4e7
+                           .group:00000000 wm4.spdif_iobitmask.h.29.c16f83f628828ab24aa2b72615b93e69
+                           .group:00000000 wm4.spibsc_iobitmask.h.29.8ade4a581f57cd5b82569a69eb5f0d67
+                           .group:00000000 wm4.sprite_iobitmask.h.29.82888597faf7ebb3bc86b5f1018a2253
+                           .group:00000000 wm4.ssif_iobitmask.h.29.482529b431f1ad627a02168620c61eee
+                           .group:00000000 wm4.usb_iobitmask.h.29.aae4dfd463dfdd120bf5855c9dc97483
+                           .group:00000000 wm4.vdc6_iobitmask.h.29.3ce0a3f9d2209ce71e4fec48b4ecb79a
+                           .group:00000000 wm4.vin_iobitmask.h.29.576a1d6e4b2cf6cbd353044865e437f2
+                           .group:00000000 wm4.wdt_iobitmask.h.29.c612db09eac33fb3da8d8aaee67287a9
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.rza_io_regrw.h.33.07c1ee176b41ade23637426c80e4b86a
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_cache_lld_rza2m.h.47.60fd1c425e79f0ee4cd5b4a9383d982b
+                           .group:00000000 wm4.r_cache_rza2_config.h.34.4f839f04653e6b32c66c11ebc6b10bd1
+
+UNDEFINED SYMBOLS
+RZA_IO_RegWrite_32
+RZA_IO_RegRead_32
+r_cache_l1_i_inv_all
+r_cache_l1_d_cache_operation
+r_cache_l1_d_inv_mva
+r_cache_l1_d_clean_mva
+r_cache_l1_d_clean_inv_mva
+r_cache_l1_i_enable
+r_cache_l1_i_disable
+r_cache_l1_d_enable
+r_cache_l1_d_disable
+r_cache_l1_btac_enable
+r_cache_l1_btac_disable
+r_cache_l1_btac_inv
+r_cache_l1_prefetch_enable
+r_cache_l1_cache_init
+r_cache_l1_prefetch_disable

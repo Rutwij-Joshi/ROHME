@@ -1,0 +1,156 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_memclk_setup.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.r_memclk_setup,"ax",%progbits
+  17              		.align	2
+  18              		.global	r_memclk_setup
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	r_memclk_setup:
+  24              	.LFB3:
+  25              		.file 1 "../generate/system/r_memclk_setup.c"
+   1:../generate/system/r_memclk_setup.c **** /**************************************************************************************************
+   2:../generate/system/r_memclk_setup.c ****  * DISCLAIMER
+   3:../generate/system/r_memclk_setup.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/system/r_memclk_setup.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/system/r_memclk_setup.c ****  * applicable laws, including copyright laws.
+   6:../generate/system/r_memclk_setup.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/system/r_memclk_setup.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/system/r_memclk_setup.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/system/r_memclk_setup.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/system/r_memclk_setup.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/system/r_memclk_setup.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/system/r_memclk_setup.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/system/r_memclk_setup.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/system/r_memclk_setup.c ****  * following link:
+  15:../generate/system/r_memclk_setup.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/system/r_memclk_setup.c ****  *
+  17:../generate/system/r_memclk_setup.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/system/r_memclk_setup.c ****  **************************************************************************************************
+  19:../generate/system/r_memclk_setup.c **** /**************************************************************************************************
+  20:../generate/system/r_memclk_setup.c ****  * File Name    : r_memclk_setup.c
+  21:../generate/system/r_memclk_setup.c ****  * Device(s)    : RZ/A2M
+  22:../generate/system/r_memclk_setup.c ****  * Description  : setting memory clock before starting R_SC_HardwareSetup
+  23:../generate/system/r_memclk_setup.c ****  **************************************************************************************************
+  24:../generate/system/r_memclk_setup.c **** 
+  25:../generate/system/r_memclk_setup.c **** /**************************************************************************************************
+  26:../generate/system/r_memclk_setup.c ****  Includes   <System Includes> , "Project Includes"
+  27:../generate/system/r_memclk_setup.c ****  **************************************************************************************************
+  28:../generate/system/r_memclk_setup.c **** #include "r_typedefs.h"
+  29:../generate/system/r_memclk_setup.c **** #include "r_memclk_setup.h"
+  30:../generate/system/r_memclk_setup.c **** 
+  31:../generate/system/r_memclk_setup.c **** /**************************************************************************************************
+  32:../generate/system/r_memclk_setup.c ****  * Function Name: r_memclk_setup
+  33:../generate/system/r_memclk_setup.c ****  * Description  : setting memory clock before starting R_SC_HardwareSetup function
+  34:../generate/system/r_memclk_setup.c ****  * Arguments    : none
+  35:../generate/system/r_memclk_setup.c ****  * Return Value : none
+  36:../generate/system/r_memclk_setup.c ****  **************************************************************************************************
+  37:../generate/system/r_memclk_setup.c **** void r_memclk_setup(void)
+  38:../generate/system/r_memclk_setup.c **** {
+  26              		.loc 1 38 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30 0000 10402DE9 		push	{r4, lr}
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 4, -8
+  33              		.cfi_offset 14, -4
+  39:../generate/system/r_memclk_setup.c ****     /* Call SPIBSC clock setup if defined */
+  40:../generate/system/r_memclk_setup.c ****     if (NULL != r_spibsc_memclk_setup)
+  34              		.loc 1 40 0
+  35 0004 003000E3 		movw	r3, #:lower16:r_spibsc_memclk_setup
+  36 0008 003040E3 		movt	r3, #:upper16:r_spibsc_memclk_setup
+  37 000c 000053E3 		cmp	r3, #0
+  38 0010 0000000A 		beq	.L2
+  41:../generate/system/r_memclk_setup.c ****     {
+  42:../generate/system/r_memclk_setup.c ****         r_spibsc_memclk_setup();
+  39              		.loc 1 42 0
+  40 0014 FEFFFFEB 		bl	r_spibsc_memclk_setup
+  41              	.LVL0:
+  42              	.L2:
+  43:../generate/system/r_memclk_setup.c ****     }
+  44:../generate/system/r_memclk_setup.c **** 
+  45:../generate/system/r_memclk_setup.c ****     /* Call HYPERBUS clock setup if defined */
+  46:../generate/system/r_memclk_setup.c ****     if (NULL != r_hyperbus_memclk_setup)
+  43              		.loc 1 46 0
+  44 0018 003000E3 		movw	r3, #:lower16:r_hyperbus_memclk_setup
+  45 001c 003040E3 		movt	r3, #:upper16:r_hyperbus_memclk_setup
+  46 0020 000053E3 		cmp	r3, #0
+  47 0024 0000000A 		beq	.L3
+  47:../generate/system/r_memclk_setup.c ****     {
+  48:../generate/system/r_memclk_setup.c ****         r_hyperbus_memclk_setup();
+  48              		.loc 1 48 0
+  49 0028 FEFFFFEB 		bl	r_hyperbus_memclk_setup
+  50              	.LVL1:
+  51              	.L3:
+  49:../generate/system/r_memclk_setup.c ****     }
+  50:../generate/system/r_memclk_setup.c **** 
+  51:../generate/system/r_memclk_setup.c ****     /* Call OCTABUS clock setup if defined */
+  52:../generate/system/r_memclk_setup.c ****     if (NULL != r_octabus_memclk_setup)
+  52              		.loc 1 52 0
+  53 002c 003000E3 		movw	r3, #:lower16:r_octabus_memclk_setup
+  54 0030 003040E3 		movt	r3, #:upper16:r_octabus_memclk_setup
+  55 0034 000053E3 		cmp	r3, #0
+  56 0038 1080BD08 		popeq	{r4, pc}
+  53:../generate/system/r_memclk_setup.c ****     {
+  54:../generate/system/r_memclk_setup.c ****         r_octabus_memclk_setup();
+  57              		.loc 1 54 0
+  58 003c FEFFFFEB 		bl	r_octabus_memclk_setup
+  59              	.LVL2:
+  60 0040 1080BDE8 		pop	{r4, pc}
+  61              		.cfi_endproc
+  62              	.LFE3:
+  64              		.weak	r_octabus_memclk_setup
+  65              		.weak	r_hyperbus_memclk_setup
+  66              		.weak	r_spibsc_memclk_setup
+  67              		.text
+  68              	.Letext0:
+  69              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+  70              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+  71              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+  72              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+  73              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+  74              		.file 7 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_memclk_setup.c
+C:\Users\rj7356s\AppData\Local\Temp\ccs5sYeM.s:17     .text.r_memclk_setup:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccs5sYeM.s:23     .text.r_memclk_setup:00000000 r_memclk_setup
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.r_compiler_abstraction_api.h.26.bb21b39b83806cb7bb8838b6f825dcff
+
+UNDEFINED SYMBOLS
+r_spibsc_memclk_setup
+r_hyperbus_memclk_setup
+r_octabus_memclk_setup

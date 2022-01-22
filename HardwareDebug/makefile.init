@@ -1,0 +1,11 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+arg1 = $(1)
+export PATH=C:\Program Files (x86)\GNU Tools ARM Embedded\6 2017-q2-update\bin\;C:\Program Files (x86)\GNU Tools ARM Embedded\6 2017-q2-update\libexec\gcc\6 2017-q2-update\;C:\Users\rj7356s\.eclipse\com.renesas.platform_1435879475\Utilities;C:/Renesas/e2_studio/eclipse//plugins/com.renesas.runtime.jdk.hotspot.win32.x86_64_11.0.8.202009102051/jdk-11.0.8+10/bin/client;C:/Renesas/e2_studio/eclipse//plugins/com.renesas.runtime.jdk.hotspot.win32.x86_64_11.0.8.202009102051/jdk-11.0.8+10/bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\MATLAB\R2020a\runtime\win64;C:\Program Files\MATLAB\R2020a\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\dotnet\;C:\Program Files (x86)\IVI Foundation\IVI\bin;C:\Program Files\IVI Foundation\IVI\bin;c:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin\;c:\Program Files\IVI Foundation\VISA\Win64\Bin\;c:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Vector CANdb++ 3.1\Exec32;C:\Program Files (x86)\MATLAB\R2013b\runtime\win32;C:\Program Files (x86)\MATLAB\R2013b\bin;C:\Users\rj7356s\AppData\Local\Microsoft\WindowsApps;;C:\Renesas\e2_studio\eclipse
+export TCINSTALL=C:\Program Files (x86)\GNU Tools ARM Embedded\6 2017-q2-update$(call arg1,\)
+export CWD=$(CURDIR)
+export TC_VERSION=6.3.1.20170620
+export PWD=$(CURDIR)
+export GCC_VERSION=6.3.1

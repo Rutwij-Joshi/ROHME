@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><settings>
+    <lcdMapData lcdId="NHD-4.3-480272EF-ATXL#-CTP" makerId="001_Newhaven_Display_International_Inc">
+        <item key="LcdBackLightControlEnable">true</item>
+        <item key="LcdBackLightControlPort">0</item>
+        <item key="LcdBackLightControlPortActive">LOW</item>
+        <item key="LcdBackLightControlPortBit">0</item>
+        <item key="LcdBackgroundColor">000000</item>
+        <item key="LcdClockEdgeType">FALLING</item>
+        <item key="LcdDataFormatType">RGB888</item>
+        <item key="LcdOutputDataBitEndian">LITTLE</item>
+        <item key="LcdOutputDataPixelOrder">BGR</item>
+        <item key="LcdResetControlEnable">true</item>
+        <item key="LcdResetControlPort">0</item>
+        <item key="LcdResetControlPortActive">LOW</item>
+        <item key="LcdResetControlPortBit">0</item>
+        <item key="TConDE">TCON2</item>
+        <item key="TConDEHighActive">true</item>
+        <item key="TConHSync">TCON1</item>
+        <item key="TConHSyncHighActive">true</item>
+        <item key="TConVSync">TCON0</item>
+        <item key="TConVSyncHighActive">true</item>
+        <item key="callBackFunctionName"/>
+        <item key="enableVposDetect">false</item>
+        <item key="enableVposInterrupt">false</item>
+        <item key="frameBuffer1">00000040</item>
+        <item key="frameBuffer2">00000040</item>
+        <item key="imageHeight1">272</item>
+        <item key="imageHeight2">272</item>
+        <item key="imageWidth1">480</item>
+        <item key="imageWidth2">480</item>
+        <item key="outputFormat1">ARGB8888</item>
+        <item key="outputFormat2">ARGB8888</item>
+        <item key="useCallBackFunction">false</item>
+        <item key="useGraphicLayer">GRAPHICLAYER2</item>
+        <item key="xPosition1">0</item>
+        <item key="xPosition2">0</item>
+        <item key="yPosition1">0</item>
+        <item key="yPosition2">0</item>
+    </lcdMapData>
+</settings>

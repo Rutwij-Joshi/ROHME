@@ -1,0 +1,2984 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_mipi_api.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.R_MIPI_Initialize,"ax",%progbits
+  17              		.align	2
+  18              		.global	R_MIPI_Initialize
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	R_MIPI_Initialize:
+  24              	.LFB0:
+  25              		.file 1 "../generate/sc_drivers/r_mipi/src/r_mipi_api.c"
+   1:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * following link:
+  15:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  *
+  17:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**************************************************************************
+  20:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * File Name : r_mipi_api.c
+  21:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Version : 1.12
+  22:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description : RZ/A2M MIPI driver API function
+  23:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **************************************************************************/
+  24:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  25:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /******************************************************************************
+  26:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** Includes   <System Includes> , "Project Includes"
+  27:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** ******************************************************************************/
+  28:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #include    <iodefine.h>
+  29:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  30:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #include    "r_mipi_api.h"
+  31:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  32:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /******************************************************************************
+  33:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** Macro definitions
+  34:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** ******************************************************************************/
+  35:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Interrupt table management */
+  36:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define MIPI_INTERRUPT_TYPE_NUM  (19u)
+  37:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_INTERRUPT_TYPE_NUM   (7u)
+  38:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define INTERRUPT_REGBIT         (0u)
+  39:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define INTERRUPT_FLAG           (1u)
+  40:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  41:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Interrupt Register Settings */
+  42:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define INTEN_MASK_ALL_SET       (0x181FFCDDu)
+  43:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define INTEN_ALL_CLEAR          (0x00000000u)
+  44:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VOIE_ALL_CLEAR           (0x00000000u)
+  45:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VNSI_WRITE_MASK          (0x000007FFu)
+  46:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  47:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* For stride pixel size check */
+  48:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_OUTPUT_FORMAT_NUM    ( 4u)
+  49:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define OUTPUT_FORMAT_ENUM       ( 0u)
+  50:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define STRIDE_ALIGN_SIZE        ( 1u)
+  51:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define PIXEL_ALIGN_32           ( 31u) /* 0x1F is used for align check */
+  52:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define PIXEL_ALIGN_64           ( 63u) /* 0x3F is used for align check */
+  53:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define PIXEL_ALIGN_128          (127u) /* 0x7F is used for align check */
+  54:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  55:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* For output data mode */
+  56:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_YMODE_YC_ASIS        ( 0u)    /* Y and C are outputed to memory as is */
+  57:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_YMODE_Y_8BIT         ( 1u)    /* Only Y is outputed to memory as 8bit */
+  58:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_YMODE_YC_8BIT        ( 2u)    /* Y and C are outputed to memory, C is converted from 10
+  59:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_YMODE_Y_10BIT        ( 3u)    /* Only Y is outputed to memory as 10bit */
+  60:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_DTMD_NOT_CONVERT     ( 0u)    /* Do not separate Y and C */
+  61:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** #define VIN_DTMD_YC_SEPARATE     ( 2u)    /* Separate Y and C */
+  62:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  63:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /******************************************************************************
+  64:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** Typedef definitions
+  65:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** ******************************************************************************/
+  66:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Bit definition of MIPI register (INTEN, INTCLOSE, INTSTATE) */
+  67:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** typedef enum
+  68:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+  69:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_LESS_THAN_WC    = 0x10000000,
+  70:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_AFIFO_OF        = 0x08000000,
+  71:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_VD_START        = 0x00100000,
+  72:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_VD_END          = 0x00080000,
+  73:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_SHP_STB         = 0x00040000,
+  74:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_FSFE            = 0x00020000,
+  75:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_LNP_STB         = 0x00010000,
+  76:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_CRC_ERR         = 0x00008000,
+  77:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_HD_WC_ZERO      = 0x00004000,
+  78:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_FRM_SEQ_ERR1    = 0x00002000,
+  79:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_FRM_SEQ_ERR0    = 0x00001000,
+  80:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ECC_ERR         = 0x00000800,
+  81:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ECC_CRCT_ERR    = 0x00000400,
+  82:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ULPS_START      = 0x00000080,
+  83:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ULPS_END        = 0x00000040,
+  84:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ERRSOTHS        = 0x00000010,
+  85:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ERRSOTSYNCHS    = 0x00000008,
+  86:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ERRESC          = 0x00000004,
+  87:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_MIPI_INT_ERRCONTROL      = 0x00000001,
+  88:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** } e_bit_mipi_int_type_t;
+  89:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+  90:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Bit definition of VIN register (VnIE, VnINTS) */
+  91:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** typedef enum
+  92:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+  93:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_VIN_INT_FIELD2           = 0x80000000,
+  94:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_VIN_INT_VSYNC_FALL       = 0x00020000,
+  95:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_VIN_INT_VSYNC_RISE       = 0x00010000,
+  96:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_VIN_INT_FIELD            = 0x00000010,
+  97:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_VIN_INT_SCANLINE         = 0x00000004,
+  98:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_VIN_INT_FRAME            = 0x00000002,
+  99:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     REGBIT_VIN_INT_FIFO_OF          = 0x00000001
+ 100:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** } e_bit_vin_int_type_t;
+ 101:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 102:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /******************************************************************************
+ 103:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** Private global variables and functions
+ 104:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** ******************************************************************************/
+ 105:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Static functions */
+ 106:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static uint8_t calc_scale_passband(uint16_t scale_int, uint16_t scale_fra);
+ 107:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 108:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Mipi Driver Status */
+ 109:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static uint8_t gs_mipi_state;
+ 110:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 111:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Mipi Callback Function */
+ 112:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static void (* Mipi_Callback  )( e_mipi_interrupt_type_t interrupt_flag);
+ 113:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 114:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Vin Callback Function */
+ 115:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static void (* Vin_Callback )( e_mipi_interrupt_type_t interrupt_flag);
+ 116:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 117:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Mipi Error Bit */
+ 118:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static const uint32_t gs_tbl_mipi_interrupt_bit[MIPI_INTERRUPT_TYPE_NUM][2] = {
+ 119:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_LESS_THAN_WC, MIPI_INT_LESS_THAN_WC }, /* INT_LESS_THAN_WC */
+ 120:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_AFIFO_OF    , MIPI_INT_AFIFO_OF     }, /* INT_AFIFO_OF */
+ 121:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_VD_START    , MIPI_INT_VD_START     }, /* INT_VD_START */
+ 122:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_VD_END      , MIPI_INT_VD_END       }, /* INT_VD_END */
+ 123:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_SHP_STB     , MIPI_INT_SHP_STB      }, /* INT_SHP_STB */
+ 124:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_FSFE        , MIPI_INT_FSFE         }, /* INT_FSFE */
+ 125:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_LNP_STB     , MIPI_INT_LNP_STB      }, /* INT_LNP_STB */
+ 126:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_CRC_ERR     , MIPI_INT_CRC_ERR      }, /* INT_CRC_ERR */
+ 127:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_HD_WC_ZERO  , MIPI_INT_HD_WC_ZERO   }, /* INT_HD_WC_ZERO */
+ 128:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_FRM_SEQ_ERR1, MIPI_INT_FRM_SEQ_ERR1 }, /* INT_FRM_SEQ_ERR1 */
+ 129:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_FRM_SEQ_ERR0, MIPI_INT_FRM_SEQ_ERR0 }, /* INT_FRM_SEQ_ERR0 */
+ 130:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ECC_ERR     , MIPI_INT_ECC_ERR      }, /* INT_ECC_ERR */
+ 131:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ECC_CRCT_ERR, MIPI_INT_ECC_CRCT_ERR }, /* INT_ECC_CRCT_ERR */
+ 132:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ULPS_START  , MIPI_INT_ULPS_START   }, /* INT_ULPS_START */
+ 133:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ULPS_END    , MIPI_INT_ULPS_END     }, /* INT_ULPS_END */
+ 134:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ERRSOTHS    , MIPI_INT_ERRSOTHS     }, /* INT_ERRSOTHS */
+ 135:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ERRSOTSYNCHS, MIPI_INT_ERRSOTSYNCHS }, /* INT_ERRSOTSYNCHS */
+ 136:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ERRESC      , MIPI_INT_ERRESC       }, /* INT_ERRESC */
+ 137:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_MIPI_INT_ERRCONTROL  , MIPI_INT_ERRCONTROL   }  /* INT_ERRCONTROL */
+ 138:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** };
+ 139:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 140:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Vin Error Bit */
+ 141:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static const uint32_t gs_tbl_vin_interrupt_bit[VIN_INTERRUPT_TYPE_NUM][2] = {
+ 142:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_VIN_INT_FIELD2    , VIN_INT_FIELD2     }, /* INT_VIN_FIELD2 */
+ 143:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_VIN_INT_VSYNC_FALL, VIN_INT_VSYNC_FALL }, /* INT_VIN_VSYNC_FALL */
+ 144:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_VIN_INT_VSYNC_RISE, VIN_INT_VSYNC_RISE }, /* INT_VIN_VSYNC_RISE */
+ 145:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_VIN_INT_FIELD     , VIN_INT_FIELD      }, /* INT_VIN_FIELD */
+ 146:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_VIN_INT_SCANLINE  , VIN_INT_SCANLINE   }, /* INT_VIN_SCANLINC */
+ 147:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_VIN_INT_FRAME     , VIN_INT_FRAME      }, /* INT_VIN_FRAME */
+ 148:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { REGBIT_VIN_INT_FIFO_OF   , VIN_INT_FIFO_OF    }  /* INT_VIN_FIFO_OF */
+ 149:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** };
+ 150:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 151:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static const char_t gs_cnvtbl_inputformat_toinf[5] = {
+ 152:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x01,       /* INPUT_YCBCR422_8 */
+ 153:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x01,       /* INPUT_YCBCR422_8I */
+ 154:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x03,       /* INPUT_YCBCR422_10 */
+ 155:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x06,       /* INPUT_RGB888 */
+ 156:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x04        /* INPUT_RAW8 */
+ 157:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** };
+ 158:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 159:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static const char_t gs_cnvtbl_interlace_toim[4] = {
+ 160:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x00,       /* INTERLACE_ODD */
+ 161:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x02,       /* INTERLACE_EVEN */
+ 162:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x01,       /* INTERLACE_BOTH */
+ 163:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     0x01        /* PROGRESSIVE */
+ 164:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** };
+ 165:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 166:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /* Table for stride pixel size checking */
+ 167:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** static const uint32_t gs_tbl_vin_stride_check[VIN_OUTPUT_FORMAT_NUM][2] = {
+ 168:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { VIN_OUTPUT_YCBCR422_8 , PIXEL_ALIGN_64     },
+ 169:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { VIN_OUTPUT_Y8_CbCr8   , PIXEL_ALIGN_128    },
+ 170:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { VIN_OUTPUT_Y8         , PIXEL_ALIGN_128    },
+ 171:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     { VIN_OUTPUT_RAW8       , PIXEL_ALIGN_64     }
+ 172:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** };
+ 173:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 174:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 175:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 176:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 177:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_Initialize
+ 178:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  MIPI driver initialization processing
+ 179:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    none
+ 180:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : none
+ 181:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 182:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** void R_MIPI_Initialize(void (* const init_func)(uint32_t),  
+ 183:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         const uint32_t user_num)
+ 184:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+  26              		.loc 1 184 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              	.LVL0:
+ 185:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* call back function */
+ 186:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if (NULL != init_func)
+  31              		.loc 1 186 0
+  32 0000 003050E2 		subs	r3, r0, #0
+  33 0004 0700000A 		beq	.L4
+ 184:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* call back function */
+  34              		.loc 1 184 0
+  35 0008 10402DE9 		push	{r4, lr}
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+  39 000c 0100A0E1 		mov	r0, r1
+  40              	.LVL1:
+ 187:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 188:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         init_func (user_num);
+  41              		.loc 1 188 0
+  42 0010 33FF2FE1 		blx	r3
+  43              	.LVL2:
+ 189:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 190:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 191:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Mipi driver internal status initialize */
+ 192:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     gs_mipi_state = MIPI_POWOFF;
+  44              		.loc 1 192 0
+  45 0014 003000E3 		movw	r3, #:lower16:.LANCHOR0
+  46 0018 003040E3 		movt	r3, #:upper16:.LANCHOR0
+  47 001c 0020A0E3 		mov	r2, #0
+  48 0020 0020C3E5 		strb	r2, [r3]
+  49 0024 1080BDE8 		pop	{r4, pc}
+  50              	.LVL3:
+  51              	.L4:
+  52              		.cfi_def_cfa_offset 0
+  53              		.cfi_restore 4
+  54              		.cfi_restore 14
+  55 0028 003000E3 		movw	r3, #:lower16:.LANCHOR0
+  56 002c 003040E3 		movt	r3, #:upper16:.LANCHOR0
+  57 0030 0020A0E3 		mov	r2, #0
+  58 0034 0020C3E5 		strb	r2, [r3]
+  59 0038 1EFF2FE1 		bx	lr
+  60              		.cfi_endproc
+  61              	.LFE0:
+  63              		.section	.text.R_MIPI_Open,"ax",%progbits
+  64              		.align	2
+  65              		.global	R_MIPI_Open
+  66              		.syntax unified
+  67              		.arm
+  68              		.fpu neon
+  70              	R_MIPI_Open:
+  71              	.LFB1:
+ 193:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 194:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return;
+ 195:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_Initialize() */
+ 196:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 197:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 198:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 199:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_Open
+ 200:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+ 201:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Parameter check.
+ 202:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - MIPI sw reset.
+ 203:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Initialization of PHY register.
+ 204:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    mipi_data : MIPI setting parameter
+ 205:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : Error code
+ 206:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 207:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** e_mipi_error_t R_MIPI_Open(const st_mipi_param_t * const mipi_data) 
+ 208:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+  72              		.loc 1 208 0
+  73              		.cfi_startproc
+  74              		@ args = 0, pretend = 0, frame = 0
+  75              		@ frame_needed = 0, uses_anonymous_args = 0
+  76              		@ link register save eliminated.
+  77              	.LVL4:
+  78 0000 0020A0E1 		mov	r2, r0
+  79              	.LVL5:
+ 209:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr = MIPI_OK;
+ 210:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t cnt;
+ 211:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 212:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check MIPI State */
+ 213:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if (gs_mipi_state != MIPI_POWOFF)
+  80              		.loc 1 213 0
+  81 0004 003000E3 		movw	r3, #:lower16:.LANCHOR0
+  82 0008 003040E3 		movt	r3, #:upper16:.LANCHOR0
+  83 000c 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+  84 0010 000053E3 		cmp	r3, #0
+  85 0014 1600001A 		bne	.L19
+ 209:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr = MIPI_OK;
+  86              		.loc 1 209 0
+  87 0018 0000A0E3 		mov	r0, #0
+  88              	.LVL6:
+  89              	.L8:
+ 214:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 215:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         merr = MIPI_STATUS_ERR;
+ 216:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 217:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 218:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check Parameter */
+ 219:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if (merr == MIPI_OK)
+  90              		.loc 1 219 0
+  91 001c 000050E3 		cmp	r0, #0
+  92 0020 0700001A 		bne	.L9
+ 220:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 221:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because either values are pointer */
+ 222:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if (mipi_data == NULL)
+  93              		.loc 1 222 0
+  94 0024 000052E3 		cmp	r2, #0
+  95 0028 2400000A 		beq	.L20
+ 223:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 224:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* NULL CHECK */
+ 225:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 226:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 227:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if ((mipi_data->mipi_lanenum != 1) && (mipi_data->mipi_lanenum != 2))
+  96              		.loc 1 227 0
+  97 002c 0010D2E5 		ldrb	r1, [r2]	@ zero_extendqisi2
+  98 0030 013041E2 		sub	r3, r1, #1
+  99 0034 7330EFE6 		uxtb	r3, r3
+ 100 0038 010053E3 		cmp	r3, #1
+ 101 003c 0E00009A 		bls	.L26
+ 228:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 229:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Lane Num == 1 or 2 ? */
+ 230:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 102              		.loc 1 230 0
+ 103 0040 0200A0E3 		mov	r0, #2
+ 104              	.LVL7:
+ 105              	.L9:
+ 231:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 232:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if (mipi_data->mipi_vc > 3)
+ 233:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 234:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Virtual Channel == 0 to 3 ? */
+ 235:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 236:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 237:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if ((mipi_data->mipi_interlace != MIPI_PROGRESSIVE) && (mipi_data->mipi_interlace != M
+ 238:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 239:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Interlace or Progressive ? */
+ 240:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 241:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 242:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if (mipi_data->mipi_laneswap > 1)
+ 243:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 244:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Mipi Lane Swap Setting ? */
+ 245:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 246:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 247:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if (mipi_data->mipi_outputrate > (mipi_data->mipi_lanenum * 1000))
+ 248:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 249:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Mipi Data Send Speed ? */
+ 250:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 251:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 252:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 253:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 254:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Do Nothing */
+ 255:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ;
+ 256:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 257:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 258:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 259:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if (merr == MIPI_OK)
+ 106              		.loc 1 259 0
+ 107 0044 000050E3 		cmp	r0, #0
+ 108 0048 1EFF2F11 		bxne	lr
+ 260:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 261:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI SW-Reset */
+ 262:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.TREF.BIT.TREF = 1;
+ 109              		.loc 1 262 0
+ 110 004c 093AA0E3 		mov	r3, #36864
+ 111 0050 20384EE3 		movt	r3, 59424
+ 112 0054 001093E5 		ldr	r1, [r3]
+ 113 0058 011081E3 		orr	r1, r1, #1
+ 114 005c 001083E5 		str	r1, [r3]
+ 263:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 264:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.SRST.BIT.SRST = 1;
+ 115              		.loc 1 264 0
+ 116 0060 041093E5 		ldr	r1, [r3, #4]
+ 117 0064 011081E3 		orr	r1, r1, #1
+ 118 0068 041083E5 		str	r1, [r3, #4]
+ 119              	.LVL8:
+ 265:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         for (cnt = (MIPI_1US_WAIT * 5); cnt > 0; cnt--)
+ 120              		.loc 1 265 0
+ 121 006c A53EA0E3 		mov	r3, #2640
+ 122 0070 170000EA 		b	.L11
+ 123              	.LVL9:
+ 124              	.L19:
+ 215:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 125              		.loc 1 215 0
+ 126 0074 0100A0E3 		mov	r0, #1
+ 127              	.LVL10:
+ 128 0078 E7FFFFEA 		b	.L8
+ 129              	.LVL11:
+ 130              	.L26:
+ 232:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 131              		.loc 1 232 0
+ 132 007c 0130D2E5 		ldrb	r3, [r2, #1]	@ zero_extendqisi2
+ 133 0080 030053E3 		cmp	r3, #3
+ 235:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 134              		.loc 1 235 0
+ 135 0084 0200A083 		movhi	r0, #2
+ 136              	.LVL12:
+ 137 0088 EDFFFF8A 		bhi	.L9
+ 138              	.LVL13:
+ 139              	.L27:
+ 237:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 140              		.loc 1 237 0
+ 141 008c 0230D2E5 		ldrb	r3, [r2, #2]	@ zero_extendqisi2
+ 142 0090 010053E3 		cmp	r3, #1
+ 240:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 143              		.loc 1 240 0
+ 144 0094 0200A083 		movhi	r0, #2
+ 145              	.LVL14:
+ 146 0098 E9FFFF8A 		bhi	.L9
+ 147              	.LVL15:
+ 148              	.L28:
+ 242:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 149              		.loc 1 242 0
+ 150 009c 0330D2E5 		ldrb	r3, [r2, #3]	@ zero_extendqisi2
+ 151 00a0 010053E3 		cmp	r3, #1
+ 152 00a4 0700008A 		bhi	.L24
+ 247:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 153              		.loc 1 247 0
+ 154 00a8 B6C0D2E1 		ldrh	ip, [r2, #6]
+ 155 00ac FA3FA0E3 		mov	r3, #1000
+ 156 00b0 930101E0 		mul	r1, r3, r1
+ 157 00b4 01005CE1 		cmp	ip, r1
+ 250:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 158              		.loc 1 250 0
+ 159 00b8 0200A0C3 		movgt	r0, #2
+ 160              	.LVL16:
+ 161 00bc E0FFFFEA 		b	.L9
+ 162              	.LVL17:
+ 163              	.L20:
+ 225:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 164              		.loc 1 225 0
+ 165 00c0 0200A0E3 		mov	r0, #2
+ 166              	.LVL18:
+ 167 00c4 DEFFFFEA 		b	.L9
+ 168              	.LVL19:
+ 169              	.L24:
+ 245:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 170              		.loc 1 245 0
+ 171 00c8 0200A0E3 		mov	r0, #2
+ 172              	.LVL20:
+ 173 00cc DCFFFFEA 		b	.L9
+ 174              	.LVL21:
+ 175              	.L12:
+ 176              		.loc 1 265 0 discriminator 3
+ 177 00d0 013043E2 		sub	r3, r3, #1
+ 178              	.LVL22:
+ 179              	.L11:
+ 180              		.loc 1 265 0 is_stmt 0 discriminator 1
+ 181 00d4 000053E3 		cmp	r3, #0
+ 182 00d8 FCFFFF1A 		bne	.L12
+ 266:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 267:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Do nothing 5us wait */
+ 268:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ;
+ 269:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 270:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 271:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.SRST.BIT.SRST = 0;
+ 183              		.loc 1 271 0 is_stmt 1
+ 184 00dc 093AA0E3 		mov	r3, #36864
+ 185              	.LVL23:
+ 186 00e0 20384EE3 		movt	r3, 59424
+ 187 00e4 041093E5 		ldr	r1, [r3, #4]
+ 188 00e8 1F10C0E7 		bfc	r1, #0, #1
+ 189 00ec 041083E5 		str	r1, [r3, #4]
+ 272:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 273:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 274:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI D-PHY Tths_prepare parameter */
+ 275:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYTIM3.BIT.THS_PREPARE  = mipi_data->mipi_phy_timing.mipi_ths_prepare;
+ 190              		.loc 1 275 0
+ 191 00f0 B8C0D2E1 		ldrh	ip, [r2, #8]
+ 192 00f4 6C1293E5 		ldr	r1, [r3, #620]
+ 193 00f8 1C10C5E7 		bfi	r1, ip, #0, #6
+ 194 00fc 6C1283E5 		str	r1, [r3, #620]
+ 276:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 277:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI D-PHY Tths_settle parameter */
+ 278:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYTIM3.BIT.THS_SETTLE   = mipi_data->mipi_phy_timing.mipi_ths_settle;
+ 195              		.loc 1 278 0
+ 196 0100 BAC0D2E1 		ldrh	ip, [r2, #10]
+ 197 0104 6C1293E5 		ldr	r1, [r3, #620]
+ 198 0108 1C14CDE7 		bfi	r1, ip, #8, #6
+ 199 010c 6C1283E5 		str	r1, [r3, #620]
+ 279:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 280:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI D-PHY Tclk_prepare parameter */
+ 281:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYTIM2.BIT.TCLK_PREPARE = mipi_data->mipi_phy_timing.mipi_tclk_prepare;
+ 200              		.loc 1 281 0
+ 201 0110 BCC0D2E1 		ldrh	ip, [r2, #12]
+ 202 0114 681293E5 		ldr	r1, [r3, #616]
+ 203 0118 1C10C4E7 		bfi	r1, ip, #0, #5
+ 204 011c 681283E5 		str	r1, [r3, #616]
+ 282:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 283:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI D-PHY Tclk_settle parameter */
+ 284:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYTIM2.BIT.TCLK_SETTLE  = mipi_data->mipi_phy_timing.mipi_tclk_settle;
+ 205              		.loc 1 284 0
+ 206 0120 BEC0D2E1 		ldrh	ip, [r2, #14]
+ 207 0124 681293E5 		ldr	r1, [r3, #616]
+ 208 0128 1C14CDE7 		bfi	r1, ip, #8, #6
+ 209 012c 681283E5 		str	r1, [r3, #616]
+ 285:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 286:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI D-PHY Tclk_miss parameter */
+ 287:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYTIM2.BIT.TCLK_MISS    = mipi_data->mipi_phy_timing.mipi_tclk_miss;
+ 210              		.loc 1 287 0
+ 211 0130 B0C1D2E1 		ldrh	ip, [r2, #16]
+ 212 0134 681293E5 		ldr	r1, [r3, #616]
+ 213 0138 1C18D4E7 		bfi	r1, ip, #16, #5
+ 214 013c 681283E5 		str	r1, [r3, #616]
+ 288:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 289:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI D-PHY Tint parameter */
+ 290:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYTIM1.BIT.T_INIT_SLAVE = mipi_data->mipi_phy_timing.mipi_t_init_slave;
+ 215              		.loc 1 290 0
+ 216 0140 B2C1D2E1 		ldrh	ip, [r2, #18]
+ 217 0144 641293E5 		ldr	r1, [r3, #612]
+ 218 0148 1C10CFE7 		bfi	r1, ip, #0, #16
+ 219 014c 641283E5 		str	r1, [r3, #612]
+ 291:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 292:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 293:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.FLD.BIT.FLD_NUM     = mipi_data->mipi_frametop;
+ 220              		.loc 1 293 0
+ 221 0150 B4C0D2E1 		ldrh	ip, [r2, #4]
+ 222 0154 1C1093E5 		ldr	r1, [r3, #28]
+ 223 0158 1C18DFE7 		bfi	r1, ip, #16, #16
+ 224 015c 1C1083E5 		str	r1, [r3, #28]
+ 294:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 295:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* Top frame */
+ 296:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.FLD.BIT.FLD_DET_SEL = 0;
+ 225              		.loc 1 296 0
+ 226 0160 1C1093E5 		ldr	r1, [r3, #28]
+ 227 0164 1F12C5E7 		bfc	r1, #4, #2
+ 228 0168 1C1083E5 		str	r1, [r3, #28]
+ 297:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 298:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if (mipi_data->mipi_interlace == MIPI_INTERLACE)
+ 229              		.loc 1 298 0
+ 230 016c 0230D2E5 		ldrb	r3, [r2, #2]	@ zero_extendqisi2
+ 231 0170 010053E3 		cmp	r3, #1
+ 232 0174 3D00000A 		beq	.L29
+ 299:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 300:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 301:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             CSI2LINK.FLD.BIT.FLD_EN = 1; /* Top frame detectable */
+ 302:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 303:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 304:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 305:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 306:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             CSI2LINK.FLD.BIT.FLD_EN = 0; /* Top frame undetectable */
+ 233              		.loc 1 306 0
+ 234 0178 093AA0E3 		mov	r3, #36864
+ 235 017c 20384EE3 		movt	r3, 59424
+ 236 0180 1C1093E5 		ldr	r1, [r3, #28]
+ 237 0184 1F10C0E7 		bfc	r1, #0, #1
+ 238 0188 1C1083E5 		str	r1, [r3, #28]
+ 239              	.L14:
+ 307:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 308:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 309:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 310:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.CHKSUM.BIT.CRC_EN            = 1;      /* CRC Checkable */
+ 240              		.loc 1 310 0
+ 241 018c 093AA0E3 		mov	r3, #36864
+ 242 0190 20384EE3 		movt	r3, 59424
+ 243 0194 0C1093E5 		ldr	r1, [r3, #12]
+ 244 0198 011081E3 		orr	r1, r1, #1
+ 245 019c 0C1083E5 		str	r1, [r3, #12]
+ 311:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.CHKSUM.BIT.ECC_EN            = 1;      /* ECC error correctable */
+ 246              		.loc 1 311 0
+ 247 01a0 0C1093E5 		ldr	r1, [r3, #12]
+ 248 01a4 021081E3 		orr	r1, r1, #2
+ 249 01a8 0C1083E5 		str	r1, [r3, #12]
+ 312:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.VCDT.BIT.VCDT_EN             = 1;      /* Channel Setting */
+ 250              		.loc 1 312 0
+ 251 01ac 101093E5 		ldr	r1, [r3, #16]
+ 252 01b0 021981E3 		orr	r1, r1, #32768
+ 253 01b4 101083E5 		str	r1, [r3, #16]
+ 313:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.VCDT.BIT.SEL_VC              = mipi_data->mipi_vc;
+ 254              		.loc 1 313 0
+ 255 01b8 01C0D2E5 		ldrb	ip, [r2, #1]	@ zero_extendqisi2
+ 256 01bc 101093E5 		ldr	r1, [r3, #16]
+ 257 01c0 1C14C9E7 		bfi	r1, ip, #8, #2
+ 258 01c4 101083E5 		str	r1, [r3, #16]
+ 314:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 315:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 316:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.VCDT.BIT.SEL_DT_ON           = 0;
+ 259              		.loc 1 316 0
+ 260 01c8 101093E5 		ldr	r1, [r3, #16]
+ 261 01cc 1F13C6E7 		bfc	r1, #6, #1
+ 262 01d0 101083E5 		str	r1, [r3, #16]
+ 317:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 318:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 319:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.VCDT.BIT.SEL_DT              = 0x2A;   /* RAW8 */
+ 263              		.loc 1 319 0
+ 264 01d4 101093E5 		ldr	r1, [r3, #16]
+ 265 01d8 2AC0A0E3 		mov	ip, #42
+ 266 01dc 1C10C5E7 		bfi	r1, ip, #0, #6
+ 267 01e0 101083E5 		str	r1, [r3, #16]
+ 320:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.FRDT.BIT.DT_FS               = 0;      /* Frame type setting */
+ 268              		.loc 1 320 0
+ 269 01e4 181093E5 		ldr	r1, [r3, #24]
+ 270 01e8 1F1CDDE7 		bfc	r1, #24, #6
+ 271 01ec 181083E5 		str	r1, [r3, #24]
+ 321:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.FRDT.BIT.DT_FE               = 1;
+ 272              		.loc 1 321 0
+ 273 01f0 181093E5 		ldr	r1, [r3, #24]
+ 274 01f4 01C0A0E3 		mov	ip, #1
+ 275 01f8 1C18D5E7 		bfi	r1, ip, #16, #6
+ 276 01fc 181083E5 		str	r1, [r3, #24]
+ 322:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 323:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 324:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.LINKCNT.BIT.REG_MONI_PACT_EN = 1;
+ 277              		.loc 1 324 0
+ 278 0200 481093E5 		ldr	r1, [r3, #72]
+ 279 0204 021481E3 		orr	r1, r1, #33554432
+ 280 0208 481083E5 		str	r1, [r3, #72]
+ 325:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 326:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 327:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.LINKCNT.BIT.MONITOR_EN       = 1;
+ 281              		.loc 1 327 0
+ 282 020c 481093E5 		ldr	r1, [r3, #72]
+ 283 0210 021181E3 		orr	r1, r1, #-2147483648
+ 284 0214 481083E5 		str	r1, [r3, #72]
+ 328:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 329:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 330:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYCNT.BIT.SHUTDOWNZ         = 1;
+ 285              		.loc 1 330 0
+ 286 0218 081093E5 		ldr	r1, [r3, #8]
+ 287 021c 021881E3 		orr	r1, r1, #131072
+ 288 0220 081083E5 		str	r1, [r3, #8]
+ 331:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 332:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 333:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYCNT.BIT.RSTZ              = 1;
+ 289              		.loc 1 333 0
+ 290 0224 081093E5 		ldr	r1, [r3, #8]
+ 291 0228 011881E3 		orr	r1, r1, #65536
+ 292 022c 081083E5 		str	r1, [r3, #8]
+ 334:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 335:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 336:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYCNT.BIT.ENABLECLK         = 1;
+ 293              		.loc 1 336 0
+ 294 0230 081093E5 		ldr	r1, [r3, #8]
+ 295 0234 101081E3 		orr	r1, r1, #16
+ 296 0238 081083E5 		str	r1, [r3, #8]
+ 337:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 338:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 339:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYCNT.BIT.ENABLE_0          = 1;
+ 297              		.loc 1 339 0
+ 298 023c 081093E5 		ldr	r1, [r3, #8]
+ 299 0240 0C1081E1 		orr	r1, r1, ip
+ 300 0244 081083E5 		str	r1, [r3, #8]
+ 340:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 341:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if (mipi_data->mipi_lanenum == 2)
+ 301              		.loc 1 341 0
+ 302 0248 0030D2E5 		ldrb	r3, [r2]	@ zero_extendqisi2
+ 303 024c 020053E3 		cmp	r3, #2
+ 304 0250 0C00000A 		beq	.L30
+ 342:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 343:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 344:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             CSI2LINK.PHYCNT.BIT.ENABLE_1      = 1;
+ 345:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 346:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 347:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 348:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 349:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             CSI2LINK.PHYCNT.BIT.ENABLE_1      = 0;
+ 305              		.loc 1 349 0
+ 306 0254 093AA0E3 		mov	r3, #36864
+ 307 0258 20384EE3 		movt	r3, 59424
+ 308 025c 082093E5 		ldr	r2, [r3, #8]
+ 309              	.LVL24:
+ 310 0260 9F20C1E7 		bfc	r2, #1, #1
+ 311 0264 082083E5 		str	r2, [r3, #8]
+ 312              	.L16:
+ 313              	.LVL25:
+ 350:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 351:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 352:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         for (cnt = (MIPI_1US_WAIT * 25); cnt > 0; cnt--)
+ 314              		.loc 1 352 0
+ 315 0268 903303E3 		movw	r3, #13200
+ 316 026c 0C0000EA 		b	.L17
+ 317              	.LVL26:
+ 318              	.L29:
+ 301:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 319              		.loc 1 301 0
+ 320 0270 093AA0E3 		mov	r3, #36864
+ 321 0274 20384EE3 		movt	r3, 59424
+ 322 0278 1C1093E5 		ldr	r1, [r3, #28]
+ 323 027c 011081E3 		orr	r1, r1, #1
+ 324 0280 1C1083E5 		str	r1, [r3, #28]
+ 325 0284 C0FFFFEA 		b	.L14
+ 326              	.L30:
+ 344:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 327              		.loc 1 344 0
+ 328 0288 093AA0E3 		mov	r3, #36864
+ 329 028c 20384EE3 		movt	r3, 59424
+ 330 0290 082093E5 		ldr	r2, [r3, #8]
+ 331              	.LVL27:
+ 332 0294 022082E3 		orr	r2, r2, #2
+ 333 0298 082083E5 		str	r2, [r3, #8]
+ 334 029c F1FFFFEA 		b	.L16
+ 335              	.LVL28:
+ 336              	.L18:
+ 337              		.loc 1 352 0 discriminator 3
+ 338 02a0 013043E2 		sub	r3, r3, #1
+ 339              	.LVL29:
+ 340              	.L17:
+ 341              		.loc 1 352 0 is_stmt 0 discriminator 1
+ 342 02a4 000053E3 		cmp	r3, #0
+ 343 02a8 FCFFFF1A 		bne	.L18
+ 353:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 354:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Do nothing (25us wait) */
+ 355:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ;
+ 356:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 357:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 358:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI State Update */
+ 359:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         gs_mipi_state = MIPI_STOP;
+ 344              		.loc 1 359 0 is_stmt 1
+ 345 02ac 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 346              	.LVL30:
+ 347 02b0 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 348 02b4 0120A0E3 		mov	r2, #1
+ 349 02b8 0020C3E5 		strb	r2, [r3]
+ 360:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 361:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 362:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return merr;
+ 363:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_Open() */
+ 350              		.loc 1 363 0
+ 351 02bc 1EFF2FE1 		bx	lr
+ 352              		.cfi_endproc
+ 353              	.LFE1:
+ 355              		.section	.text.R_MIPI_Close,"ax",%progbits
+ 356              		.align	2
+ 357              		.global	R_MIPI_Close
+ 358              		.syntax unified
+ 359              		.arm
+ 360              		.fpu neon
+ 362              	R_MIPI_Close:
+ 363              	.LFB2:
+ 364:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 365:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 366:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 367:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_Close
+ 368:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+ 369:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Check MIPI state.
+ 370:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - MIPI interruput all disable.
+ 371:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - VIN capture stop.
+ 372:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - MIPI sw-reset.
+ 373:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Calls the user-defined function specified in finalize_func.
+ 374:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    finalize_func : Pointer to a user-defined function
+ 375:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                user_num  : User defined number
+ 376:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : Error code
+ 377:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 378:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** e_mipi_error_t R_MIPI_Close(void (* const finalize_func)(uint32_t),  
+ 379:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         const uint32_t user_num)
+ 380:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 364              		.loc 1 380 0
+ 365              		.cfi_startproc
+ 366              		@ args = 0, pretend = 0, frame = 0
+ 367              		@ frame_needed = 0, uses_anonymous_args = 0
+ 368              	.LVL31:
+ 369 0000 10402DE9 		push	{r4, lr}
+ 370              		.cfi_def_cfa_offset 8
+ 371              		.cfi_offset 4, -8
+ 372              		.cfi_offset 14, -4
+ 373              	.LVL32:
+ 381:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr = MIPI_OK;
+ 382:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 383:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check MIPI State */
+ 384:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( ( gs_mipi_state != MIPI_STOP ) && ( gs_mipi_state != MIPI_CAPTURE ) )
+ 374              		.loc 1 384 0
+ 375 0004 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 376 0008 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 377 000c 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 378 0010 013043E2 		sub	r3, r3, #1
+ 379 0014 7330EFE6 		uxtb	r3, r3
+ 380 0018 010053E3 		cmp	r3, #1
+ 381 001c 2B00009A 		bls	.L36
+ 385:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 386:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         merr = MIPI_STATUS_ERR;
+ 382              		.loc 1 386 0
+ 383 0020 0140A0E3 		mov	r4, #1
+ 384              	.L32:
+ 385              	.LVL33:
+ 387:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 388:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 389:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( merr == MIPI_OK )
+ 386              		.loc 1 389 0
+ 387 0024 000054E3 		cmp	r4, #0
+ 388 0028 2600001A 		bne	.L33
+ 390:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 391:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* Interrupt Disable and Mask */
+ 392:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.INTEN.LONG    = INTEN_ALL_CLEAR;
+ 389              		.loc 1 392 0
+ 390 002c 093AA0E3 		mov	r3, #36864
+ 391 0030 20384EE3 		movt	r3, 59424
+ 392 0034 0020A0E3 		mov	r2, #0
+ 393 0038 302083E5 		str	r2, [r3, #48]
+ 393:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 394:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 395:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.INTCLOSE.LONG = INTEN_MASK_ALL_SET;
+ 394              		.loc 1 395 0
+ 395 003c DDCC0FE3 		movw	ip, #64733
+ 396 0040 1FC841E3 		movt	ip, 6175
+ 397 0044 34C083E5 		str	ip, [r3, #52]
+ 396:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 397:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 398:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0IE.LONG          = VOIE_ALL_CLEAR;
+ 398              		.loc 1 398 0
+ 399 0048 0FCAA0E3 		mov	ip, #61440
+ 400 004c 03C84EE3 		movt	ip, 59395
+ 401 0050 40208CE5 		str	r2, [ip, #64]
+ 399:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 400:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* Capture Stop */
+ 401:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.ME = 0;    /* VIN Stop */
+ 402              		.loc 1 401 0
+ 403 0054 00E09CE5 		ldr	lr, [ip]
+ 404 0058 12E0C0E7 		bfi	lr, r2, #0, #1
+ 405 005c 00E08CE5 		str	lr, [ip]
+ 402:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0FC.BIT.SC = 0;    /* Capture mode off */
+ 406              		.loc 1 402 0
+ 407 0060 08E09CE5 		ldr	lr, [ip, #8]
+ 408 0064 12E0C0E7 		bfi	lr, r2, #0, #1
+ 409 0068 08E08CE5 		str	lr, [ip, #8]
+ 403:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0FC.BIT.CC = 0;
+ 410              		.loc 1 403 0
+ 411 006c 08E09CE5 		ldr	lr, [ip, #8]
+ 412 0070 92E0C1E7 		bfi	lr, r2, #1, #1
+ 413 0074 08E08CE5 		str	lr, [ip, #8]
+ 404:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 405:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI Reset */
+ 406:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 407:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYCNT.BIT.SHUTDOWNZ = 0;
+ 414              		.loc 1 407 0
+ 415 0078 08C093E5 		ldr	ip, [r3, #8]
+ 416 007c 92C8D1E7 		bfi	ip, r2, #17, #1
+ 417 0080 08C083E5 		str	ip, [r3, #8]
+ 408:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 409:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 410:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.PHYCNT.BIT.RSTZ      = 0;
+ 418              		.loc 1 410 0
+ 419 0084 08C093E5 		ldr	ip, [r3, #8]
+ 420 0088 12C8D0E7 		bfi	ip, r2, #16, #1
+ 421 008c 08C083E5 		str	ip, [r3, #8]
+ 411:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 412:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 413:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.SRST.BIT.SRST        = 1;
+ 422              		.loc 1 413 0
+ 423 0090 04C093E5 		ldr	ip, [r3, #4]
+ 424 0094 01C08CE3 		orr	ip, ip, #1
+ 425 0098 04C083E5 		str	ip, [r3, #4]
+ 414:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 415:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 416:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.SRST.BIT.SRST        = 0;
+ 426              		.loc 1 416 0
+ 427 009c 04C093E5 		ldr	ip, [r3, #4]
+ 428 00a0 12C0C0E7 		bfi	ip, r2, #0, #1
+ 429 00a4 04C083E5 		str	ip, [r3, #4]
+ 417:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 418:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* MIPI State Update */
+ 419:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         gs_mipi_state = MIPI_POWOFF;
+ 430              		.loc 1 419 0
+ 431 00a8 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 432 00ac 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 433 00b0 0020C3E5 		strb	r2, [r3]
+ 420:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 421:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* Callback function */
+ 422:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if (finalize_func != 0)
+ 434              		.loc 1 422 0
+ 435 00b4 020050E1 		cmp	r0, r2
+ 436 00b8 0200000A 		beq	.L33
+ 437 00bc 0030A0E1 		mov	r3, r0
+ 423:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 424:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             finalize_func(user_num);
+ 438              		.loc 1 424 0
+ 439 00c0 0100A0E1 		mov	r0, r1
+ 440              	.LVL34:
+ 441 00c4 33FF2FE1 		blx	r3
+ 442              	.LVL35:
+ 443              	.L33:
+ 425:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 426:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 427:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 428:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return merr;
+ 429:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_Close() */
+ 444              		.loc 1 429 0
+ 445 00c8 0400A0E1 		mov	r0, r4
+ 446 00cc 1080BDE8 		pop	{r4, pc}
+ 447              	.LVL36:
+ 448              	.L36:
+ 381:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 449              		.loc 1 381 0
+ 450 00d0 0040A0E3 		mov	r4, #0
+ 451 00d4 D2FFFFEA 		b	.L32
+ 452              		.cfi_endproc
+ 453              	.LFE2:
+ 455              		.section	.text.R_MIPI_Setup,"ax",%progbits
+ 456              		.align	2
+ 457              		.global	R_MIPI_Setup
+ 458              		.syntax unified
+ 459              		.arm
+ 460              		.fpu neon
+ 462              	R_MIPI_Setup:
+ 463              	.LFB3:
+ 430:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 431:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 432:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 433:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_Setup
+ 434:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+ 435:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Parameter check.
+ 436:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Initialization of VIN register.
+ 437:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - VIN scaling setting.
+ 438:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - VIN clipping setting.
+ 439:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    vin_setup : VIN setting parameter
+ 440:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : Error code
+ 441:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 442:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** e_mipi_error_t R_MIPI_Setup(const st_vin_setup_t * const vin_setup ) 
+ 443:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 464              		.loc 1 443 0
+ 465              		.cfi_startproc
+ 466              		@ args = 0, pretend = 0, frame = 0
+ 467              		@ frame_needed = 0, uses_anonymous_args = 0
+ 468              	.LVL37:
+ 469 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 470              		.cfi_def_cfa_offset 4
+ 471              		.cfi_offset 14, -4
+ 472              	.LVL38:
+ 444:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr = MIPI_OK;
+ 445:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint8_t scale_enable;
+ 446:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 447:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check MIPI State */
+ 448:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( gs_mipi_state != MIPI_STOP )
+ 473              		.loc 1 448 0
+ 474 0004 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 475 0008 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 476 000c 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 477 0010 010053E3 		cmp	r3, #1
+ 478 0014 0F00000A 		beq	.L71
+ 449:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 450:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         merr = MIPI_STATUS_ERR;
+ 479              		.loc 1 450 0
+ 480 0018 0120A0E3 		mov	r2, #1
+ 481              	.L38:
+ 482              	.LVL39:
+ 451:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 452:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 453:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check Parameter */
+ 454:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( merr == MIPI_OK )
+ 483              		.loc 1 454 0
+ 484 001c 000052E3 		cmp	r2, #0
+ 485 0020 2E00001A 		bne	.L39
+ 455:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 456:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because either values are pointer */
+ 457:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if (vin_setup == NULL)
+ 486              		.loc 1 457 0
+ 487 0024 000050E3 		cmp	r0, #0
+ 488 0028 2900000A 		beq	.L53
+ 458:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 459:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* NULL CHECK */
+ 460:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 461:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 462:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if (vin_setup->vin_inputformat > VIN_INPUT_RAW8)
+ 489              		.loc 1 462 0
+ 490 002c 1430D0E5 		ldrb	r3, [r0, #20]	@ zero_extendqisi2
+ 491 0030 040053E3 		cmp	r3, #4
+ 492 0034 2800008A 		bhi	.L54
+ 463:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 464:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* RANGE CHECK */
+ 465:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 466:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 467:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if (vin_setup->vin_outputformat > VIN_OUTPUT_RAW8)
+ 493              		.loc 1 467 0
+ 494 0038 1530D0E5 		ldrb	r3, [r0, #21]	@ zero_extendqisi2
+ 495 003c 200053E3 		cmp	r3, #32
+ 496 0040 3B00008A 		bhi	.L55
+ 468:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 469:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* RANGE CHECK */
+ 470:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 471:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 472:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if (vin_setup->vin_outputendian > VIN_OUTPUT_EN_BIG)
+ 497              		.loc 1 472 0
+ 498 0044 1610D0E5 		ldrb	r1, [r0, #22]	@ zero_extendqisi2
+ 499 0048 010051E3 		cmp	r1, #1
+ 500 004c 0300009A 		bls	.L72
+ 473:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 474:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* RANGE CHECK */
+ 475:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 501              		.loc 1 475 0
+ 502 0050 0220A0E3 		mov	r2, #2
+ 503              	.LVL40:
+ 504 0054 210000EA 		b	.L39
+ 505              	.LVL41:
+ 506              	.L71:
+ 444:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint8_t scale_enable;
+ 507              		.loc 1 444 0
+ 508 0058 0020A0E3 		mov	r2, #0
+ 509 005c EEFFFFEA 		b	.L38
+ 510              	.LVL42:
+ 511              	.L72:
+ 476:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 477:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if (vin_setup->vin_interlace > VIN_PROGRESSIVE)
+ 512              		.loc 1 477 0
+ 513 0060 1810D0E5 		ldrb	r1, [r0, #24]	@ zero_extendqisi2
+ 514 0064 030051E3 		cmp	r1, #3
+ 515 0068 3300008A 		bhi	.L57
+ 478:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 479:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* RANGE CHECK */
+ 480:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 481:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 482:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if ((vin_setup->vin_ycoffset & 0x7F) != 0)
+ 516              		.loc 1 482 0
+ 517 006c 201090E5 		ldr	r1, [r0, #32]
+ 518 0070 7F0011E3 		tst	r1, #127
+ 519 0074 3200001A 		bne	.L58
+ 483:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 484:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* CHECK MULTIPLE of 128 */
+ 485:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 486:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 487:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 488:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 489:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Check stride size */
+ 490:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             if (vin_setup->vin_stride <
+ 520              		.loc 1 490 0
+ 521 0078 BCE1D0E1 		ldrh	lr, [r0, #28]
+ 491:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 (vin_setup->vin_preclip.vin_preclip_endx - vin_setup->vin_preclip.vin_preclip_start
+ 522              		.loc 1 491 0
+ 523 007c B610D0E1 		ldrh	r1, [r0, #6]
+ 524 0080 B4C0D0E1 		ldrh	ip, [r0, #4]
+ 525 0084 0C1041E0 		sub	r1, r1, ip
+ 490:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 (vin_setup->vin_preclip.vin_preclip_endx - vin_setup->vin_preclip.vin_preclip_start
+ 526              		.loc 1 490 0
+ 527 0088 01005EE1 		cmp	lr, r1
+ 528 008c 2E0000BA 		blt	.L59
+ 529 0090 0010A0E3 		mov	r1, #0
+ 530 0094 000000EA 		b	.L40
+ 531              	.LVL43:
+ 532              	.L41:
+ 533              	.LBB2:
+ 492:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             {
+ 493:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 /* Minimal than pre-clip horizontal size in case of scale off */
+ 494:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 merr = MIPI_PARAM_ERR;
+ 495:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             }
+ 496:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             else
+ 497:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             {
+ 498:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 uint32_t count;
+ 499:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 for (count = 0; count < VIN_OUTPUT_FORMAT_NUM; count++)
+ 534              		.loc 1 499 0 discriminator 2
+ 535 0098 011081E2 		add	r1, r1, #1
+ 536              	.LVL44:
+ 537              	.L40:
+ 538              		.loc 1 499 0 is_stmt 0 discriminator 1
+ 539 009c 030051E3 		cmp	r1, #3
+ 540 00a0 0E00008A 		bhi	.L39
+ 500:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 501:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     if ((vin_setup->vin_outputformat == gs_tbl_vin_stride_check[count][OUTPUT_FORMA
+ 541              		.loc 1 501 0 is_stmt 1
+ 542 00a4 00C000E3 		movw	ip, #:lower16:.LANCHOR1
+ 543 00a8 00C040E3 		movt	ip, #:upper16:.LANCHOR1
+ 544 00ac 81C19CE7 		ldr	ip, [ip, r1, lsl #3]
+ 545 00b0 0C0053E1 		cmp	r3, ip
+ 546 00b4 F7FFFF1A 		bne	.L41
+ 502:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                         ((vin_setup->vin_stride & gs_tbl_vin_stride_check[count][STRIDE_ALIGN_SIZE]
+ 547              		.loc 1 502 0 discriminator 1
+ 548 00b8 00C000E3 		movw	ip, #:lower16:.LANCHOR1
+ 549 00bc 00C040E3 		movt	ip, #:upper16:.LANCHOR1
+ 550 00c0 81C18CE0 		add	ip, ip, r1, lsl #3
+ 551 00c4 04C09CE5 		ldr	ip, [ip, #4]
+ 501:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                         ((vin_setup->vin_stride & gs_tbl_vin_stride_check[count][STRIDE_ALIGN_SIZE]
+ 552              		.loc 1 501 0 discriminator 1
+ 553 00c8 0C001EE1 		tst	lr, ip
+ 503:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     {
+ 504:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                         /* Stride size is not aligned with target output format specification */
+ 505:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                         merr = MIPI_PARAM_ERR;
+ 554              		.loc 1 505 0
+ 555 00cc 0220A013 		movne	r2, #2
+ 556              	.LVL45:
+ 557 00d0 F0FFFFEA 		b	.L41
+ 558              	.LVL46:
+ 559              	.L53:
+ 560              	.LBE2:
+ 460:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 561              		.loc 1 460 0
+ 562 00d4 0220A0E3 		mov	r2, #2
+ 563              	.LVL47:
+ 564 00d8 000000EA 		b	.L39
+ 565              	.LVL48:
+ 566              	.L54:
+ 465:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 567              		.loc 1 465 0
+ 568 00dc 0220A0E3 		mov	r2, #2
+ 569              	.LVL49:
+ 570              	.L39:
+ 506:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     }
+ 507:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 508:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             }
+ 509:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 510:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 511:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 512:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if (merr == MIPI_OK)
+ 571              		.loc 1 512 0
+ 572 00e0 000052E3 		cmp	r2, #0
+ 573 00e4 1B00001A 		bne	.L43
+ 513:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 514:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* Check PreClip Parameter */
+ 515:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if ((vin_setup->vin_preclip.vin_preclip_starty > vin_setup->vin_preclip.vin_preclip_endy) |
+ 574              		.loc 1 515 0
+ 575 00e8 B010D0E1 		ldrh	r1, [r0]
+ 576 00ec B230D0E1 		ldrh	r3, [r0, #2]
+ 577 00f0 030051E1 		cmp	r1, r3
+ 578 00f4 1600008A 		bhi	.L61
+ 516:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ((vin_setup->vin_preclip.vin_preclip_endy - vin_setup->vin_preclip.vin_preclip_starty) 
+ 579              		.loc 1 516 0 discriminator 1
+ 580 00f8 013043E0 		sub	r3, r3, r1
+ 515:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ((vin_setup->vin_preclip.vin_preclip_endy - vin_setup->vin_preclip.vin_preclip_starty) 
+ 581              		.loc 1 515 0 discriminator 1
+ 582 00fc 000053E3 		cmp	r3, #0
+ 583 0100 8B0000DA 		ble	.L62
+ 517:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 518:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* RANGE CHECK */
+ 519:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 520:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 521:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if ((vin_setup->vin_preclip.vin_preclip_startx > vin_setup->vin_preclip.vin_preclip_en
+ 584              		.loc 1 521 0
+ 585 0104 B410D0E1 		ldrh	r1, [r0, #4]
+ 586 0108 B630D0E1 		ldrh	r3, [r0, #6]
+ 587 010c 030051E1 		cmp	r1, r3
+ 588 0110 8900008A 		bhi	.L63
+ 522:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ((vin_setup->vin_preclip.vin_preclip_endx - vin_setup->vin_preclip.vin_preclip_startx) 
+ 589              		.loc 1 522 0 discriminator 1
+ 590 0114 013043E0 		sub	r3, r3, r1
+ 521:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ((vin_setup->vin_preclip.vin_preclip_endx - vin_setup->vin_preclip.vin_preclip_startx) 
+ 591              		.loc 1 521 0 discriminator 1
+ 592 0118 050053E3 		cmp	r3, #5
+ 593 011c 880000DA 		ble	.L64
+ 594              		.loc 1 522 0
+ 595 0120 010011E3 		tst	r1, #1
+ 596 0124 8800001A 		bne	.L65
+ 523:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ((vin_setup->vin_preclip.vin_preclip_startx % 2) != 0) ||
+ 597              		.loc 1 523 0
+ 598 0128 010013E3 		tst	r3, #1
+ 524:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             (((vin_setup->vin_preclip.vin_preclip_endx - vin_setup->vin_preclip.vin_preclip_startx)
+ 525:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 526:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* RANGE CHECK */
+ 527:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 599              		.loc 1 527 0
+ 600 012c 0220A003 		moveq	r2, #2
+ 601              	.LVL50:
+ 602 0130 080000EA 		b	.L43
+ 603              	.LVL51:
+ 604              	.L55:
+ 470:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 605              		.loc 1 470 0
+ 606 0134 0220A0E3 		mov	r2, #2
+ 607              	.LVL52:
+ 608 0138 E8FFFFEA 		b	.L39
+ 609              	.LVL53:
+ 610              	.L57:
+ 480:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 611              		.loc 1 480 0
+ 612 013c 0220A0E3 		mov	r2, #2
+ 613              	.LVL54:
+ 614 0140 E6FFFFEA 		b	.L39
+ 615              	.LVL55:
+ 616              	.L58:
+ 485:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 617              		.loc 1 485 0
+ 618 0144 0220A0E3 		mov	r2, #2
+ 619              	.LVL56:
+ 620 0148 E4FFFFEA 		b	.L39
+ 621              	.LVL57:
+ 622              	.L59:
+ 494:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             }
+ 623              		.loc 1 494 0
+ 624 014c 0220A0E3 		mov	r2, #2
+ 625              	.LVL58:
+ 626 0150 E2FFFFEA 		b	.L39
+ 627              	.LVL59:
+ 628              	.L61:
+ 519:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 629              		.loc 1 519 0
+ 630 0154 0220A0E3 		mov	r2, #2
+ 631              	.LVL60:
+ 632              	.L43:
+ 528:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 529:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 530:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 531:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* Do Nothing */
+ 532:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             ;
+ 533:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 534:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 535:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 536:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( merr == MIPI_OK )
+ 633              		.loc 1 536 0
+ 634 0158 000052E3 		cmp	r2, #0
+ 635 015c BF00001A 		bne	.L44
+ 537:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 538:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* VIN Initial Setting */
+ 539:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.CLP   = 0;          /* YUV Clip default setting */
+ 636              		.loc 1 539 0
+ 637 0160 0F3AA0E3 		mov	r3, #61440
+ 638 0164 03384EE3 		movt	r3, 59395
+ 639 0168 001093E5 		ldr	r1, [r3]
+ 640 016c 1F1EDDE7 		bfc	r1, #28, #2
+ 641 0170 001083E5 		str	r1, [r3]
+ 540:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.SCLE  = 0;          /* Scaling Off */
+ 642              		.loc 1 540 0
+ 643 0174 001093E5 		ldr	r1, [r3]
+ 644 0178 1F1DDAE7 		bfc	r1, #26, #1
+ 645 017c 001083E5 		str	r1, [r3]
+ 541:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.LUTE  = 0;          /* LUT conversion Off */
+ 646              		.loc 1 541 0
+ 647 0180 001093E5 		ldr	r1, [r3]
+ 648 0184 1F1AD4E7 		bfc	r1, #20, #1
+ 649 0188 001083E5 		str	r1, [r3]
+ 542:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 543:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 544:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.YCAL  = vin_setup->vin_input_align;
+ 650              		.loc 1 544 0
+ 651 018c 24C0D0E5 		ldrb	ip, [r0, #36]	@ zero_extendqisi2
+ 652 0190 001093E5 		ldr	r1, [r3]
+ 653 0194 9C19D3E7 		bfi	r1, ip, #19, #1
+ 654 0198 001083E5 		str	r1, [r3]
+ 545:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 546:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 547:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.INF   = gs_cnvtbl_inputformat_toinf[vin_setup->vin_inputformat];
+ 655              		.loc 1 547 0
+ 656 019c 14C0D0E5 		ldrb	ip, [r0, #20]	@ zero_extendqisi2
+ 657 01a0 001000E3 		movw	r1, #:lower16:.LANCHOR2
+ 658 01a4 001040E3 		movt	r1, #:upper16:.LANCHOR2
+ 659 01a8 0CC0D1E7 		ldrb	ip, [r1, ip]	@ zero_extendqisi2
+ 660 01ac 001093E5 		ldr	r1, [r3]
+ 661 01b0 1C18D2E7 		bfi	r1, ip, #16, #3
+ 662 01b4 001083E5 		str	r1, [r3]
+ 548:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 549:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 550:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.DC    = 0;
+ 663              		.loc 1 550 0
+ 664 01b8 001093E5 		ldr	r1, [r3]
+ 665 01bc 1F17CFE7 		bfc	r1, #14, #2
+ 666 01c0 001083E5 		str	r1, [r3]
+ 551:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 552:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 553:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.EN    = vin_setup->vin_outputendian;
+ 667              		.loc 1 553 0
+ 668 01c4 16C0D0E5 		ldrb	ip, [r0, #22]	@ zero_extendqisi2
+ 669 01c8 001093E5 		ldr	r1, [r3]
+ 670 01cc 1C13C6E7 		bfi	r1, ip, #6, #1
+ 671 01d0 001083E5 		str	r1, [r3]
+ 554:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 555:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 556:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.IM    = gs_cnvtbl_interlace_toim[vin_setup->vin_interlace];
+ 672              		.loc 1 556 0
+ 673 01d4 18C0D0E5 		ldrb	ip, [r0, #24]	@ zero_extendqisi2
+ 674 01d8 001000E3 		movw	r1, #:lower16:.LANCHOR3
+ 675 01dc 001040E3 		movt	r1, #:upper16:.LANCHOR3
+ 676 01e0 0CC0D1E7 		ldrb	ip, [r1, ip]	@ zero_extendqisi2
+ 677 01e4 001093E5 		ldr	r1, [r3]
+ 678 01e8 9C11C4E7 		bfi	r1, ip, #3, #2
+ 679 01ec 001083E5 		str	r1, [r3]
+ 557:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 558:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 559:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.BPS        = 1;   /* Do not convert */
+ 680              		.loc 1 559 0
+ 681 01f0 001093E5 		ldr	r1, [r3]
+ 682 01f4 021081E3 		orr	r1, r1, #2
+ 683 01f8 001083E5 		str	r1, [r3]
+ 560:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 561:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 562:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.ME         = 0;
+ 684              		.loc 1 562 0
+ 685 01fc 001093E5 		ldr	r1, [r3]
+ 686 0200 1F10C0E7 		bfc	r1, #0, #1
+ 687 0204 001083E5 		str	r1, [r3]
+ 563:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 564:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 565:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0CSI_IFMD.BIT.DES0 = 1;                                  /* Eexpand bit to '0' (8 or 1
+ 688              		.loc 1 565 0
+ 689 0208 201093E5 		ldr	r1, [r3, #32]
+ 690 020c 021481E3 		orr	r1, r1, #33554432
+ 691 0210 201083E5 		str	r1, [r3, #32]
+ 566:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 567:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 568:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR2.BIT.FTEV     = 1;
+ 692              		.loc 1 568 0
+ 693 0214 5C1093E5 		ldr	r1, [r3, #92]
+ 694 0218 021881E3 		orr	r1, r1, #131072
+ 695 021c 5C1083E5 		str	r1, [r3, #92]
+ 569:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 570:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 571:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR2.BIT.VLV      = 1;
+ 696              		.loc 1 571 0
+ 697 0220 5C1093E5 		ldr	r1, [r3, #92]
+ 698 0224 01C0A0E3 		mov	ip, #1
+ 699 0228 1C16CFE7 		bfi	r1, ip, #12, #4
+ 700 022c 5C1083E5 		str	r1, [r3, #92]
+ 572:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 573:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 574:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR2.BIT.FTEH     = 0;
+ 701              		.loc 1 574 0
+ 702 0230 5C1093E5 		ldr	r1, [r3, #92]
+ 703 0234 1F18D0E7 		bfc	r1, #16, #1
+ 704 0238 5C1083E5 		str	r1, [r3, #92]
+ 575:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 576:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 577:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR2.BIT.HLV      = 0;
+ 705              		.loc 1 577 0
+ 706 023c 5C1093E5 		ldr	r1, [r3, #92]
+ 707 0240 1F10CAE7 		bfc	r1, #0, #11
+ 708 0244 5C1083E5 		str	r1, [r3, #92]
+ 578:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 579:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if (vin_setup->vin_outputformat == VIN_OUTPUT_RAW8)
+ 709              		.loc 1 579 0
+ 710 0248 1530D0E5 		ldrb	r3, [r0, #21]	@ zero_extendqisi2
+ 711 024c 200053E3 		cmp	r3, #32
+ 712 0250 3F00000A 		beq	.L73
+ 580:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 581:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 582:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             VIN.V0IS.LONG           = (vin_setup->vin_stride / 2);
+ 583:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 584:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 585:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 586:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 587:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             VIN.V0IS.LONG           = vin_setup->vin_stride;
+ 713              		.loc 1 587 0
+ 714 0254 BC11D0E1 		ldrh	r1, [r0, #28]
+ 715 0258 0F3AA0E3 		mov	r3, #61440
+ 716 025c 03384EE3 		movt	r3, 59395
+ 717 0260 2C1083E5 		str	r1, [r3, #44]
+ 718              	.L46:
+ 588:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 589:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 590:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* Pre Clip Setting */
+ 591:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 592:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0SLPrC.LONG        = vin_setup->vin_preclip.vin_preclip_starty;
+ 719              		.loc 1 592 0
+ 720 0264 B010D0E1 		ldrh	r1, [r0]
+ 721 0268 0F3AA0E3 		mov	r3, #61440
+ 722 026c 03384EE3 		movt	r3, 59395
+ 723 0270 0C1083E5 		str	r1, [r3, #12]
+ 593:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 594:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 595:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0ELPrC.LONG        = vin_setup->vin_preclip.vin_preclip_endy;
+ 724              		.loc 1 595 0
+ 725 0274 B210D0E1 		ldrh	r1, [r0, #2]
+ 726 0278 101083E5 		str	r1, [r3, #16]
+ 596:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 597:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 598:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0SPPrC.LONG        = vin_setup->vin_preclip.vin_preclip_startx;
+ 727              		.loc 1 598 0
+ 728 027c B410D0E1 		ldrh	r1, [r0, #4]
+ 729 0280 141083E5 		str	r1, [r3, #20]
+ 599:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 600:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 601:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0EPPrC.LONG        = vin_setup->vin_preclip.vin_preclip_endx;
+ 730              		.loc 1 601 0
+ 731 0284 B610D0E1 		ldrh	r1, [r0, #6]
+ 732 0288 181083E5 		str	r1, [r3, #24]
+ 602:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 603:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* Scaling Setting */
+ 604:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_CTRL.BIT.AMD    = 0;
+ 733              		.loc 1 604 0
+ 734 028c 801093E5 		ldr	r1, [r3, #128]
+ 735 0290 1F1FDEE7 		bfc	r1, #30, #1
+ 736 0294 801083E5 		str	r1, [r3, #128]
+ 605:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 606:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 607:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_CTRL.BIT.BC     = 0;
+ 737              		.loc 1 607 0
+ 738 0298 801093E5 		ldr	r1, [r3, #128]
+ 739 029c 1F1AD4E7 		bfc	r1, #20, #1
+ 740 02a0 801083E5 		str	r1, [r3, #128]
+ 608:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 609:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 610:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_CTRL.BIT.NE_RCR = 0;
+ 741              		.loc 1 610 0
+ 742 02a4 801093E5 		ldr	r1, [r3, #128]
+ 743 02a8 1F19D2E7 		bfc	r1, #18, #1
+ 744 02ac 801083E5 		str	r1, [r3, #128]
+ 611:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 612:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 613:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_CTRL.BIT.NE_BCB = 0;
+ 745              		.loc 1 613 0
+ 746 02b0 801093E5 		ldr	r1, [r3, #128]
+ 747 02b4 1F18D0E7 		bfc	r1, #16, #1
+ 748 02b8 801083E5 		str	r1, [r3, #128]
+ 614:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 615:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 616:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_CTRL.BIT.NE_GY  = 0;
+ 749              		.loc 1 616 0
+ 750 02bc 801093E5 		ldr	r1, [r3, #128]
+ 751 02c0 9F18D1E7 		bfc	r1, #17, #1
+ 752 02c4 801083E5 		str	r1, [r3, #128]
+ 617:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 618:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 619:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_SCALE.LONG = 0;
+ 753              		.loc 1 619 0
+ 754 02c8 0010A0E3 		mov	r1, #0
+ 755 02cc 841083E5 		str	r1, [r3, #132]
+ 620:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 621:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 622:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_PASS_BWIDTH.BIT.BWIDTH_H = 0;
+ 756              		.loc 1 622 0
+ 757 02d0 90C093E5 		ldr	ip, [r3, #144]
+ 758 02d4 11C8D6E7 		bfi	ip, r1, #16, #7
+ 759 02d8 90C083E5 		str	ip, [r3, #144]
+ 623:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 624:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 625:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_PASS_BWIDTH.BIT.BWIDTH_V = 0;
+ 760              		.loc 1 625 0
+ 761 02dc 90C093E5 		ldr	ip, [r3, #144]
+ 762 02e0 11C0C6E7 		bfi	ip, r1, #0, #7
+ 763 02e4 90C083E5 		str	ip, [r3, #144]
+ 626:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 627:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 628:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_CLIP_SIZE.BIT.CL_HSIZE = 0;
+ 764              		.loc 1 628 0
+ 765 02e8 A4C093E5 		ldr	ip, [r3, #164]
+ 766 02ec 11C8DBE7 		bfi	ip, r1, #16, #12
+ 767 02f0 A4C083E5 		str	ip, [r3, #164]
+ 629:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 630:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 631:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UDS_CLIP_SIZE.BIT.CL_VSIZE = 0;
+ 768              		.loc 1 631 0
+ 769 02f4 A4C093E5 		ldr	ip, [r3, #164]
+ 770 02f8 11C0CBE7 		bfi	ip, r1, #0, #12
+ 771 02fc A4C083E5 		str	ip, [r3, #164]
+ 632:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 633:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 634:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR.BIT.A8BIT              = 0;
+ 772              		.loc 1 634 0
+ 773 0300 58C093E5 		ldr	ip, [r3, #88]
+ 774 0304 11CCDFE7 		bfi	ip, r1, #24, #8
+ 775 0308 58C083E5 		str	ip, [r3, #88]
+ 635:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 636:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 637:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR.BIT.EVA                = 0;
+ 776              		.loc 1 637 0
+ 777 030c 58C093E5 		ldr	ip, [r3, #88]
+ 778 0310 11C8D0E7 		bfi	ip, r1, #16, #1
+ 779 0314 58C083E5 		str	ip, [r3, #88]
+ 638:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 639:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         switch (vin_setup->vin_inputformat)
+ 780              		.loc 1 639 0
+ 781 0318 1430D0E5 		ldrb	r3, [r0, #20]	@ zero_extendqisi2
+ 782 031c 010053E3 		cmp	r3, #1
+ 783 0320 1100009A 		bls	.L48
+ 784 0324 040053E3 		cmp	r3, #4
+ 785 0328 3400000A 		beq	.L49
+ 640:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 641:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             case VIN_INPUT_YCBCR422_8:
+ 642:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             case VIN_INPUT_YCBCR422_8I:
+ 643:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 if (vin_setup->vin_outputformat == VIN_OUTPUT_Y8_CbCr8)
+ 644:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 645:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     /* Output Y and C, and those are separated */
+ 646:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.YMODE = VIN_YMODE_YC_ASIS;    /* Both of Y and C are outputed to 
+ 647:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.DTMD  = VIN_DTMD_YC_SEPARATE; /* Separate Y and C */
+ 648:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 649:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 else if (vin_setup->vin_outputformat == VIN_OUTPUT_Y8)
+ 650:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 651:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     /* Output only Y */
+ 652:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.YMODE = VIN_YMODE_Y_8BIT;     /* Only Y is outputed to memory as 
+ 653:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.DTMD  = VIN_DTMD_YC_SEPARATE; /* Separate Y and C */
+ 654:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 655:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 else if (vin_setup->vin_outputformat == VIN_OUTPUT_YCBCR422_8)
+ 656:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 657:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     /* Output Y and C, and those are not separated */
+ 658:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.YMODE = VIN_YMODE_YC_ASIS;    /* Both of Y and C are outputed to 
+ 659:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.DTMD  = VIN_DTMD_NOT_CONVERT; /* Do not separate Y and C */
+ 660:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 661:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 else
+ 662:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 663:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     /* This driver do not support other format conversion */
+ 664:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     merr = MIPI_PARAM_ERR;
+ 665:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 666:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             break;
+ 667:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             case VIN_INPUT_RAW8:
+ 668:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 669:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 /* Set as default */
+ 670:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 VIN.V0DMR.BIT.YMODE = VIN_YMODE_YC_ASIS;    /* Both of Y and C are outputed to memo
+ 671:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 VIN.V0DMR.BIT.DTMD  = VIN_DTMD_NOT_CONVERT; /* Do not separate Y and C */
+ 672:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             break;
+ 673:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             case VIN_INPUT_YCBCR422_10:
+ 674:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             case VIN_INPUT_RGB888:
+ 675:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             default:
+ 676:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 677:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 /* Not support */
+ 678:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 merr = MIPI_PARAM_ERR;
+ 786              		.loc 1 678 0
+ 787 032c 0220A0E3 		mov	r2, #2
+ 788              	.LVL61:
+ 789 0330 3A0000EA 		b	.L47
+ 790              	.LVL62:
+ 791              	.L62:
+ 519:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 792              		.loc 1 519 0
+ 793 0334 0220A0E3 		mov	r2, #2
+ 794              	.LVL63:
+ 795 0338 86FFFFEA 		b	.L43
+ 796              	.LVL64:
+ 797              	.L63:
+ 527:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 798              		.loc 1 527 0
+ 799 033c 0220A0E3 		mov	r2, #2
+ 800              	.LVL65:
+ 801 0340 84FFFFEA 		b	.L43
+ 802              	.LVL66:
+ 803              	.L64:
+ 804 0344 0220A0E3 		mov	r2, #2
+ 805              	.LVL67:
+ 806 0348 82FFFFEA 		b	.L43
+ 807              	.LVL68:
+ 808              	.L65:
+ 809 034c 0220A0E3 		mov	r2, #2
+ 810              	.LVL69:
+ 811 0350 80FFFFEA 		b	.L43
+ 812              	.LVL70:
+ 813              	.L73:
+ 582:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 814              		.loc 1 582 0
+ 815 0354 BC11D0E1 		ldrh	r1, [r0, #28]
+ 816 0358 311CA0E1 		lsr	r1, r1, ip
+ 817 035c 0F3AA0E3 		mov	r3, #61440
+ 818 0360 03384EE3 		movt	r3, 59395
+ 819 0364 2C1083E5 		str	r1, [r3, #44]
+ 820 0368 BDFFFFEA 		b	.L46
+ 821              	.L48:
+ 643:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 822              		.loc 1 643 0
+ 823 036c 1530D0E5 		ldrb	r3, [r0, #21]	@ zero_extendqisi2
+ 824 0370 020053E3 		cmp	r3, #2
+ 825 0374 0C00000A 		beq	.L74
+ 649:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 826              		.loc 1 649 0
+ 827 0378 030053E3 		cmp	r3, #3
+ 828 037c 1400000A 		beq	.L75
+ 655:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 {
+ 829              		.loc 1 655 0
+ 830 0380 000053E3 		cmp	r3, #0
+ 831 0384 3700001A 		bne	.L68
+ 658:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.DTMD  = VIN_DTMD_NOT_CONVERT; /* Do not separate Y and C */
+ 832              		.loc 1 658 0
+ 833 0388 0F3AA0E3 		mov	r3, #61440
+ 834 038c 03384EE3 		movt	r3, 59395
+ 835 0390 581093E5 		ldr	r1, [r3, #88]
+ 836 0394 1F16CEE7 		bfc	r1, #12, #3
+ 837 0398 581083E5 		str	r1, [r3, #88]
+ 659:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 838              		.loc 1 659 0
+ 839 039c 581093E5 		ldr	r1, [r3, #88]
+ 840 03a0 1F10C1E7 		bfc	r1, #0, #2
+ 841 03a4 581083E5 		str	r1, [r3, #88]
+ 842 03a8 1C0000EA 		b	.L47
+ 843              	.L74:
+ 646:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.DTMD  = VIN_DTMD_YC_SEPARATE; /* Separate Y and C */
+ 844              		.loc 1 646 0
+ 845 03ac 0F3AA0E3 		mov	r3, #61440
+ 846 03b0 03384EE3 		movt	r3, 59395
+ 847 03b4 581093E5 		ldr	r1, [r3, #88]
+ 848 03b8 1F16CEE7 		bfc	r1, #12, #3
+ 849 03bc 581083E5 		str	r1, [r3, #88]
+ 647:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 850              		.loc 1 647 0
+ 851 03c0 581093E5 		ldr	r1, [r3, #88]
+ 852 03c4 02C0A0E3 		mov	ip, #2
+ 853 03c8 1C10C1E7 		bfi	r1, ip, #0, #2
+ 854 03cc 581083E5 		str	r1, [r3, #88]
+ 855 03d0 120000EA 		b	.L47
+ 856              	.L75:
+ 652:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                     VIN.V0DMR.BIT.DTMD  = VIN_DTMD_YC_SEPARATE; /* Separate Y and C */
+ 857              		.loc 1 652 0
+ 858 03d4 0F3AA0E3 		mov	r3, #61440
+ 859 03d8 03384EE3 		movt	r3, 59395
+ 860 03dc 581093E5 		ldr	r1, [r3, #88]
+ 861 03e0 01C0A0E3 		mov	ip, #1
+ 862 03e4 1C16CEE7 		bfi	r1, ip, #12, #3
+ 863 03e8 581083E5 		str	r1, [r3, #88]
+ 653:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 864              		.loc 1 653 0
+ 865 03ec 581093E5 		ldr	r1, [r3, #88]
+ 866 03f0 02C0A0E3 		mov	ip, #2
+ 867 03f4 1C10C1E7 		bfi	r1, ip, #0, #2
+ 868 03f8 581083E5 		str	r1, [r3, #88]
+ 869 03fc 070000EA 		b	.L47
+ 870              	.L49:
+ 670:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 VIN.V0DMR.BIT.DTMD  = VIN_DTMD_NOT_CONVERT; /* Do not separate Y and C */
+ 871              		.loc 1 670 0
+ 872 0400 0F3AA0E3 		mov	r3, #61440
+ 873 0404 03384EE3 		movt	r3, 59395
+ 874 0408 581093E5 		ldr	r1, [r3, #88]
+ 875 040c 1F16CEE7 		bfc	r1, #12, #3
+ 876 0410 581083E5 		str	r1, [r3, #88]
+ 671:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             break;
+ 877              		.loc 1 671 0
+ 878 0414 581093E5 		ldr	r1, [r3, #88]
+ 879 0418 1F10C1E7 		bfc	r1, #0, #2
+ 880 041c 581083E5 		str	r1, [r3, #88]
+ 881              	.LVL71:
+ 882              	.L47:
+ 679:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             break;
+ 680:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 681:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 682:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 683:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR.BIT.EXRGB   = 0;
+ 883              		.loc 1 683 0
+ 884 0420 0F3AA0E3 		mov	r3, #61440
+ 885 0424 03384EE3 		movt	r3, 59395
+ 886 0428 581093E5 		ldr	r1, [r3, #88]
+ 887 042c 1F14C8E7 		bfc	r1, #8, #1
+ 888 0430 581083E5 		str	r1, [r3, #88]
+ 684:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 685:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 686:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR.BIT.BPSM    = vin_setup->vin_output_swap;
+ 889              		.loc 1 686 0
+ 890 0434 25C0D0E5 		ldrb	ip, [r0, #37]	@ zero_extendqisi2
+ 891 0438 581093E5 		ldr	r1, [r3, #88]
+ 892 043c 1C12C4E7 		bfi	r1, ip, #4, #1
+ 893 0440 581083E5 		str	r1, [r3, #88]
+ 687:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 688:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 689:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0DMR.BIT.ABIT    = 0;
+ 894              		.loc 1 689 0
+ 895 0444 581093E5 		ldr	r1, [r3, #88]
+ 896 0448 1F11C2E7 		bfc	r1, #2, #1
+ 897 044c 581083E5 		str	r1, [r3, #88]
+ 690:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 691:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 692:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0UVAOF.BIT.UVAOF = vin_setup->vin_ycoffset;
+ 898              		.loc 1 692 0
+ 899 0450 200090E5 		ldr	r0, [r0, #32]
+ 900              	.LVL72:
+ 901 0454 601093E5 		ldr	r1, [r3, #96]
+ 902 0458 9013DFE7 		bfi	r1, r0, #7, #25
+ 903 045c 601083E5 		str	r1, [r3, #96]
+ 904              	.L44:
+ 693:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 694:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 695:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return merr;
+ 696:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_Setup() */
+ 905              		.loc 1 696 0
+ 906 0460 0200A0E1 		mov	r0, r2
+ 907 0464 04F09DE4 		ldr	pc, [sp], #4
+ 908              	.LVL73:
+ 909              	.L68:
+ 664:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 }
+ 910              		.loc 1 664 0
+ 911 0468 0220A0E3 		mov	r2, #2
+ 912              	.LVL74:
+ 913 046c EBFFFFEA 		b	.L47
+ 914              		.cfi_endproc
+ 915              	.LFE3:
+ 917              		.section	.text.R_MIPI_SetBufferAdr,"ax",%progbits
+ 918              		.align	2
+ 919              		.global	R_MIPI_SetBufferAdr
+ 920              		.syntax unified
+ 921              		.arm
+ 922              		.fpu neon
+ 924              	R_MIPI_SetBufferAdr:
+ 925              	.LFB4:
+ 697:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 698:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 699:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 700:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_SetBufferAdr
+ 701:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+ 702:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Parameter check.
+ 703:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - VIN setting buffer address.
+ 704:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    buffer_no  : Select buffer base (MB1, MB2, MB3)
+ 705:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                bufferBase : Buffer base address
+ 706:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : Error code
+ 707:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 708:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** e_mipi_error_t R_MIPI_SetBufferAdr(const uint8_t buffer_no,  
+ 709:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         const uint8_t * const bufferBase)
+ 710:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 926              		.loc 1 710 0
+ 927              		.cfi_startproc
+ 928              		@ args = 0, pretend = 0, frame = 0
+ 929              		@ frame_needed = 0, uses_anonymous_args = 0
+ 930              	.LVL75:
+ 931 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 932              		.cfi_def_cfa_offset 16
+ 933              		.cfi_offset 4, -16
+ 934              		.cfi_offset 5, -12
+ 935              		.cfi_offset 6, -8
+ 936              		.cfi_offset 14, -4
+ 937              	.LVL76:
+ 711:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr  = MIPI_OK;
+ 712:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 713:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This casting is valid because uint32_t and unsigned long is same byte length */
+ 714:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t vin_intf  = VIN.V0IE.LONG;
+ 938              		.loc 1 714 0
+ 939 0004 0F2AA0E3 		mov	r2, #61440
+ 940 0008 03284EE3 		movt	r2, 59395
+ 941 000c 406092E5 		ldr	r6, [r2, #64]
+ 942              	.LVL77:
+ 715:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 716:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length */
+ 717:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t mipi_intf = CSI2LINK.INTCLOSE.LONG;
+ 943              		.loc 1 717 0
+ 944 0010 093AA0E3 		mov	r3, #36864
+ 945 0014 20384EE3 		movt	r3, 59424
+ 946 0018 345093E5 		ldr	r5, [r3, #52]
+ 947              	.LVL78:
+ 718:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 719:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 720:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          = 0;
+ 948              		.loc 1 720 0
+ 949 001c 00C0A0E3 		mov	ip, #0
+ 950 0020 40C082E5 		str	ip, [r2, #64]
+ 721:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 722:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 723:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = INTEN_MASK_ALL_SET;
+ 951              		.loc 1 723 0
+ 952 0024 DD2C0FE3 		movw	r2, #64733
+ 953 0028 1F2841E3 		movt	r2, 6175
+ 954 002c 342083E5 		str	r2, [r3, #52]
+ 724:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 725:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check MIPI State */
+ 726:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( ( gs_mipi_state != MIPI_STOP ) && ( gs_mipi_state != MIPI_CAPTURE ) )
+ 955              		.loc 1 726 0
+ 956 0030 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 957 0034 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 958 0038 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 959 003c 013043E2 		sub	r3, r3, #1
+ 960 0040 7330EFE6 		uxtb	r3, r3
+ 961 0044 010053E3 		cmp	r3, #1
+ 962 0048 1800009A 		bls	.L87
+ 727:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 728:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         merr = MIPI_STATUS_ERR;
+ 963              		.loc 1 728 0
+ 964 004c 0140A0E3 		mov	r4, #1
+ 965              	.L77:
+ 966              	.LVL79:
+ 729:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 730:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 731:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check Parameter */
+ 732:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( merr == MIPI_OK )
+ 967              		.loc 1 732 0
+ 968 0050 000054E3 		cmp	r4, #0
+ 969 0054 0200001A 		bne	.L78
+ 733:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 734:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if( buffer_no > 2 )
+ 970              		.loc 1 734 0
+ 971 0058 020050E3 		cmp	r0, #2
+ 972 005c 1500009A 		bls	.L88
+ 735:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 736:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 973              		.loc 1 736 0
+ 974 0060 0240A0E3 		mov	r4, #2
+ 975              	.LVL80:
+ 976              	.L78:
+ 737:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 738:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting(right side statement) is valid because either values are pointer *
+ 739:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if(bufferBase == NULL)
+ 740:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 741:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 742:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 743:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This casting is valid because this processing just checking address as value */
+ 744:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if( ( ((uint32_t)bufferBase) & 0x7FUL ) != 0 )
+ 745:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 746:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             merr = MIPI_PARAM_ERR;
+ 747:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 748:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 749:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 750:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( merr == MIPI_OK )
+ 977              		.loc 1 750 0
+ 978 0064 000054E3 		cmp	r4, #0
+ 979 0068 0800001A 		bne	.L79
+ 751:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 752:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if( buffer_no == 0 )
+ 980              		.loc 1 752 0
+ 981 006c 000050E3 		cmp	r0, #0
+ 982 0070 1700000A 		beq	.L89
+ 753:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 754:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This casting is valid because this function required to hand the pointer as value */
+ 755:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             VIN.V0MB1.LONG = R_MIPI_CPUVAddrToSysPAddr((uint32_t)bufferBase);
+ 756:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 757:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else if( buffer_no == 1 )
+ 983              		.loc 1 757 0
+ 984 0074 010050E3 		cmp	r0, #1
+ 985 0078 1B00000A 		beq	.L90
+ 758:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 759:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This casting is valid because this function required to hand the pointer as value */
+ 760:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             VIN.V0MB2.LONG = R_MIPI_CPUVAddrToSysPAddr((uint32_t)bufferBase);
+ 761:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 762:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 763:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 764:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This casting is valid because this function required to hand the pointer as value */
+ 765:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             VIN.V0MB3.LONG = R_MIPI_CPUVAddrToSysPAddr((uint32_t)bufferBase);
+ 986              		.loc 1 765 0
+ 987 007c 0100A0E1 		mov	r0, r1
+ 988              	.LVL81:
+ 989 0080 FEFFFFEB 		bl	R_MIPI_CPUVAddrToSysPAddr
+ 990              	.LVL82:
+ 991 0084 0F3AA0E3 		mov	r3, #61440
+ 992 0088 03384EE3 		movt	r3, 59395
+ 993 008c 380083E5 		str	r0, [r3, #56]
+ 994              	.L79:
+ 766:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 767:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 768:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 769:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 770:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          = vin_intf;
+ 995              		.loc 1 770 0
+ 996 0090 0F3AA0E3 		mov	r3, #61440
+ 997 0094 03384EE3 		movt	r3, 59395
+ 998 0098 406083E5 		str	r6, [r3, #64]
+ 771:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 772:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 773:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = mipi_intf;
+ 999              		.loc 1 773 0
+ 1000 009c 093AA0E3 		mov	r3, #36864
+ 1001 00a0 20384EE3 		movt	r3, 59424
+ 1002 00a4 345083E5 		str	r5, [r3, #52]
+ 774:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 775:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return merr;
+ 776:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_SetBufferAdr() */
+ 1003              		.loc 1 776 0
+ 1004 00a8 0400A0E1 		mov	r0, r4
+ 1005 00ac 7080BDE8 		pop	{r4, r5, r6, pc}
+ 1006              	.LVL83:
+ 1007              	.L87:
+ 711:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 1008              		.loc 1 711 0
+ 1009 00b0 0C40A0E1 		mov	r4, ip
+ 1010 00b4 E5FFFFEA 		b	.L77
+ 1011              	.LVL84:
+ 1012              	.L88:
+ 739:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 1013              		.loc 1 739 0
+ 1014 00b8 000051E3 		cmp	r1, #0
+ 1015 00bc 0200000A 		beq	.L84
+ 744:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 1016              		.loc 1 744 0
+ 1017 00c0 7F0011E3 		tst	r1, #127
+ 746:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 1018              		.loc 1 746 0
+ 1019 00c4 0240A013 		movne	r4, #2
+ 1020              	.LVL85:
+ 1021 00c8 E5FFFFEA 		b	.L78
+ 1022              	.LVL86:
+ 1023              	.L84:
+ 741:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 1024              		.loc 1 741 0
+ 1025 00cc 0240A0E3 		mov	r4, #2
+ 1026              	.LVL87:
+ 1027 00d0 E3FFFFEA 		b	.L78
+ 1028              	.LVL88:
+ 1029              	.L89:
+ 755:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 1030              		.loc 1 755 0
+ 1031 00d4 0100A0E1 		mov	r0, r1
+ 1032              	.LVL89:
+ 1033 00d8 FEFFFFEB 		bl	R_MIPI_CPUVAddrToSysPAddr
+ 1034              	.LVL90:
+ 1035 00dc 0F3AA0E3 		mov	r3, #61440
+ 1036 00e0 03384EE3 		movt	r3, 59395
+ 1037 00e4 300083E5 		str	r0, [r3, #48]
+ 1038 00e8 E8FFFFEA 		b	.L79
+ 1039              	.LVL91:
+ 1040              	.L90:
+ 760:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 1041              		.loc 1 760 0
+ 1042 00ec 0100A0E1 		mov	r0, r1
+ 1043              	.LVL92:
+ 1044 00f0 FEFFFFEB 		bl	R_MIPI_CPUVAddrToSysPAddr
+ 1045              	.LVL93:
+ 1046 00f4 0F3AA0E3 		mov	r3, #61440
+ 1047 00f8 03384EE3 		movt	r3, 59395
+ 1048 00fc 340083E5 		str	r0, [r3, #52]
+ 1049 0100 E2FFFFEA 		b	.L79
+ 1050              		.cfi_endproc
+ 1051              	.LFE4:
+ 1053              		.section	.text.R_MIPI_InterruptEnable,"ax",%progbits
+ 1054              		.align	2
+ 1055              		.global	R_MIPI_InterruptEnable
+ 1056              		.syntax unified
+ 1057              		.arm
+ 1058              		.fpu neon
+ 1060              	R_MIPI_InterruptEnable:
+ 1061              	.LFB5:
+ 777:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 778:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 779:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 780:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_InterruptEnable
+ 781:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  Set the interrupt enable register of MIPI and VIN
+ 782:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    param : Interrupt settings
+ 783:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : none
+ 784:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 785:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** void R_MIPI_InterruptEnable(const st_mipi_int_t * const param) 
+ 786:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 1062              		.loc 1 786 0
+ 1063              		.cfi_startproc
+ 1064              		@ args = 0, pretend = 0, frame = 0
+ 1065              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1066              	.LVL94:
+ 1067 0000 30402DE9 		push	{r4, r5, lr}
+ 1068              		.cfi_def_cfa_offset 12
+ 1069              		.cfi_offset 4, -12
+ 1070              		.cfi_offset 5, -8
+ 1071              		.cfi_offset 14, -4
+ 787:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t int_type      = param->type;
+ 1072              		.loc 1 787 0
+ 1073 0004 001090E5 		ldr	r1, [r0]
+ 1074              	.LVL95:
+ 788:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t mipi_int_type = 0;
+ 789:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t vin_int_type  = 0;
+ 790:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t count;
+ 791:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 792:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* At first, mask all interrupt */
+ 793:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          = VOIE_ALL_CLEAR;      /* Set all VIN interrupt disable at once */
+ 1075              		.loc 1 793 0
+ 1076 0008 0F3AA0E3 		mov	r3, #61440
+ 1077 000c 03384EE3 		movt	r3, 59395
+ 1078 0010 00C0A0E3 		mov	ip, #0
+ 1079 0014 40C083E5 		str	ip, [r3, #64]
+ 794:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTEN.LONG    = INTEN_ALL_CLEAR;     /* Set all MIPI interrupt disable at once */
+ 1080              		.loc 1 794 0
+ 1081 0018 093AA0E3 		mov	r3, #36864
+ 1082 001c 20384EE3 		movt	r3, 59424
+ 1083 0020 30C083E5 		str	ip, [r3, #48]
+ 795:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = INTEN_MASK_ALL_SET;  /* Mask all MIPI interrupt at once  */
+ 1084              		.loc 1 795 0
+ 1085 0024 DD2C0FE3 		movw	r2, #64733
+ 1086 0028 1F2841E3 		movt	r2, 6175
+ 1087 002c 342083E5 		str	r2, [r3, #52]
+ 796:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 797:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Callback function pointer */
+ 798:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     Mipi_Callback = param->p_mipiCallback;
+ 1088              		.loc 1 798 0
+ 1089 0030 042090E5 		ldr	r2, [r0, #4]
+ 1090 0034 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 1091 0038 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 1092 003c 002083E5 		str	r2, [r3]
+ 799:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     Vin_Callback  = param->p_vinCallback;
+ 1093              		.loc 1 799 0
+ 1094 0040 082090E5 		ldr	r2, [r0, #8]
+ 1095 0044 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 1096 0048 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 1097 004c 002083E5 		str	r2, [r3]
+ 1098              	.LVL96:
+ 800:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 801:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* check interrupt type of MIPI */
+ 802:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     for (count = 0; count < MIPI_INTERRUPT_TYPE_NUM; count++)
+ 1099              		.loc 1 802 0
+ 1100 0050 0C20A0E1 		mov	r2, ip
+ 1101 0054 000000EA 		b	.L92
+ 1102              	.LVL97:
+ 1103              	.L93:
+ 1104              		.loc 1 802 0 is_stmt 0 discriminator 2
+ 1105 0058 012082E2 		add	r2, r2, #1
+ 1106              	.LVL98:
+ 1107              	.L92:
+ 1108              		.loc 1 802 0 discriminator 1
+ 1109 005c 120052E3 		cmp	r2, #18
+ 1110 0060 0900008A 		bhi	.L99
+ 803:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 804:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if((int_type & gs_tbl_mipi_interrupt_bit[count][INTERRUPT_FLAG]) ==
+ 1111              		.loc 1 804 0 is_stmt 1
+ 1112 0064 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 1113 0068 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 1114 006c 823183E0 		add	r3, r3, r2, lsl #3
+ 1115 0070 043093E5 		ldr	r3, [r3, #4]
+ 1116 0074 0130D3E1 		bics	r3, r3, r1
+ 805:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             gs_tbl_mipi_interrupt_bit[count][INTERRUPT_FLAG])
+ 806:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 807:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             mipi_int_type |= gs_tbl_mipi_interrupt_bit[count][INTERRUPT_REGBIT];
+ 1117              		.loc 1 807 0
+ 1118 0078 00300003 		movweq	r3, #:lower16:.LANCHOR6
+ 1119 007c 00304003 		movteq	r3, #:upper16:.LANCHOR6
+ 1120 0080 82319307 		ldreq	r3, [r3, r2, lsl #3]
+ 1121 0084 03C08C01 		orreq	ip, ip, r3
+ 1122              	.LVL99:
+ 1123 0088 F2FFFFEA 		b	.L93
+ 1124              	.L99:
+ 1125 008c 0020A0E3 		mov	r2, #0
+ 1126              	.LVL100:
+ 1127 0090 02E0A0E1 		mov	lr, r2
+ 1128 0094 000000EA 		b	.L95
+ 1129              	.LVL101:
+ 1130              	.L96:
+ 808:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 809:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 810:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 811:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* check interrupt type of VIN */
+ 812:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     for (count = 0; count < VIN_INTERRUPT_TYPE_NUM; count++)
+ 1131              		.loc 1 812 0 discriminator 2
+ 1132 0098 012082E2 		add	r2, r2, #1
+ 1133              	.LVL102:
+ 1134              	.L95:
+ 1135              		.loc 1 812 0 is_stmt 0 discriminator 1
+ 1136 009c 060052E3 		cmp	r2, #6
+ 1137 00a0 1200008A 		bhi	.L100
+ 813:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 814:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if((int_type & gs_tbl_vin_interrupt_bit[count][INTERRUPT_FLAG]) ==
+ 1138              		.loc 1 814 0 is_stmt 1
+ 1139 00a4 003000E3 		movw	r3, #:lower16:.LANCHOR7
+ 1140 00a8 003040E3 		movt	r3, #:upper16:.LANCHOR7
+ 1141 00ac 823183E0 		add	r3, r3, r2, lsl #3
+ 1142 00b0 043093E5 		ldr	r3, [r3, #4]
+ 1143 00b4 0140D3E1 		bics	r4, r3, r1
+ 1144 00b8 F6FFFF1A 		bne	.L96
+ 815:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             gs_tbl_vin_interrupt_bit[count][INTERRUPT_FLAG])
+ 816:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 817:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             vin_int_type |= gs_tbl_vin_interrupt_bit[count][INTERRUPT_REGBIT];
+ 1145              		.loc 1 817 0
+ 1146 00bc 004000E3 		movw	r4, #:lower16:.LANCHOR7
+ 1147 00c0 004040E3 		movt	r4, #:upper16:.LANCHOR7
+ 1148 00c4 824194E7 		ldr	r4, [r4, r2, lsl #3]
+ 1149 00c8 04E08EE1 		orr	lr, lr, r4
+ 1150              	.LVL103:
+ 818:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             if (gs_tbl_vin_interrupt_bit[count][1] == VIN_INT_SCANLINE)
+ 1151              		.loc 1 818 0
+ 1152 00cc 010453E3 		cmp	r3, #16777216
+ 1153 00d0 F0FFFF1A 		bne	.L96
+ 819:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             {
+ 820:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 /* This implicit casting is valid because unsigned long is acceptable the value */
+ 821:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****                 VIN.V0SI.BIT.SI = (param->line_num & VNSI_WRITE_MASK);
+ 1154              		.loc 1 821 0
+ 1155 00d4 0C5090E5 		ldr	r5, [r0, #12]
+ 1156 00d8 0F3AA0E3 		mov	r3, #61440
+ 1157 00dc 03384EE3 		movt	r3, 59395
+ 1158 00e0 484093E5 		ldr	r4, [r3, #72]
+ 1159 00e4 1540CAE7 		bfi	r4, r5, #0, #11
+ 1160 00e8 484083E5 		str	r4, [r3, #72]
+ 1161 00ec E9FFFFEA 		b	.L96
+ 1162              	.L100:
+ 822:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             }
+ 823:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 824:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 825:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 826:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Interrupt Enable */
+ 827:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTSTATE.LONG |=  mipi_int_type;  /* Clear all MIPI interrupt state */
+ 1163              		.loc 1 827 0
+ 1164 00f0 093AA0E3 		mov	r3, #36864
+ 1165 00f4 20384EE3 		movt	r3, 59424
+ 1166 00f8 382093E5 		ldr	r2, [r3, #56]
+ 1167              	.LVL104:
+ 1168 00fc 02208CE1 		orr	r2, ip, r2
+ 1169 0100 382083E5 		str	r2, [r3, #56]
+ 828:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0INTS.LONG        |=  vin_int_type;   /* Clear all VIN  interrupt state */
+ 1170              		.loc 1 828 0
+ 1171 0104 0F2AA0E3 		mov	r2, #61440
+ 1172 0108 03284EE3 		movt	r2, 59395
+ 1173 010c 441092E5 		ldr	r1, [r2, #68]
+ 1174              	.LVL105:
+ 1175 0110 01108EE1 		orr	r1, lr, r1
+ 1176 0114 441082E5 		str	r1, [r2, #68]
+ 829:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 830:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 831:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTEN.LONG    |=  mipi_int_type;                         /* Set MIPI interrupt enable 
+ 1177              		.loc 1 831 0
+ 1178 0118 301093E5 		ldr	r1, [r3, #48]
+ 1179 011c 01108CE1 		orr	r1, ip, r1
+ 1180 0120 301083E5 		str	r1, [r3, #48]
+ 832:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG  =  (INTEN_MASK_ALL_SET - mipi_int_type);  /* Mask unused interrupt */
+ 1181              		.loc 1 832 0
+ 1182 0124 DD1C0FE3 		movw	r1, #64733
+ 1183 0128 1F1841E3 		movt	r1, 6175
+ 1184 012c 0C1041E0 		sub	r1, r1, ip
+ 1185 0130 341083E5 		str	r1, [r3, #52]
+ 833:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          |=  vin_int_type;                          /* Set VIN interrupt enable *
+ 1186              		.loc 1 833 0
+ 1187 0134 403092E5 		ldr	r3, [r2, #64]
+ 1188 0138 03E08EE1 		orr	lr, lr, r3
+ 1189              	.LVL106:
+ 1190 013c 40E082E5 		str	lr, [r2, #64]
+ 1191 0140 3080BDE8 		pop	{r4, r5, pc}
+ 1192              		.cfi_endproc
+ 1193              	.LFE5:
+ 1195              		.section	.text.R_MIPI_InterruptDisable,"ax",%progbits
+ 1196              		.align	2
+ 1197              		.global	R_MIPI_InterruptDisable
+ 1198              		.syntax unified
+ 1199              		.arm
+ 1200              		.fpu neon
+ 1202              	R_MIPI_InterruptDisable:
+ 1203              	.LFB6:
+ 834:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_InterruptEnable() */
+ 835:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 836:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 837:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 838:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_InterruptDisable
+ 839:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  Clear the interrupt enable register of MIPI and VIN
+ 840:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    none
+ 841:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : none
+ 842:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 843:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** void R_MIPI_InterruptDisable(void) 
+ 844:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 1204              		.loc 1 844 0
+ 1205              		.cfi_startproc
+ 1206              		@ args = 0, pretend = 0, frame = 0
+ 1207              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1208              		@ link register save eliminated.
+ 845:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Callback function pointer clear */
+ 846:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     Mipi_Callback = 0;
+ 1209              		.loc 1 846 0
+ 1210 0000 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 1211 0004 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 1212 0008 0020A0E3 		mov	r2, #0
+ 1213 000c 002083E5 		str	r2, [r3]
+ 847:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     Vin_Callback  = 0;
+ 1214              		.loc 1 847 0
+ 1215 0010 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 1216 0014 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 1217 0018 002083E5 		str	r2, [r3]
+ 848:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 849:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Interrupt Enable Register claer */
+ 850:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          = VOIE_ALL_CLEAR;      /* Set all VIN interrupt disable */
+ 1218              		.loc 1 850 0
+ 1219 001c 0F3AA0E3 		mov	r3, #61440
+ 1220 0020 03384EE3 		movt	r3, 59395
+ 1221 0024 402083E5 		str	r2, [r3, #64]
+ 851:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTEN.LONG    = INTEN_ALL_CLEAR;     /* Set all MIPI interrupt disable */
+ 1222              		.loc 1 851 0
+ 1223 0028 093AA0E3 		mov	r3, #36864
+ 1224 002c 20384EE3 		movt	r3, 59424
+ 1225 0030 302083E5 		str	r2, [r3, #48]
+ 852:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = INTEN_MASK_ALL_SET;  /* Mask all MIPI interrupt */
+ 1226              		.loc 1 852 0
+ 1227 0034 DD2C0FE3 		movw	r2, #64733
+ 1228 0038 1F2841E3 		movt	r2, 6175
+ 1229 003c 342083E5 		str	r2, [r3, #52]
+ 1230 0040 1EFF2FE1 		bx	lr
+ 1231              		.cfi_endproc
+ 1232              	.LFE6:
+ 1234              		.section	.text.R_MIPI_GetInfo,"ax",%progbits
+ 1235              		.align	2
+ 1236              		.global	R_MIPI_GetInfo
+ 1237              		.syntax unified
+ 1238              		.arm
+ 1239              		.fpu neon
+ 1241              	R_MIPI_GetInfo:
+ 1242              	.LFB7:
+ 853:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_InterruptDisable() */
+ 854:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 855:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 856:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 857:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_GetInfo
+ 858:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+ 859:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Getting registers status (Line Count/Field Status/Frame Buffer Status).
+ 860:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    infoType : registers status
+ 861:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : Error code
+ 862:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 863:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** e_mipi_error_t R_MIPI_GetInfo(st_vin_info_type_t * infoType) 
+ 864:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 1243              		.loc 1 864 0
+ 1244              		.cfi_startproc
+ 1245              		@ args = 0, pretend = 0, frame = 0
+ 1246              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1247              		@ link register save eliminated.
+ 1248              	.LVL107:
+ 1249 0000 0020A0E1 		mov	r2, r0
+ 1250              	.LVL108:
+ 865:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr = MIPI_OK;
+ 866:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 867:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check MIPI State */
+ 868:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( ( gs_mipi_state != MIPI_STOP ) && ( gs_mipi_state != MIPI_CAPTURE ) ){
+ 1251              		.loc 1 868 0
+ 1252 0004 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 1253 0008 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 1254 000c 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1255 0010 013043E2 		sub	r3, r3, #1
+ 1256 0014 7330EFE6 		uxtb	r3, r3
+ 1257 0018 010053E3 		cmp	r3, #1
+ 1258 001c 0C00009A 		bls	.L105
+ 869:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         merr = MIPI_STATUS_ERR;
+ 1259              		.loc 1 869 0
+ 1260 0020 0100A0E3 		mov	r0, #1
+ 1261              	.LVL109:
+ 1262              	.L103:
+ 870:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 871:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 872:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Set Status */
+ 873:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     infoType->vin_nowcaptureline  = VIN.V0LC.BIT.LC; /* Line Count */
+ 1263              		.loc 1 873 0
+ 1264 0024 0F3AA0E3 		mov	r3, #61440
+ 1265 0028 03384EE3 		movt	r3, 59395
+ 1266 002c 3C1093E5 		ldr	r1, [r3, #60]
+ 1267 0030 5110EBE7 		ubfx	r1, r1, #0, #12
+ 1268 0034 B010C2E1 		strh	r1, [r2]	@ movhi
+ 874:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     infoType->vin_nowcapturefield = VIN.V0MS.BIT.FS; /* Field Status */
+ 1269              		.loc 1 874 0
+ 1270 0038 041093E5 		ldr	r1, [r3, #4]
+ 1271 003c 5111E0E7 		ubfx	r1, r1, #2, #1
+ 1272 0040 0210C2E5 		strb	r1, [r2, #2]
+ 875:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     infoType->vin_nowcapturebase  = VIN.V0MS.BIT.FBS;/* Frame Buffer Status */
+ 1273              		.loc 1 875 0
+ 1274 0044 043093E5 		ldr	r3, [r3, #4]
+ 1275 0048 D331E1E7 		ubfx	r3, r3, #3, #2
+ 1276 004c 0330C2E5 		strb	r3, [r2, #3]
+ 876:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 877:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return merr;
+ 878:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_GetInfo() */
+ 1277              		.loc 1 878 0
+ 1278 0050 1EFF2FE1 		bx	lr
+ 1279              	.LVL110:
+ 1280              	.L105:
+ 865:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 1281              		.loc 1 865 0
+ 1282 0054 0000A0E3 		mov	r0, #0
+ 1283              	.LVL111:
+ 1284 0058 F1FFFFEA 		b	.L103
+ 1285              		.cfi_endproc
+ 1286              	.LFE7:
+ 1288              		.section	.text.R_MIPI_CaptureStart,"ax",%progbits
+ 1289              		.align	2
+ 1290              		.global	R_MIPI_CaptureStart
+ 1291              		.syntax unified
+ 1292              		.arm
+ 1293              		.fpu neon
+ 1295              	R_MIPI_CaptureStart:
+ 1296              	.LFB8:
+ 879:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 880:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 881:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 882:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_CaptureStart
+ 883:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+ 884:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Setting capture mode( Single or Continuous ).
+ 885:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Capture start.
+ 886:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    captureMode : Single or Continuous
+ 887:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : Error code
+ 888:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 889:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** e_mipi_error_t R_MIPI_CaptureStart(const e_mipi_capture_mode_t captureMode) 
+ 890:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 1297              		.loc 1 890 0
+ 1298              		.cfi_startproc
+ 1299              		@ args = 0, pretend = 0, frame = 0
+ 1300              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1301              	.LVL112:
+ 1302 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 1303              		.cfi_def_cfa_offset 4
+ 1304              		.cfi_offset 14, -4
+ 1305              	.LVL113:
+ 891:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr = MIPI_OK;
+ 892:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t intstate;
+ 893:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 894:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This casting is valid because uint32_t and unsigned long is same byte length */
+ 895:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t vin_intf = VIN.V0IE.LONG;
+ 1306              		.loc 1 895 0
+ 1307 0004 0F2AA0E3 		mov	r2, #61440
+ 1308 0008 03284EE3 		movt	r2, 59395
+ 1309 000c 40C092E5 		ldr	ip, [r2, #64]
+ 1310              	.LVL114:
+ 896:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 897:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length */
+ 898:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t mipi_intf = CSI2LINK.INTCLOSE.LONG;
+ 1311              		.loc 1 898 0
+ 1312 0010 093AA0E3 		mov	r3, #36864
+ 1313 0014 20384EE3 		movt	r3, 59424
+ 1314 0018 341093E5 		ldr	r1, [r3, #52]
+ 1315              	.LVL115:
+ 899:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 900:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 901:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG = 0;
+ 1316              		.loc 1 901 0
+ 1317 001c 00E0A0E3 		mov	lr, #0
+ 1318 0020 40E082E5 		str	lr, [r2, #64]
+ 902:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 903:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 904:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = INTEN_MASK_ALL_SET;
+ 1319              		.loc 1 904 0
+ 1320 0024 DD2C0FE3 		movw	r2, #64733
+ 1321 0028 1F2841E3 		movt	r2, 6175
+ 1322 002c 342083E5 		str	r2, [r3, #52]
+ 905:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 906:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check MIPI State */
+ 907:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( ( gs_mipi_state != MIPI_STOP ) && ( gs_mipi_state != MIPI_CAPTURE ) )
+ 1323              		.loc 1 907 0
+ 1324 0030 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 1325 0034 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 1326 0038 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1327 003c 013043E2 		sub	r3, r3, #1
+ 1328 0040 7330EFE6 		uxtb	r3, r3
+ 1329 0044 010053E3 		cmp	r3, #1
+ 1330 0048 2800009A 		bls	.L113
+ 908:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 909:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         merr = MIPI_STATUS_ERR;
+ 1331              		.loc 1 909 0
+ 1332 004c 0120A0E3 		mov	r2, #1
+ 1333              	.L107:
+ 1334              	.LVL116:
+ 910:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 911:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 912:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( merr == MIPI_OK )
+ 1335              		.loc 1 912 0
+ 1336 0050 000052E3 		cmp	r2, #0
+ 1337 0054 1D00001A 		bne	.L108
+ 913:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 914:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 915:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0FC.BIT.CC = 0;
+ 1338              		.loc 1 915 0
+ 1339 0058 0F3AA0E3 		mov	r3, #61440
+ 1340 005c 03384EE3 		movt	r3, 59395
+ 1341 0060 08E093E5 		ldr	lr, [r3, #8]
+ 1342 0064 9FE0C1E7 		bfc	lr, #1, #1
+ 1343 0068 08E083E5 		str	lr, [r3, #8]
+ 916:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 917:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 918:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0FC.BIT.SC = 0;
+ 1344              		.loc 1 918 0
+ 1345 006c 08E093E5 		ldr	lr, [r3, #8]
+ 1346 0070 1FE0C0E7 		bfc	lr, #0, #1
+ 1347 0074 08E083E5 		str	lr, [r3, #8]
+ 919:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 920:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 921:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.ME = 1; /* Capture Enable */
+ 1348              		.loc 1 921 0
+ 1349 0078 00E093E5 		ldr	lr, [r3]
+ 1350 007c 01E08EE3 		orr	lr, lr, #1
+ 1351 0080 00E083E5 		str	lr, [r3]
+ 922:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 923:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if (captureMode == MIPI_SINGLE_MODE)
+ 1352              		.loc 1 923 0
+ 1353 0084 000050E3 		cmp	r0, #0
+ 1354 0088 1A00001A 		bne	.L109
+ 924:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 925:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 926:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             VIN.V0FC.BIT.SC = 1; /* Single Capture Mode */
+ 1355              		.loc 1 926 0
+ 1356 008c 0F3AA0E3 		mov	r3, #61440
+ 1357 0090 03384EE3 		movt	r3, 59395
+ 1358 0094 080093E5 		ldr	r0, [r3, #8]
+ 1359              	.LVL117:
+ 1360 0098 010080E3 		orr	r0, r0, #1
+ 1361 009c 080083E5 		str	r0, [r3, #8]
+ 1362              	.L110:
+ 927:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 928:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         else
+ 929:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+ 930:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             /* This implicit casting is valid because unsigned long is acceptable the value */
+ 931:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             VIN.V0FC.BIT.CC = 1;
+ 932:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 933:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 934:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length *
+ 935:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         intstate               = CSI2LINK.INTSTATE.LONG;
+ 1363              		.loc 1 935 0
+ 1364 00a0 093AA0E3 		mov	r3, #36864
+ 1365 00a4 20384EE3 		movt	r3, 59424
+ 1366 00a8 380093E5 		ldr	r0, [r3, #56]
+ 1367              	.LVL118:
+ 936:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 937:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length *
+ 938:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         CSI2LINK.INTSTATE.LONG = intstate;
+ 1368              		.loc 1 938 0
+ 1369 00ac 380083E5 		str	r0, [r3, #56]
+ 939:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 940:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length *
+ 941:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         intstate               = VIN.V0INTS.LONG;
+ 1370              		.loc 1 941 0
+ 1371 00b0 0F3AA0E3 		mov	r3, #61440
+ 1372 00b4 03384EE3 		movt	r3, 59395
+ 1373 00b8 440093E5 		ldr	r0, [r3, #68]
+ 1374              	.LVL119:
+ 942:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 943:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length *
+ 944:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0INTS.LONG        = intstate;
+ 1375              		.loc 1 944 0
+ 1376 00bc 440083E5 		str	r0, [r3, #68]
+ 945:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         gs_mipi_state             = MIPI_CAPTURE;
+ 1377              		.loc 1 945 0
+ 1378 00c0 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 1379 00c4 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 1380 00c8 0200A0E3 		mov	r0, #2
+ 1381              	.LVL120:
+ 1382 00cc 0000C3E5 		strb	r0, [r3]
+ 1383              	.L108:
+ 946:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 947:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 948:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 949:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          = vin_intf;
+ 1384              		.loc 1 949 0
+ 1385 00d0 0F3AA0E3 		mov	r3, #61440
+ 1386 00d4 03384EE3 		movt	r3, 59395
+ 1387 00d8 40C083E5 		str	ip, [r3, #64]
+ 950:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 951:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length */
+ 952:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = mipi_intf;
+ 1388              		.loc 1 952 0
+ 1389 00dc 093AA0E3 		mov	r3, #36864
+ 1390 00e0 20384EE3 		movt	r3, 59424
+ 1391 00e4 341083E5 		str	r1, [r3, #52]
+ 953:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 954:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return merr;
+ 955:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_CaptureStart() */
+ 1392              		.loc 1 955 0
+ 1393 00e8 0200A0E1 		mov	r0, r2
+ 1394 00ec 04F09DE4 		ldr	pc, [sp], #4
+ 1395              	.LVL121:
+ 1396              	.L113:
+ 891:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t intstate;
+ 1397              		.loc 1 891 0
+ 1398 00f0 0E20A0E1 		mov	r2, lr
+ 1399 00f4 D5FFFFEA 		b	.L107
+ 1400              	.LVL122:
+ 1401              	.L109:
+ 931:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+ 1402              		.loc 1 931 0
+ 1403 00f8 0F3AA0E3 		mov	r3, #61440
+ 1404 00fc 03384EE3 		movt	r3, 59395
+ 1405 0100 080093E5 		ldr	r0, [r3, #8]
+ 1406              	.LVL123:
+ 1407 0104 020080E3 		orr	r0, r0, #2
+ 1408 0108 080083E5 		str	r0, [r3, #8]
+ 1409 010c E3FFFFEA 		b	.L110
+ 1410              		.cfi_endproc
+ 1411              	.LFE8:
+ 1413              		.section	.text.R_MIPI_CaptureStop,"ax",%progbits
+ 1414              		.align	2
+ 1415              		.global	R_MIPI_CaptureStop
+ 1416              		.syntax unified
+ 1417              		.arm
+ 1418              		.fpu neon
+ 1420              	R_MIPI_CaptureStop:
+ 1421              	.LFB9:
+ 956:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 957:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+ 958:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+ 959:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_CaptureStop
+ 960:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+ 961:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Capture stop.
+ 962:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    none
+ 963:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : Error code
+ 964:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+ 965:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** e_mipi_error_t R_MIPI_CaptureStop(void) 
+ 966:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 1422              		.loc 1 966 0
+ 1423              		.cfi_startproc
+ 1424              		@ args = 0, pretend = 0, frame = 0
+ 1425              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1426              		@ link register save eliminated.
+ 1427              	.LVL124:
+ 967:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     e_mipi_error_t merr      = MIPI_OK;
+ 968:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 969:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This casting is valid because uint32_t and unsigned long is same byte length */
+ 970:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t     vin_intf  = VIN.V0IE.LONG;
+ 1428              		.loc 1 970 0
+ 1429 0000 0F2AA0E3 		mov	r2, #61440
+ 1430 0004 03284EE3 		movt	r2, 59395
+ 1431 0008 40C092E5 		ldr	ip, [r2, #64]
+ 1432              	.LVL125:
+ 971:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 972:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length */
+ 973:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t     mipi_intf = CSI2LINK.INTCLOSE.LONG;
+ 1433              		.loc 1 973 0
+ 1434 000c 093AA0E3 		mov	r3, #36864
+ 1435 0010 20384EE3 		movt	r3, 59424
+ 1436 0014 341093E5 		ldr	r1, [r3, #52]
+ 1437              	.LVL126:
+ 974:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 975:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 976:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          = 0;
+ 1438              		.loc 1 976 0
+ 1439 0018 0000A0E3 		mov	r0, #0
+ 1440 001c 400082E5 		str	r0, [r2, #64]
+ 977:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 978:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 979:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = INTEN_MASK_ALL_SET;
+ 1441              		.loc 1 979 0
+ 1442 0020 DD2C0FE3 		movw	r2, #64733
+ 1443 0024 1F2841E3 		movt	r2, 6175
+ 1444 0028 342083E5 		str	r2, [r3, #52]
+ 980:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 981:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* Check MIPI State */
+ 982:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( gs_mipi_state != MIPI_CAPTURE )
+ 1445              		.loc 1 982 0
+ 1446 002c 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 1447 0030 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 1448 0034 0030D3E5 		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1449 0038 020053E3 		cmp	r3, #2
+ 983:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 984:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         merr = MIPI_STATUS_ERR;
+ 1450              		.loc 1 984 0
+ 1451 003c 0100A013 		movne	r0, #1
+ 1452              	.L115:
+ 1453              	.LVL127:
+ 985:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 986:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 987:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if( merr == MIPI_OK )
+ 1454              		.loc 1 987 0
+ 1455 0040 000050E3 		cmp	r0, #0
+ 1456 0044 0800001A 		bne	.L116
+ 988:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+ 989:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This implicit casting is valid because unsigned long is acceptable the value */
+ 990:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         VIN.V0MC.BIT.ME = 0;         /* Capture Disable */
+ 1457              		.loc 1 990 0
+ 1458 0048 0F3AA0E3 		mov	r3, #61440
+ 1459 004c 03384EE3 		movt	r3, 59395
+ 1460 0050 002093E5 		ldr	r2, [r3]
+ 1461 0054 1F20C0E7 		bfc	r2, #0, #1
+ 1462 0058 002083E5 		str	r2, [r3]
+ 991:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         gs_mipi_state      = MIPI_STOP;
+ 1463              		.loc 1 991 0
+ 1464 005c 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 1465 0060 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 1466 0064 0120A0E3 		mov	r2, #1
+ 1467 0068 0020C3E5 		strb	r2, [r3]
+ 1468              	.L116:
+ 992:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+ 993:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 994:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+ 995:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0IE.LONG          = vin_intf;
+ 1469              		.loc 1 995 0
+ 1470 006c 0F3AA0E3 		mov	r3, #61440
+ 1471 0070 03384EE3 		movt	r3, 59395
+ 1472 0074 40C083E5 		str	ip, [r3, #64]
+ 996:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 997:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length */
+ 998:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTCLOSE.LONG = mipi_intf;
+ 1473              		.loc 1 998 0
+ 1474 0078 093AA0E3 		mov	r3, #36864
+ 1475 007c 20384EE3 		movt	r3, 59424
+ 1476 0080 341083E5 		str	r1, [r3, #52]
+ 999:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1000:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     return merr;
+1001:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_CaptureStop() */
+ 1477              		.loc 1 1001 0
+ 1478 0084 1EFF2FE1 		bx	lr
+ 1479              		.cfi_endproc
+ 1480              	.LFE9:
+ 1482              		.section	.text.R_MIPI_InterruptHandler,"ax",%progbits
+ 1483              		.align	2
+ 1484              		.global	R_MIPI_InterruptHandler
+ 1485              		.syntax unified
+ 1486              		.arm
+ 1487              		.fpu neon
+ 1489              	R_MIPI_InterruptHandler:
+ 1490              	.LFB10:
+1002:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1003:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+1004:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+1005:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_MIPI_InterruptHandler
+1006:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+1007:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Check MIPI interrupt type.
+1008:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Call the callback funtion.
+1009:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    int_sense   : sense
+1010:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : none
+1011:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+1012:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** void R_MIPI_InterruptHandler( uint32_t int_sense ) 
+1013:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 1491              		.loc 1 1013 0
+ 1492              		.cfi_startproc
+ 1493              		@ args = 0, pretend = 0, frame = 8
+ 1494              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1495              	.LVL128:
+ 1496 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 1497              		.cfi_def_cfa_offset 4
+ 1498              		.cfi_offset 14, -4
+ 1499 0004 0CD04DE2 		sub	sp, sp, #12
+ 1500              		.cfi_def_cfa_offset 16
+ 1501              	.LVL129:
+1014:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     volatile uint32_t intdata;
+1015:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t          mipi_cnt;
+1016:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t          mipi_int_type = 0;
+1017:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1018:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length */
+1019:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     intdata                = CSI2LINK.INTSTATE.LONG;
+ 1502              		.loc 1 1019 0
+ 1503 0008 093AA0E3 		mov	r3, #36864
+ 1504 000c 20384EE3 		movt	r3, 59424
+ 1505 0010 382093E5 		ldr	r2, [r3, #56]
+ 1506 0014 04208DE5 		str	r2, [sp, #4]
+1020:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1021:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because uint32_t and unsigned long is same 1byte length */
+1022:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     CSI2LINK.INTSTATE.LONG = intdata;    /* Clear interrupt status */
+ 1507              		.loc 1 1022 0
+ 1508 0018 04209DE5 		ldr	r2, [sp, #4]
+ 1509 001c 382083E5 		str	r2, [r3, #56]
+ 1510              	.LVL130:
+1016:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 1511              		.loc 1 1016 0
+ 1512 0020 0000A0E3 		mov	r0, #0
+ 1513              	.LVL131:
+1023:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1024:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* check interrupt type of MIPI */
+1025:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     for (mipi_cnt = 0; mipi_cnt < MIPI_INTERRUPT_TYPE_NUM; mipi_cnt++)
+ 1514              		.loc 1 1025 0
+ 1515 0024 0030A0E1 		mov	r3, r0
+ 1516 0028 000000EA 		b	.L119
+ 1517              	.LVL132:
+ 1518              	.L120:
+ 1519              		.loc 1 1025 0 is_stmt 0 discriminator 2
+ 1520 002c 013083E2 		add	r3, r3, #1
+ 1521              	.LVL133:
+ 1522              	.L119:
+ 1523              		.loc 1 1025 0 discriminator 1
+ 1524 0030 120053E3 		cmp	r3, #18
+ 1525 0034 0B00008A 		bhi	.L124
+1026:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+1027:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if((intdata & gs_tbl_mipi_interrupt_bit[mipi_cnt][INTERRUPT_REGBIT]) ==
+ 1526              		.loc 1 1027 0 is_stmt 1
+ 1527 0038 002000E3 		movw	r2, #:lower16:.LANCHOR6
+ 1528 003c 002040E3 		movt	r2, #:upper16:.LANCHOR6
+ 1529 0040 832192E7 		ldr	r2, [r2, r3, lsl #3]
+ 1530 0044 04109DE5 		ldr	r1, [sp, #4]
+ 1531 0048 0120D2E1 		bics	r2, r2, r1
+ 1532 004c F6FFFF1A 		bne	.L120
+1028:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             gs_tbl_mipi_interrupt_bit[mipi_cnt][INTERRUPT_REGBIT])
+1029:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+1030:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             mipi_int_type |= gs_tbl_mipi_interrupt_bit[mipi_cnt][INTERRUPT_FLAG];
+ 1533              		.loc 1 1030 0
+ 1534 0050 002000E3 		movw	r2, #:lower16:.LANCHOR6
+ 1535 0054 002040E3 		movt	r2, #:upper16:.LANCHOR6
+ 1536 0058 832182E0 		add	r2, r2, r3, lsl #3
+ 1537 005c 042092E5 		ldr	r2, [r2, #4]
+ 1538 0060 020080E1 		orr	r0, r0, r2
+ 1539              	.LVL134:
+ 1540 0064 F0FFFFEA 		b	.L120
+ 1541              	.L124:
+1031:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+1032:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+1033:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1034:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* If callback function is set, call it */
+1035:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if (Mipi_Callback != NULL)
+ 1542              		.loc 1 1035 0
+ 1543 0068 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 1544              	.LVL135:
+ 1545 006c 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 1546 0070 003093E5 		ldr	r3, [r3]
+ 1547 0074 000053E3 		cmp	r3, #0
+ 1548 0078 0000000A 		beq	.L118
+1036:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+1037:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This casting is valid because the value never out of range of e_mipi_interrupt_type_t */
+1038:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         Mipi_Callback((e_mipi_interrupt_type_t)mipi_int_type);
+ 1549              		.loc 1 1038 0
+ 1550 007c 33FF2FE1 		blx	r3
+ 1551              	.LVL136:
+ 1552              	.L118:
+1039:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+1040:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_MIPI_InterruptHandler() */
+ 1553              		.loc 1 1040 0
+ 1554 0080 0CD08DE2 		add	sp, sp, #12
+ 1555              		.cfi_def_cfa_offset 4
+ 1556              		@ sp needed
+ 1557 0084 04F09DE4 		ldr	pc, [sp], #4
+ 1558              		.cfi_endproc
+ 1559              	.LFE10:
+ 1561              		.section	.text.R_VIN_InterruptHandler,"ax",%progbits
+ 1562              		.align	2
+ 1563              		.global	R_VIN_InterruptHandler
+ 1564              		.syntax unified
+ 1565              		.arm
+ 1566              		.fpu neon
+ 1568              	R_VIN_InterruptHandler:
+ 1569              	.LFB11:
+1041:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1042:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** /**********************************************************************
+1043:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *
+1044:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Function Name: R_VIN_InterruptHandler
+1045:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Description :  This function performs the following processing
+1046:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Check VIN interrupt type.
+1047:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** *                - Call the callback funtion.
+1048:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Arguments :    int_sense   : sense
+1049:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** * Return Value : none
+1050:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** **********************************************************************/
+1051:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** void R_VIN_InterruptHandler( uint32_t int_sense ) 
+1052:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** {
+ 1570              		.loc 1 1052 0
+ 1571              		.cfi_startproc
+ 1572              		@ args = 0, pretend = 0, frame = 8
+ 1573              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1574              	.LVL137:
+ 1575 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 1576              		.cfi_def_cfa_offset 4
+ 1577              		.cfi_offset 14, -4
+ 1578 0004 0CD04DE2 		sub	sp, sp, #12
+ 1579              		.cfi_def_cfa_offset 16
+ 1580              	.LVL138:
+1053:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     volatile uint32_t intdata;
+1054:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t          vin_cnt;
+1055:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     uint32_t          vin_int_type = 0;
+1056:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1057:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This casting is valid because uint32_t and unsigned long is same byte length */
+1058:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     intdata         = VIN.V0INTS.LONG;
+ 1581              		.loc 1 1058 0
+ 1582 0008 0F3AA0E3 		mov	r3, #61440
+ 1583 000c 03384EE3 		movt	r3, 59395
+ 1584 0010 442093E5 		ldr	r2, [r3, #68]
+ 1585 0014 04208DE5 		str	r2, [sp, #4]
+1059:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1060:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* This implicit casting is valid because unsigned long is acceptable the value */
+1061:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     VIN.V0INTS.LONG = intdata;   /* Clear interrupt status */
+ 1586              		.loc 1 1061 0
+ 1587 0018 04209DE5 		ldr	r2, [sp, #4]
+ 1588 001c 442083E5 		str	r2, [r3, #68]
+ 1589              	.LVL139:
+1055:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+ 1590              		.loc 1 1055 0
+ 1591 0020 0000A0E3 		mov	r0, #0
+ 1592              	.LVL140:
+1062:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1063:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* check interrupt type of VIN */
+1064:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     for (vin_cnt = 0; vin_cnt < VIN_INTERRUPT_TYPE_NUM; vin_cnt++)
+ 1593              		.loc 1 1064 0
+ 1594 0024 0030A0E1 		mov	r3, r0
+ 1595 0028 000000EA 		b	.L126
+ 1596              	.LVL141:
+ 1597              	.L127:
+ 1598              		.loc 1 1064 0 is_stmt 0 discriminator 2
+ 1599 002c 013083E2 		add	r3, r3, #1
+ 1600              	.LVL142:
+ 1601              	.L126:
+ 1602              		.loc 1 1064 0 discriminator 1
+ 1603 0030 060053E3 		cmp	r3, #6
+ 1604 0034 0B00008A 		bhi	.L131
+1065:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+1066:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         if((intdata & gs_tbl_vin_interrupt_bit[vin_cnt][INTERRUPT_REGBIT]) ==
+ 1605              		.loc 1 1066 0 is_stmt 1
+ 1606 0038 002000E3 		movw	r2, #:lower16:.LANCHOR7
+ 1607 003c 002040E3 		movt	r2, #:upper16:.LANCHOR7
+ 1608 0040 832192E7 		ldr	r2, [r2, r3, lsl #3]
+ 1609 0044 04109DE5 		ldr	r1, [sp, #4]
+ 1610 0048 0120D2E1 		bics	r2, r2, r1
+ 1611 004c F6FFFF1A 		bne	.L127
+1067:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             gs_tbl_vin_interrupt_bit[vin_cnt][INTERRUPT_REGBIT])
+1068:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         {
+1069:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****             vin_int_type |= gs_tbl_vin_interrupt_bit[vin_cnt][INTERRUPT_FLAG];
+ 1612              		.loc 1 1069 0
+ 1613 0050 002000E3 		movw	r2, #:lower16:.LANCHOR7
+ 1614 0054 002040E3 		movt	r2, #:upper16:.LANCHOR7
+ 1615 0058 832182E0 		add	r2, r2, r3, lsl #3
+ 1616 005c 042092E5 		ldr	r2, [r2, #4]
+ 1617 0060 020080E1 		orr	r0, r0, r2
+ 1618              	.LVL143:
+ 1619 0064 F0FFFFEA 		b	.L127
+ 1620              	.L131:
+1070:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         }
+1071:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+1072:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** 
+1073:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     /* If callback function is set, call it */
+1074:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     if (Vin_Callback != NULL)
+ 1621              		.loc 1 1074 0
+ 1622 0068 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 1623              	.LVL144:
+ 1624 006c 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 1625 0070 003093E5 		ldr	r3, [r3]
+ 1626 0074 000053E3 		cmp	r3, #0
+ 1627 0078 0000000A 		beq	.L125
+1075:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     {
+1076:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         /* This casting is valid because the value never out of range of e_mipi_interrupt_type_t */
+1077:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****         Vin_Callback((e_mipi_interrupt_type_t)vin_int_type);
+ 1628              		.loc 1 1077 0
+ 1629 007c 33FF2FE1 		blx	r3
+ 1630              	.LVL145:
+ 1631              	.L125:
+1078:../generate/sc_drivers/r_mipi/src/r_mipi_api.c ****     }
+1079:../generate/sc_drivers/r_mipi/src/r_mipi_api.c **** }   /* End of function R_VIN_InterruptHandler() */
+ 1632              		.loc 1 1079 0
+ 1633 0080 0CD08DE2 		add	sp, sp, #12
+ 1634              		.cfi_def_cfa_offset 4
+ 1635              		@ sp needed
+ 1636 0084 04F09DE4 		ldr	pc, [sp], #4
+ 1637              		.cfi_endproc
+ 1638              	.LFE11:
+ 1640              		.section	.bss.Mipi_Callback,"aw",%nobits
+ 1641              		.align	2
+ 1642              		.set	.LANCHOR4,. + 0
+ 1645              	Mipi_Callback:
+ 1646 0000 00000000 		.space	4
+ 1647              		.section	.bss.Vin_Callback,"aw",%nobits
+ 1648              		.align	2
+ 1649              		.set	.LANCHOR5,. + 0
+ 1652              	Vin_Callback:
+ 1653 0000 00000000 		.space	4
+ 1654              		.section	.bss.gs_mipi_state,"aw",%nobits
+ 1655              		.set	.LANCHOR0,. + 0
+ 1658              	gs_mipi_state:
+ 1659 0000 00       		.space	1
+ 1660              		.section	.rodata.gs_cnvtbl_inputformat_toinf,"a",%progbits
+ 1661              		.align	2
+ 1662              		.set	.LANCHOR2,. + 0
+ 1665              	gs_cnvtbl_inputformat_toinf:
+ 1666 0000 01       		.byte	1
+ 1667 0001 01       		.byte	1
+ 1668 0002 03       		.byte	3
+ 1669 0003 06       		.byte	6
+ 1670 0004 04       		.byte	4
+ 1671              		.section	.rodata.gs_cnvtbl_interlace_toim,"a",%progbits
+ 1672              		.align	2
+ 1673              		.set	.LANCHOR3,. + 0
+ 1676              	gs_cnvtbl_interlace_toim:
+ 1677 0000 00       		.byte	0
+ 1678 0001 02       		.byte	2
+ 1679 0002 01       		.byte	1
+ 1680 0003 01       		.byte	1
+ 1681              		.section	.rodata.gs_tbl_mipi_interrupt_bit,"a",%progbits
+ 1682              		.align	2
+ 1683              		.set	.LANCHOR6,. + 0
+ 1686              	gs_tbl_mipi_interrupt_bit:
+ 1687 0000 00000010 		.word	268435456
+ 1688 0004 01000000 		.word	1
+ 1689 0008 00000008 		.word	134217728
+ 1690 000c 02000000 		.word	2
+ 1691 0010 00001000 		.word	1048576
+ 1692 0014 04000000 		.word	4
+ 1693 0018 00000800 		.word	524288
+ 1694 001c 08000000 		.word	8
+ 1695 0020 00000400 		.word	262144
+ 1696 0024 10000000 		.word	16
+ 1697 0028 00000200 		.word	131072
+ 1698 002c 20000000 		.word	32
+ 1699 0030 00000100 		.word	65536
+ 1700 0034 40000000 		.word	64
+ 1701 0038 00800000 		.word	32768
+ 1702 003c 80000000 		.word	128
+ 1703 0040 00400000 		.word	16384
+ 1704 0044 00010000 		.word	256
+ 1705 0048 00200000 		.word	8192
+ 1706 004c 00020000 		.word	512
+ 1707 0050 00100000 		.word	4096
+ 1708 0054 00040000 		.word	1024
+ 1709 0058 00080000 		.word	2048
+ 1710 005c 00080000 		.word	2048
+ 1711 0060 00040000 		.word	1024
+ 1712 0064 00100000 		.word	4096
+ 1713 0068 80000000 		.word	128
+ 1714 006c 00200000 		.word	8192
+ 1715 0070 40000000 		.word	64
+ 1716 0074 00400000 		.word	16384
+ 1717 0078 10000000 		.word	16
+ 1718 007c 00800000 		.word	32768
+ 1719 0080 08000000 		.word	8
+ 1720 0084 00000100 		.word	65536
+ 1721 0088 04000000 		.word	4
+ 1722 008c 00000200 		.word	131072
+ 1723 0090 01000000 		.word	1
+ 1724 0094 00000400 		.word	262144
+ 1725              		.section	.rodata.gs_tbl_vin_interrupt_bit,"a",%progbits
+ 1726              		.align	2
+ 1727              		.set	.LANCHOR7,. + 0
+ 1730              	gs_tbl_vin_interrupt_bit:
+ 1731 0000 00000080 		.word	-2147483648
+ 1732 0004 00001000 		.word	1048576
+ 1733 0008 00000200 		.word	131072
+ 1734 000c 00002000 		.word	2097152
+ 1735 0010 00000100 		.word	65536
+ 1736 0014 00004000 		.word	4194304
+ 1737 0018 10000000 		.word	16
+ 1738 001c 00008000 		.word	8388608
+ 1739 0020 04000000 		.word	4
+ 1740 0024 00000001 		.word	16777216
+ 1741 0028 02000000 		.word	2
+ 1742 002c 00000002 		.word	33554432
+ 1743 0030 01000000 		.word	1
+ 1744 0034 00000004 		.word	67108864
+ 1745              		.section	.rodata.gs_tbl_vin_stride_check,"a",%progbits
+ 1746              		.align	2
+ 1747              		.set	.LANCHOR1,. + 0
+ 1750              	gs_tbl_vin_stride_check:
+ 1751 0000 00000000 		.word	0
+ 1752 0004 3F000000 		.word	63
+ 1753 0008 02000000 		.word	2
+ 1754 000c 7F000000 		.word	127
+ 1755 0010 03000000 		.word	3
+ 1756 0014 7F000000 		.word	127
+ 1757 0018 20000000 		.word	32
+ 1758 001c 3F000000 		.word	63
+ 1759              		.text
+ 1760              	.Letext0:
+ 1761              		.file 2 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 1762              		.file 3 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 1763              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1764              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1765              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1766              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1767              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 1768              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1769              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1770              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 1771              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 1772              		.file 13 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_mipi_api.c
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:17     .text.R_MIPI_Initialize:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:23     .text.R_MIPI_Initialize:00000000 R_MIPI_Initialize
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1655   .bss.gs_mipi_state:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:64     .text.R_MIPI_Open:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:70     .text.R_MIPI_Open:00000000 R_MIPI_Open
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:356    .text.R_MIPI_Close:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:362    .text.R_MIPI_Close:00000000 R_MIPI_Close
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:456    .text.R_MIPI_Setup:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:462    .text.R_MIPI_Setup:00000000 R_MIPI_Setup
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1747   .rodata.gs_tbl_vin_stride_check:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1662   .rodata.gs_cnvtbl_inputformat_toinf:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1673   .rodata.gs_cnvtbl_interlace_toim:00000000 .LANCHOR3
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:918    .text.R_MIPI_SetBufferAdr:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:924    .text.R_MIPI_SetBufferAdr:00000000 R_MIPI_SetBufferAdr
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1054   .text.R_MIPI_InterruptEnable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1060   .text.R_MIPI_InterruptEnable:00000000 R_MIPI_InterruptEnable
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1642   .bss.Mipi_Callback:00000000 .LANCHOR4
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1649   .bss.Vin_Callback:00000000 .LANCHOR5
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1683   .rodata.gs_tbl_mipi_interrupt_bit:00000000 .LANCHOR6
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1727   .rodata.gs_tbl_vin_interrupt_bit:00000000 .LANCHOR7
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1196   .text.R_MIPI_InterruptDisable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1202   .text.R_MIPI_InterruptDisable:00000000 R_MIPI_InterruptDisable
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1235   .text.R_MIPI_GetInfo:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1241   .text.R_MIPI_GetInfo:00000000 R_MIPI_GetInfo
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1289   .text.R_MIPI_CaptureStart:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1295   .text.R_MIPI_CaptureStart:00000000 R_MIPI_CaptureStart
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1414   .text.R_MIPI_CaptureStop:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1420   .text.R_MIPI_CaptureStop:00000000 R_MIPI_CaptureStop
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1483   .text.R_MIPI_InterruptHandler:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1489   .text.R_MIPI_InterruptHandler:00000000 R_MIPI_InterruptHandler
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1562   .text.R_VIN_InterruptHandler:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1568   .text.R_VIN_InterruptHandler:00000000 R_VIN_InterruptHandler
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1641   .bss.Mipi_Callback:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1645   .bss.Mipi_Callback:00000000 Mipi_Callback
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1648   .bss.Vin_Callback:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1652   .bss.Vin_Callback:00000000 Vin_Callback
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1658   .bss.gs_mipi_state:00000000 gs_mipi_state
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1659   .bss.gs_mipi_state:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1661   .rodata.gs_cnvtbl_inputformat_toinf:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1665   .rodata.gs_cnvtbl_inputformat_toinf:00000000 gs_cnvtbl_inputformat_toinf
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1672   .rodata.gs_cnvtbl_interlace_toim:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1676   .rodata.gs_cnvtbl_interlace_toim:00000000 gs_cnvtbl_interlace_toim
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1682   .rodata.gs_tbl_mipi_interrupt_bit:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1686   .rodata.gs_tbl_mipi_interrupt_bit:00000000 gs_tbl_mipi_interrupt_bit
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1726   .rodata.gs_tbl_vin_interrupt_bit:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1730   .rodata.gs_tbl_vin_interrupt_bit:00000000 gs_tbl_vin_interrupt_bit
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1746   .rodata.gs_tbl_vin_stride_check:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccfEKsSR.s:1750   .rodata.gs_tbl_vin_stride_check:00000000 gs_tbl_vin_stride_check
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.r_mipi_user.h.32.80935d64668479eae19d7b52f81717b2
+
+UNDEFINED SYMBOLS
+R_MIPI_CPUVAddrToSysPAddr

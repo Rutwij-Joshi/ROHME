@@ -1,0 +1,444 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_os_abstraction_stdio.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.stdio_hld_open,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	stdio_hld_open:
+  23              	.LFB4:
+  24              		.file 1 "../generate/os_abstraction/src/r_os_abstraction_stdio.c"
+   1:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+   2:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * DISCLAIMER
+   3:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * applicable laws, including copyright laws.
+   6:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * following link:
+  15:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+  17:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  19:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  20:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  21:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * File Name    : r_os_abstraction_stdio.c
+  22:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Version      : see OS_LESS_RZ_HLD_VERSION_MAJOR.OS_LESS_RZ_HLD_VERSION_MINOR
+  23:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Description  : OS-Less OS Abstraction Layer
+  24:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  25:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  26:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  27:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * History      : DD.MM.YYYY  Description
+  28:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *              : 21.05.2020  First issued
+  29:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  30:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  31:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include <stdio.h>
+  32:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include <string.h>
+  33:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include <fcntl.h>
+  34:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include <unistd.h>
+  35:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  36:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include "r_typedefs.h"
+  37:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include "driver.h"
+  38:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include "r_devlink_wrapper.h"
+  39:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  40:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /* compiler specific API header */
+  41:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include "r_compiler_abstraction_api.h"
+  42:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  43:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /* OS abstraction specific API header */
+  44:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** #include "r_os_abstraction_api.h"
+  45:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  46:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  47:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  48:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Function Macros
+  49:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  50:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  51:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  52:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Typedefs
+  53:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  54:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  55:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  56:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  57:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  58:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  Function Prototypes
+  59:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  60:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /* STDIO */
+  61:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_open (st_stream_ptr_t p_stream);
+  62:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static void  stdio_hld_close (st_stream_ptr_t p_stream);
+  63:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_read (st_stream_ptr_t p_stream, uint8_t *p_buffer, uint32_t ui_count);
+  64:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_write (st_stream_ptr_t p_stream, const uint8_t *p_buffer, uint32_t count);
+  65:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_control (st_stream_ptr_t p_stream, uint32_t ctlCode, void *pCtlStruct);
+  66:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_get_version (st_stream_ptr_t stream_ptr, st_ver_info_t *pVerInfo);
+  67:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  68:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  69:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  Constant Data
+  70:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  71:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  72:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /* Define the driver function table for this implementation */
+  73:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /* This is an empty driver. This driver is used to reserve a file handle. */
+  74:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** const st_r_driver_t g_stdio_driver =
+  75:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** {"STDIO Device Driver", stdio_hld_open, stdio_hld_close, stdio_hld_read, stdio_hld_write, stdio_hld
+  76:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  77:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  78:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  79:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  Global Data
+  80:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  81:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  82:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+  83:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  Private Functions
+  84:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+  85:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+  86:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**
+  87:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @brief  Opens the STDIO device driver
+  88:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * 
+  89:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * This function allows for a channel to be ready for
+  90:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * operational use. If a channel is unavailable or a
+  91:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * channel is already opened this function will return
+  92:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * a fail (-1)
+  93:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+  94:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in] p_stream Pointer to the file stream
+  95:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * 
+  96:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval 0  DRV_SUCCESS
+  97:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval -1 DRV_ERROR 
+  98:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **/
+  99:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_open (st_stream_ptr_t p_stream)
+ 100:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** {
+  25              		.loc 1 100 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              		@ link register save eliminated.
+  30              	.LVL0:
+ 101:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     int_t ret = DRV_SUCCESS;
+ 102:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 103:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     return (ret);
+ 104:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** }
+  31              		.loc 1 104 0
+  32 0000 0000A0E3 		mov	r0, #0
+  33              	.LVL1:
+  34 0004 1EFF2FE1 		bx	lr
+  35              		.cfi_endproc
+  36              	.LFE4:
+  38              		.section	.text.stdio_hld_close,"ax",%progbits
+  39              		.align	2
+  40              		.syntax unified
+  41              		.arm
+  42              		.fpu neon
+  44              	stdio_hld_close:
+  45              	.LFB5:
+ 105:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+ 106:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * End of Function stdio_hld_open
+ 107:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+ 108:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 109:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**
+ 110:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @brief Closes the STDIO driver
+ 111:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 112:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * The STDIO driver's file stream can be closed once
+ 113:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * the desired operation has been done, freeing any
+ 114:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * memory or resources it uses
+ 115:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * 
+ 116:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in] p_stream Pointer to the file stream
+ 117:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 118:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @return None
+ 119:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  */
+ 120:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static void stdio_hld_close (st_stream_ptr_t p_stream)
+ 121:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** {
+  46              		.loc 1 121 0
+  47              		.cfi_startproc
+  48              		@ args = 0, pretend = 0, frame = 0
+  49              		@ frame_needed = 0, uses_anonymous_args = 0
+  50              		@ link register save eliminated.
+  51              	.LVL2:
+  52 0000 1EFF2FE1 		bx	lr
+  53              		.cfi_endproc
+  54              	.LFE5:
+  56              		.section	.text.stdio_hld_read,"ax",%progbits
+  57              		.align	2
+  58              		.syntax unified
+  59              		.arm
+  60              		.fpu neon
+  62              	stdio_hld_read:
+  63              	.LFB6:
+ 122:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     return;
+ 123:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** }
+ 124:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+ 125:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * End of Function stdio_hld_close
+ 126:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+ 127:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 128:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**
+ 129:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @brief Translates the read operation to the private read function.
+ 130:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 131:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * The private read function requires to get the channel instead of the
+ 132:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * file stream and therefore some translation is required.
+ 133:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 134:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in]  p_stream The file stream that contains the desired STDIO channel
+ 135:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[out] p_buffer The buffer to be populated with the data read
+ 136:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in]  count    The size of p_buffer
+ 137:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 138:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval  N Where N is the number of bytes read
+ 139:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval -1 DRV_ERROR 
+ 140:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  */
+ 141:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_read (st_stream_ptr_t p_stream, uint8_t *p_buffer, uint32_t count)
+ 142:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** {
+  64              		.loc 1 142 0
+  65              		.cfi_startproc
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  68              		@ link register save eliminated.
+  69              	.LVL3:
+ 143:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     /* read from channel */
+ 144:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     return (0);
+ 145:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** }
+  70              		.loc 1 145 0
+  71 0000 0000A0E3 		mov	r0, #0
+  72              	.LVL4:
+  73 0004 1EFF2FE1 		bx	lr
+  74              		.cfi_endproc
+  75              	.LFE6:
+  77              		.section	.text.stdio_hld_write,"ax",%progbits
+  78              		.align	2
+  79              		.syntax unified
+  80              		.arm
+  81              		.fpu neon
+  83              	stdio_hld_write:
+  84              	.LFB7:
+ 146:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+ 147:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * End of Function stdio_hld_read
+ 148:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+ 149:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 150:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**
+ 151:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @brief Translates the write operation to the private write function
+ 152:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 153:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * The private write function requires to get the channel instead of the
+ 154:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * file stream and therefore some translation is required
+ 155:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 156:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in] p_stream The file stream that contains the desired STDIO channel
+ 157:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in] p_buffer The intended buffer of data intended to be written
+ 158:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in] count    The amount of data in the p_buffer
+ 159:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 160:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval >0 The number of bytes written
+ 161:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval -1 DRV_ERROR 
+ 162:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  */
+ 163:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_write (st_stream_ptr_t p_stream, const uint8_t *p_buffer, uint32_t count)
+ 164:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** {
+  85              		.loc 1 164 0
+  86              		.cfi_startproc
+  87              		@ args = 0, pretend = 0, frame = 0
+  88              		@ frame_needed = 0, uses_anonymous_args = 0
+  89              		@ link register save eliminated.
+  90              	.LVL5:
+ 165:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     /* write to channel */
+ 166:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     return (0);
+ 167:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** }
+  91              		.loc 1 167 0
+  92 0000 0000A0E3 		mov	r0, #0
+  93              	.LVL6:
+  94 0004 1EFF2FE1 		bx	lr
+  95              		.cfi_endproc
+  96              	.LFE7:
+  98              		.section	.text.stdio_hld_control,"ax",%progbits
+  99              		.align	2
+ 100              		.syntax unified
+ 101              		.arm
+ 102              		.fpu neon
+ 104              	stdio_hld_control:
+ 105              	.LFB8:
+ 168:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+ 169:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * End of Function stdio_hld_write
+ 170:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+ 171:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 172:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**
+ 173:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @brief stdio_hld_control handles custom controls for the STDIO device driver
+ 174:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * 
+ 175:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Depending on the ctl_code given the control function will perform specific
+ 176:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * tasks. For the STDIO this includes getting and setting the configuration.
+ 177:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * If a invalid ctl_code is given the return value will be -1 and the trace will
+ 178:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * print a message accordingly.
+ 179:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 180:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in] p_stream          Pointer to the file stream
+ 181:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in] ctl_code          The custom control code
+ 182:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param[in,out] p_ctl_struct  Pointer to the custom control structure
+ 183:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 184:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval 0  DRV_SUCCESS
+ 185:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval -1 DRV_ERROR 
+ 186:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  */
+ 187:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_control (st_stream_ptr_t p_stream, uint32_t ctl_code, void *p_ctl_struct)
+ 188:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** {
+ 106              		.loc 1 188 0
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110              		@ link register save eliminated.
+ 111              	.LVL7:
+ 189:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     int_t ret = DRV_SUCCESS;
+ 190:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 191:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 192:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     return (ret);
+ 193:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** }
+ 112              		.loc 1 193 0
+ 113 0000 0000A0E3 		mov	r0, #0
+ 114              	.LVL8:
+ 115 0004 1EFF2FE1 		bx	lr
+ 116              		.cfi_endproc
+ 117              	.LFE8:
+ 119              		.section	.text.stdio_hld_get_version,"ax",%progbits
+ 120              		.align	2
+ 121              		.syntax unified
+ 122              		.arm
+ 123              		.fpu neon
+ 125              	stdio_hld_get_version:
+ 126              	.LFB9:
+ 194:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**************************************************************************************************
+ 195:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * End of Function stdio_hld_control()
+ 196:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  **************************************************************************************************
+ 197:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** 
+ 198:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** /**
+ 199:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @brief Provides build information even if driver fails to open\n
+ 200:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *        version information is updated by developer
+ 201:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * 
+ 202:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * Acquires the version information for both the high layer and
+ 203:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * low layer driver. This allows for control of releases and debugging
+ 204:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * code.
+ 205:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 206:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param stream_ptr  Pointer to the file stream
+ 207:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @param p_ver_info  Structure holding the version information
+ 208:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  *
+ 209:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  * @retval 0  DRV_SUCCESS (Never Fails)
+ 210:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****  */
+ 211:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** static int_t stdio_hld_get_version (st_stream_ptr_t stream_ptr, st_ver_info_t *p_ver_info)
+ 212:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** {
+ 127              		.loc 1 212 0
+ 128              		.cfi_startproc
+ 129              		@ args = 0, pretend = 0, frame = 0
+ 130              		@ frame_needed = 0, uses_anonymous_args = 0
+ 131              		@ link register save eliminated.
+ 132              	.LVL9:
+ 213:../generate/os_abstraction/src/r_os_abstraction_stdio.c ****     return (DRV_SUCCESS);
+ 214:../generate/os_abstraction/src/r_os_abstraction_stdio.c **** }
+ 133              		.loc 1 214 0
+ 134 0000 0000A0E3 		mov	r0, #0
+ 135              	.LVL10:
+ 136 0004 1EFF2FE1 		bx	lr
+ 137              		.cfi_endproc
+ 138              	.LFE9:
+ 140              		.global	g_stdio_driver
+ 141              		.section	.rodata.g_stdio_driver,"a",%progbits
+ 142              		.align	2
+ 145              	g_stdio_driver:
+ 146 0000 00000000 		.word	.LC0
+ 147 0004 00000000 		.word	stdio_hld_open
+ 148 0008 00000000 		.word	stdio_hld_close
+ 149 000c 00000000 		.word	stdio_hld_read
+ 150 0010 00000000 		.word	stdio_hld_write
+ 151 0014 00000000 		.word	stdio_hld_control
+ 152 0018 00000000 		.word	stdio_hld_get_version
+ 153              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 154              		.align	2
+ 155              	.LC0:
+ 156 0000 53544449 		.ascii	"STDIO Device Driver\000"
+ 156      4F204465 
+ 156      76696365 
+ 156      20447269 
+ 156      76657200 
+ 157              		.text
+ 158              	.Letext0:
+ 159              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 160              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 161              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 162              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 163              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 164              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 165              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 166              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 167              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 168              		.file 11 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 169              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 170              		.file 13 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 171              		.file 14 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_os_abstraction_stdio.c
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:17     .text.stdio_hld_open:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:22     .text.stdio_hld_open:00000000 stdio_hld_open
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:39     .text.stdio_hld_close:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:44     .text.stdio_hld_close:00000000 stdio_hld_close
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:57     .text.stdio_hld_read:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:62     .text.stdio_hld_read:00000000 stdio_hld_read
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:78     .text.stdio_hld_write:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:83     .text.stdio_hld_write:00000000 stdio_hld_write
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:99     .text.stdio_hld_control:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:104    .text.stdio_hld_control:00000000 stdio_hld_control
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:120    .text.stdio_hld_get_version:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:125    .text.stdio_hld_get_version:00000000 stdio_hld_get_version
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:145    .rodata.g_stdio_driver:00000000 g_stdio_driver
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:142    .rodata.g_stdio_driver:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccHDSZ7n.s:154    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.187.2ff233552538c6ff9b8575ca8ea52cb3
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.stddef.h.39.ec95e8feac892e292b69dc7ae75b0d64
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.30.bbece7fa40993a78092dcc5805132560
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.8188691c2279eac7a223caa50f6694b9
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4._default_fcntl.h.6.b13d56891b95175b639f824a0fd1ed77
+                           .group:00000000 wm4.time.h.8.db4619001f026d0b4874c029fef0e91f
+                           .group:00000000 wm4.time.h.2.4581ce0ffb6627cfc02162c94bf846c9
+                           .group:00000000 wm4.time.h.25.106a07801fea6508dd6bbd3b8a1c271a
+                           .group:00000000 wm4.stat.h.71.d65ac61ff88c651e198008cfb38bda9c
+                           .group:00000000 wm4.fcntl.h.9.9336f33d7f5028f694c75e6e224e0cf7
+                           .group:00000000 wm4.unistd.h.2.39165d5b7784d1815ef4b0c4be6df560
+                           .group:00000000 wm4.unistd.h.156.614f0202926a9fae83688cfc56e25f59
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.reent.h.91.b3ea049ebc5486622b61409b78486f84
+                           .group:00000000 wm4.r_devlink_wrapper.h.72.ad1de4c851513efa3aed0532ebca7ca2
+                           .group:00000000 wm4.r_compiler_abstraction_api.h.26.bb21b39b83806cb7bb8838b6f825dcff
+                           .group:00000000 wm4.r_os_abstraction_api.h.53.c40489f97d2474c70b40d43822d1406c
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,1003 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_scifa_drv_api.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.scifa_hld_get_version,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	scifa_hld_get_version:
+  23              	.LFB6:
+  24              		.file 1 "../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c"
+   1:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * This software is supplied by Renesas Electronics Corporation and is only
+   4:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * intended for use with Renesas products. No other uses are authorized. This
+   5:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * software is owned by Renesas Electronics Corporation and is protected under
+   6:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * all applicable laws, including copyright laws.
+   7:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   8:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT
+   9:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  10:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.
+  11:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS
+  12:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE
+  13:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR
+  14:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE
+  15:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  16:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * Renesas reserves the right, without notice, to make changes to this software
+  17:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * and to discontinue the availability of this software. By using this software,
+  18:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * you agree to the additional terms and conditions found by accessing the
+  19:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * following link:
+  20:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * http://www.renesas.com/disclaimer
+  21:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  22:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  23:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  24:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * File Name    : r_scifa_drv_api.c
+  25:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * Description  : SCIFA High Layer Device driver
+  26:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  27:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  28:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * History      : DD.MM.YYYY Version Description
+  29:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *              : 15.05.2018 1.00    Release
+  30:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *              : 10.05.2019 1.01    Fixed issue with channel 0 Baud rate setting
+  31:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *              : 23.05.2019 1.02    Restructuring to ensure that other LLDs are only accessed from
+  32:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  33:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  34:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  35:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  Includes   <System Includes> , "Project Includes"
+  36:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  37:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "r_devlink_wrapper.h"      /* Devlink API header */
+  38:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "r_scifa_drv_api.h"        /* SCIFA driver API header */
+  39:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "r_scifa_drv_link.h"       /* Link include to Low Layer Driver */
+  40:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "r_scifa_hld_prv.h"        /* High Layer Driver private functions */
+  41:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  42:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "r_gpio_drv_api.h"
+  43:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "r_gpio_drv_sc_cfg.h"
+  44:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  45:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "r_os_abstraction_api.h"
+  46:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  47:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** #include "driver.h"                 /* device driver header */
+  48:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  49:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  50:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  51:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  Macro definitions
+  52:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  53:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  54:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  55:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  Function Prototypes
+  56:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  57:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /* STDIO */
+  58:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_open (st_stream_ptr_t p_stream);
+  59:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static void  scifa_hld_close (st_stream_ptr_t p_stream);
+  60:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_read (st_stream_ptr_t p_stream, uint8_t *p_buffer, uint32_t ui_count);
+  61:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_write (st_stream_ptr_t p_stream, const uint8_t *p_buffer, uint32_t count);
+  62:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_control (st_stream_ptr_t p_stream, uint32_t ctlCode, void *pCtlStruct);
+  63:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_get_version (st_stream_ptr_t stream_ptr, st_ver_info_t *pVerInfo);
+  64:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  65:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /* file stream access */
+  66:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static r_sc_index_t scifa_get_config_index (st_stream_ptr_t stream_ptr);
+  67:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  68:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  69:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  Constant Data
+  70:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  71:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  72:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static const st_drv_info_t gs_hld_info =
+  73:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+  74:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     {
+  75:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         ((STDIO_SCIFA_RZ_HLD_VERSION_MAJOR << 16) + STDIO_SCIFA_RZ_HLD_VERSION_MINOR)
+  76:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     },
+  77:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     STDIO_SCIFA_RZ_HLD_BUILD_NUM,
+  78:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     STDIO_SCIFA_RZ_HLD_DRV_NAME
+  79:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** };
+  80:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  81:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /* Define the driver function table for this implementation */
+  82:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** const st_r_driver_t g_scifa_driver =
+  83:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {"SCIFA Device Driver", scifa_hld_open, scifa_hld_close, scifa_hld_read, scifa_hld_write, scifa_hld
+  84:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  85:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  86:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  Private global variables
+  87:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  88:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  89:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+  90:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  Private Functions
+  91:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+  92:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+  93:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**
+  94:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @brief  Opens the SCIFA device driver
+  95:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * 
+  96:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * This function allows for a channel to be ready for
+  97:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * operational use. If a channel is unavailable or a
+  98:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * channel is already opened this function will return
+  99:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * a fail (-1)
+ 100:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 101:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in] p_stream Pointer to the file stream
+ 102:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * 
+ 103:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval 0  DRV_SUCCESS
+ 104:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval -1 DRV_ERROR 
+ 105:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **/
+ 106:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_open (st_stream_ptr_t p_stream)
+ 107:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+ 108:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     int_t ret = DRV_ERROR;
+ 109:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 110:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 111:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_sc_index_t sc_config_index = scifa_get_config_index(p_stream);
+ 112:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 113:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* open using SC settings for selected channel */
+ 114:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     ret = r_scifa_hld_prv_open(sc_config_index, p_stream->file_mode);
+ 115:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 116:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* return status */
+ 117:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     return (ret);
+ 118:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 119:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 120:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * End of Function scifa_hld_open
+ 121:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+ 122:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 123:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**
+ 124:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @brief Closes the SCIFA driver
+ 125:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 126:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * The SCIFA driver's file stream can be closed once
+ 127:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * the desired operation has been done, freeing any
+ 128:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * memory or resources it uses
+ 129:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * 
+ 130:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in] p_stream Pointer to the file stream
+ 131:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 132:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @return None
+ 133:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  */
+ 134:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static void scifa_hld_close (st_stream_ptr_t p_stream)
+ 135:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+ 136:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 137:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_sc_index_t sc_config_index = scifa_get_config_index(p_stream);
+ 138:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 139:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* close the channel */
+ 140:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_scifa_hld_prv_close(sc_config_index);
+ 141:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 142:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 143:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * End of Function scifa_hld_close
+ 144:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+ 145:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 146:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**
+ 147:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @brief Translates the read operation to the private read function.
+ 148:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 149:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * The private read function requires to get the channel instead of the
+ 150:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * file stream and therefore some translation is required.
+ 151:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 152:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in]  p_stream The file stream that contains the desired SCIFA channel
+ 153:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[out] p_buffer The buffer to be populated with the data read
+ 154:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in]  count    The size of p_buffer
+ 155:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 156:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval  N Where N is the number of bytes read
+ 157:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval -1 DRV_ERROR 
+ 158:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  */
+ 159:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_read (st_stream_ptr_t p_stream, uint8_t *p_buffer, uint32_t count)
+ 160:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+ 161:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 162:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_sc_index_t sc_config_index = scifa_get_config_index(p_stream);
+ 163:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 164:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* read from channel */
+ 165:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     return (r_scifa_hld_prv_read(sc_config_index, p_buffer, (int32_t) count));
+ 166:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 167:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 168:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * End of Function scifa_hld_read
+ 169:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+ 170:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 171:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**
+ 172:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @brief Translates the write operation to the private write function
+ 173:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 174:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * The private write function requires to get the channel instead of the
+ 175:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * file stream and therefore some translation is required
+ 176:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 177:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in] p_stream The file stream that contains the desired SCIFA channel
+ 178:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in] p_buffer The intended buffer of data intended to be written
+ 179:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in] count    The amount of data in the p_buffer
+ 180:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 181:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval >0 The number of bytes written
+ 182:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval -1 DRV_ERROR 
+ 183:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  */
+ 184:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_write (st_stream_ptr_t p_stream, const uint8_t *p_buffer, uint32_t count)
+ 185:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+ 186:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 187:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_sc_index_t sc_config_index = scifa_get_config_index(p_stream);
+ 188:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 189:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* write to channel */
+ 190:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     return (r_scifa_hld_prv_write(sc_config_index, p_buffer, (int32_t) count));
+ 191:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 192:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 193:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * End of Function scifa_hld_write
+ 194:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+ 195:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 196:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**
+ 197:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @brief scifa_hld_control handles custom controls for the SCIFA device driver
+ 198:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * 
+ 199:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * Depending on the ctl_code given the control function will perform specific
+ 200:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * tasks. For the SCIFA this includes getting and setting the configuration.
+ 201:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * If a invalid ctl_code is given the return value will be -1 and the trace will
+ 202:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * print a message accordingly.
+ 203:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 204:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in] p_stream          Pointer to the file stream
+ 205:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in] ctl_code          The custom control code
+ 206:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param[in,out] p_ctl_struct  Pointer to the custom control structure
+ 207:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 208:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval 0  DRV_SUCCESS
+ 209:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval -1 DRV_ERROR 
+ 210:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  */
+ 211:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_control (st_stream_ptr_t p_stream, uint32_t ctl_code, void *p_ctl_struct)
+ 212:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+ 213:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     int_t ret = DRV_ERROR;
+ 214:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 215:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 216:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_sc_index_t sc_config_index = scifa_get_config_index(p_stream);
+ 217:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 218:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* if the configuration index is valid */
+ 219:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     if (DRV_ERROR != sc_config_index)
+ 220:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     {
+ 221:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         switch (ctl_code)
+ 222:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         {
+ 223:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             case CTL_SCIFA_SET_CONFIGURATION:
+ 224:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 225:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 /* check argument is not NULL */
+ 226:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 if (NULL != p_ctl_struct)
+ 227:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 228:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                     ret = r_scifa_hld_prv_set_config(sc_config_index, p_ctl_struct);
+ 229:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 230:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 231:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 232:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 233:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             case CTL_SCIFA_GET_CONFIGURATION:
+ 234:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 235:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 /* check argument is not NULL */
+ 236:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 if (NULL != p_ctl_struct)
+ 237:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 238:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                     ret = r_scifa_hld_prv_get_config(sc_config_index, p_ctl_struct);
+ 239:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 240:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 241:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 242:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 243:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             case CTL_SCIFA_DMA_READ_ABORT:
+ 244:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 245:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 ret = r_scifa_hld_dma_read_abort(sc_config_index);
+ 246:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 247:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 248:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 249:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             case CTL_SCIFA_DMA_WRITE_ABORT:
+ 250:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 251:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 ret = r_scifa_hld_dma_write_abort(sc_config_index);
+ 252:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 253:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 254:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 255:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             case CTL_SCIFA_READ_NEXT:
+ 256:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 257:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 /* check argument is not NULL */
+ 258:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 if (NULL != p_ctl_struct)
+ 259:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 260:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                     /* Set next DMA read */
+ 261:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                     ret = r_scifa_hld_dma_read_next(sc_config_index, (st_scifa_dma_rw_t *) p_ctl_st
+ 262:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 263:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 264:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 265:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 266:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             case CTL_SCIFA_WRITE_NEXT:
+ 267:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 268:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 /* check argument is not NULL */
+ 269:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 if (NULL != p_ctl_struct)
+ 270:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 271:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                     /* Set next DMA write */
+ 272:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                     ret = r_scifa_hld_dma_write_next(sc_config_index, (st_scifa_dma_rw_t *) p_ctl_s
+ 273:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 274:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 275:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 276:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 277:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             case CTL_SCIFA_FLUSH_OUTPUT:
+ 278:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 279:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 ret = r_scifa_hld_tx_flush(sc_config_index);
+ 280:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 281:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 282:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 283:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             default:
+ 284:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             {
+ 285:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 printf("SCIFA Driver: Unknown control code %ld\r\n", ctl_code);
+ 286:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 287:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 288:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         }
+ 289:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     }
+ 290:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 291:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     return (ret);
+ 292:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 293:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 294:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * End of Function scifa_hld_control()
+ 295:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+ 296:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 297:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**
+ 298:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @brief Provides build information even if driver fails to open\n
+ 299:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *        version information is updated by developer
+ 300:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * 
+ 301:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * Acquires the version information for both the high layer and
+ 302:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * low layer driver. This allows for control of releases and debugging
+ 303:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * code.
+ 304:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 305:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param stream_ptr  Pointer to the file stream
+ 306:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param p_ver_info  Structure holding the version information
+ 307:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 308:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval 0  DRV_SUCCESS (Never Fails)
+ 309:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  */
+ 310:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static int_t scifa_hld_get_version (st_stream_ptr_t stream_ptr, st_ver_info_t *p_ver_info)
+ 311:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+  25              		.loc 1 311 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              	.LVL0:
+  30 0000 10402DE9 		push	{r4, lr}
+  31              		.cfi_def_cfa_offset 8
+  32              		.cfi_offset 4, -8
+  33              		.cfi_offset 14, -4
+ 312:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     (void) stream_ptr;
+ 313:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 314:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     p_ver_info->hld.version.sub.major = gs_hld_info.version.sub.major;
+  34              		.loc 1 314 0
+  35 0004 0230A0E3 		mov	r3, #2
+  36 0008 B230C1E1 		strh	r3, [r1, #2]	@ movhi
+ 315:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     p_ver_info->hld.version.sub.minor = gs_hld_info.version.sub.minor;
+  37              		.loc 1 315 0
+  38 000c 0130A0E3 		mov	r3, #1
+  39 0010 B030C1E1 		strh	r3, [r1]	@ movhi
+ 316:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     p_ver_info->hld.build = gs_hld_info.build;
+  40              		.loc 1 316 0
+  41 0014 0040A0E3 		mov	r4, #0
+  42 0018 044081E5 		str	r4, [r1, #4]
+ 317:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     p_ver_info->hld.p_szdriver_name = gs_hld_info.p_szdriver_name;
+  43              		.loc 1 317 0
+  44 001c 003000E3 		movw	r3, #:lower16:.LC0
+  45 0020 003040E3 		movt	r3, #:upper16:.LC0
+  46 0024 083081E5 		str	r3, [r1, #8]
+ 318:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 319:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* Obtain version information from Low Layer Driver */
+ 320:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     R_SCIFA_GetVersion(p_ver_info);
+  47              		.loc 1 320 0
+  48 0028 0100A0E1 		mov	r0, r1
+  49              	.LVL1:
+  50 002c FEFFFFEB 		bl	R_SCIFA_GetVersion
+  51              	.LVL2:
+ 321:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 322:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     return (DRV_SUCCESS);
+ 323:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+  52              		.loc 1 323 0
+  53 0030 0400A0E1 		mov	r0, r4
+  54 0034 1080BDE8 		pop	{r4, pc}
+  55              		.cfi_endproc
+  56              	.LFE6:
+  58              		.section	.text.scifa_get_config_index,"ax",%progbits
+  59              		.align	2
+  60              		.syntax unified
+  61              		.arm
+  62              		.fpu neon
+  64              	scifa_get_config_index:
+  65              	.LFB7:
+ 324:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 325:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * End of Function scifa_hld_get_version
+ 326:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  **************************************************************************************************
+ 327:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 328:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**
+ 329:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @brief Acquires and validates the smart configuration index from a given stream_ptr
+ 330:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 331:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * This function safely returns a configuration index if it is
+ 332:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * supported by the driver, otherwise it returns -1
+ 333:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 334:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @param stream_ptr Pointer to the file stream
+ 335:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  *
+ 336:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval  N Where N is the configuration index
+ 337:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  * @retval -1 DRV_ERROR
+ 338:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****  */
+ 339:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** static r_sc_index_t scifa_get_config_index (st_stream_ptr_t stream_ptr)
+ 340:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** {
+  66              		.loc 1 340 0
+  67              		.cfi_startproc
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 0, uses_anonymous_args = 0
+  70              	.LVL3:
+  71 0000 10402DE9 		push	{r4, lr}
+  72              		.cfi_def_cfa_offset 8
+  73              		.cfi_offset 4, -8
+  74              		.cfi_offset 14, -4
+ 341:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_channel_t channel_id;
+ 342:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     r_sc_index_t sc_config_index;
+ 343:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 344:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* return error if not valid stream pointer */
+ 345:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     if (NULL == stream_ptr)
+  75              		.loc 1 345 0
+  76 0004 000050E3 		cmp	r0, #0
+  77 0008 0E00000A 		beq	.L5
+ 346:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     {
+ 347:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         return (DRV_ERROR);
+ 348:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     }
+ 349:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 350:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get channel associated with configuration */
+ 351:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     sc_config_index = (int_t) (stream_ptr->sc_config_index);
+  78              		.loc 1 351 0
+  79 000c 1C40D0E5 		ldrb	r4, [r0, #28]	@ zero_extendqisi2
+  80              	.LVL4:
+ 352:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     channel_id = R_SCIFA_GetChannel(sc_config_index);
+  81              		.loc 1 352 0
+  82 0010 0400A0E1 		mov	r0, r4
+  83              	.LVL5:
+  84 0014 FEFFFFEB 		bl	R_SCIFA_GetChannel
+  85              	.LVL6:
+ 353:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 354:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     if (DRV_ERROR == channel_id)
+  86              		.loc 1 354 0
+  87 0018 010070E3 		cmn	r0, #1
+  88 001c 0B00000A 		beq	.L6
+ 355:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     {
+ 356:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         return (DRV_ERROR);
+ 357:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     }
+ 358:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 359:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* verify that the channel is supported */
+ 360:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* look for channel in the map of available channels from low level driver */
+ 361:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* (e_channel_id_t). This is a bit field where the power of 2 is the available channel */
+ 362:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     if (((1 << channel_id) <= R_CH15))
+  89              		.loc 1 362 0
+  90 0020 0130A0E3 		mov	r3, #1
+  91 0024 1300A0E1 		lsl	r0, r3, r0
+  92              	.LVL7:
+  93 0028 020950E3 		cmp	r0, #32768
+  94 002c 090000CA 		bgt	.L7
+  95              	.LVL8:
+  96              	.LBB2:
+ 363:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     {
+ 364:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         /* set channel as bit field where value is 2 << channel */
+ 365:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         uint16_t channel_bit_value = (uint16_t) (1 << channel_id);
+ 366:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 367:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         /* get bit field of supported channels */
+ 368:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         uint16_t supported_channels = SCIFA_CFG_LLD_SUPPORTED_CHANNELS;
+ 369:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 370:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         if (0 != (channel_bit_value & supported_channels))
+  97              		.loc 1 370 0
+  98 0030 1F0010E3 		tst	r0, #31
+  99 0034 0100000A 		beq	.L9
+ 100              	.LVL9:
+ 101              	.L4:
+ 102              	.LBE2:
+ 371:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         {
+ 372:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             /* channel is supported */
+ 373:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             return (sc_config_index);
+ 374:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         }
+ 375:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     }
+ 376:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 377:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     return (DRV_ERROR);
+ 378:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 103              		.loc 1 378 0
+ 104 0038 0400A0E1 		mov	r0, r4
+ 105 003c 1080BDE8 		pop	{r4, pc}
+ 106              	.LVL10:
+ 107              	.L9:
+ 377:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 108              		.loc 1 377 0
+ 109 0040 0040E0E3 		mvn	r4, #0
+ 110              	.LVL11:
+ 111 0044 FBFFFFEA 		b	.L4
+ 112              	.LVL12:
+ 113              	.L5:
+ 347:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     }
+ 114              		.loc 1 347 0
+ 115 0048 0040E0E3 		mvn	r4, #0
+ 116 004c F9FFFFEA 		b	.L4
+ 117              	.LVL13:
+ 118              	.L6:
+ 356:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     }
+ 119              		.loc 1 356 0
+ 120 0050 0040E0E3 		mvn	r4, #0
+ 121              	.LVL14:
+ 122 0054 F7FFFFEA 		b	.L4
+ 123              	.LVL15:
+ 124              	.L7:
+ 377:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 125              		.loc 1 377 0
+ 126 0058 0040E0E3 		mvn	r4, #0
+ 127              	.LVL16:
+ 128 005c F5FFFFEA 		b	.L4
+ 129              		.cfi_endproc
+ 130              	.LFE7:
+ 132              		.section	.text.scifa_hld_control,"ax",%progbits
+ 133              		.align	2
+ 134              		.syntax unified
+ 135              		.arm
+ 136              		.fpu neon
+ 138              	scifa_hld_control:
+ 139              	.LFB5:
+ 212:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     int_t ret = DRV_ERROR;
+ 140              		.loc 1 212 0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144              	.LVL17:
+ 145 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 146              		.cfi_def_cfa_offset 16
+ 147              		.cfi_offset 4, -16
+ 148              		.cfi_offset 5, -12
+ 149              		.cfi_offset 6, -8
+ 150              		.cfi_offset 14, -4
+ 151 0004 0140A0E1 		mov	r4, r1
+ 152 0008 0250A0E1 		mov	r5, r2
+ 153              	.LVL18:
+ 216:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 154              		.loc 1 216 0
+ 155 000c FEFFFFEB 		bl	scifa_get_config_index
+ 156              	.LVL19:
+ 219:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     {
+ 157              		.loc 1 219 0
+ 158 0010 010070E3 		cmn	r0, #1
+ 159 0014 2A00000A 		beq	.L21
+ 221:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****         {
+ 160              		.loc 1 221 0
+ 161 0018 4D3844E2 		sub	r3, r4, #5046272
+ 162 001c 060053E3 		cmp	r3, #6
+ 163 0020 03F19F97 		ldrls	pc, [pc, r3, asl #2]
+ 164 0024 200000EA 		b	.L12
+ 165              	.L14:
+ 166 0028 44000000 		.word	.L13
+ 167 002c 58000000 		.word	.L15
+ 168 0030 6C000000 		.word	.L16
+ 169 0034 74000000 		.word	.L17
+ 170 0038 90000000 		.word	.L18
+ 171 003c 7C000000 		.word	.L19
+ 172 0040 A4000000 		.word	.L20
+ 173              	.L13:
+ 226:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 174              		.loc 1 226 0
+ 175 0044 000055E3 		cmp	r5, #0
+ 176 0048 1F00000A 		beq	.L22
+ 228:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 177              		.loc 1 228 0
+ 178 004c 0510A0E1 		mov	r1, r5
+ 179 0050 FEFFFFEB 		bl	r_scifa_hld_prv_set_config
+ 180              	.LVL20:
+ 181 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 182              	.LVL21:
+ 183              	.L15:
+ 236:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 184              		.loc 1 236 0
+ 185 0058 000055E3 		cmp	r5, #0
+ 186 005c 1C00000A 		beq	.L23
+ 238:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 187              		.loc 1 238 0
+ 188 0060 0510A0E1 		mov	r1, r5
+ 189 0064 FEFFFFEB 		bl	r_scifa_hld_prv_get_config
+ 190              	.LVL22:
+ 191 0068 7080BDE8 		pop	{r4, r5, r6, pc}
+ 192              	.LVL23:
+ 193              	.L16:
+ 245:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 194              		.loc 1 245 0
+ 195 006c FEFFFFEB 		bl	r_scifa_hld_dma_read_abort
+ 196              	.LVL24:
+ 246:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 197              		.loc 1 246 0
+ 198 0070 7080BDE8 		pop	{r4, r5, r6, pc}
+ 199              	.LVL25:
+ 200              	.L17:
+ 251:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 201              		.loc 1 251 0
+ 202 0074 FEFFFFEB 		bl	r_scifa_hld_dma_write_abort
+ 203              	.LVL26:
+ 252:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 204              		.loc 1 252 0
+ 205 0078 7080BDE8 		pop	{r4, r5, r6, pc}
+ 206              	.LVL27:
+ 207              	.L19:
+ 258:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 208              		.loc 1 258 0
+ 209 007c 000055E3 		cmp	r5, #0
+ 210 0080 1500000A 		beq	.L24
+ 261:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 211              		.loc 1 261 0
+ 212 0084 0510A0E1 		mov	r1, r5
+ 213 0088 FEFFFFEB 		bl	r_scifa_hld_dma_read_next
+ 214              	.LVL28:
+ 215 008c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 216              	.LVL29:
+ 217              	.L18:
+ 269:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 {
+ 218              		.loc 1 269 0
+ 219 0090 000055E3 		cmp	r5, #0
+ 220 0094 1200000A 		beq	.L25
+ 272:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 }
+ 221              		.loc 1 272 0
+ 222 0098 0510A0E1 		mov	r1, r5
+ 223 009c FEFFFFEB 		bl	r_scifa_hld_dma_write_next
+ 224              	.LVL30:
+ 225 00a0 7080BDE8 		pop	{r4, r5, r6, pc}
+ 226              	.LVL31:
+ 227              	.L20:
+ 279:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 228              		.loc 1 279 0
+ 229 00a4 FEFFFFEB 		bl	r_scifa_hld_tx_flush
+ 230              	.LVL32:
+ 280:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 231              		.loc 1 280 0
+ 232 00a8 7080BDE8 		pop	{r4, r5, r6, pc}
+ 233              	.LVL33:
+ 234              	.L12:
+ 285:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****                 break;
+ 235              		.loc 1 285 0
+ 236 00ac 0410A0E1 		mov	r1, r4
+ 237 00b0 000000E3 		movw	r0, #:lower16:.LC1
+ 238              	.LVL34:
+ 239 00b4 000040E3 		movt	r0, #:upper16:.LC1
+ 240 00b8 FEFFFFEB 		bl	printf
+ 241              	.LVL35:
+ 213:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 242              		.loc 1 213 0
+ 243 00bc 0000E0E3 		mvn	r0, #0
+ 286:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****             }
+ 244              		.loc 1 286 0
+ 245 00c0 7080BDE8 		pop	{r4, r5, r6, pc}
+ 246              	.LVL36:
+ 247              	.L21:
+ 213:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 248              		.loc 1 213 0
+ 249 00c4 0000E0E3 		mvn	r0, #0
+ 250              	.LVL37:
+ 251 00c8 7080BDE8 		pop	{r4, r5, r6, pc}
+ 252              	.LVL38:
+ 253              	.L22:
+ 254 00cc 0000E0E3 		mvn	r0, #0
+ 255              	.LVL39:
+ 256 00d0 7080BDE8 		pop	{r4, r5, r6, pc}
+ 257              	.LVL40:
+ 258              	.L23:
+ 259 00d4 0000E0E3 		mvn	r0, #0
+ 260              	.LVL41:
+ 261 00d8 7080BDE8 		pop	{r4, r5, r6, pc}
+ 262              	.LVL42:
+ 263              	.L24:
+ 264 00dc 0000E0E3 		mvn	r0, #0
+ 265              	.LVL43:
+ 266 00e0 7080BDE8 		pop	{r4, r5, r6, pc}
+ 267              	.LVL44:
+ 268              	.L25:
+ 269 00e4 0000E0E3 		mvn	r0, #0
+ 270              	.LVL45:
+ 292:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 271              		.loc 1 292 0
+ 272 00e8 7080BDE8 		pop	{r4, r5, r6, pc}
+ 273              		.cfi_endproc
+ 274              	.LFE5:
+ 276              		.section	.text.scifa_hld_write,"ax",%progbits
+ 277              		.align	2
+ 278              		.syntax unified
+ 279              		.arm
+ 280              		.fpu neon
+ 282              	scifa_hld_write:
+ 283              	.LFB4:
+ 185:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 284              		.loc 1 185 0
+ 285              		.cfi_startproc
+ 286              		@ args = 0, pretend = 0, frame = 0
+ 287              		@ frame_needed = 0, uses_anonymous_args = 0
+ 288              	.LVL46:
+ 289 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 290              		.cfi_def_cfa_offset 16
+ 291              		.cfi_offset 4, -16
+ 292              		.cfi_offset 5, -12
+ 293              		.cfi_offset 6, -8
+ 294              		.cfi_offset 14, -4
+ 295 0004 0140A0E1 		mov	r4, r1
+ 296 0008 0250A0E1 		mov	r5, r2
+ 187:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 297              		.loc 1 187 0
+ 298 000c FEFFFFEB 		bl	scifa_get_config_index
+ 299              	.LVL47:
+ 190:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 300              		.loc 1 190 0
+ 301 0010 0520A0E1 		mov	r2, r5
+ 302 0014 0410A0E1 		mov	r1, r4
+ 303 0018 FEFFFFEB 		bl	r_scifa_hld_prv_write
+ 304              	.LVL48:
+ 191:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 305              		.loc 1 191 0
+ 306 001c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 307              		.cfi_endproc
+ 308              	.LFE4:
+ 310              		.section	.text.scifa_hld_read,"ax",%progbits
+ 311              		.align	2
+ 312              		.syntax unified
+ 313              		.arm
+ 314              		.fpu neon
+ 316              	scifa_hld_read:
+ 317              	.LFB3:
+ 160:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 318              		.loc 1 160 0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 0
+ 321              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322              	.LVL49:
+ 323 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 324              		.cfi_def_cfa_offset 16
+ 325              		.cfi_offset 4, -16
+ 326              		.cfi_offset 5, -12
+ 327              		.cfi_offset 6, -8
+ 328              		.cfi_offset 14, -4
+ 329 0004 0140A0E1 		mov	r4, r1
+ 330 0008 0250A0E1 		mov	r5, r2
+ 162:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 331              		.loc 1 162 0
+ 332 000c FEFFFFEB 		bl	scifa_get_config_index
+ 333              	.LVL50:
+ 165:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 334              		.loc 1 165 0
+ 335 0010 0520A0E1 		mov	r2, r5
+ 336 0014 0410A0E1 		mov	r1, r4
+ 337 0018 FEFFFFEB 		bl	r_scifa_hld_prv_read
+ 338              	.LVL51:
+ 166:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 339              		.loc 1 166 0
+ 340 001c 7080BDE8 		pop	{r4, r5, r6, pc}
+ 341              		.cfi_endproc
+ 342              	.LFE3:
+ 344              		.section	.text.scifa_hld_close,"ax",%progbits
+ 345              		.align	2
+ 346              		.syntax unified
+ 347              		.arm
+ 348              		.fpu neon
+ 350              	scifa_hld_close:
+ 351              	.LFB2:
+ 135:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     /* get the Smart Configuration index associated with the handle */
+ 352              		.loc 1 135 0
+ 353              		.cfi_startproc
+ 354              		@ args = 0, pretend = 0, frame = 0
+ 355              		@ frame_needed = 0, uses_anonymous_args = 0
+ 356              	.LVL52:
+ 357 0000 10402DE9 		push	{r4, lr}
+ 358              		.cfi_def_cfa_offset 8
+ 359              		.cfi_offset 4, -8
+ 360              		.cfi_offset 14, -4
+ 137:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 361              		.loc 1 137 0
+ 362 0004 FEFFFFEB 		bl	scifa_get_config_index
+ 363              	.LVL53:
+ 140:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** }
+ 364              		.loc 1 140 0
+ 365 0008 FEFFFFEB 		bl	r_scifa_hld_prv_close
+ 366              	.LVL54:
+ 367 000c 1080BDE8 		pop	{r4, pc}
+ 368              		.cfi_endproc
+ 369              	.LFE2:
+ 371              		.section	.text.scifa_hld_open,"ax",%progbits
+ 372              		.align	2
+ 373              		.syntax unified
+ 374              		.arm
+ 375              		.fpu neon
+ 377              	scifa_hld_open:
+ 378              	.LFB1:
+ 107:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c ****     int_t ret = DRV_ERROR;
+ 379              		.loc 1 107 0
+ 380              		.cfi_startproc
+ 381              		@ args = 0, pretend = 0, frame = 0
+ 382              		@ frame_needed = 0, uses_anonymous_args = 0
+ 383              	.LVL55:
+ 384 0000 10402DE9 		push	{r4, lr}
+ 385              		.cfi_def_cfa_offset 8
+ 386              		.cfi_offset 4, -8
+ 387              		.cfi_offset 14, -4
+ 388 0004 0040A0E1 		mov	r4, r0
+ 389              	.LVL56:
+ 111:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 390              		.loc 1 111 0
+ 391 0008 FEFFFFEB 		bl	scifa_get_config_index
+ 392              	.LVL57:
+ 114:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** 
+ 393              		.loc 1 114 0
+ 394 000c 141094E5 		ldr	r1, [r4, #20]
+ 395 0010 FEFFFFEB 		bl	r_scifa_hld_prv_open
+ 396              	.LVL58:
+ 118:../generate/sc_drivers/r_scifa/src/hld/r_scifa_drv_api.c **** /**************************************************************************************************
+ 397              		.loc 1 118 0
+ 398 0014 1080BDE8 		pop	{r4, pc}
+ 399              		.cfi_endproc
+ 400              	.LFE1:
+ 402              		.global	g_scifa_driver
+ 403              		.section	.rodata.g_scifa_driver,"a",%progbits
+ 404              		.align	2
+ 407              	g_scifa_driver:
+ 408 0000 00000000 		.word	.LC2
+ 409 0004 00000000 		.word	scifa_hld_open
+ 410 0008 00000000 		.word	scifa_hld_close
+ 411 000c 00000000 		.word	scifa_hld_read
+ 412 0010 00000000 		.word	scifa_hld_write
+ 413 0014 00000000 		.word	scifa_hld_control
+ 414 0018 00000000 		.word	scifa_hld_get_version
+ 415              		.section	.rodata.scifa_hld_control.str1.4,"aMS",%progbits,1
+ 416              		.align	2
+ 417              	.LC1:
+ 418 0000 53434946 		.ascii	"SCIFA Driver: Unknown control code %ld\015\012\000"
+ 418      41204472 
+ 418      69766572 
+ 418      3A20556E 
+ 418      6B6E6F77 
+ 419              		.section	.rodata.scifa_hld_get_version.str1.4,"aMS",%progbits,1
+ 420              		.align	2
+ 421              	.LC0:
+ 422 0000 484C4420 		.ascii	"HLD SCIFA\000"
+ 422      53434946 
+ 422      4100
+ 423              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 424              		.align	2
+ 425              	.LC2:
+ 426 0000 53434946 		.ascii	"SCIFA Device Driver\000"
+ 426      41204465 
+ 426      76696365 
+ 426      20447269 
+ 426      76657200 
+ 427              		.text
+ 428              	.Letext0:
+ 429              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 430              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 431              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 432              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 433              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 434              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 435              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 436              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system/
+ 437              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 438              		.file 11 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 439              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/system
+ 440              		.file 13 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 441              		.file 14 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 442              		.file 15 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 443              		.file 16 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 444              		.file 17 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 445              		.file 18 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/driver
+ 446              		.file 19 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 447              		.file 20 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/os_abs
+ 448              		.file 21 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 449              		.file 22 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 450              		.file 23 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_scifa_drv_api.c
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:17     .text.scifa_hld_get_version:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:22     .text.scifa_hld_get_version:00000000 scifa_hld_get_version
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:421    .rodata.scifa_hld_get_version.str1.4:00000000 .LC0
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:59     .text.scifa_get_config_index:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:64     .text.scifa_get_config_index:00000000 scifa_get_config_index
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:133    .text.scifa_hld_control:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:138    .text.scifa_hld_control:00000000 scifa_hld_control
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:166    .text.scifa_hld_control:00000028 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:175    .text.scifa_hld_control:00000044 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:417    .rodata.scifa_hld_control.str1.4:00000000 .LC1
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:277    .text.scifa_hld_write:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:282    .text.scifa_hld_write:00000000 scifa_hld_write
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:311    .text.scifa_hld_read:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:316    .text.scifa_hld_read:00000000 scifa_hld_read
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:345    .text.scifa_hld_close:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:350    .text.scifa_hld_close:00000000 scifa_hld_close
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:372    .text.scifa_hld_open:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:377    .text.scifa_hld_open:00000000 scifa_hld_open
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:407    .rodata.g_scifa_driver:00000000 g_scifa_driver
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:404    .rodata.g_scifa_driver:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:416    .rodata.scifa_hld_control.str1.4:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:420    .rodata.scifa_hld_get_version.str1.4:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccEgbHHd.s:424    .rodata.str1.4:00000000 $d
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.stdio.h.27.3fc80220048df77954e38daec3bb9670
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.30.bbece7fa40993a78092dcc5805132560
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.8188691c2279eac7a223caa50f6694b9
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.reent.h.91.b3ea049ebc5486622b61409b78486f84
+                           .group:00000000 wm4._default_fcntl.h.6.b13d56891b95175b639f824a0fd1ed77
+                           .group:00000000 wm4.time.h.8.db4619001f026d0b4874c029fef0e91f
+                           .group:00000000 wm4.time.h.2.4581ce0ffb6627cfc02162c94bf846c9
+                           .group:00000000 wm4.time.h.25.0e6a0fdbc9955f5707ed54246ed2e089
+                           .group:00000000 wm4.time.h.162.d096f2f5887c52e271c4dc33d795dc64
+                           .group:00000000 wm4.stat.h.71.d65ac61ff88c651e198008cfb38bda9c
+                           .group:00000000 wm4.fcntl.h.9.9336f33d7f5028f694c75e6e224e0cf7
+                           .group:00000000 wm4.driver.h.34.180df73e0731406f5e50150641059ede
+                           .group:00000000 wm4.r_devlink_wrapper.h.72.ad1de4c851513efa3aed0532ebca7ca2
+                           .group:00000000 wm4.r_rza2_scifa_lld_cfg.h.36.61e814bf2acbefb3a77603b0f9c69f70
+                           .group:00000000 wm4.r_rza2_scifa_lld_api.h.40.f15aca924d8f4510909a605ba9e2cfc9
+                           .group:00000000 wm4.r_intc_lld_rza2m.h.35.148dee33e6a963828fdce2545668b517
+                           .group:00000000 wm4.r_rza2_scifa_lld.h.43.012a3fef11a37869f92df11b17f0b8cf
+                           .group:00000000 wm4.r_scifa_drv_api.h.86.11d6fc583c1ae6ce65f8fcc14c380c45
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_gpio_lld_rza2m.h.35.fd76d0816769697a06dd6f4a61c03021
+                           .group:00000000 wm4.r_gpio_drv_api.h.82.9514441e942567d0eb0b23efaff62239
+                           .group:00000000 wm4.r_os_abstraction_api.h.53.c40489f97d2474c70b40d43822d1406c
+
+UNDEFINED SYMBOLS
+R_SCIFA_GetVersion
+R_SCIFA_GetChannel
+r_scifa_hld_prv_set_config
+r_scifa_hld_prv_get_config
+r_scifa_hld_dma_read_abort
+r_scifa_hld_dma_write_abort
+r_scifa_hld_dma_read_next
+r_scifa_hld_dma_write_next
+r_scifa_hld_tx_flush
+printf
+r_scifa_hld_prv_write
+r_scifa_hld_prv_read
+r_scifa_hld_prv_close
+r_scifa_hld_prv_open

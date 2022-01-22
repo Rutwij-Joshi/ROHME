@@ -1,0 +1,468 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"rza_io_regrw.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.RZA_IO_RegWrite_8,"ax",%progbits
+  17              		.align	2
+  18              		.global	RZA_IO_RegWrite_8
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	RZA_IO_RegWrite_8:
+  24              	.LFB0:
+  25              		.file 1 "../generate/system/rza_io_regrw.c"
+   1:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+   2:../generate/system/rza_io_regrw.c ****  * DISCLAIMER
+   3:../generate/system/rza_io_regrw.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/system/rza_io_regrw.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/system/rza_io_regrw.c ****  * applicable laws, including copyright laws.
+   6:../generate/system/rza_io_regrw.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/system/rza_io_regrw.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/system/rza_io_regrw.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/system/rza_io_regrw.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/system/rza_io_regrw.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/system/rza_io_regrw.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/system/rza_io_regrw.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/system/rza_io_regrw.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/system/rza_io_regrw.c ****  * following link:
+  15:../generate/system/rza_io_regrw.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/system/rza_io_regrw.c ****  *
+  17:../generate/system/rza_io_regrw.c ****  * Copyright (C) 2018 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+  19:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+  20:../generate/system/rza_io_regrw.c ****  * File Name   : rza_io_regrw.c
+  21:../generate/system/rza_io_regrw.c ****  * Description : Low level register read/write
+  22:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+  23:../generate/system/rza_io_regrw.c **** 
+  24:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+  25:../generate/system/rza_io_regrw.c ****  Includes   <System Includes> , "Project Includes"
+  26:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+  27:../generate/system/rza_io_regrw.c **** #include "r_typedefs.h"
+  28:../generate/system/rza_io_regrw.c **** #include "rza_io_regrw.h"
+  29:../generate/system/rza_io_regrw.c **** 
+  30:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+  31:../generate/system/rza_io_regrw.c ****  Private (static) variables and functions
+  32:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+  33:../generate/system/rza_io_regrw.c **** 
+  34:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+  35:../generate/system/rza_io_regrw.c ****  * Function Name: RZA_IO_RegWrite_8
+  36:../generate/system/rza_io_regrw.c ****  * Description  : IO register 8-bit write
+  37:../generate/system/rza_io_regrw.c ****  * Arguments    : volatile uint8_t * ioreg : IO register for writing
+  38:../generate/system/rza_io_regrw.c ****  *              :                          : Use register definition name of the iodefine.h
+  39:../generate/system/rza_io_regrw.c ****  *              : uint8_t write_value      : Write value for the IO register
+  40:../generate/system/rza_io_regrw.c ****  *              : uint8_t shift            : The number of left shifts to the target bit
+  41:../generate/system/rza_io_regrw.c ****  *              : uint32_t mask            : Mask value for the IO register (Target bit : "1")
+  42:../generate/system/rza_io_regrw.c ****  * Return Value : None
+  43:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+  44:../generate/system/rza_io_regrw.c **** void RZA_IO_RegWrite_8(volatile uint8_t * ioreg, uint8_t write_value, uint8_t shift, uint32_t mask)
+  45:../generate/system/rza_io_regrw.c **** {
+  26              		.loc 1 45 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31              	.LVL0:
+  46:../generate/system/rza_io_regrw.c ****     uint8_t reg_value;
+  47:../generate/system/rza_io_regrw.c **** 
+  48:../generate/system/rza_io_regrw.c ****     if (IOREG_NONMASK_ACCESS != mask)
+  32              		.loc 1 48 0
+  33 0000 010073E3 		cmn	r3, #1
+  34 0004 0400000A 		beq	.L2
+  49:../generate/system/rza_io_regrw.c ****     {
+  50:../generate/system/rza_io_regrw.c ****         /* Read from register */
+  51:../generate/system/rza_io_regrw.c ****         reg_value = *ioreg;
+  35              		.loc 1 51 0
+  36 0008 00C0D0E5 		ldrb	ip, [r0]	@ zero_extendqisi2
+  37              	.LVL1:
+  52:../generate/system/rza_io_regrw.c **** 
+  53:../generate/system/rza_io_regrw.c ****         /* Modify value */
+  54:../generate/system/rza_io_regrw.c ****         reg_value = (uint8_t)((reg_value & (~mask)) | (uint8_t)(write_value << shift));
+  38              		.loc 1 54 0
+  39 000c 0330CCE1 		bic	r3, ip, r3
+  40              	.LVL2:
+  41 0010 1112A0E1 		lsl	r1, r1, r2
+  42              	.LVL3:
+  43 0014 7110EFE6 		uxtb	r1, r1
+  44 0018 011083E1 		orr	r1, r3, r1
+  45              	.LVL4:
+  46              	.L2:
+  55:../generate/system/rza_io_regrw.c ****     }
+  56:../generate/system/rza_io_regrw.c ****     else
+  57:../generate/system/rza_io_regrw.c ****     {
+  58:../generate/system/rza_io_regrw.c ****         reg_value = write_value;
+  59:../generate/system/rza_io_regrw.c ****     }
+  60:../generate/system/rza_io_regrw.c **** 
+  61:../generate/system/rza_io_regrw.c ****     /* Write to register */
+  62:../generate/system/rza_io_regrw.c ****     *ioreg = reg_value;
+  47              		.loc 1 62 0
+  48 001c 0010C0E5 		strb	r1, [r0]
+  49 0020 1EFF2FE1 		bx	lr
+  50              		.cfi_endproc
+  51              	.LFE0:
+  53              		.section	.text.RZA_IO_RegWrite_16,"ax",%progbits
+  54              		.align	2
+  55              		.global	RZA_IO_RegWrite_16
+  56              		.syntax unified
+  57              		.arm
+  58              		.fpu neon
+  60              	RZA_IO_RegWrite_16:
+  61              	.LFB1:
+  63:../generate/system/rza_io_regrw.c **** }
+  64:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+  65:../generate/system/rza_io_regrw.c ****  * End of function RZA_IO_RegWrite_8
+  66:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+  67:../generate/system/rza_io_regrw.c **** 
+  68:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+  69:../generate/system/rza_io_regrw.c ****  * Function Name: RZA_IO_RegWrite_16
+  70:../generate/system/rza_io_regrw.c ****  * Description  : IO register 16-bit write
+  71:../generate/system/rza_io_regrw.c ****  * Arguments    : volatile uint16_t * ioreg : IO register for writing
+  72:../generate/system/rza_io_regrw.c ****  *              :                           : Use register definition name of the iodefine.h
+  73:../generate/system/rza_io_regrw.c ****  *              : uint16_t write_value      : Write value for the IO register
+  74:../generate/system/rza_io_regrw.c ****  *              : uint16_t shift            : The number of left shifts to the target bit
+  75:../generate/system/rza_io_regrw.c ****  *              : uint32_t mask             : Mask value for the IO register (Target bit : "1")
+  76:../generate/system/rza_io_regrw.c ****  * Return Value : None
+  77:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+  78:../generate/system/rza_io_regrw.c **** void RZA_IO_RegWrite_16(volatile uint16_t * ioreg, uint16_t write_value, uint16_t shift, uint32_t m
+  79:../generate/system/rza_io_regrw.c **** {
+  62              		.loc 1 79 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 0
+  65              		@ frame_needed = 0, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+  67              	.LVL5:
+  80:../generate/system/rza_io_regrw.c ****     uint16_t reg_value;
+  81:../generate/system/rza_io_regrw.c **** 
+  82:../generate/system/rza_io_regrw.c ****     if (IOREG_NONMASK_ACCESS != mask)
+  68              		.loc 1 82 0
+  69 0000 010073E3 		cmn	r3, #1
+  70 0004 0400000A 		beq	.L4
+  83:../generate/system/rza_io_regrw.c ****     {
+  84:../generate/system/rza_io_regrw.c ****         /* Read from register */
+  85:../generate/system/rza_io_regrw.c ****         reg_value = *ioreg;
+  71              		.loc 1 85 0
+  72 0008 B0C0D0E1 		ldrh	ip, [r0]
+  73              	.LVL6:
+  86:../generate/system/rza_io_regrw.c **** 
+  87:../generate/system/rza_io_regrw.c ****         /* Modify value */
+  88:../generate/system/rza_io_regrw.c ****         reg_value = (uint16_t)((reg_value & (~mask)) | (uint16_t)(write_value << shift));
+  74              		.loc 1 88 0
+  75 000c 0330CCE1 		bic	r3, ip, r3
+  76              	.LVL7:
+  77 0010 1112A0E1 		lsl	r1, r1, r2
+  78              	.LVL8:
+  79 0014 7110FFE6 		uxth	r1, r1
+  80 0018 011083E1 		orr	r1, r3, r1
+  81              	.LVL9:
+  82              	.L4:
+  89:../generate/system/rza_io_regrw.c ****     }
+  90:../generate/system/rza_io_regrw.c ****     else
+  91:../generate/system/rza_io_regrw.c ****     {
+  92:../generate/system/rza_io_regrw.c ****         reg_value = write_value;
+  93:../generate/system/rza_io_regrw.c ****     }
+  94:../generate/system/rza_io_regrw.c **** 
+  95:../generate/system/rza_io_regrw.c ****     /* Write to register */
+  96:../generate/system/rza_io_regrw.c ****     *ioreg = reg_value;
+  83              		.loc 1 96 0
+  84 001c B010C0E1 		strh	r1, [r0]	@ movhi
+  85 0020 1EFF2FE1 		bx	lr
+  86              		.cfi_endproc
+  87              	.LFE1:
+  89              		.section	.text.RZA_IO_RegWrite_32,"ax",%progbits
+  90              		.align	2
+  91              		.global	RZA_IO_RegWrite_32
+  92              		.syntax unified
+  93              		.arm
+  94              		.fpu neon
+  96              	RZA_IO_RegWrite_32:
+  97              	.LFB2:
+  97:../generate/system/rza_io_regrw.c **** }
+  98:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+  99:../generate/system/rza_io_regrw.c ****  * End of function RZA_IO_RegWrite_16
+ 100:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 101:../generate/system/rza_io_regrw.c **** 
+ 102:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+ 103:../generate/system/rza_io_regrw.c ****  * Function Name: RZA_IO_RegWrite_32
+ 104:../generate/system/rza_io_regrw.c ****  * Description  : IO register 32-bit write
+ 105:../generate/system/rza_io_regrw.c ****  * Arguments    : volatile uint32_t * ioreg : IO register for writing
+ 106:../generate/system/rza_io_regrw.c ****  *              :                           : Use register definition name of the iodefine.h
+ 107:../generate/system/rza_io_regrw.c ****  *              : uint32_t write_value      : Write value for the IO register
+ 108:../generate/system/rza_io_regrw.c ****  *              : uint32_t shift            : The number of left shifts to the target bit
+ 109:../generate/system/rza_io_regrw.c ****  *              : uint32_t mask             : Mask value for the IO register (Target bit : "1")
+ 110:../generate/system/rza_io_regrw.c ****  * Return Value : None
+ 111:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 112:../generate/system/rza_io_regrw.c **** void RZA_IO_RegWrite_32(volatile uint32_t * ioreg, uint32_t write_value, uint32_t shift, uint32_t m
+ 113:../generate/system/rza_io_regrw.c **** {
+  98              		.loc 1 113 0
+  99              		.cfi_startproc
+ 100              		@ args = 0, pretend = 0, frame = 0
+ 101              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102              		@ link register save eliminated.
+ 103              	.LVL10:
+ 114:../generate/system/rza_io_regrw.c ****     uint32_t reg_value;
+ 115:../generate/system/rza_io_regrw.c **** 
+ 116:../generate/system/rza_io_regrw.c ****     if (IOREG_NONMASK_ACCESS != mask)
+ 104              		.loc 1 116 0
+ 105 0000 010073E3 		cmn	r3, #1
+ 117:../generate/system/rza_io_regrw.c ****     {
+ 118:../generate/system/rza_io_regrw.c ****         /* Read from register */
+ 119:../generate/system/rza_io_regrw.c ****         reg_value = *ioreg;
+ 106              		.loc 1 119 0
+ 107 0004 00C09015 		ldrne	ip, [r0]
+ 108              	.LVL11:
+ 120:../generate/system/rza_io_regrw.c **** 
+ 121:../generate/system/rza_io_regrw.c ****         /* Modify value */
+ 122:../generate/system/rza_io_regrw.c ****         reg_value = (uint32_t)((reg_value & (~mask)) | (uint32_t)(write_value << shift));
+ 109              		.loc 1 122 0
+ 110 0008 0330CC11 		bicne	r3, ip, r3
+ 111              	.LVL12:
+ 112 000c 11128311 		orrne	r1, r3, r1, lsl r2
+ 113              	.LVL13:
+ 114              	.L6:
+ 123:../generate/system/rza_io_regrw.c ****     }
+ 124:../generate/system/rza_io_regrw.c ****     else
+ 125:../generate/system/rza_io_regrw.c ****     {
+ 126:../generate/system/rza_io_regrw.c ****         reg_value = write_value;
+ 127:../generate/system/rza_io_regrw.c ****     }
+ 128:../generate/system/rza_io_regrw.c **** 
+ 129:../generate/system/rza_io_regrw.c ****     /* Write to register */
+ 130:../generate/system/rza_io_regrw.c ****     *ioreg = reg_value;
+ 115              		.loc 1 130 0
+ 116 0010 001080E5 		str	r1, [r0]
+ 117 0014 1EFF2FE1 		bx	lr
+ 118              		.cfi_endproc
+ 119              	.LFE2:
+ 121              		.section	.text.RZA_IO_RegRead_8,"ax",%progbits
+ 122              		.align	2
+ 123              		.global	RZA_IO_RegRead_8
+ 124              		.syntax unified
+ 125              		.arm
+ 126              		.fpu neon
+ 128              	RZA_IO_RegRead_8:
+ 129              	.LFB3:
+ 131:../generate/system/rza_io_regrw.c **** }
+ 132:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+ 133:../generate/system/rza_io_regrw.c ****  * End of function RZA_IO_RegWrite_32
+ 134:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 135:../generate/system/rza_io_regrw.c **** 
+ 136:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+ 137:../generate/system/rza_io_regrw.c ****  * Function Name: RZA_IO_RegRead_8
+ 138:../generate/system/rza_io_regrw.c ****  * Description  : IO register 8-bit read
+ 139:../generate/system/rza_io_regrw.c ****  * Arguments    : volatile uint8_t * ioreg : IO register for reading
+ 140:../generate/system/rza_io_regrw.c ****  *              :                          : Use register definition name of the iodefine.h
+ 141:../generate/system/rza_io_regrw.c ****  *              : uint8_t shift            : The number of right shifts to the target bit
+ 142:../generate/system/rza_io_regrw.c ****  *              : uint32_t mask            : Mask bit for the IO register (Target bit: "1")
+ 143:../generate/system/rza_io_regrw.c ****  * Return Value : uint8_t : Value of the obtained target bit
+ 144:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 145:../generate/system/rza_io_regrw.c **** uint8_t RZA_IO_RegRead_8(volatile uint8_t * ioreg, uint8_t shift, uint32_t mask)
+ 146:../generate/system/rza_io_regrw.c **** {
+ 130              		.loc 1 146 0
+ 131              		.cfi_startproc
+ 132              		@ args = 0, pretend = 0, frame = 0
+ 133              		@ frame_needed = 0, uses_anonymous_args = 0
+ 134              		@ link register save eliminated.
+ 135              	.LVL14:
+ 147:../generate/system/rza_io_regrw.c ****     uint8_t reg_value;
+ 148:../generate/system/rza_io_regrw.c **** 
+ 149:../generate/system/rza_io_regrw.c ****     /* Read from register */
+ 150:../generate/system/rza_io_regrw.c ****     reg_value = *ioreg;
+ 136              		.loc 1 150 0
+ 137 0000 0000D0E5 		ldrb	r0, [r0]	@ zero_extendqisi2
+ 138              	.LVL15:
+ 139 0004 7000EFE6 		uxtb	r0, r0
+ 140              	.LVL16:
+ 151:../generate/system/rza_io_regrw.c **** 
+ 152:../generate/system/rza_io_regrw.c ****     if (IOREG_NONMASK_ACCESS != mask)
+ 141              		.loc 1 152 0
+ 142 0008 010072E3 		cmn	r2, #1
+ 143 000c 1EFF2F01 		bxeq	lr
+ 153:../generate/system/rza_io_regrw.c ****     {
+ 154:../generate/system/rza_io_regrw.c ****         /* Clear other bit and Bit shift */
+ 155:../generate/system/rza_io_regrw.c ****         reg_value = (uint8_t)((reg_value & mask) >> shift);
+ 144              		.loc 1 155 0
+ 145 0010 020000E0 		and	r0, r0, r2
+ 146              	.LVL17:
+ 147 0014 3001A0E1 		lsr	r0, r0, r1
+ 148 0018 7000EFE6 		uxtb	r0, r0
+ 149              	.LVL18:
+ 156:../generate/system/rza_io_regrw.c ****     }
+ 157:../generate/system/rza_io_regrw.c **** 
+ 158:../generate/system/rza_io_regrw.c ****     return (reg_value);
+ 159:../generate/system/rza_io_regrw.c **** }
+ 150              		.loc 1 159 0
+ 151 001c 1EFF2FE1 		bx	lr
+ 152              		.cfi_endproc
+ 153              	.LFE3:
+ 155              		.section	.text.RZA_IO_RegRead_16,"ax",%progbits
+ 156              		.align	2
+ 157              		.global	RZA_IO_RegRead_16
+ 158              		.syntax unified
+ 159              		.arm
+ 160              		.fpu neon
+ 162              	RZA_IO_RegRead_16:
+ 163              	.LFB4:
+ 160:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+ 161:../generate/system/rza_io_regrw.c ****  * End of function RZA_IO_RegRead_8
+ 162:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 163:../generate/system/rza_io_regrw.c **** 
+ 164:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+ 165:../generate/system/rza_io_regrw.c ****  * Function Name: RZA_IO_RegRead_16
+ 166:../generate/system/rza_io_regrw.c ****  * Description  : IO register 16-bit read
+ 167:../generate/system/rza_io_regrw.c ****  * Arguments    : volatile uint16_t * ioreg : IO register for reading
+ 168:../generate/system/rza_io_regrw.c ****  *              :                           : Use register definition name of the iodefine.h
+ 169:../generate/system/rza_io_regrw.c ****  *              : uint16_t shift            : The number of right shifts to the target bit
+ 170:../generate/system/rza_io_regrw.c ****  *              : uint32_t mask             : Mask bit for the IO register (Target bit: "1")
+ 171:../generate/system/rza_io_regrw.c ****  * Return Value : uint16_t : Value of the obtained target bit
+ 172:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 173:../generate/system/rza_io_regrw.c **** uint16_t RZA_IO_RegRead_16(volatile uint16_t * ioreg, uint16_t shift, uint32_t mask)
+ 174:../generate/system/rza_io_regrw.c **** {
+ 164              		.loc 1 174 0
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 0
+ 167              		@ frame_needed = 0, uses_anonymous_args = 0
+ 168              		@ link register save eliminated.
+ 169              	.LVL19:
+ 175:../generate/system/rza_io_regrw.c ****     uint16_t reg_value;
+ 176:../generate/system/rza_io_regrw.c **** 
+ 177:../generate/system/rza_io_regrw.c ****     /* Read from register */
+ 178:../generate/system/rza_io_regrw.c ****     reg_value = *ioreg;
+ 170              		.loc 1 178 0
+ 171 0000 B000D0E1 		ldrh	r0, [r0]
+ 172              	.LVL20:
+ 173 0004 7000FFE6 		uxth	r0, r0
+ 174              	.LVL21:
+ 179:../generate/system/rza_io_regrw.c **** 
+ 180:../generate/system/rza_io_regrw.c ****     if (IOREG_NONMASK_ACCESS != mask)
+ 175              		.loc 1 180 0
+ 176 0008 010072E3 		cmn	r2, #1
+ 177 000c 1EFF2F01 		bxeq	lr
+ 181:../generate/system/rza_io_regrw.c ****     {
+ 182:../generate/system/rza_io_regrw.c ****         /* Clear other bit and Bit shift */
+ 183:../generate/system/rza_io_regrw.c ****         reg_value = (uint16_t)((reg_value & mask) >> shift);
+ 178              		.loc 1 183 0
+ 179 0010 020000E0 		and	r0, r0, r2
+ 180              	.LVL22:
+ 181 0014 3001A0E1 		lsr	r0, r0, r1
+ 182 0018 7000FFE6 		uxth	r0, r0
+ 183              	.LVL23:
+ 184:../generate/system/rza_io_regrw.c ****     }
+ 185:../generate/system/rza_io_regrw.c **** 
+ 186:../generate/system/rza_io_regrw.c ****     return (reg_value);
+ 187:../generate/system/rza_io_regrw.c **** }
+ 184              		.loc 1 187 0
+ 185 001c 1EFF2FE1 		bx	lr
+ 186              		.cfi_endproc
+ 187              	.LFE4:
+ 189              		.section	.text.RZA_IO_RegRead_32,"ax",%progbits
+ 190              		.align	2
+ 191              		.global	RZA_IO_RegRead_32
+ 192              		.syntax unified
+ 193              		.arm
+ 194              		.fpu neon
+ 196              	RZA_IO_RegRead_32:
+ 197              	.LFB5:
+ 188:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+ 189:../generate/system/rza_io_regrw.c ****  * End of function RZA_IO_RegRead_16
+ 190:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 191:../generate/system/rza_io_regrw.c **** 
+ 192:../generate/system/rza_io_regrw.c **** /**************************************************************************************************
+ 193:../generate/system/rza_io_regrw.c ****  * Function Name: RZA_IO_RegRead_32
+ 194:../generate/system/rza_io_regrw.c ****  * Description  : IO register 32-bit read
+ 195:../generate/system/rza_io_regrw.c ****  * Arguments    : volatile uint32_t * ioreg : IO register for reading
+ 196:../generate/system/rza_io_regrw.c ****  *              :                           : Use register definition name of the iodefine.h
+ 197:../generate/system/rza_io_regrw.c ****  *              : uint32_t shift            : The number of right shifts to the target bit
+ 198:../generate/system/rza_io_regrw.c ****  *              : uint32_t mask             : Mask bit for the IO register (Target bit: "1")
+ 199:../generate/system/rza_io_regrw.c ****  * Return Value : uint32_t : Value of the obtained target bit
+ 200:../generate/system/rza_io_regrw.c ****  **************************************************************************************************
+ 201:../generate/system/rza_io_regrw.c **** uint32_t RZA_IO_RegRead_32(volatile uint32_t * ioreg, uint32_t shift, uint32_t mask)
+ 202:../generate/system/rza_io_regrw.c **** {
+ 198              		.loc 1 202 0
+ 199              		.cfi_startproc
+ 200              		@ args = 0, pretend = 0, frame = 0
+ 201              		@ frame_needed = 0, uses_anonymous_args = 0
+ 202              		@ link register save eliminated.
+ 203              	.LVL24:
+ 203:../generate/system/rza_io_regrw.c ****     uint32_t reg_value;
+ 204:../generate/system/rza_io_regrw.c **** 
+ 205:../generate/system/rza_io_regrw.c ****     /* Read from register */
+ 206:../generate/system/rza_io_regrw.c ****     reg_value = *ioreg;
+ 204              		.loc 1 206 0
+ 205 0000 000090E5 		ldr	r0, [r0]
+ 206              	.LVL25:
+ 207:../generate/system/rza_io_regrw.c **** 
+ 208:../generate/system/rza_io_regrw.c ****     if (IOREG_NONMASK_ACCESS != mask)
+ 207              		.loc 1 208 0
+ 208 0004 010072E3 		cmn	r2, #1
+ 209 0008 1EFF2F01 		bxeq	lr
+ 209:../generate/system/rza_io_regrw.c ****     {
+ 210:../generate/system/rza_io_regrw.c ****         /* Clear other bit and Bit shift */
+ 211:../generate/system/rza_io_regrw.c ****         reg_value = (reg_value & mask) >> shift;
+ 210              		.loc 1 211 0
+ 211 000c 020000E0 		and	r0, r0, r2
+ 212              	.LVL26:
+ 213 0010 3001A0E1 		lsr	r0, r0, r1
+ 214              	.LVL27:
+ 212:../generate/system/rza_io_regrw.c ****     }
+ 213:../generate/system/rza_io_regrw.c **** 
+ 214:../generate/system/rza_io_regrw.c ****     return (reg_value);
+ 215:../generate/system/rza_io_regrw.c **** }
+ 215              		.loc 1 215 0
+ 216 0014 1EFF2FE1 		bx	lr
+ 217              		.cfi_endproc
+ 218              	.LFE5:
+ 220              		.text
+ 221              	.Letext0:
+ 222              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 223              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 224              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 225              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 226              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 227              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 228              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+DEFINED SYMBOLS
+                            *ABS*:00000000 rza_io_regrw.c
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:17     .text.RZA_IO_RegWrite_8:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:23     .text.RZA_IO_RegWrite_8:00000000 RZA_IO_RegWrite_8
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:54     .text.RZA_IO_RegWrite_16:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:60     .text.RZA_IO_RegWrite_16:00000000 RZA_IO_RegWrite_16
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:90     .text.RZA_IO_RegWrite_32:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:96     .text.RZA_IO_RegWrite_32:00000000 RZA_IO_RegWrite_32
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:122    .text.RZA_IO_RegRead_8:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:128    .text.RZA_IO_RegRead_8:00000000 RZA_IO_RegRead_8
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:156    .text.RZA_IO_RegRead_16:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:162    .text.RZA_IO_RegRead_16:00000000 RZA_IO_RegRead_16
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:190    .text.RZA_IO_RegRead_32:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cckTHAMT.s:196    .text.RZA_IO_RegRead_32:00000000 RZA_IO_RegRead_32
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.rza_io_regrw.h.33.07c1ee176b41ade23637426c80e4b86a
+
+NO UNDEFINED SYMBOLS

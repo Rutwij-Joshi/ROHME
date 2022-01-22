@@ -1,0 +1,2601 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_bcd_lcd.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.R_BCD_LcdGetVramAddress,"ax",%progbits
+  17              		.align	2
+  18              		.global	R_BCD_LcdGetVramAddress
+  19              		.syntax unified
+  20              		.arm
+  21              		.fpu neon
+  23              	R_BCD_LcdGetVramAddress:
+  24              	.LFB1:
+  25              		.file 1 "../src/renesas/application/r_bcd_lcd.c"
+   1:../src/renesas/application/r_bcd_lcd.c **** /**************************************************************************************************
+   2:../src/renesas/application/r_bcd_lcd.c ****  * DISCLAIMER
+   3:../src/renesas/application/r_bcd_lcd.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../src/renesas/application/r_bcd_lcd.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../src/renesas/application/r_bcd_lcd.c ****  * applicable laws, including copyright laws.
+   6:../src/renesas/application/r_bcd_lcd.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../src/renesas/application/r_bcd_lcd.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../src/renesas/application/r_bcd_lcd.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../src/renesas/application/r_bcd_lcd.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../src/renesas/application/r_bcd_lcd.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../src/renesas/application/r_bcd_lcd.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../src/renesas/application/r_bcd_lcd.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../src/renesas/application/r_bcd_lcd.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../src/renesas/application/r_bcd_lcd.c ****  * following link:
+  15:../src/renesas/application/r_bcd_lcd.c ****  * http://www.renesas.com/disclaimer
+  16:../src/renesas/application/r_bcd_lcd.c ****  *
+  17:../src/renesas/application/r_bcd_lcd.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../src/renesas/application/r_bcd_lcd.c ****  **************************************************************************************************
+  19:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+  20:../src/renesas/application/r_bcd_lcd.c **** Includes   <System Includes> , "Project Includes"
+  21:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+  22:../src/renesas/application/r_bcd_lcd.c **** #include <string.h>
+  23:../src/renesas/application/r_bcd_lcd.c **** #include "r_typedefs.h"
+  24:../src/renesas/application/r_bcd_lcd.c **** 
+  25:../src/renesas/application/r_bcd_lcd.c **** #include "r_rvapi_vdc.h"
+  26:../src/renesas/application/r_bcd_lcd.c **** #include "lcd_panel.h"
+  27:../src/renesas/application/r_bcd_lcd.c **** #include "r_image_config.h"
+  28:../src/renesas/application/r_bcd_lcd.c **** 
+  29:../src/renesas/application/r_bcd_lcd.c **** #include "r_bcd_lcd.h"
+  30:../src/renesas/application/r_bcd_lcd.c **** #include "draw.h"
+  31:../src/renesas/application/r_bcd_lcd.c **** #include "fontdata.h"
+  32:../src/renesas/application/r_bcd_lcd.c **** 
+  33:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+  34:../src/renesas/application/r_bcd_lcd.c **** Typedef definitions
+  35:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+  36:../src/renesas/application/r_bcd_lcd.c **** 
+  37:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+  38:../src/renesas/application/r_bcd_lcd.c **** Macro definitions
+  39:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+  40:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER0_DISP_AREA_HS         (0u)
+  41:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER0_DISP_AREA_VS         (0u)
+  42:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER0_DISP_AREA_HW         (R_BCD_LCD_WIDTH)
+  43:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER0_DISP_AREA_VW         (R_BCD_LCD_HEIGHT)
+  44:../src/renesas/application/r_bcd_lcd.c **** 
+  45:../src/renesas/application/r_bcd_lcd.c **** #define     VIDEO_BUFFER_STRIDE         ((LAYER0_DISP_AREA_HW + (R_BCD_LCD_STRIDE - 1)) & ~(R_BCD_L
+  46:../src/renesas/application/r_bcd_lcd.c **** #define     VIDEO_BUFFER_HEIGHT         (LAYER0_DISP_AREA_VW)
+  47:../src/renesas/application/r_bcd_lcd.c **** #define     VIDEO_BUFFER_NUM            (2u)
+  48:../src/renesas/application/r_bcd_lcd.c **** 
+  49:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER2_DISP_AREA_HS         (0u)
+  50:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER2_DISP_AREA_VS         (0u)
+  51:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER2_DISP_AREA_HW         (R_BCD_LCD_WIDTH)
+  52:../src/renesas/application/r_bcd_lcd.c **** #define     LAYER2_DISP_AREA_VW         (R_BCD_LCD_HEIGHT)
+  53:../src/renesas/application/r_bcd_lcd.c **** 
+  54:../src/renesas/application/r_bcd_lcd.c **** #define     GRAPHICS2_BUFFER_STRIDE     (((LAYER2_DISP_AREA_HW / 2) + (R_BCD_LCD_STRIDE - 1)) & ~(R
+  55:../src/renesas/application/r_bcd_lcd.c **** #define     GRAPHICS2_BUFFER_HEIGHT     (LAYER2_DISP_AREA_VW)
+  56:../src/renesas/application/r_bcd_lcd.c **** #define     GRAPHICS2_BUFFER_NUM        (2u)
+  57:../src/renesas/application/r_bcd_lcd.c **** 
+  58:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+  59:../src/renesas/application/r_bcd_lcd.c **** Imported global variables and functions (from other files)
+  60:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+  61:../src/renesas/application/r_bcd_lcd.c **** extern void VDC_LcdPortSetting(uint32_t param);
+  62:../src/renesas/application/r_bcd_lcd.c **** extern void DrawLine( vdc_layer_id_t layer_id, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint
+  63:../src/renesas/application/r_bcd_lcd.c **** 
+  64:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+  65:../src/renesas/application/r_bcd_lcd.c **** Exported global variables and functions (to be accessed by other files)
+  66:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+  67:../src/renesas/application/r_bcd_lcd.c **** 
+  68:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+  69:../src/renesas/application/r_bcd_lcd.c **** Private global variables and functions
+  70:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+  71:../src/renesas/application/r_bcd_lcd.c **** static uint8_t video_buffer[VIDEO_BUFFER_NUM][(VIDEO_BUFFER_STRIDE * VIDEO_BUFFER_HEIGHT)] __attrib
+  72:../src/renesas/application/r_bcd_lcd.c **** static uint8_t graphics2_buffer[GRAPHICS2_BUFFER_NUM][(GRAPHICS2_BUFFER_STRIDE * GRAPHICS2_BUFFER_H
+  73:../src/renesas/application/r_bcd_lcd.c **** static volatile int32_t vsync_count = 0;
+  74:../src/renesas/application/r_bcd_lcd.c **** 
+  75:../src/renesas/application/r_bcd_lcd.c **** static uint32_t Req_Layer1_Swap = 0;
+  76:../src/renesas/application/r_bcd_lcd.c **** static uint32_t Req_Layer2_Swap = 0;
+  77:../src/renesas/application/r_bcd_lcd.c **** static uint32_t Layer1_buffer_id = 0;
+  78:../src/renesas/application/r_bcd_lcd.c **** static uint32_t layer2_buffer_id = 0;
+  79:../src/renesas/application/r_bcd_lcd.c **** 
+  80:../src/renesas/application/r_bcd_lcd.c **** static void IntCallbackFunc (vdc_int_type_t int_type);
+  81:../src/renesas/application/r_bcd_lcd.c **** vdc_error_t r_display_init(const vdc_channel_t vdc_ch);
+  82:../src/renesas/application/r_bcd_lcd.c **** vdc_error_t r_image_quality_adjustment(vdc_channel_t vdc_ch);
+  83:../src/renesas/application/r_bcd_lcd.c **** vdc_error_t r_video_quality_adjustment(vdc_channel_t vdc_ch);
+  84:../src/renesas/application/r_bcd_lcd.c **** 
+  85:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+  86:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdGetVramAddress
+  87:../src/renesas/application/r_bcd_lcd.c **** * Description  : Acquire the address of the video buffer which is not currently being displayed
+  88:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : -
+  89:../src/renesas/application/r_bcd_lcd.c **** * Return Value : Video buffer address
+  90:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+  91:../src/renesas/application/r_bcd_lcd.c **** uint8_t *R_BCD_LcdGetVramAddress(void)
+  92:../src/renesas/application/r_bcd_lcd.c **** {
+  26              		.loc 1 92 0
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 0, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  93:../src/renesas/application/r_bcd_lcd.c ****     uint8_t *paddr; 
+  94:../src/renesas/application/r_bcd_lcd.c **** 
+  95:../src/renesas/application/r_bcd_lcd.c ****     if (Req_Layer1_Swap != 0)
+  31              		.loc 1 95 0
+  32 0000 003000E3 		movw	r3, #:lower16:.LANCHOR0
+  33 0004 003040E3 		movt	r3, #:upper16:.LANCHOR0
+  34 0008 003093E5 		ldr	r3, [r3]
+  35 000c 000053E3 		cmp	r3, #0
+  36 0010 0700001A 		bne	.L4
+  96:../src/renesas/application/r_bcd_lcd.c ****     {
+  97:../src/renesas/application/r_bcd_lcd.c ****         paddr = &video_buffer[1-Layer1_buffer_id][0];
+  98:../src/renesas/application/r_bcd_lcd.c ****     }
+  99:../src/renesas/application/r_bcd_lcd.c ****     else
+ 100:../src/renesas/application/r_bcd_lcd.c ****     {
+ 101:../src/renesas/application/r_bcd_lcd.c ****         paddr = &video_buffer[Layer1_buffer_id][0];
+  37              		.loc 1 101 0
+  38 0014 003000E3 		movw	r3, #:lower16:.LANCHOR1
+  39 0018 003040E3 		movt	r3, #:upper16:.LANCHOR1
+  40 001c 000093E5 		ldr	r0, [r3]
+  41 0020 003000E3 		movw	r3, #:lower16:.LANCHOR2
+  42 0024 003040E3 		movt	r3, #:upper16:.LANCHOR2
+  43 0028 4B2AA0E3 		mov	r2, #307200
+  44 002c 923020E0 		mla	r0, r2, r0, r3
+  45              	.LVL0:
+ 102:../src/renesas/application/r_bcd_lcd.c ****     }
+ 103:../src/renesas/application/r_bcd_lcd.c **** 
+ 104:../src/renesas/application/r_bcd_lcd.c ****     return paddr;
+ 105:../src/renesas/application/r_bcd_lcd.c **** }   /* End of function R_BCD_LcdGetVramAddress() */
+  46              		.loc 1 105 0
+  47 0030 1EFF2FE1 		bx	lr
+  48              	.LVL1:
+  49              	.L4:
+  97:../src/renesas/application/r_bcd_lcd.c ****     }
+  50              		.loc 1 97 0
+  51 0034 003000E3 		movw	r3, #:lower16:.LANCHOR1
+  52 0038 003040E3 		movt	r3, #:upper16:.LANCHOR1
+  53 003c 000093E5 		ldr	r0, [r3]
+  54 0040 010060E2 		rsb	r0, r0, #1
+  55 0044 003000E3 		movw	r3, #:lower16:.LANCHOR2
+  56 0048 003040E3 		movt	r3, #:upper16:.LANCHOR2
+  57 004c 4B2AA0E3 		mov	r2, #307200
+  58 0050 923020E0 		mla	r0, r2, r0, r3
+  59              	.LVL2:
+  60 0054 1EFF2FE1 		bx	lr
+  61              		.cfi_endproc
+  62              	.LFE1:
+  64              		.section	.text.R_BCD_LcdGetOLVramAddress,"ax",%progbits
+  65              		.align	2
+  66              		.global	R_BCD_LcdGetOLVramAddress
+  67              		.syntax unified
+  68              		.arm
+  69              		.fpu neon
+  71              	R_BCD_LcdGetOLVramAddress:
+  72              	.LFB2:
+ 106:../src/renesas/application/r_bcd_lcd.c **** 
+ 107:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 108:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdGetOLVramAddress
+ 109:../src/renesas/application/r_bcd_lcd.c **** * Description  : Acquire the address of the Overlap buffer which is not currently being displayed
+ 110:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : -
+ 111:../src/renesas/application/r_bcd_lcd.c **** * Return Value : Overlap buffer address
+ 112:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 113:../src/renesas/application/r_bcd_lcd.c **** uint8_t *R_BCD_LcdGetOLVramAddress(void) 
+ 114:../src/renesas/application/r_bcd_lcd.c **** {
+  73              		.loc 1 114 0
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 0
+  76              		@ frame_needed = 0, uses_anonymous_args = 0
+  77              		@ link register save eliminated.
+ 115:../src/renesas/application/r_bcd_lcd.c ****     uint8_t *paddr; 
+ 116:../src/renesas/application/r_bcd_lcd.c **** 
+ 117:../src/renesas/application/r_bcd_lcd.c ****     if (Req_Layer2_Swap != 0)
+  78              		.loc 1 117 0
+  79 0000 003000E3 		movw	r3, #:lower16:.LANCHOR3
+  80 0004 003040E3 		movt	r3, #:upper16:.LANCHOR3
+  81 0008 003093E5 		ldr	r3, [r3]
+  82 000c 000053E3 		cmp	r3, #0
+  83 0010 0700001A 		bne	.L8
+ 118:../src/renesas/application/r_bcd_lcd.c ****     {
+ 119:../src/renesas/application/r_bcd_lcd.c ****         paddr = &graphics2_buffer[1-layer2_buffer_id][0];
+ 120:../src/renesas/application/r_bcd_lcd.c ****     }
+ 121:../src/renesas/application/r_bcd_lcd.c ****     else
+ 122:../src/renesas/application/r_bcd_lcd.c ****     {
+ 123:../src/renesas/application/r_bcd_lcd.c ****         paddr =  &graphics2_buffer[layer2_buffer_id][0];
+  84              		.loc 1 123 0
+  85 0014 003000E3 		movw	r3, #:lower16:.LANCHOR4
+  86 0018 003040E3 		movt	r3, #:upper16:.LANCHOR4
+  87 001c 000093E5 		ldr	r0, [r3]
+  88 0020 003000E3 		movw	r3, #:lower16:.LANCHOR5
+  89 0024 003040E3 		movt	r3, #:upper16:.LANCHOR5
+  90 0028 962BA0E3 		mov	r2, #153600
+  91 002c 923020E0 		mla	r0, r2, r0, r3
+  92              	.LVL3:
+ 124:../src/renesas/application/r_bcd_lcd.c ****     }
+ 125:../src/renesas/application/r_bcd_lcd.c **** 
+ 126:../src/renesas/application/r_bcd_lcd.c ****     return paddr;
+ 127:../src/renesas/application/r_bcd_lcd.c **** }   /* End of function R_BCD_LcdGetOLVramAddress() */
+  93              		.loc 1 127 0
+  94 0030 1EFF2FE1 		bx	lr
+  95              	.LVL4:
+  96              	.L8:
+ 119:../src/renesas/application/r_bcd_lcd.c ****     }
+  97              		.loc 1 119 0
+  98 0034 003000E3 		movw	r3, #:lower16:.LANCHOR4
+  99 0038 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 100 003c 000093E5 		ldr	r0, [r3]
+ 101 0040 010060E2 		rsb	r0, r0, #1
+ 102 0044 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 103 0048 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 104 004c 962BA0E3 		mov	r2, #153600
+ 105 0050 923020E0 		mla	r0, r2, r0, r3
+ 106              	.LVL5:
+ 107 0054 1EFF2FE1 		bx	lr
+ 108              		.cfi_endproc
+ 109              	.LFE2:
+ 111              		.section	.text.r_display_init,"ax",%progbits
+ 112              		.align	2
+ 113              		.global	r_display_init
+ 114              		.syntax unified
+ 115              		.arm
+ 116              		.fpu neon
+ 118              	r_display_init:
+ 119              	.LFB5:
+ 128:../src/renesas/application/r_bcd_lcd.c **** 
+ 129:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 130:../src/renesas/application/r_bcd_lcd.c **** * Function Name: IntCallbackFunc
+ 131:../src/renesas/application/r_bcd_lcd.c **** * Description  : VDC6 Interrupt callback function
+ 132:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : int_type
+ 133:../src/renesas/application/r_bcd_lcd.c **** *              :   VDC6 interrupt type
+ 134:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 135:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 136:../src/renesas/application/r_bcd_lcd.c **** static void IntCallbackFunc(vdc_int_type_t int_type)
+ 137:../src/renesas/application/r_bcd_lcd.c **** {
+ 138:../src/renesas/application/r_bcd_lcd.c ****     if( int_type == VDC_INT_TYPE_VLINE )
+ 139:../src/renesas/application/r_bcd_lcd.c ****     {
+ 140:../src/renesas/application/r_bcd_lcd.c ****         /* Update the LCD output.*/
+ 141:../src/renesas/application/r_bcd_lcd.c ****         R_BCD_LcdVSync();
+ 142:../src/renesas/application/r_bcd_lcd.c ****     }
+ 143:../src/renesas/application/r_bcd_lcd.c **** 
+ 144:../src/renesas/application/r_bcd_lcd.c ****     if( int_type == VDC_INT_TYPE_S0_LO_VSYNC )
+ 145:../src/renesas/application/r_bcd_lcd.c ****     {
+ 146:../src/renesas/application/r_bcd_lcd.c ****         if (vsync_count > 0)
+ 147:../src/renesas/application/r_bcd_lcd.c ****         {
+ 148:../src/renesas/application/r_bcd_lcd.c ****             vsync_count--;
+ 149:../src/renesas/application/r_bcd_lcd.c ****         }
+ 150:../src/renesas/application/r_bcd_lcd.c ****     }
+ 151:../src/renesas/application/r_bcd_lcd.c **** 
+ 152:../src/renesas/application/r_bcd_lcd.c ****     return;
+ 153:../src/renesas/application/r_bcd_lcd.c **** }   /* End of function IntCallbackFunc() */
+ 154:../src/renesas/application/r_bcd_lcd.c **** 
+ 155:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 156:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdInit
+ 157:../src/renesas/application/r_bcd_lcd.c **** * Description  : LCD initialization processing
+ 158:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : -
+ 159:../src/renesas/application/r_bcd_lcd.c **** * Return Value : Always returns 0
+ 160:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 161:../src/renesas/application/r_bcd_lcd.c **** int32_t R_BCD_LcdInit(void)
+ 162:../src/renesas/application/r_bcd_lcd.c **** {
+ 163:../src/renesas/application/r_bcd_lcd.c ****     vdc_error_t error;
+ 164:../src/renesas/application/r_bcd_lcd.c ****     vdc_channel_t vdc_ch = VDC_CHANNEL_0;
+ 165:../src/renesas/application/r_bcd_lcd.c ****     uint32_t table_no;
+ 166:../src/renesas/application/r_bcd_lcd.c ****     uint32_t clut[256];
+ 167:../src/renesas/application/r_bcd_lcd.c **** 
+ 168:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 169:../src/renesas/application/r_bcd_lcd.c ****     /* display init (VDC6 output setting) */
+ 170:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 171:../src/renesas/application/r_bcd_lcd.c ****     error = r_display_init (vdc_ch);
+ 172:../src/renesas/application/r_bcd_lcd.c **** 
+ 173:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 174:../src/renesas/application/r_bcd_lcd.c ****     /* Interrupt init */
+ 175:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 176:../src/renesas/application/r_bcd_lcd.c ****     if (error == VDC_OK)
+ 177:../src/renesas/application/r_bcd_lcd.c ****     {
+ 178:../src/renesas/application/r_bcd_lcd.c ****         uint16_t line_num;
+ 179:../src/renesas/application/r_bcd_lcd.c **** 
+ 180:../src/renesas/application/r_bcd_lcd.c ****         line_num = LCD_CH0_DISP_VS + R_BCD_LCD_HEIGHT;
+ 181:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_InterruptEnableVDC(vdc_ch, VDC_INT_TYPE_VLINE, line_num, IntCallbackFunc);
+ 182:../src/renesas/application/r_bcd_lcd.c ****     }
+ 183:../src/renesas/application/r_bcd_lcd.c **** 
+ 184:../src/renesas/application/r_bcd_lcd.c ****     if (error == VDC_OK)
+ 185:../src/renesas/application/r_bcd_lcd.c ****     {
+ 186:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_InterruptEnableVDC(vdc_ch, VDC_INT_TYPE_S0_LO_VSYNC, 0, IntCallbackFunc);
+ 187:../src/renesas/application/r_bcd_lcd.c ****     }
+ 188:../src/renesas/application/r_bcd_lcd.c **** 
+ 189:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 190:../src/renesas/application/r_bcd_lcd.c ****     /* Graphic Layer 0 VDC6_GR_FORMAT_CLUT8 */
+ 191:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 192:../src/renesas/application/r_bcd_lcd.c ****     if (error == VDC_OK)
+ 193:../src/renesas/application/r_bcd_lcd.c ****     {
+ 194:../src/renesas/application/r_bcd_lcd.c ****         gr_surface_disp_config_t gr_disp_cnf;
+ 195:../src/renesas/application/r_bcd_lcd.c **** 
+ 196:../src/renesas/application/r_bcd_lcd.c ****         for(table_no = 0; table_no < 256 ; table_no ++ )
+ 197:../src/renesas/application/r_bcd_lcd.c ****         {
+ 198:../src/renesas/application/r_bcd_lcd.c ****             clut[table_no] = 0xFF000000 | (table_no << 16 ) | (table_no << 8) | table_no;
+ 199:../src/renesas/application/r_bcd_lcd.c ****         }
+ 200:../src/renesas/application/r_bcd_lcd.c **** 
+ 201:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.layer_id  = VDC_LAYER_ID_0_RD;         /* Layer ID                        */
+ 202:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_buff   = (void *)&video_buffer[0];   /* Frame buffer address            */
+ 203:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_stride = VIDEO_BUFFER_STRIDE;        /* Frame buffer stride             */
+ 204:../src/renesas/application/r_bcd_lcd.c **** 
+ 205:../src/renesas/application/r_bcd_lcd.c ****         /* Display Area               */
+ 206:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.hs_rel = LAYER0_DISP_AREA_HS;
+ 207:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.hw_rel = LAYER0_DISP_AREA_HW;
+ 208:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vs_rel = LAYER0_DISP_AREA_VS;
+ 209:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vw_rel = LAYER0_DISP_AREA_VW;
+ 210:../src/renesas/application/r_bcd_lcd.c **** 
+ 211:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_format   = VDC_GR_FORMAT_CLUT8;           /* Read Format                */
+ 212:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_ycc_swap = VDC_GR_YCCSWAP_CBY0CRY1;       /* Read Swap for YCbCr422     */
+ 213:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_swap     = VDC_WR_RD_WRSWA_32_16_8BIT;    /* Read Swap 8bit/16bit/32bit */
+ 214:../src/renesas/application/r_bcd_lcd.c **** 
+ 215:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.clut_table = clut;  /* Setting if Read Format is CLUT. */
+ 216:../src/renesas/application/r_bcd_lcd.c **** 
+ 217:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_mode = VDC_DISPSEL_CURRENT;   /* Display mode select        */
+ 218:../src/renesas/application/r_bcd_lcd.c **** 
+ 219:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_GraphCreateSurfaceVDC(vdc_ch, &gr_disp_cnf);
+ 220:../src/renesas/application/r_bcd_lcd.c ****     }
+ 221:../src/renesas/application/r_bcd_lcd.c **** 
+ 222:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 223:../src/renesas/application/r_bcd_lcd.c ****     /* Graphic Layer 2 VDC6_GR_FORMAT_CLUT4 */
+ 224:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 225:../src/renesas/application/r_bcd_lcd.c ****     if (error == VDC_OK)
+ 226:../src/renesas/application/r_bcd_lcd.c ****     {
+ 227:../src/renesas/application/r_bcd_lcd.c ****         gr_surface_disp_config_t gr_disp_cnf;
+ 228:../src/renesas/application/r_bcd_lcd.c **** 
+ 229:../src/renesas/application/r_bcd_lcd.c ****         clut[BLACK]       = BLACK_DATA;
+ 230:../src/renesas/application/r_bcd_lcd.c ****         clut[BLUE]        = BLUE_DATA;
+ 231:../src/renesas/application/r_bcd_lcd.c ****         clut[GREEN]       = GREEN_DATA;
+ 232:../src/renesas/application/r_bcd_lcd.c ****         clut[RED]         = RED_DATA;
+ 233:../src/renesas/application/r_bcd_lcd.c ****         clut[WHITE]       = WHITE_DATA;
+ 234:../src/renesas/application/r_bcd_lcd.c ****         clut[CYAN]        = CYAN_DATA;
+ 235:../src/renesas/application/r_bcd_lcd.c ****         clut[YELLOW]      = YELLOW_DATA;
+ 236:../src/renesas/application/r_bcd_lcd.c ****         clut[MAGENTA]     = MAGENTA_DATA;
+ 237:../src/renesas/application/r_bcd_lcd.c ****         clut[NAVY]        = NAVY_DATA;
+ 238:../src/renesas/application/r_bcd_lcd.c ****         clut[DARKGREEN]   = DARKGREEN_DATA;
+ 239:../src/renesas/application/r_bcd_lcd.c ****         clut[DEEPSKYBLUE] = DEEPSKYBLUE_DATA;
+ 240:../src/renesas/application/r_bcd_lcd.c ****         clut[PURPLE]      = PURPLE_DATA;
+ 241:../src/renesas/application/r_bcd_lcd.c ****         clut[GRAY]        = GRAY_DATA;
+ 242:../src/renesas/application/r_bcd_lcd.c ****         clut[BROWN]       = BROWN_DATA;
+ 243:../src/renesas/application/r_bcd_lcd.c ****         clut[GOLD]        = GOLD_DATA;
+ 244:../src/renesas/application/r_bcd_lcd.c ****         clut[TRANSPARENT] = TRANSPARENT_DATA;
+ 245:../src/renesas/application/r_bcd_lcd.c **** 
+ 246:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.layer_id  = VDC_LAYER_ID_2_RD;             /* Layer ID                        *
+ 247:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_buff   = (void *)&graphics2_buffer[0];   /* Frame buffer address            
+ 248:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_stride = GRAPHICS2_BUFFER_STRIDE;        /* Frame buffer stride             
+ 249:../src/renesas/application/r_bcd_lcd.c **** 
+ 250:../src/renesas/application/r_bcd_lcd.c ****         /* Display Area               */
+ 251:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.hs_rel = LAYER2_DISP_AREA_HS;
+ 252:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.hw_rel = LAYER2_DISP_AREA_HW;
+ 253:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vs_rel = LAYER2_DISP_AREA_VS;
+ 254:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vw_rel = LAYER2_DISP_AREA_VW;
+ 255:../src/renesas/application/r_bcd_lcd.c **** 
+ 256:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_format   = VDC_GR_FORMAT_CLUT4;           /* Read Format                */
+ 257:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_ycc_swap = VDC_GR_YCCSWAP_CBY0CRY1;       /* Read Swap for YCbCr422     */
+ 258:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_swap     = VDC_WR_RD_WRSWA_32_16_8BIT;    /* Read Swap 8bit/16bit/32bit */
+ 259:../src/renesas/application/r_bcd_lcd.c **** 
+ 260:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.clut_table = clut;  /* Setting if Read Format is CLUT. */
+ 261:../src/renesas/application/r_bcd_lcd.c **** 
+ 262:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_mode = VDC_DISPSEL_BLEND;   /* Display mode select */
+ 263:../src/renesas/application/r_bcd_lcd.c **** 
+ 264:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_GraphCreateSurfaceVDC(vdc_ch, &gr_disp_cnf);
+ 265:../src/renesas/application/r_bcd_lcd.c ****     }
+ 266:../src/renesas/application/r_bcd_lcd.c **** 
+ 267:../src/renesas/application/r_bcd_lcd.c ****     {
+ 268:../src/renesas/application/r_bcd_lcd.c ****         draw_buffer_info            info;
+ 269:../src/renesas/application/r_bcd_lcd.c **** 
+ 270:../src/renesas/application/r_bcd_lcd.c ****         /* gra draw init */
+ 271:../src/renesas/application/r_bcd_lcd.c ****         info.buff_addr1        = graphics2_buffer[0];
+ 272:../src/renesas/application/r_bcd_lcd.c ****         info.buff_addr2        = graphics2_buffer[1];
+ 273:../src/renesas/application/r_bcd_lcd.c ****         info.buff_stride       = GRAPHICS2_BUFFER_STRIDE;
+ 274:../src/renesas/application/r_bcd_lcd.c ****         info.window_width      = LAYER2_DISP_AREA_HW;
+ 275:../src/renesas/application/r_bcd_lcd.c ****         info.window_height     = LAYER2_DISP_AREA_VW;
+ 276:../src/renesas/application/r_bcd_lcd.c ****         DrawInit( VDC_LAYER_ID_2_RD, &info );
+ 277:../src/renesas/application/r_bcd_lcd.c **** 
+ 278:../src/renesas/application/r_bcd_lcd.c ****         /* buffer claer */
+ 279:../src/renesas/application/r_bcd_lcd.c ****         DrawRectFill( VDC_LAYER_ID_2_RD, 0 ,0, R_BCD_LCD_WIDTH, R_BCD_LCD_HEIGHT, TRANSPARENT );
+ 280:../src/renesas/application/r_bcd_lcd.c ****     }
+ 281:../src/renesas/application/r_bcd_lcd.c **** 
+ 282:../src/renesas/application/r_bcd_lcd.c ****     /* image and video quality adjustment */
+ 283:../src/renesas/application/r_bcd_lcd.c ****     if (VDC_OK == error)
+ 284:../src/renesas/application/r_bcd_lcd.c ****     {
+ 285:../src/renesas/application/r_bcd_lcd.c ****         r_image_quality_adjustment(vdc_ch);
+ 286:../src/renesas/application/r_bcd_lcd.c **** #if 0 
+ 287:../src/renesas/application/r_bcd_lcd.c ****         r_video_quality_adjustment(vdc_ch);  /* It is possible to use it when inputting video with 
+ 288:../src/renesas/application/r_bcd_lcd.c ****                                In this sample, it can not be used because it is video input with MI
+ 289:../src/renesas/application/r_bcd_lcd.c **** #endif
+ 290:../src/renesas/application/r_bcd_lcd.c ****     }
+ 291:../src/renesas/application/r_bcd_lcd.c **** 
+ 292:../src/renesas/application/r_bcd_lcd.c ****     /* Display On */
+ 293:../src/renesas/application/r_bcd_lcd.c ****     if (VDC_OK == error)
+ 294:../src/renesas/application/r_bcd_lcd.c ****     {
+ 295:../src/renesas/application/r_bcd_lcd.c ****         R_RVAPI_DispPortSettingVDC(vdc_ch, &VDC_LcdPortSetting);
+ 296:../src/renesas/application/r_bcd_lcd.c ****     }
+ 297:../src/renesas/application/r_bcd_lcd.c **** 
+ 298:../src/renesas/application/r_bcd_lcd.c ****     return 0;
+ 299:../src/renesas/application/r_bcd_lcd.c **** }   /* End of function R_BCD_LcdInit() */
+ 300:../src/renesas/application/r_bcd_lcd.c **** 
+ 301:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 302:../src/renesas/application/r_bcd_lcd.c **** * Function Name: r_display_init
+ 303:../src/renesas/application/r_bcd_lcd.c **** * Description  : VDC6 output setting
+ 304:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : vdc_ch
+ 305:../src/renesas/application/r_bcd_lcd.c **** *              :   Channel
+ 306:../src/renesas/application/r_bcd_lcd.c **** * Return Value : 0
+ 307:../src/renesas/application/r_bcd_lcd.c **** *              :   success
+ 308:../src/renesas/application/r_bcd_lcd.c **** *              : other
+ 309:../src/renesas/application/r_bcd_lcd.c **** *              :   fail (vdc_error_t)
+ 310:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 311:../src/renesas/application/r_bcd_lcd.c **** vdc_error_t r_display_init(const vdc_channel_t vdc_ch)
+ 312:../src/renesas/application/r_bcd_lcd.c **** {
+ 120              		.loc 1 312 0
+ 121              		.cfi_startproc
+ 122              		@ args = 0, pretend = 0, frame = 48
+ 123              		@ frame_needed = 0, uses_anonymous_args = 0
+ 124              	.LVL6:
+ 125 0000 10402DE9 		push	{r4, lr}
+ 126              		.cfi_def_cfa_offset 8
+ 127              		.cfi_offset 4, -8
+ 128              		.cfi_offset 14, -4
+ 129 0004 30D04DE2 		sub	sp, sp, #48
+ 130              		.cfi_def_cfa_offset 56
+ 131 0008 0040A0E1 		mov	r4, r0
+ 132              	.LBB2:
+ 313:../src/renesas/application/r_bcd_lcd.c ****     vdc_error_t error;
+ 314:../src/renesas/application/r_bcd_lcd.c **** 
+ 315:../src/renesas/application/r_bcd_lcd.c ****     /* Display clock setting */
+ 316:../src/renesas/application/r_bcd_lcd.c ****     {
+ 317:../src/renesas/application/r_bcd_lcd.c ****         clock_config_t clock_config;
+ 318:../src/renesas/application/r_bcd_lcd.c ****         vdc_lvds_t lvds;
+ 319:../src/renesas/application/r_bcd_lcd.c **** 
+ 320:../src/renesas/application/r_bcd_lcd.c ****         clock_config.panel_clk = LCD_CH0_PANEL_CLK;
+ 133              		.loc 1 320 0
+ 134 000c 0330A0E3 		mov	r3, #3
+ 135 0010 0430CDE5 		strb	r3, [sp, #4]
+ 321:../src/renesas/application/r_bcd_lcd.c ****         clock_config.panel_clk_div = LCD_CH0_PANEL_CLK_DIV;
+ 136              		.loc 1 321 0
+ 137 0014 0030A0E3 		mov	r3, #0
+ 138 0018 0530CDE5 		strb	r3, [sp, #5]
+ 322:../src/renesas/application/r_bcd_lcd.c **** 
+ 323:../src/renesas/application/r_bcd_lcd.c ****         lvds.lvds_vdc_sel = vdc_ch;                 /* A channel in VDC6 whose data is to be output
+ 139              		.loc 1 323 0
+ 140 001c 1100CDE5 		strb	r0, [sp, #17]
+ 324:../src/renesas/application/r_bcd_lcd.c ****         lvds.lvds_in_clk_sel = LVDS_PLL_INPUT_CLK;  /* The clock input to frequency divider 1 */
+ 141              		.loc 1 324 0
+ 142 0020 0230A0E3 		mov	r3, #2
+ 143 0024 0C30CDE5 		strb	r3, [sp, #12]
+ 325:../src/renesas/application/r_bcd_lcd.c ****         lvds.lvds_idiv_set = LVDS_PLL_NIDV;         /* Not use */
+ 144              		.loc 1 325 0
+ 145 0028 0D30CDE5 		strb	r3, [sp, #13]
+ 326:../src/renesas/application/r_bcd_lcd.c ****         lvds.lvds_odiv_set = LVDS_PLL_NODIV;        /* The frequency dividing value (NODIV) for fre
+ 146              		.loc 1 326 0
+ 147 002c 1030CDE5 		strb	r3, [sp, #16]
+ 327:../src/renesas/application/r_bcd_lcd.c ****         lvds.lvdspll_fd = LVDS_PLL_NFD;             /* The frequency dividing value (NFD) for the f
+ 148              		.loc 1 327 0
+ 149 0030 1E20A0E3 		mov	r2, #30
+ 150 0034 B221CDE1 		strh	r2, [sp, #18]	@ movhi
+ 328:../src/renesas/application/r_bcd_lcd.c ****         lvds.lvdspll_rd = LVDS_PLL_NRD;             /* The frequency dividing value (NRD) for the i
+ 151              		.loc 1 328 0
+ 152 0038 0520A0E3 		mov	r2, #5
+ 153 003c B421CDE1 		strh	r2, [sp, #20]	@ movhi
+ 329:../src/renesas/application/r_bcd_lcd.c ****         lvds.lvdspll_od = LVDS_PLL_NOD;             /* Not use */
+ 154              		.loc 1 329 0
+ 155 0040 1630CDE5 		strb	r3, [sp, #22]
+ 330:../src/renesas/application/r_bcd_lcd.c ****         clock_config.lvds = &lvds;
+ 156              		.loc 1 330 0
+ 157 0044 0C308DE2 		add	r3, sp, #12
+ 158 0048 08308DE5 		str	r3, [sp, #8]
+ 331:../src/renesas/application/r_bcd_lcd.c **** 
+ 332:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_InitializeVDC (vdc_ch, &clock_config);
+ 159              		.loc 1 332 0
+ 160 004c 04108DE2 		add	r1, sp, #4
+ 161 0050 FEFFFFEB 		bl	R_RVAPI_InitializeVDC
+ 162              	.LVL7:
+ 163              	.LBE2:
+ 333:../src/renesas/application/r_bcd_lcd.c ****     }
+ 334:../src/renesas/application/r_bcd_lcd.c **** 
+ 335:../src/renesas/application/r_bcd_lcd.c ****     /* Display setting */
+ 336:../src/renesas/application/r_bcd_lcd.c ****     if (VDC_OK == error)
+ 164              		.loc 1 336 0
+ 165 0054 000050E3 		cmp	r0, #0
+ 166              	.LVL8:
+ 167 0058 0100000A 		beq	.L12
+ 168              	.L10:
+ 169              	.LVL9:
+ 337:../src/renesas/application/r_bcd_lcd.c ****     {
+ 338:../src/renesas/application/r_bcd_lcd.c ****         qe_config_t q_cnf;
+ 339:../src/renesas/application/r_bcd_lcd.c **** 
+ 340:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vps = LCD_CH0_S_VSYNC;                    /* Vertical Pulse start position */
+ 341:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vpw = LCD_CH0_W_VSYNC;                    /* Vertical Pulse Width(VPW) */
+ 342:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vs = LCD_CH0_DISP_VS;                     /* LCD display area vertical start position
+ 343:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vdp = LCD_CH0_DISP_VW;                    /* Vertical Display Period(VDP) */
+ 344:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hps = LCD_CH0_S_HSYNC;                    /* Horizontal Pulse start position */
+ 345:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hpw = LCD_CH0_W_HSYNC;                    /* Horizontal Pulse Width(HPW) */
+ 346:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hs = LCD_CH0_DISP_HS;                     /* LCD display area horizontal start positi
+ 347:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hdp = LCD_CH0_DISP_HW;                    /* Horizontal Display Period(HDP */
+ 348:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vtp = LCD_CH0_SIG_FV;                     /* Vertical Total Period(VTP) */
+ 349:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.htp = LCD_CH0_SIG_FH;                     /* Horizontal Total Period(HTP) */
+ 350:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_vsync = LCD_CH0_TCON_PIN_VSYNC;      /* Vsync_TCON_select */
+ 351:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_hsync = LCD_CH0_TCON_PIN_HSYNC;      /* Hsync_TCON_select */
+ 352:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_de = LCD_CH0_TCON_PIN_DE;            /* DE_TCON_select */
+ 353:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_vsync_inv = LCD_CH0_TOCN_POL_VSYNC;  /* Vsync_POL */
+ 354:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_hsync_inv = LCD_CH0_TOCN_POL_HSYNC;  /* Hsync_POL */
+ 355:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_de_inv = LCD_CH0_TOCN_POL_DE;        /* DE_POL */
+ 356:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_half = LCD_CH0_TCON_HALF;            /* TCON reference timing, 1/2fH timing(HTP)
+ 357:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_ofset = LCD_CH0_TCON_OFFSET;         /* TCON reference timing, offset Hsync sign
+ 358:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.lcd_data_out_edge = LCD_CH0_OUT_EDGE;     /* LCD_DATA_OUT_EDGE */
+ 359:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.lcd_outformat = LCD_CH0_OUT_FORMAT;       /* LCD output format select */
+ 360:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.out_endian_on = VDC_ON;
+ 361:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.out_swap_on = VDC_ON;
+ 362:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_DispControlConfigVDC (vdc_ch, VDC_ON, &q_cnf);
+ 363:../src/renesas/application/r_bcd_lcd.c ****      }
+ 364:../src/renesas/application/r_bcd_lcd.c **** 
+ 365:../src/renesas/application/r_bcd_lcd.c ****     return error;
+ 366:../src/renesas/application/r_bcd_lcd.c **** }   /* End of function r_display_init() */
+ 170              		.loc 1 366 0
+ 171 005c 30D08DE2 		add	sp, sp, #48
+ 172              		.cfi_remember_state
+ 173              		.cfi_def_cfa_offset 8
+ 174              		@ sp needed
+ 175 0060 1080BDE8 		pop	{r4, pc}
+ 176              	.LVL10:
+ 177              	.L12:
+ 178              		.cfi_restore_state
+ 179              	.LBB3:
+ 340:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vpw = LCD_CH0_W_VSYNC;                    /* Vertical Pulse Width(VPW) */
+ 180              		.loc 1 340 0
+ 181 0064 0030A0E3 		mov	r3, #0
+ 182 0068 BC30CDE1 		strh	r3, [sp, #12]	@ movhi
+ 341:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vs = LCD_CH0_DISP_VS;                     /* LCD display area vertical start position
+ 183              		.loc 1 341 0
+ 184 006c 0620A0E3 		mov	r2, #6
+ 185 0070 BE20CDE1 		strh	r2, [sp, #14]	@ movhi
+ 342:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vdp = LCD_CH0_DISP_VW;                    /* Vertical Display Period(VDP) */
+ 186              		.loc 1 342 0
+ 187 0074 1720A0E3 		mov	r2, #23
+ 188 0078 B021CDE1 		strh	r2, [sp, #16]	@ movhi
+ 343:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hps = LCD_CH0_S_HSYNC;                    /* Horizontal Pulse start position */
+ 189              		.loc 1 343 0
+ 190 007c 032CA0E3 		mov	r2, #768
+ 191 0080 B221CDE1 		strh	r2, [sp, #18]	@ movhi
+ 344:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hpw = LCD_CH0_W_HSYNC;                    /* Horizontal Pulse Width(HPW) */
+ 192              		.loc 1 344 0
+ 193 0084 B431CDE1 		strh	r3, [sp, #20]	@ movhi
+ 345:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hs = LCD_CH0_DISP_HS;                     /* LCD display area horizontal start positi
+ 194              		.loc 1 345 0
+ 195 0088 7020A0E3 		mov	r2, #112
+ 196 008c B621CDE1 		strh	r2, [sp, #22]	@ movhi
+ 346:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.hdp = LCD_CH0_DISP_HW;                    /* Horizontal Display Period(HDP */
+ 197              		.loc 1 346 0
+ 198 0090 172EA0E3 		mov	r2, #368
+ 199 0094 B821CDE1 		strh	r2, [sp, #24]	@ movhi
+ 347:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.vtp = LCD_CH0_SIG_FV;                     /* Vertical Total Period(VTP) */
+ 200              		.loc 1 347 0
+ 201 0098 552EA0E3 		mov	r2, #1360
+ 202 009c BA21CDE1 		strh	r2, [sp, #26]	@ movhi
+ 348:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.htp = LCD_CH0_SIG_FH;                     /* Horizontal Total Period(HTP) */
+ 203              		.loc 1 348 0
+ 204 00a0 1A2300E3 		movw	r2, #794
+ 205 00a4 BC21CDE1 		strh	r2, [sp, #28]	@ movhi
+ 349:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_vsync = LCD_CH0_TCON_PIN_VSYNC;      /* Vsync_TCON_select */
+ 206              		.loc 1 349 0
+ 207 00a8 F92CE0E3 		mvn	r2, #63744
+ 208 00ac BE21CDE1 		strh	r2, [sp, #30]	@ movhi
+ 350:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_hsync = LCD_CH0_TCON_PIN_HSYNC;      /* Hsync_TCON_select */
+ 209              		.loc 1 350 0
+ 210 00b0 0110A0E3 		mov	r1, #1
+ 211 00b4 2010CDE5 		strb	r1, [sp, #32]
+ 351:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_de = LCD_CH0_TCON_PIN_DE;            /* DE_TCON_select */
+ 212              		.loc 1 351 0
+ 213 00b8 2130CDE5 		strb	r3, [sp, #33]
+ 352:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_vsync_inv = LCD_CH0_TOCN_POL_VSYNC;  /* Vsync_POL */
+ 214              		.loc 1 352 0
+ 215 00bc 0220A0E3 		mov	r2, #2
+ 216 00c0 2220CDE5 		strb	r2, [sp, #34]
+ 353:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_hsync_inv = LCD_CH0_TOCN_POL_HSYNC;  /* Hsync_POL */
+ 217              		.loc 1 353 0
+ 218 00c4 2330CDE5 		strb	r3, [sp, #35]
+ 354:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_de_inv = LCD_CH0_TOCN_POL_DE;        /* DE_POL */
+ 219              		.loc 1 354 0
+ 220 00c8 2430CDE5 		strb	r3, [sp, #36]
+ 355:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_half = LCD_CH0_TCON_HALF;            /* TCON reference timing, 1/2fH timing(HTP)
+ 221              		.loc 1 355 0
+ 222 00cc 2530CDE5 		strb	r3, [sp, #37]
+ 356:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.tcon_ofset = LCD_CH0_TCON_OFFSET;         /* TCON reference timing, offset Hsync sign
+ 223              		.loc 1 356 0
+ 224 00d0 072CA0E3 		mov	r2, #1792
+ 225 00d4 B622CDE1 		strh	r2, [sp, #38]	@ movhi
+ 357:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.lcd_data_out_edge = LCD_CH0_OUT_EDGE;     /* LCD_DATA_OUT_EDGE */
+ 226              		.loc 1 357 0
+ 227 00d8 B832CDE1 		strh	r3, [sp, #40]	@ movhi
+ 358:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.lcd_outformat = LCD_CH0_OUT_FORMAT;       /* LCD output format select */
+ 228              		.loc 1 358 0
+ 229 00dc 2A10CDE5 		strb	r1, [sp, #42]
+ 359:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.out_endian_on = VDC_ON;
+ 230              		.loc 1 359 0
+ 231 00e0 2D30CDE5 		strb	r3, [sp, #45]
+ 360:../src/renesas/application/r_bcd_lcd.c ****         q_cnf.out_swap_on = VDC_ON;
+ 232              		.loc 1 360 0
+ 233 00e4 2B10CDE5 		strb	r1, [sp, #43]
+ 361:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_DispControlConfigVDC (vdc_ch, VDC_ON, &q_cnf);
+ 234              		.loc 1 361 0
+ 235 00e8 2C10CDE5 		strb	r1, [sp, #44]
+ 362:../src/renesas/application/r_bcd_lcd.c ****      }
+ 236              		.loc 1 362 0
+ 237 00ec 0C208DE2 		add	r2, sp, #12
+ 238 00f0 0400A0E1 		mov	r0, r4
+ 239 00f4 FEFFFFEB 		bl	R_RVAPI_DispControlConfigVDC
+ 240              	.LVL11:
+ 241 00f8 D7FFFFEA 		b	.L10
+ 242              	.LBE3:
+ 243              		.cfi_endproc
+ 244              	.LFE5:
+ 246              		.section	.text.r_image_quality_adjustment,"ax",%progbits
+ 247              		.align	2
+ 248              		.global	r_image_quality_adjustment
+ 249              		.syntax unified
+ 250              		.arm
+ 251              		.fpu neon
+ 253              	r_image_quality_adjustment:
+ 254              	.LFB6:
+ 367:../src/renesas/application/r_bcd_lcd.c **** 
+ 368:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 369:../src/renesas/application/r_bcd_lcd.c **** * Function Name: r_image_quality_adjustment
+ 370:../src/renesas/application/r_bcd_lcd.c **** * Description  : Image Quality Adjustment
+ 371:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : vdc_ch
+ 372:../src/renesas/application/r_bcd_lcd.c **** *              :   Channel
+ 373:../src/renesas/application/r_bcd_lcd.c **** * Return Value : 0
+ 374:../src/renesas/application/r_bcd_lcd.c **** *              :   success
+ 375:../src/renesas/application/r_bcd_lcd.c **** *              : other
+ 376:../src/renesas/application/r_bcd_lcd.c **** *              :   fail (vdc_error_t)
+ 377:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 378:../src/renesas/application/r_bcd_lcd.c **** vdc_error_t r_image_quality_adjustment(vdc_channel_t vdc_ch)
+ 379:../src/renesas/application/r_bcd_lcd.c **** {
+ 255              		.loc 1 379 0
+ 256              		.cfi_startproc
+ 257              		@ args = 0, pretend = 0, frame = 24
+ 258              		@ frame_needed = 0, uses_anonymous_args = 0
+ 259              	.LVL12:
+ 260 0000 10402DE9 		push	{r4, lr}
+ 261              		.cfi_def_cfa_offset 8
+ 262              		.cfi_offset 4, -8
+ 263              		.cfi_offset 14, -4
+ 264 0004 28D04DE2 		sub	sp, sp, #40
+ 265              		.cfi_def_cfa_offset 48
+ 266 0008 0040A0E1 		mov	r4, r0
+ 267              	.LBB4:
+ 380:../src/renesas/application/r_bcd_lcd.c ****     vdc_error_t error;
+ 381:../src/renesas/application/r_bcd_lcd.c **** 
+ 382:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 383:../src/renesas/application/r_bcd_lcd.c ****     /* Display out calibration */
+ 384:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 385:../src/renesas/application/r_bcd_lcd.c ****     {
+ 386:../src/renesas/application/r_bcd_lcd.c ****         vdc_calibr_bright_t bright;
+ 387:../src/renesas/application/r_bcd_lcd.c ****         vdc_calibr_contrast_t contrast;
+ 388:../src/renesas/application/r_bcd_lcd.c ****         vdc_calibr_dither_t dither;
+ 389:../src/renesas/application/r_bcd_lcd.c **** 
+ 390:../src/renesas/application/r_bcd_lcd.c ****         /* Bright */
+ 391:../src/renesas/application/r_bcd_lcd.c ****         bright.pbrt_g = IMGC_BRIGHT_OUTCTL_OFFSET_G;
+ 268              		.loc 1 391 0
+ 269 000c 023CA0E3 		mov	r3, #512
+ 270 0010 B032CDE1 		strh	r3, [sp, #32]	@ movhi
+ 392:../src/renesas/application/r_bcd_lcd.c ****         bright.pbrt_b = IMGC_BRIGHT_OUTCTL_OFFSET_B;
+ 271              		.loc 1 392 0
+ 272 0014 B232CDE1 		strh	r3, [sp, #34]	@ movhi
+ 393:../src/renesas/application/r_bcd_lcd.c ****         bright.pbrt_r = IMGC_BRIGHT_OUTCTL_OFFSET_R;
+ 273              		.loc 1 393 0
+ 274 0018 B432CDE1 		strh	r3, [sp, #36]	@ movhi
+ 394:../src/renesas/application/r_bcd_lcd.c **** 
+ 395:../src/renesas/application/r_bcd_lcd.c ****         /* Contrast */
+ 396:../src/renesas/application/r_bcd_lcd.c ****         contrast.cont_g = IMGC_CONTRAST_OUTCTL_GAIN_G;
+ 275              		.loc 1 396 0
+ 276 001c 7F30E0E3 		mvn	r3, #127
+ 277 0020 1430CDE5 		strb	r3, [sp, #20]
+ 397:../src/renesas/application/r_bcd_lcd.c ****         contrast.cont_b = IMGC_CONTRAST_OUTCTL_GAIN_B;
+ 278              		.loc 1 397 0
+ 279 0024 1530CDE5 		strb	r3, [sp, #21]
+ 398:../src/renesas/application/r_bcd_lcd.c ****         contrast.cont_r = IMGC_CONTRAST_OUTCTL_GAIN_R;
+ 280              		.loc 1 398 0
+ 281 0028 1630CDE5 		strb	r3, [sp, #22]
+ 399:../src/renesas/application/r_bcd_lcd.c **** 
+ 400:../src/renesas/application/r_bcd_lcd.c ****         /* Dither settings */
+ 401:../src/renesas/application/r_bcd_lcd.c ****         dither.pdth_sel = IMGC_DITHER_MODE;
+ 282              		.loc 1 401 0
+ 283 002c 0010A0E3 		mov	r1, #0
+ 284 0030 1810CDE5 		strb	r1, [sp, #24]
+ 402:../src/renesas/application/r_bcd_lcd.c ****         dither.pdth_pa = IMGC_DITHER_2X2_PA;
+ 285              		.loc 1 402 0
+ 286 0034 0330A0E3 		mov	r3, #3
+ 287 0038 1930CDE5 		strb	r3, [sp, #25]
+ 403:../src/renesas/application/r_bcd_lcd.c ****         dither.pdth_pb = IMGC_DITHER_2X2_PB;
+ 288              		.loc 1 403 0
+ 289 003c 1A10CDE5 		strb	r1, [sp, #26]
+ 404:../src/renesas/application/r_bcd_lcd.c ****         dither.pdth_pc = IMGC_DITHER_2X2_PC;
+ 290              		.loc 1 404 0
+ 291 0040 0230A0E3 		mov	r3, #2
+ 292 0044 1B30CDE5 		strb	r3, [sp, #27]
+ 405:../src/renesas/application/r_bcd_lcd.c ****         dither.pdth_pd = IMGC_DITHER_2X2_PD;
+ 293              		.loc 1 405 0
+ 294 0048 0130A0E3 		mov	r3, #1
+ 295 004c 1C30CDE5 		strb	r3, [sp, #28]
+ 406:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_DispCalibrationVDC (vdc_ch, IMGC_OUTCTL_CALIB_ROUTE, &bright, &contrast, &d
+ 296              		.loc 1 406 0
+ 297 0050 18308DE2 		add	r3, sp, #24
+ 298 0054 00308DE5 		str	r3, [sp]
+ 299 0058 14308DE2 		add	r3, sp, #20
+ 300 005c 20208DE2 		add	r2, sp, #32
+ 301 0060 FEFFFFEB 		bl	R_RVAPI_DispCalibrationVDC
+ 302              	.LVL13:
+ 303              	.LBE4:
+ 407:../src/renesas/application/r_bcd_lcd.c ****     }
+ 408:../src/renesas/application/r_bcd_lcd.c **** 
+ 409:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 410:../src/renesas/application/r_bcd_lcd.c ****     /*  Display Gamma */
+ 411:../src/renesas/application/r_bcd_lcd.c ****     /***********************************************************************/
+ 412:../src/renesas/application/r_bcd_lcd.c ****     if (VDC_OK == error)
+ 304              		.loc 1 412 0
+ 305 0064 000050E3 		cmp	r0, #0
+ 306              	.LVL14:
+ 307 0068 0100000A 		beq	.L16
+ 308              	.L14:
+ 309              	.LVL15:
+ 413:../src/renesas/application/r_bcd_lcd.c ****     {
+ 414:../src/renesas/application/r_bcd_lcd.c ****         static const uint16_t gam_g_gain[VDC_GAM_GAIN_ADJ_NUM] =
+ 415:../src/renesas/application/r_bcd_lcd.c ****         { IMGC_GAMMA_G_GAIN_00, IMGC_GAMMA_G_GAIN_01, IMGC_GAMMA_G_GAIN_02, IMGC_GAMMA_G_GAIN_03,
+ 416:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_GAIN_04, IMGC_GAMMA_G_GAIN_05, IMGC_GAMMA_G_GAIN_06, IMGC_GAMMA_G_GAIN_07,
+ 417:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_GAIN_08, IMGC_GAMMA_G_GAIN_09, IMGC_GAMMA_G_GAIN_10, IMGC_GAMMA_G_GAIN_11,
+ 418:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_GAIN_12, IMGC_GAMMA_G_GAIN_13, IMGC_GAMMA_G_GAIN_14, IMGC_GAMMA_G_GAIN_15,
+ 419:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_GAIN_16, IMGC_GAMMA_G_GAIN_17, IMGC_GAMMA_G_GAIN_18, IMGC_GAMMA_G_GAIN_19,
+ 420:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_GAIN_20, IMGC_GAMMA_G_GAIN_21, IMGC_GAMMA_G_GAIN_22, IMGC_GAMMA_G_GAIN_23,
+ 421:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_GAIN_24, IMGC_GAMMA_G_GAIN_25, IMGC_GAMMA_G_GAIN_26, IMGC_GAMMA_G_GAIN_27,
+ 422:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_GAIN_28, IMGC_GAMMA_G_GAIN_29, IMGC_GAMMA_G_GAIN_30, IMGC_GAMMA_G_GAIN_31 
+ 423:../src/renesas/application/r_bcd_lcd.c ****         static const uint8_t gam_g_th[VDC_GAM_START_TH_NUM] =
+ 424:../src/renesas/application/r_bcd_lcd.c ****         { IMGC_GAMMA_G_TH_01, IMGC_GAMMA_G_TH_02, IMGC_GAMMA_G_TH_03, IMGC_GAMMA_G_TH_04, IMGC_GAMM
+ 425:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_TH_06, IMGC_GAMMA_G_TH_07, IMGC_GAMMA_G_TH_08, IMGC_GAMMA_G_TH_09,
+ 426:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_TH_10, IMGC_GAMMA_G_TH_11, IMGC_GAMMA_G_TH_12, IMGC_GAMMA_G_TH_13,
+ 427:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_TH_14, IMGC_GAMMA_G_TH_15, IMGC_GAMMA_G_TH_16, IMGC_GAMMA_G_TH_17,
+ 428:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_TH_18, IMGC_GAMMA_G_TH_19, IMGC_GAMMA_G_TH_20, IMGC_GAMMA_G_TH_21,
+ 429:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_TH_22, IMGC_GAMMA_G_TH_23, IMGC_GAMMA_G_TH_24, IMGC_GAMMA_G_TH_25,
+ 430:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_TH_26, IMGC_GAMMA_G_TH_27, IMGC_GAMMA_G_TH_28, IMGC_GAMMA_G_TH_29,
+ 431:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_G_TH_30, IMGC_GAMMA_G_TH_31 };
+ 432:../src/renesas/application/r_bcd_lcd.c **** 
+ 433:../src/renesas/application/r_bcd_lcd.c ****         static const uint16_t gam_b_gain[VDC_GAM_GAIN_ADJ_NUM] =
+ 434:../src/renesas/application/r_bcd_lcd.c ****         { IMGC_GAMMA_B_GAIN_00, IMGC_GAMMA_B_GAIN_01, IMGC_GAMMA_B_GAIN_02, IMGC_GAMMA_B_GAIN_03, I
+ 435:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_GAIN_05, IMGC_GAMMA_B_GAIN_06, IMGC_GAMMA_B_GAIN_07, IMGC_GAMMA_B_GAIN_08,
+ 436:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_GAIN_09, IMGC_GAMMA_B_GAIN_10, IMGC_GAMMA_B_GAIN_11, IMGC_GAMMA_B_GAIN_12,
+ 437:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_GAIN_13, IMGC_GAMMA_B_GAIN_14, IMGC_GAMMA_B_GAIN_15, IMGC_GAMMA_B_GAIN_16,
+ 438:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_GAIN_17, IMGC_GAMMA_B_GAIN_18, IMGC_GAMMA_B_GAIN_19, IMGC_GAMMA_B_GAIN_20,
+ 439:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_GAIN_21, IMGC_GAMMA_B_GAIN_22, IMGC_GAMMA_B_GAIN_23, IMGC_GAMMA_B_GAIN_24,
+ 440:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_GAIN_25, IMGC_GAMMA_B_GAIN_26, IMGC_GAMMA_B_GAIN_27, IMGC_GAMMA_B_GAIN_28,
+ 441:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_GAIN_29, IMGC_GAMMA_B_GAIN_30, IMGC_GAMMA_B_GAIN_31 };
+ 442:../src/renesas/application/r_bcd_lcd.c ****         static const uint8_t gam_b_th[VDC_GAM_START_TH_NUM] =
+ 443:../src/renesas/application/r_bcd_lcd.c ****         { IMGC_GAMMA_B_TH_01, IMGC_GAMMA_B_TH_02, IMGC_GAMMA_B_TH_03, IMGC_GAMMA_B_TH_04, IMGC_GAMM
+ 444:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_TH_06, IMGC_GAMMA_B_TH_07, IMGC_GAMMA_B_TH_08, IMGC_GAMMA_B_TH_09, IMGC_GA
+ 445:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_TH_11, IMGC_GAMMA_B_TH_12, IMGC_GAMMA_B_TH_13, IMGC_GAMMA_B_TH_14, IMGC_GA
+ 446:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_TH_16, IMGC_GAMMA_B_TH_17, IMGC_GAMMA_B_TH_18, IMGC_GAMMA_B_TH_19, IMGC_GA
+ 447:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_TH_21, IMGC_GAMMA_B_TH_22, IMGC_GAMMA_B_TH_23, IMGC_GAMMA_B_TH_24, IMGC_GA
+ 448:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_TH_26, IMGC_GAMMA_B_TH_27, IMGC_GAMMA_B_TH_28, IMGC_GAMMA_B_TH_29, IMGC_GA
+ 449:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_B_TH_31 };
+ 450:../src/renesas/application/r_bcd_lcd.c **** 
+ 451:../src/renesas/application/r_bcd_lcd.c ****         static const uint16_t gam_r_gain[VDC_GAM_GAIN_ADJ_NUM] =
+ 452:../src/renesas/application/r_bcd_lcd.c ****         { IMGC_GAMMA_R_GAIN_00, IMGC_GAMMA_R_GAIN_01, IMGC_GAMMA_R_GAIN_02, IMGC_GAMMA_R_GAIN_03, I
+ 453:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_GAIN_05, IMGC_GAMMA_R_GAIN_06, IMGC_GAMMA_R_GAIN_07, IMGC_GAMMA_R_GAIN_08,
+ 454:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_GAIN_09, IMGC_GAMMA_R_GAIN_10, IMGC_GAMMA_R_GAIN_11, IMGC_GAMMA_R_GAIN_12,
+ 455:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_GAIN_13, IMGC_GAMMA_R_GAIN_14, IMGC_GAMMA_R_GAIN_15, IMGC_GAMMA_R_GAIN_16,
+ 456:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_GAIN_17, IMGC_GAMMA_R_GAIN_18, IMGC_GAMMA_R_GAIN_19, IMGC_GAMMA_R_GAIN_20,
+ 457:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_GAIN_21, IMGC_GAMMA_R_GAIN_22, IMGC_GAMMA_R_GAIN_23, IMGC_GAMMA_R_GAIN_24,
+ 458:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_GAIN_25, IMGC_GAMMA_R_GAIN_26, IMGC_GAMMA_R_GAIN_27, IMGC_GAMMA_R_GAIN_28,
+ 459:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_GAIN_29, IMGC_GAMMA_R_GAIN_30, IMGC_GAMMA_R_GAIN_31 };
+ 460:../src/renesas/application/r_bcd_lcd.c **** 
+ 461:../src/renesas/application/r_bcd_lcd.c ****         static const uint8_t gam_r_th[VDC_GAM_START_TH_NUM] =
+ 462:../src/renesas/application/r_bcd_lcd.c ****         { IMGC_GAMMA_R_TH_01, IMGC_GAMMA_R_TH_02, IMGC_GAMMA_R_TH_03, IMGC_GAMMA_R_TH_04, IMGC_GAMM
+ 463:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_TH_06, IMGC_GAMMA_R_TH_07, IMGC_GAMMA_R_TH_08, IMGC_GAMMA_R_TH_09, IMGC_GA
+ 464:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_TH_11, IMGC_GAMMA_R_TH_12, IMGC_GAMMA_R_TH_13, IMGC_GAMMA_R_TH_14, IMGC_GA
+ 465:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_TH_16, IMGC_GAMMA_R_TH_17, IMGC_GAMMA_R_TH_18, IMGC_GAMMA_R_TH_19, IMGC_GA
+ 466:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_TH_21, IMGC_GAMMA_R_TH_22, IMGC_GAMMA_R_TH_23, IMGC_GAMMA_R_TH_24, IMGC_GA
+ 467:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_TH_26, IMGC_GAMMA_R_TH_27, IMGC_GAMMA_R_TH_28, IMGC_GAMMA_R_TH_29, IMGC_GA
+ 468:../src/renesas/application/r_bcd_lcd.c ****             IMGC_GAMMA_R_TH_31 };
+ 469:../src/renesas/application/r_bcd_lcd.c **** 
+ 470:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_DispGammaVDC (vdc_ch, IMGC_GAMMA_ACTIVE, &gam_r_gain[0], &gam_r_th[0], &gam
+ 471:../src/renesas/application/r_bcd_lcd.c ****                                         &gam_g_th[0], &gam_b_gain[0], &gam_b_th[0]);
+ 472:../src/renesas/application/r_bcd_lcd.c ****     }
+ 473:../src/renesas/application/r_bcd_lcd.c **** 
+ 474:../src/renesas/application/r_bcd_lcd.c ****     return error;
+ 475:../src/renesas/application/r_bcd_lcd.c **** } /* End of function r_image_quality_adjustment() */
+ 310              		.loc 1 475 0
+ 311 006c 28D08DE2 		add	sp, sp, #40
+ 312              		.cfi_remember_state
+ 313              		.cfi_def_cfa_offset 8
+ 314              		@ sp needed
+ 315 0070 1080BDE8 		pop	{r4, pc}
+ 316              	.LVL16:
+ 317              	.L16:
+ 318              		.cfi_restore_state
+ 319              	.LBB5:
+ 470:../src/renesas/application/r_bcd_lcd.c ****                                         &gam_g_th[0], &gam_b_gain[0], &gam_b_th[0]);
+ 320              		.loc 1 470 0
+ 321 0074 003000E3 		movw	r3, #:lower16:.LANCHOR8
+ 322 0078 003040E3 		movt	r3, #:upper16:.LANCHOR8
+ 323 007c 0C308DE5 		str	r3, [sp, #12]
+ 324 0080 003000E3 		movw	r3, #:lower16:.LANCHOR9
+ 325 0084 003040E3 		movt	r3, #:upper16:.LANCHOR9
+ 326 0088 08308DE5 		str	r3, [sp, #8]
+ 327 008c 003000E3 		movw	r3, #:lower16:.LANCHOR10
+ 328 0090 003040E3 		movt	r3, #:upper16:.LANCHOR10
+ 329 0094 04308DE5 		str	r3, [sp, #4]
+ 330 0098 003000E3 		movw	r3, #:lower16:.LANCHOR11
+ 331 009c 003040E3 		movt	r3, #:upper16:.LANCHOR11
+ 332 00a0 00308DE5 		str	r3, [sp]
+ 333 00a4 003000E3 		movw	r3, #:lower16:.LANCHOR6
+ 334 00a8 003040E3 		movt	r3, #:upper16:.LANCHOR6
+ 335 00ac 002000E3 		movw	r2, #:lower16:.LANCHOR7
+ 336 00b0 002040E3 		movt	r2, #:upper16:.LANCHOR7
+ 337 00b4 0110A0E3 		mov	r1, #1
+ 338 00b8 0400A0E1 		mov	r0, r4
+ 339 00bc FEFFFFEB 		bl	R_RVAPI_DispGammaVDC
+ 340              	.LVL17:
+ 341 00c0 E9FFFFEA 		b	.L14
+ 342              	.LBE5:
+ 343              		.cfi_endproc
+ 344              	.LFE6:
+ 346              		.section	.text.R_BCD_LcdInit,"ax",%progbits
+ 347              		.align	2
+ 348              		.global	R_BCD_LcdInit
+ 349              		.syntax unified
+ 350              		.arm
+ 351              		.fpu neon
+ 353              	R_BCD_LcdInit:
+ 354              	.LFB4:
+ 162:../src/renesas/application/r_bcd_lcd.c ****     vdc_error_t error;
+ 355              		.loc 1 162 0
+ 356              		.cfi_startproc
+ 357              		@ args = 0, pretend = 0, frame = 1056
+ 358              		@ frame_needed = 0, uses_anonymous_args = 0
+ 359 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 360              		.cfi_def_cfa_offset 16
+ 361              		.cfi_offset 4, -16
+ 362              		.cfi_offset 5, -12
+ 363              		.cfi_offset 6, -8
+ 364              		.cfi_offset 14, -4
+ 365 0004 42DE4DE2 		sub	sp, sp, #1056
+ 366              		.cfi_def_cfa_offset 1072
+ 367 0008 08D04DE2 		sub	sp, sp, #8
+ 368              		.cfi_def_cfa_offset 1080
+ 369              	.LVL18:
+ 171:../src/renesas/application/r_bcd_lcd.c **** 
+ 370              		.loc 1 171 0
+ 371 000c 0000A0E3 		mov	r0, #0
+ 372 0010 FEFFFFEB 		bl	r_display_init
+ 373              	.LVL19:
+ 176:../src/renesas/application/r_bcd_lcd.c ****     {
+ 374              		.loc 1 176 0
+ 375 0014 004050E2 		subs	r4, r0, #0
+ 376 0018 2300000A 		beq	.L28
+ 377              	.LVL20:
+ 378              	.L18:
+ 184:../src/renesas/application/r_bcd_lcd.c ****     {
+ 379              		.loc 1 184 0
+ 380 001c 000054E3 		cmp	r4, #0
+ 381 0020 2800000A 		beq	.L29
+ 382              	.L19:
+ 192:../src/renesas/application/r_bcd_lcd.c ****     {
+ 383              		.loc 1 192 0
+ 384 0024 000054E3 		cmp	r4, #0
+ 385 0028 5300000A 		beq	.L26
+ 386              	.L21:
+ 225:../src/renesas/application/r_bcd_lcd.c ****     {
+ 387              		.loc 1 225 0
+ 388 002c 000054E3 		cmp	r4, #0
+ 389 0030 5300000A 		beq	.L30
+ 390              	.L23:
+ 391              	.LBB6:
+ 271:../src/renesas/application/r_bcd_lcd.c ****         info.buff_addr2        = graphics2_buffer[1];
+ 392              		.loc 1 271 0
+ 393 0034 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 394 0038 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 395 003c 08308DE5 		str	r3, [sp, #8]
+ 272:../src/renesas/application/r_bcd_lcd.c ****         info.buff_stride       = GRAPHICS2_BUFFER_STRIDE;
+ 396              		.loc 1 272 0
+ 397 0040 963B83E2 		add	r3, r3, #153600
+ 398 0044 0C308DE5 		str	r3, [sp, #12]
+ 273:../src/renesas/application/r_bcd_lcd.c ****         info.window_width      = LAYER2_DISP_AREA_HW;
+ 399              		.loc 1 273 0
+ 400 0048 053DA0E3 		mov	r3, #320
+ 401 004c 14308DE5 		str	r3, [sp, #20]
+ 274:../src/renesas/application/r_bcd_lcd.c ****         info.window_height     = LAYER2_DISP_AREA_VW;
+ 402              		.loc 1 274 0
+ 403 0050 0A5DA0E3 		mov	r5, #640
+ 404 0054 1C508DE5 		str	r5, [sp, #28]
+ 275:../src/renesas/application/r_bcd_lcd.c ****         DrawInit( VDC_LAYER_ID_2_RD, &info );
+ 405              		.loc 1 275 0
+ 406 0058 1E6EA0E3 		mov	r6, #480
+ 407 005c 20608DE5 		str	r6, [sp, #32]
+ 276:../src/renesas/application/r_bcd_lcd.c **** 
+ 408              		.loc 1 276 0
+ 409 0060 08108DE2 		add	r1, sp, #8
+ 410 0064 0200A0E3 		mov	r0, #2
+ 411 0068 FEFFFFEB 		bl	DrawInit
+ 412              	.LVL21:
+ 279:../src/renesas/application/r_bcd_lcd.c ****     }
+ 413              		.loc 1 279 0
+ 414 006c 0F30A0E3 		mov	r3, #15
+ 415 0070 04308DE5 		str	r3, [sp, #4]
+ 416 0074 00608DE5 		str	r6, [sp]
+ 417 0078 0530A0E1 		mov	r3, r5
+ 418 007c 0020A0E3 		mov	r2, #0
+ 419 0080 0210A0E1 		mov	r1, r2
+ 420 0084 0200A0E3 		mov	r0, #2
+ 421 0088 FEFFFFEB 		bl	DrawRectFill
+ 422              	.LVL22:
+ 423              	.LBE6:
+ 283:../src/renesas/application/r_bcd_lcd.c ****     {
+ 424              		.loc 1 283 0
+ 425 008c 000054E3 		cmp	r4, #0
+ 426 0090 8000000A 		beq	.L31
+ 427              	.L24:
+ 293:../src/renesas/application/r_bcd_lcd.c ****     {
+ 428              		.loc 1 293 0
+ 429 0094 000054E3 		cmp	r4, #0
+ 430 0098 8100000A 		beq	.L32
+ 431              	.L25:
+ 299:../src/renesas/application/r_bcd_lcd.c **** 
+ 432              		.loc 1 299 0
+ 433 009c 0000A0E3 		mov	r0, #0
+ 434 00a0 42DE8DE2 		add	sp, sp, #1056
+ 435 00a4 08D08DE2 		add	sp, sp, #8
+ 436              		.cfi_remember_state
+ 437              		.cfi_def_cfa_offset 16
+ 438              		@ sp needed
+ 439 00a8 7080BDE8 		pop	{r4, r5, r6, pc}
+ 440              	.LVL23:
+ 441              	.L28:
+ 442              		.cfi_restore_state
+ 443              	.LBB7:
+ 181:../src/renesas/application/r_bcd_lcd.c ****     }
+ 444              		.loc 1 181 0
+ 445 00ac 003000E3 		movw	r3, #:lower16:IntCallbackFunc
+ 446 00b0 003040E3 		movt	r3, #:upper16:IntCallbackFunc
+ 447 00b4 F72100E3 		movw	r2, #503
+ 448 00b8 0310A0E3 		mov	r1, #3
+ 449 00bc FEFFFFEB 		bl	R_RVAPI_InterruptEnableVDC
+ 450              	.LVL24:
+ 451 00c0 0040A0E1 		mov	r4, r0
+ 452              	.LVL25:
+ 453 00c4 D4FFFFEA 		b	.L18
+ 454              	.LVL26:
+ 455              	.L29:
+ 456              	.LBE7:
+ 186:../src/renesas/application/r_bcd_lcd.c ****     }
+ 457              		.loc 1 186 0
+ 458 00c8 003000E3 		movw	r3, #:lower16:IntCallbackFunc
+ 459 00cc 003040E3 		movt	r3, #:upper16:IntCallbackFunc
+ 460 00d0 0020A0E3 		mov	r2, #0
+ 461 00d4 0110A0E3 		mov	r1, #1
+ 462 00d8 0200A0E1 		mov	r0, r2
+ 463 00dc FEFFFFEB 		bl	R_RVAPI_InterruptEnableVDC
+ 464              	.LVL27:
+ 465 00e0 0040A0E1 		mov	r4, r0
+ 466              	.LVL28:
+ 467 00e4 CEFFFFEA 		b	.L19
+ 468              	.LVL29:
+ 469              	.L22:
+ 470              	.LBB8:
+ 198:../src/renesas/application/r_bcd_lcd.c ****         }
+ 471              		.loc 1 198 0 discriminator 3
+ 472 00e8 0234A0E1 		lsl	r3, r2, #8
+ 473 00ec 023883E1 		orr	r3, r3, r2, lsl #16
+ 474 00f0 033082E1 		orr	r3, r2, r3
+ 475 00f4 FF3483E3 		orr	r3, r3, #-16777216
+ 476 00f8 421E8DE2 		add	r1, sp, #1056
+ 477 00fc 081081E2 		add	r1, r1, #8
+ 478 0100 021181E0 		add	r1, r1, r2, lsl #2
+ 479 0104 003401E5 		str	r3, [r1, #-1024]
+ 196:../src/renesas/application/r_bcd_lcd.c ****         {
+ 480              		.loc 1 196 0 discriminator 3
+ 481 0108 012082E2 		add	r2, r2, #1
+ 482              	.LVL30:
+ 483              	.L20:
+ 196:../src/renesas/application/r_bcd_lcd.c ****         {
+ 484              		.loc 1 196 0 is_stmt 0 discriminator 1
+ 485 010c FF0052E3 		cmp	r2, #255
+ 486 0110 F4FFFF9A 		bls	.L22
+ 201:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_buff   = (void *)&video_buffer[0];   /* Frame buffer address            */
+ 487              		.loc 1 201 0 is_stmt 1
+ 488 0114 0130A0E3 		mov	r3, #1
+ 489 0118 0830CDE5 		strb	r3, [sp, #8]
+ 202:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_stride = VIDEO_BUFFER_STRIDE;        /* Frame buffer stride             */
+ 490              		.loc 1 202 0
+ 491 011c 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 492 0120 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 493 0124 14308DE5 		str	r3, [sp, #20]
+ 203:../src/renesas/application/r_bcd_lcd.c **** 
+ 494              		.loc 1 203 0
+ 495 0128 0A3DA0E3 		mov	r3, #640
+ 496 012c 18308DE5 		str	r3, [sp, #24]
+ 206:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.hw_rel = LAYER0_DISP_AREA_HW;
+ 497              		.loc 1 206 0
+ 498 0130 0000A0E3 		mov	r0, #0
+ 499 0134 BE00CDE1 		strh	r0, [sp, #14]	@ movhi
+ 207:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vs_rel = LAYER0_DISP_AREA_VS;
+ 500              		.loc 1 207 0
+ 501 0138 B031CDE1 		strh	r3, [sp, #16]	@ movhi
+ 208:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vw_rel = LAYER0_DISP_AREA_VW;
+ 502              		.loc 1 208 0
+ 503 013c BA00CDE1 		strh	r0, [sp, #10]	@ movhi
+ 209:../src/renesas/application/r_bcd_lcd.c **** 
+ 504              		.loc 1 209 0
+ 505 0140 1E3EA0E3 		mov	r3, #480
+ 506 0144 BC30CDE1 		strh	r3, [sp, #12]	@ movhi
+ 211:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_ycc_swap = VDC_GR_YCCSWAP_CBY0CRY1;       /* Read Swap for YCbCr422     */
+ 507              		.loc 1 211 0
+ 508 0148 0530A0E3 		mov	r3, #5
+ 509 014c 1C30CDE5 		strb	r3, [sp, #28]
+ 212:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_swap     = VDC_WR_RD_WRSWA_32_16_8BIT;    /* Read Swap 8bit/16bit/32bit */
+ 510              		.loc 1 212 0
+ 511 0150 2400CDE5 		strb	r0, [sp, #36]
+ 213:../src/renesas/application/r_bcd_lcd.c **** 
+ 512              		.loc 1 213 0
+ 513 0154 0730A0E3 		mov	r3, #7
+ 514 0158 2530CDE5 		strb	r3, [sp, #37]
+ 215:../src/renesas/application/r_bcd_lcd.c **** 
+ 515              		.loc 1 215 0
+ 516 015c 28308DE2 		add	r3, sp, #40
+ 517 0160 20308DE5 		str	r3, [sp, #32]
+ 217:../src/renesas/application/r_bcd_lcd.c **** 
+ 518              		.loc 1 217 0
+ 519 0164 0230A0E3 		mov	r3, #2
+ 520 0168 2630CDE5 		strb	r3, [sp, #38]
+ 219:../src/renesas/application/r_bcd_lcd.c ****     }
+ 521              		.loc 1 219 0
+ 522 016c 08108DE2 		add	r1, sp, #8
+ 523 0170 FEFFFFEB 		bl	R_RVAPI_GraphCreateSurfaceVDC
+ 524              	.LVL31:
+ 525 0174 0040A0E1 		mov	r4, r0
+ 526              	.LVL32:
+ 527 0178 ABFFFFEA 		b	.L21
+ 528              	.L26:
+ 529              	.LBE8:
+ 530 017c 0020A0E3 		mov	r2, #0
+ 531 0180 E1FFFFEA 		b	.L20
+ 532              	.L30:
+ 533              	.LBB9:
+ 229:../src/renesas/application/r_bcd_lcd.c ****         clut[BLUE]        = BLUE_DATA;
+ 534              		.loc 1 229 0
+ 535 0184 FF34A0E3 		mov	r3, #-16777216
+ 536 0188 28308DE5 		str	r3, [sp, #40]
+ 230:../src/renesas/application/r_bcd_lcd.c ****         clut[GREEN]       = GREEN_DATA;
+ 537              		.loc 1 230 0
+ 538 018c FF30A0E3 		mov	r3, #255
+ 539 0190 003F4FE3 		movt	r3, 65280
+ 540 0194 2C308DE5 		str	r3, [sp, #44]
+ 231:../src/renesas/application/r_bcd_lcd.c ****         clut[RED]         = RED_DATA;
+ 541              		.loc 1 231 0
+ 542 0198 FF3CA0E3 		mov	r3, #65280
+ 543 019c 1338DFE7 		bfi	r3, r3, #16, #16
+ 544 01a0 30308DE5 		str	r3, [sp, #48]
+ 232:../src/renesas/application/r_bcd_lcd.c ****         clut[WHITE]       = WHITE_DATA;
+ 545              		.loc 1 232 0
+ 546 01a4 0030A0E3 		mov	r3, #0
+ 547 01a8 FF3F4FE3 		movt	r3, 65535
+ 548 01ac 34308DE5 		str	r3, [sp, #52]
+ 233:../src/renesas/application/r_bcd_lcd.c ****         clut[CYAN]        = CYAN_DATA;
+ 549              		.loc 1 233 0
+ 550 01b0 0030E0E3 		mvn	r3, #0
+ 551 01b4 38308DE5 		str	r3, [sp, #56]
+ 234:../src/renesas/application/r_bcd_lcd.c ****         clut[YELLOW]      = YELLOW_DATA;
+ 552              		.loc 1 234 0
+ 553 01b8 FF38E0E3 		mvn	r3, #16711680
+ 554 01bc 3C308DE5 		str	r3, [sp, #60]
+ 235:../src/renesas/application/r_bcd_lcd.c ****         clut[MAGENTA]     = MAGENTA_DATA;
+ 555              		.loc 1 235 0
+ 556 01c0 FF30E0E3 		mvn	r3, #255
+ 557 01c4 40308DE5 		str	r3, [sp, #64]
+ 236:../src/renesas/application/r_bcd_lcd.c ****         clut[NAVY]        = NAVY_DATA;
+ 558              		.loc 1 236 0
+ 559 01c8 FF3CE0E3 		mvn	r3, #65280
+ 560 01cc 44308DE5 		str	r3, [sp, #68]
+ 237:../src/renesas/application/r_bcd_lcd.c ****         clut[DARKGREEN]   = DARKGREEN_DATA;
+ 561              		.loc 1 237 0
+ 562 01d0 8030A0E3 		mov	r3, #128
+ 563 01d4 003F4FE3 		movt	r3, 65280
+ 564 01d8 48308DE5 		str	r3, [sp, #72]
+ 238:../src/renesas/application/r_bcd_lcd.c ****         clut[DEEPSKYBLUE] = DEEPSKYBLUE_DATA;
+ 565              		.loc 1 238 0
+ 566 01dc 193BA0E3 		mov	r3, #25600
+ 567 01e0 003F4FE3 		movt	r3, 65280
+ 568 01e4 4C308DE5 		str	r3, [sp, #76]
+ 239:../src/renesas/application/r_bcd_lcd.c ****         clut[PURPLE]      = PURPLE_DATA;
+ 569              		.loc 1 239 0
+ 570 01e8 FF3F0BE3 		movw	r3, #49151
+ 571 01ec 003F4FE3 		movt	r3, 65280
+ 572 01f0 50308DE5 		str	r3, [sp, #80]
+ 240:../src/renesas/application/r_bcd_lcd.c ****         clut[GRAY]        = GRAY_DATA;
+ 573              		.loc 1 240 0
+ 574 01f4 8030A0E3 		mov	r3, #128
+ 575 01f8 803F4FE3 		movt	r3, 65408
+ 576 01fc 54308DE5 		str	r3, [sp, #84]
+ 241:../src/renesas/application/r_bcd_lcd.c ****         clut[BROWN]       = BROWN_DATA;
+ 577              		.loc 1 241 0
+ 578 0200 803008E3 		movw	r3, #32896
+ 579 0204 803F4FE3 		movt	r3, 65408
+ 580 0208 58308DE5 		str	r3, [sp, #88]
+ 242:../src/renesas/application/r_bcd_lcd.c ****         clut[GOLD]        = GOLD_DATA;
+ 581              		.loc 1 242 0
+ 582 020c 2A3A02E3 		movw	r3, #10794
+ 583 0210 A53F4FE3 		movt	r3, 65445
+ 584 0214 5C308DE5 		str	r3, [sp, #92]
+ 243:../src/renesas/application/r_bcd_lcd.c ****         clut[TRANSPARENT] = TRANSPARENT_DATA;
+ 585              		.loc 1 243 0
+ 586 0218 80370DE3 		movw	r3, #55168
+ 587 021c FF3F4FE3 		movt	r3, 65535
+ 588 0220 60308DE5 		str	r3, [sp, #96]
+ 244:../src/renesas/application/r_bcd_lcd.c **** 
+ 589              		.loc 1 244 0
+ 590 0224 FF34E0E3 		mvn	r3, #-16777216
+ 591 0228 64308DE5 		str	r3, [sp, #100]
+ 246:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_buff   = (void *)&graphics2_buffer[0];   /* Frame buffer address            
+ 592              		.loc 1 246 0
+ 593 022c 0230A0E3 		mov	r3, #2
+ 594 0230 0830CDE5 		strb	r3, [sp, #8]
+ 247:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.fb_stride = GRAPHICS2_BUFFER_STRIDE;        /* Frame buffer stride             
+ 595              		.loc 1 247 0
+ 596 0234 003000E3 		movw	r3, #:lower16:.LANCHOR5
+ 597 0238 003040E3 		movt	r3, #:upper16:.LANCHOR5
+ 598 023c 14308DE5 		str	r3, [sp, #20]
+ 248:../src/renesas/application/r_bcd_lcd.c **** 
+ 599              		.loc 1 248 0
+ 600 0240 053DA0E3 		mov	r3, #320
+ 601 0244 18308DE5 		str	r3, [sp, #24]
+ 251:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.hw_rel = LAYER2_DISP_AREA_HW;
+ 602              		.loc 1 251 0
+ 603 0248 0000A0E3 		mov	r0, #0
+ 604 024c BE00CDE1 		strh	r0, [sp, #14]	@ movhi
+ 252:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vs_rel = LAYER2_DISP_AREA_VS;
+ 605              		.loc 1 252 0
+ 606 0250 0A3DA0E3 		mov	r3, #640
+ 607 0254 B031CDE1 		strh	r3, [sp, #16]	@ movhi
+ 253:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.disp_area.vw_rel = LAYER2_DISP_AREA_VW;
+ 608              		.loc 1 253 0
+ 609 0258 BA00CDE1 		strh	r0, [sp, #10]	@ movhi
+ 254:../src/renesas/application/r_bcd_lcd.c **** 
+ 610              		.loc 1 254 0
+ 611 025c 1E3EA0E3 		mov	r3, #480
+ 612 0260 BC30CDE1 		strh	r3, [sp, #12]	@ movhi
+ 256:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_ycc_swap = VDC_GR_YCCSWAP_CBY0CRY1;       /* Read Swap for YCbCr422     */
+ 613              		.loc 1 256 0
+ 614 0264 0630A0E3 		mov	r3, #6
+ 615 0268 1C30CDE5 		strb	r3, [sp, #28]
+ 257:../src/renesas/application/r_bcd_lcd.c ****         gr_disp_cnf.read_swap     = VDC_WR_RD_WRSWA_32_16_8BIT;    /* Read Swap 8bit/16bit/32bit */
+ 616              		.loc 1 257 0
+ 617 026c 2400CDE5 		strb	r0, [sp, #36]
+ 258:../src/renesas/application/r_bcd_lcd.c **** 
+ 618              		.loc 1 258 0
+ 619 0270 0730A0E3 		mov	r3, #7
+ 620 0274 2530CDE5 		strb	r3, [sp, #37]
+ 260:../src/renesas/application/r_bcd_lcd.c **** 
+ 621              		.loc 1 260 0
+ 622 0278 28308DE2 		add	r3, sp, #40
+ 623 027c 20308DE5 		str	r3, [sp, #32]
+ 262:../src/renesas/application/r_bcd_lcd.c **** 
+ 624              		.loc 1 262 0
+ 625 0280 0330A0E3 		mov	r3, #3
+ 626 0284 2630CDE5 		strb	r3, [sp, #38]
+ 264:../src/renesas/application/r_bcd_lcd.c ****     }
+ 627              		.loc 1 264 0
+ 628 0288 08108DE2 		add	r1, sp, #8
+ 629 028c FEFFFFEB 		bl	R_RVAPI_GraphCreateSurfaceVDC
+ 630              	.LVL33:
+ 631 0290 0040A0E1 		mov	r4, r0
+ 632              	.LVL34:
+ 633 0294 66FFFFEA 		b	.L23
+ 634              	.L31:
+ 635              	.LBE9:
+ 285:../src/renesas/application/r_bcd_lcd.c **** #if 0 
+ 636              		.loc 1 285 0
+ 637 0298 0000A0E3 		mov	r0, #0
+ 638 029c FEFFFFEB 		bl	r_image_quality_adjustment
+ 639              	.LVL35:
+ 640 02a0 7BFFFFEA 		b	.L24
+ 641              	.L32:
+ 295:../src/renesas/application/r_bcd_lcd.c ****     }
+ 642              		.loc 1 295 0
+ 643 02a4 001000E3 		movw	r1, #:lower16:VDC_LcdPortSetting
+ 644 02a8 001040E3 		movt	r1, #:upper16:VDC_LcdPortSetting
+ 645 02ac 0000A0E3 		mov	r0, #0
+ 646 02b0 FEFFFFEB 		bl	R_RVAPI_DispPortSettingVDC
+ 647              	.LVL36:
+ 648 02b4 78FFFFEA 		b	.L25
+ 649              		.cfi_endproc
+ 650              	.LFE4:
+ 652              		.section	.text.r_video_quality_adjustment,"ax",%progbits
+ 653              		.align	2
+ 654              		.global	r_video_quality_adjustment
+ 655              		.syntax unified
+ 656              		.arm
+ 657              		.fpu neon
+ 659              	r_video_quality_adjustment:
+ 660              	.LFB7:
+ 476:../src/renesas/application/r_bcd_lcd.c **** 
+ 477:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 478:../src/renesas/application/r_bcd_lcd.c **** * Function Name: r_video_quality_adjustment
+ 479:../src/renesas/application/r_bcd_lcd.c **** * Description  : Video Quality Adjustment
+ 480:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : vdc_ch
+ 481:../src/renesas/application/r_bcd_lcd.c **** *              :   Channel
+ 482:../src/renesas/application/r_bcd_lcd.c **** * Return Value : 0
+ 483:../src/renesas/application/r_bcd_lcd.c **** *              :   success
+ 484:../src/renesas/application/r_bcd_lcd.c **** *              : other
+ 485:../src/renesas/application/r_bcd_lcd.c **** *              :   fail (vdc_error_t)
+ 486:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 487:../src/renesas/application/r_bcd_lcd.c **** vdc_error_t r_video_quality_adjustment(vdc_channel_t vdc_ch)
+ 488:../src/renesas/application/r_bcd_lcd.c **** {
+ 661              		.loc 1 488 0
+ 662              		.cfi_startproc
+ 663              		@ args = 0, pretend = 0, frame = 48
+ 664              		@ frame_needed = 0, uses_anonymous_args = 0
+ 665              	.LVL37:
+ 666 0000 10402DE9 		push	{r4, lr}
+ 667              		.cfi_def_cfa_offset 8
+ 668              		.cfi_offset 4, -8
+ 669              		.cfi_offset 14, -4
+ 670 0004 40D04DE2 		sub	sp, sp, #64
+ 671              		.cfi_def_cfa_offset 72
+ 672 0008 0040A0E1 		mov	r4, r0
+ 673              	.LBB10:
+ 489:../src/renesas/application/r_bcd_lcd.c ****     vdc_error_t error;
+ 490:../src/renesas/application/r_bcd_lcd.c **** 
+ 491:../src/renesas/application/r_bcd_lcd.c ****     {
+ 492:../src/renesas/application/r_bcd_lcd.c ****         vdc_color_matrix_t color_matrix;
+ 493:../src/renesas/application/r_bcd_lcd.c **** 
+ 494:../src/renesas/application/r_bcd_lcd.c ****         /* Operating mode */
+ 495:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.module = IMGC_BRIGHT_INPUTCTL_MODULE;
+ 674              		.loc 1 495 0
+ 675 000c 0030A0E3 		mov	r3, #0
+ 676 0010 2430CDE5 		strb	r3, [sp, #36]
+ 496:../src/renesas/application/r_bcd_lcd.c **** 
+ 497:../src/renesas/application/r_bcd_lcd.c ****         /* Mode Select */
+ 498:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.mtx_mode = IMGC_BRIGHT_INPUTCTL_MODE;
+ 677              		.loc 1 498 0
+ 678 0014 0320A0E3 		mov	r2, #3
+ 679 0018 2520CDE5 		strb	r2, [sp, #37]
+ 499:../src/renesas/application/r_bcd_lcd.c **** 
+ 500:../src/renesas/application/r_bcd_lcd.c ****         /* Bright */
+ 501:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.offset[VDC_COLORMTX_OFFST_YG] = IMGC_BRIGHT_INPUTCTL_OFFSET_YG;
+ 680              		.loc 1 501 0
+ 681 001c 8020A0E3 		mov	r2, #128
+ 682 0020 B622CDE1 		strh	r2, [sp, #38]	@ movhi
+ 502:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.offset[VDC_COLORMTX_OFFST_B]  = IMGC_BRIGHT_INPUTCTL_OFFSET_B;
+ 683              		.loc 1 502 0
+ 684 0024 B822CDE1 		strh	r2, [sp, #40]	@ movhi
+ 503:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.offset[VDC_COLORMTX_OFFST_R]  = IMGC_BRIGHT_INPUTCTL_OFFSET_R;
+ 685              		.loc 1 503 0
+ 686 0028 BA22CDE1 		strh	r2, [sp, #42]	@ movhi
+ 504:../src/renesas/application/r_bcd_lcd.c **** 
+ 505:../src/renesas/application/r_bcd_lcd.c ****         /* Contrast */
+ 506:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_GG] = IMGC_CONTRAST_INPUTCTL_GAIN_GG;
+ 687              		.loc 1 506 0
+ 688 002c 012CA0E3 		mov	r2, #256
+ 689 0030 BC22CDE1 		strh	r2, [sp, #44]	@ movhi
+ 507:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_GB] = IMGC_CONTRAST_INPUTCTL_GAIN_GB;
+ 690              		.loc 1 507 0
+ 691 0034 BE32CDE1 		strh	r3, [sp, #46]	@ movhi
+ 508:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_GR] = IMGC_CONTRAST_INPUTCTL_GAIN_GR;
+ 692              		.loc 1 508 0
+ 693 0038 B033CDE1 		strh	r3, [sp, #48]	@ movhi
+ 509:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_BG] = IMGC_CONTRAST_INPUTCTL_GAIN_BG;
+ 694              		.loc 1 509 0
+ 695 003c B233CDE1 		strh	r3, [sp, #50]	@ movhi
+ 510:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_BB] = IMGC_CONTRAST_INPUTCTL_GAIN_BB;
+ 696              		.loc 1 510 0
+ 697 0040 B423CDE1 		strh	r2, [sp, #52]	@ movhi
+ 511:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_BR] = IMGC_CONTRAST_INPUTCTL_GAIN_BR;
+ 698              		.loc 1 511 0
+ 699 0044 B633CDE1 		strh	r3, [sp, #54]	@ movhi
+ 512:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_RG] = IMGC_CONTRAST_INPUTCTL_GAIN_RG;
+ 700              		.loc 1 512 0
+ 701 0048 B833CDE1 		strh	r3, [sp, #56]	@ movhi
+ 513:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_RB] = IMGC_CONTRAST_INPUTCTL_GAIN_RB;
+ 702              		.loc 1 513 0
+ 703 004c BA33CDE1 		strh	r3, [sp, #58]	@ movhi
+ 514:../src/renesas/application/r_bcd_lcd.c ****         color_matrix.gain[VDC_COLORMTX_GAIN_RR] = IMGC_CONTRAST_INPUTCTL_GAIN_RR;
+ 704              		.loc 1 514 0
+ 705 0050 BC23CDE1 		strh	r2, [sp, #60]	@ movhi
+ 515:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_VideoCalibrationVDC (vdc_ch, &color_matrix);
+ 706              		.loc 1 515 0
+ 707 0054 24108DE2 		add	r1, sp, #36
+ 708 0058 FEFFFFEB 		bl	R_RVAPI_VideoCalibrationVDC
+ 709              	.LVL38:
+ 710              	.LBE10:
+ 516:../src/renesas/application/r_bcd_lcd.c ****     }
+ 517:../src/renesas/application/r_bcd_lcd.c **** 
+ 518:../src/renesas/application/r_bcd_lcd.c ****     if (VDC_OK == error)
+ 711              		.loc 1 518 0
+ 712 005c 000050E3 		cmp	r0, #0
+ 713              	.LVL39:
+ 714 0060 0100000A 		beq	.L36
+ 715              	.L34:
+ 716              	.LVL40:
+ 519:../src/renesas/application/r_bcd_lcd.c ****     {
+ 520:../src/renesas/application/r_bcd_lcd.c ****         vdc_enhance_sharp_t sharp_param;
+ 521:../src/renesas/application/r_bcd_lcd.c ****         vdc_enhance_lti_t lti_param;
+ 522:../src/renesas/application/r_bcd_lcd.c ****         vdc_period_rect_t enh_area;
+ 523:../src/renesas/application/r_bcd_lcd.c **** 
+ 524:../src/renesas/application/r_bcd_lcd.c ****         /* Sharpness of H1 */
+ 525:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_clip_o = IMGC_SHARPNESS_H1_CLIP_O;
+ 526:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_clip_u = IMGC_SHARPNESS_H1_CLIP_U;
+ 527:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_gain_o = IMGC_SHARPNESS_H1_GAIN_O;
+ 528:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_gain_u = IMGC_SHARPNESS_H1_GAIN_U;
+ 529:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_core   = IMGC_SHARPNESS_H1_CORE;
+ 530:../src/renesas/application/r_bcd_lcd.c **** 
+ 531:../src/renesas/application/r_bcd_lcd.c ****         /* Sharpness of H2 */
+ 532:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_clip_o = IMGC_SHARPNESS_H2_CLIP_O;
+ 533:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_clip_u = IMGC_SHARPNESS_H2_CLIP_U;
+ 534:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_gain_o = IMGC_SHARPNESS_H2_GAIN_O;
+ 535:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_gain_u = IMGC_SHARPNESS_H2_GAIN_U;
+ 536:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_core   = IMGC_SHARPNESS_H2_CORE;
+ 537:../src/renesas/application/r_bcd_lcd.c **** 
+ 538:../src/renesas/application/r_bcd_lcd.c ****         if (IMGC_SHARPNESS_H2_LPF == 0)
+ 539:../src/renesas/application/r_bcd_lcd.c ****         {
+ 540:../src/renesas/application/r_bcd_lcd.c ****             sharp_param.shp_h2_lpf_sel = VDC_OFF;
+ 541:../src/renesas/application/r_bcd_lcd.c ****         }
+ 542:../src/renesas/application/r_bcd_lcd.c ****         else
+ 543:../src/renesas/application/r_bcd_lcd.c ****         {
+ 544:../src/renesas/application/r_bcd_lcd.c ****             sharp_param.shp_h2_lpf_sel = VDC_ON;
+ 545:../src/renesas/application/r_bcd_lcd.c ****         }
+ 546:../src/renesas/application/r_bcd_lcd.c **** 
+ 547:../src/renesas/application/r_bcd_lcd.c ****         /* Sharpness of H3 */
+ 548:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_clip_o = IMGC_SHARPNESS_H3_CLIP_O;
+ 549:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_clip_u = IMGC_SHARPNESS_H3_CLIP_U;
+ 550:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_gain_o = IMGC_SHARPNESS_H3_GAIN_O;
+ 551:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_gain_u = IMGC_SHARPNESS_H3_GAIN_U;
+ 552:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_core   = IMGC_SHARPNESS_H3_CORE;
+ 553:../src/renesas/application/r_bcd_lcd.c **** 
+ 554:../src/renesas/application/r_bcd_lcd.c ****         /* LTI H2 */
+ 555:../src/renesas/application/r_bcd_lcd.c ****         if (IMGC_SHARPNESS_LTI_H2_LPF == 0)
+ 556:../src/renesas/application/r_bcd_lcd.c ****         {
+ 557:../src/renesas/application/r_bcd_lcd.c ****             lti_param.lti_h2_lpf_sel = VDC_OFF;
+ 558:../src/renesas/application/r_bcd_lcd.c ****         }
+ 559:../src/renesas/application/r_bcd_lcd.c ****         else
+ 560:../src/renesas/application/r_bcd_lcd.c ****         {
+ 561:../src/renesas/application/r_bcd_lcd.c ****             lti_param.lti_h2_lpf_sel = VDC_ON;
+ 562:../src/renesas/application/r_bcd_lcd.c ****         }
+ 563:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI1].lti_inc_zero = IMGC_SHARPNESS_LTI_H2_ZERO;
+ 564:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI1].lti_gain     = IMGC_SHARPNESS_LTI_H2_GAIN;
+ 565:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI1].lti_core     = IMGC_SHARPNESS_LTI_H2_CORE;
+ 566:../src/renesas/application/r_bcd_lcd.c **** 
+ 567:../src/renesas/application/r_bcd_lcd.c ****         /* LTI H4 */
+ 568:../src/renesas/application/r_bcd_lcd.c ****         if (IMGC_SHARPNESS_LTI_H4_MEDTAP_SEL == VDC_LTI_MDFIL_SEL_ADJ2)
+ 569:../src/renesas/application/r_bcd_lcd.c ****         {
+ 570:../src/renesas/application/r_bcd_lcd.c ****             lti_param.lti_h4_median_tap_sel = VDC_LTI_MDFIL_SEL_ADJ2;
+ 571:../src/renesas/application/r_bcd_lcd.c ****         }
+ 572:../src/renesas/application/r_bcd_lcd.c ****         else
+ 573:../src/renesas/application/r_bcd_lcd.c ****         {
+ 574:../src/renesas/application/r_bcd_lcd.c ****             lti_param.lti_h4_median_tap_sel = VDC_LTI_MDFIL_SEL_ADJ1;
+ 575:../src/renesas/application/r_bcd_lcd.c ****         }
+ 576:../src/renesas/application/r_bcd_lcd.c **** 
+ 577:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI2].lti_inc_zero = IMGC_SHARPNESS_LTI_H4_ZERO;
+ 578:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI2].lti_gain     = IMGC_SHARPNESS_LTI_H4_GAIN;
+ 579:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI2].lti_core     = IMGC_SHARPNESS_LTI_H4_CORE;
+ 580:../src/renesas/application/r_bcd_lcd.c **** 
+ 581:../src/renesas/application/r_bcd_lcd.c ****         /* Sharpness Effective area */
+ 582:../src/renesas/application/r_bcd_lcd.c ****         enh_area.hs = IMGC_SHARPNESS_HS;
+ 583:../src/renesas/application/r_bcd_lcd.c ****         enh_area.hw = IMGC_SHARPNESS_HW;
+ 584:../src/renesas/application/r_bcd_lcd.c ****         enh_area.vs = IMGC_SHARPNESS_VS;
+ 585:../src/renesas/application/r_bcd_lcd.c ****         enh_area.vw = IMGC_SHARPNESS_VW;
+ 586:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_VideoSharpnessLtiVDC (vdc_ch, IMGC_IMG_IMPRV_ID, IMGC_SHARPNESS_ACTIVE, &sh
+ 587:../src/renesas/application/r_bcd_lcd.c ****             IMGC_SHARPNESS_LTI_ACTIVE, &lti_param, &enh_area);
+ 588:../src/renesas/application/r_bcd_lcd.c **** 
+ 589:../src/renesas/application/r_bcd_lcd.c ****     }
+ 590:../src/renesas/application/r_bcd_lcd.c **** 
+ 591:../src/renesas/application/r_bcd_lcd.c ****     return error;
+ 592:../src/renesas/application/r_bcd_lcd.c **** } /* End of function r_video_quality_adjustment() */
+ 717              		.loc 1 592 0
+ 718 0064 40D08DE2 		add	sp, sp, #64
+ 719              		.cfi_remember_state
+ 720              		.cfi_def_cfa_offset 8
+ 721              		@ sp needed
+ 722 0068 1080BDE8 		pop	{r4, pc}
+ 723              	.LVL41:
+ 724              	.L36:
+ 725              		.cfi_restore_state
+ 726              	.LBB11:
+ 525:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_clip_u = IMGC_SHARPNESS_H1_CLIP_U;
+ 727              		.loc 1 525 0
+ 728 006c 0010A0E3 		mov	r1, #0
+ 729 0070 2510CDE5 		strb	r1, [sp, #37]
+ 526:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_gain_o = IMGC_SHARPNESS_H1_GAIN_O;
+ 730              		.loc 1 526 0
+ 731 0074 2610CDE5 		strb	r1, [sp, #38]
+ 527:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_gain_u = IMGC_SHARPNESS_H1_GAIN_U;
+ 732              		.loc 1 527 0
+ 733 0078 2710CDE5 		strb	r1, [sp, #39]
+ 528:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H1].shp_core   = IMGC_SHARPNESS_H1_CORE;
+ 734              		.loc 1 528 0
+ 735 007c 2810CDE5 		strb	r1, [sp, #40]
+ 529:../src/renesas/application/r_bcd_lcd.c **** 
+ 736              		.loc 1 529 0
+ 737 0080 2910CDE5 		strb	r1, [sp, #41]
+ 532:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_clip_u = IMGC_SHARPNESS_H2_CLIP_U;
+ 738              		.loc 1 532 0
+ 739 0084 2A10CDE5 		strb	r1, [sp, #42]
+ 533:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_gain_o = IMGC_SHARPNESS_H2_GAIN_O;
+ 740              		.loc 1 533 0
+ 741 0088 2B10CDE5 		strb	r1, [sp, #43]
+ 534:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_gain_u = IMGC_SHARPNESS_H2_GAIN_U;
+ 742              		.loc 1 534 0
+ 743 008c 2C10CDE5 		strb	r1, [sp, #44]
+ 535:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H2].shp_core   = IMGC_SHARPNESS_H2_CORE;
+ 744              		.loc 1 535 0
+ 745 0090 2D10CDE5 		strb	r1, [sp, #45]
+ 536:../src/renesas/application/r_bcd_lcd.c **** 
+ 746              		.loc 1 536 0
+ 747 0094 2E10CDE5 		strb	r1, [sp, #46]
+ 540:../src/renesas/application/r_bcd_lcd.c ****         }
+ 748              		.loc 1 540 0
+ 749 0098 2410CDE5 		strb	r1, [sp, #36]
+ 548:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_clip_u = IMGC_SHARPNESS_H3_CLIP_U;
+ 750              		.loc 1 548 0
+ 751 009c 2F10CDE5 		strb	r1, [sp, #47]
+ 549:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_gain_o = IMGC_SHARPNESS_H3_GAIN_O;
+ 752              		.loc 1 549 0
+ 753 00a0 3010CDE5 		strb	r1, [sp, #48]
+ 550:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_gain_u = IMGC_SHARPNESS_H3_GAIN_U;
+ 754              		.loc 1 550 0
+ 755 00a4 3110CDE5 		strb	r1, [sp, #49]
+ 551:../src/renesas/application/r_bcd_lcd.c ****         sharp_param.hrz_sharp[VDC_IMGENH_SHARP_H3].shp_core   = IMGC_SHARPNESS_H3_CORE;
+ 756              		.loc 1 551 0
+ 757 00a8 3210CDE5 		strb	r1, [sp, #50]
+ 552:../src/renesas/application/r_bcd_lcd.c **** 
+ 758              		.loc 1 552 0
+ 759 00ac 3310CDE5 		strb	r1, [sp, #51]
+ 557:../src/renesas/application/r_bcd_lcd.c ****         }
+ 760              		.loc 1 557 0
+ 761 00b0 1410CDE5 		strb	r1, [sp, #20]
+ 563:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI1].lti_gain     = IMGC_SHARPNESS_LTI_H2_GAIN;
+ 762              		.loc 1 563 0
+ 763 00b4 0A30A0E3 		mov	r3, #10
+ 764 00b8 1630CDE5 		strb	r3, [sp, #22]
+ 564:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI1].lti_core     = IMGC_SHARPNESS_LTI_H2_CORE;
+ 765              		.loc 1 564 0
+ 766 00bc 1710CDE5 		strb	r1, [sp, #23]
+ 565:../src/renesas/application/r_bcd_lcd.c **** 
+ 767              		.loc 1 565 0
+ 768 00c0 1810CDE5 		strb	r1, [sp, #24]
+ 570:../src/renesas/application/r_bcd_lcd.c ****         }
+ 769              		.loc 1 570 0
+ 770 00c4 1510CDE5 		strb	r1, [sp, #21]
+ 577:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI2].lti_gain     = IMGC_SHARPNESS_LTI_H4_GAIN;
+ 771              		.loc 1 577 0
+ 772 00c8 1930CDE5 		strb	r3, [sp, #25]
+ 578:../src/renesas/application/r_bcd_lcd.c ****         lti_param.lti[VDC_IMGENH_LTI2].lti_core     = IMGC_SHARPNESS_LTI_H4_CORE;
+ 773              		.loc 1 578 0
+ 774 00cc 1A10CDE5 		strb	r1, [sp, #26]
+ 579:../src/renesas/application/r_bcd_lcd.c **** 
+ 775              		.loc 1 579 0
+ 776 00d0 1B10CDE5 		strb	r1, [sp, #27]
+ 582:../src/renesas/application/r_bcd_lcd.c ****         enh_area.hw = IMGC_SHARPNESS_HW;
+ 777              		.loc 1 582 0
+ 778 00d4 173EA0E3 		mov	r3, #368
+ 779 00d8 B032CDE1 		strh	r3, [sp, #32]	@ movhi
+ 583:../src/renesas/application/r_bcd_lcd.c ****         enh_area.vs = IMGC_SHARPNESS_VS;
+ 780              		.loc 1 583 0
+ 781 00dc 553EA0E3 		mov	r3, #1360
+ 782 00e0 B232CDE1 		strh	r3, [sp, #34]	@ movhi
+ 584:../src/renesas/application/r_bcd_lcd.c ****         enh_area.vw = IMGC_SHARPNESS_VW;
+ 783              		.loc 1 584 0
+ 784 00e4 1730A0E3 		mov	r3, #23
+ 785 00e8 BC31CDE1 		strh	r3, [sp, #28]	@ movhi
+ 585:../src/renesas/application/r_bcd_lcd.c ****         error = R_RVAPI_VideoSharpnessLtiVDC (vdc_ch, IMGC_IMG_IMPRV_ID, IMGC_SHARPNESS_ACTIVE, &sh
+ 786              		.loc 1 585 0
+ 787 00ec 033CA0E3 		mov	r3, #768
+ 788 00f0 BE31CDE1 		strh	r3, [sp, #30]	@ movhi
+ 586:../src/renesas/application/r_bcd_lcd.c ****             IMGC_SHARPNESS_LTI_ACTIVE, &lti_param, &enh_area);
+ 789              		.loc 1 586 0
+ 790 00f4 1C308DE2 		add	r3, sp, #28
+ 791 00f8 08308DE5 		str	r3, [sp, #8]
+ 792 00fc 14308DE2 		add	r3, sp, #20
+ 793 0100 04308DE5 		str	r3, [sp, #4]
+ 794 0104 00108DE5 		str	r1, [sp]
+ 795 0108 24308DE2 		add	r3, sp, #36
+ 796 010c 0120A0E1 		mov	r2, r1
+ 797 0110 0400A0E1 		mov	r0, r4
+ 798 0114 FEFFFFEB 		bl	R_RVAPI_VideoSharpnessLtiVDC
+ 799              	.LVL42:
+ 800 0118 D1FFFFEA 		b	.L34
+ 801              	.LBE11:
+ 802              		.cfi_endproc
+ 803              	.LFE7:
+ 805              		.section	.text.R_BCD_LcdSwapVideoBuffer,"ax",%progbits
+ 806              		.align	2
+ 807              		.global	R_BCD_LcdSwapVideoBuffer
+ 808              		.syntax unified
+ 809              		.arm
+ 810              		.fpu neon
+ 812              	R_BCD_LcdSwapVideoBuffer:
+ 813              	.LFB8:
+ 593:../src/renesas/application/r_bcd_lcd.c **** 
+ 594:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 595:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdSwapVideoBuffer
+ 596:../src/renesas/application/r_bcd_lcd.c **** * Description  : Record video buffer swap request
+ 597:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : -
+ 598:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 599:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 600:../src/renesas/application/r_bcd_lcd.c **** void R_BCD_LcdSwapVideoBuffer( void )
+ 601:../src/renesas/application/r_bcd_lcd.c **** {
+ 814              		.loc 1 601 0
+ 815              		.cfi_startproc
+ 816              		@ args = 0, pretend = 0, frame = 0
+ 817              		@ frame_needed = 0, uses_anonymous_args = 0
+ 818              		@ link register save eliminated.
+ 602:../src/renesas/application/r_bcd_lcd.c ****     Req_Layer1_Swap = 1;
+ 819              		.loc 1 602 0
+ 820 0000 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 821 0004 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 822 0008 0120A0E3 		mov	r2, #1
+ 823 000c 002083E5 		str	r2, [r3]
+ 824 0010 1EFF2FE1 		bx	lr
+ 825              		.cfi_endproc
+ 826              	.LFE8:
+ 828              		.section	.text.R_BCD_LcdSwapGraphicsBuffer,"ax",%progbits
+ 829              		.align	2
+ 830              		.global	R_BCD_LcdSwapGraphicsBuffer
+ 831              		.syntax unified
+ 832              		.arm
+ 833              		.fpu neon
+ 835              	R_BCD_LcdSwapGraphicsBuffer:
+ 836              	.LFB9:
+ 603:../src/renesas/application/r_bcd_lcd.c **** 
+ 604:../src/renesas/application/r_bcd_lcd.c ****     return;
+ 605:../src/renesas/application/r_bcd_lcd.c **** } /* End of function R_BCD_LcdSwapVideoBuffer() */
+ 606:../src/renesas/application/r_bcd_lcd.c **** 
+ 607:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 608:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdSwapGraphicsBuffer
+ 609:../src/renesas/application/r_bcd_lcd.c **** * Description  : Record graphics buffer swap request
+ 610:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : -
+ 611:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 612:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 613:../src/renesas/application/r_bcd_lcd.c **** void R_BCD_LcdSwapGraphicsBuffer(void)
+ 614:../src/renesas/application/r_bcd_lcd.c **** {
+ 837              		.loc 1 614 0
+ 838              		.cfi_startproc
+ 839              		@ args = 0, pretend = 0, frame = 0
+ 840              		@ frame_needed = 0, uses_anonymous_args = 0
+ 841              		@ link register save eliminated.
+ 615:../src/renesas/application/r_bcd_lcd.c ****     Req_Layer2_Swap = 1;
+ 842              		.loc 1 615 0
+ 843 0000 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 844 0004 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 845 0008 0120A0E3 		mov	r2, #1
+ 846 000c 002083E5 		str	r2, [r3]
+ 847 0010 1EFF2FE1 		bx	lr
+ 848              		.cfi_endproc
+ 849              	.LFE9:
+ 851              		.section	.text.R_BCD_LcdVSync,"ax",%progbits
+ 852              		.align	2
+ 853              		.global	R_BCD_LcdVSync
+ 854              		.syntax unified
+ 855              		.arm
+ 856              		.fpu neon
+ 858              	R_BCD_LcdVSync:
+ 859              	.LFB10:
+ 616:../src/renesas/application/r_bcd_lcd.c **** 
+ 617:../src/renesas/application/r_bcd_lcd.c ****     return;
+ 618:../src/renesas/application/r_bcd_lcd.c **** } /* End of function R_BCD_LcdSwapGraphicsBuffer() */
+ 619:../src/renesas/application/r_bcd_lcd.c **** 
+ 620:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 621:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdVSync
+ 622:../src/renesas/application/r_bcd_lcd.c **** * Description  : Interrupt process for VDC6
+ 623:../src/renesas/application/r_bcd_lcd.c **** *              : Check the swap request of the video buffer and the overlap buffer,
+ 624:../src/renesas/application/r_bcd_lcd.c **** *              : and swap the buffer if there is a request.
+ 625:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : -
+ 626:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 627:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 628:../src/renesas/application/r_bcd_lcd.c **** void R_BCD_LcdVSync(void) 
+ 629:../src/renesas/application/r_bcd_lcd.c **** {
+ 860              		.loc 1 629 0
+ 861              		.cfi_startproc
+ 862              		@ args = 0, pretend = 0, frame = 0
+ 863              		@ frame_needed = 0, uses_anonymous_args = 0
+ 864 0000 10402DE9 		push	{r4, lr}
+ 865              		.cfi_def_cfa_offset 8
+ 866              		.cfi_offset 4, -8
+ 867              		.cfi_offset 14, -4
+ 630:../src/renesas/application/r_bcd_lcd.c ****     /* Check whether the video buffer swap request is pending */
+ 631:../src/renesas/application/r_bcd_lcd.c ****     if (Req_Layer1_Swap != 0)
+ 868              		.loc 1 631 0
+ 869 0004 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 870 0008 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 871 000c 003093E5 		ldr	r3, [r3]
+ 872 0010 000053E3 		cmp	r3, #0
+ 873 0014 0D00000A 		beq	.L40
+ 632:../src/renesas/application/r_bcd_lcd.c ****     {
+ 633:../src/renesas/application/r_bcd_lcd.c ****         if( Layer1_buffer_id == 0 )
+ 874              		.loc 1 633 0
+ 875 0018 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 876 001c 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 877 0020 003093E5 		ldr	r3, [r3]
+ 878 0024 000053E3 		cmp	r3, #0
+ 879 0028 2500001A 		bne	.L41
+ 634:../src/renesas/application/r_bcd_lcd.c ****         {
+ 635:../src/renesas/application/r_bcd_lcd.c ****             R_RVAPI_GraphChangeSurfaceVDC(VDC_CHANNEL_0, VDC_LAYER_ID_0_RD, video_buffer[0]);
+ 880              		.loc 1 635 0
+ 881 002c 002000E3 		movw	r2, #:lower16:.LANCHOR2
+ 882 0030 002040E3 		movt	r2, #:upper16:.LANCHOR2
+ 883 0034 0110A0E3 		mov	r1, #1
+ 884 0038 0000A0E3 		mov	r0, #0
+ 885 003c FEFFFFEB 		bl	R_RVAPI_GraphChangeSurfaceVDC
+ 886              	.LVL43:
+ 636:../src/renesas/application/r_bcd_lcd.c ****             Layer1_buffer_id = 1;
+ 887              		.loc 1 636 0
+ 888 0040 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 889 0044 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 890 0048 0120A0E3 		mov	r2, #1
+ 891 004c 002083E5 		str	r2, [r3]
+ 892              	.L40:
+ 637:../src/renesas/application/r_bcd_lcd.c ****         }
+ 638:../src/renesas/application/r_bcd_lcd.c ****         else
+ 639:../src/renesas/application/r_bcd_lcd.c ****         {
+ 640:../src/renesas/application/r_bcd_lcd.c ****             R_RVAPI_GraphChangeSurfaceVDC(VDC_CHANNEL_0, VDC_LAYER_ID_0_RD, video_buffer[1]);
+ 641:../src/renesas/application/r_bcd_lcd.c ****             Layer1_buffer_id = 0;
+ 642:../src/renesas/application/r_bcd_lcd.c ****         }
+ 643:../src/renesas/application/r_bcd_lcd.c ****     }
+ 644:../src/renesas/application/r_bcd_lcd.c **** 
+ 645:../src/renesas/application/r_bcd_lcd.c ****     /* Check whether the overlap buffer swap request is pending */
+ 646:../src/renesas/application/r_bcd_lcd.c ****     if (Req_Layer2_Swap != 0)
+ 893              		.loc 1 646 0
+ 894 0050 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 895 0054 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 896 0058 003093E5 		ldr	r3, [r3]
+ 897 005c 000053E3 		cmp	r3, #0
+ 898 0060 0F00000A 		beq	.L42
+ 647:../src/renesas/application/r_bcd_lcd.c ****     {
+ 648:../src/renesas/application/r_bcd_lcd.c ****         if (layer2_buffer_id == 0)
+ 899              		.loc 1 648 0
+ 900 0064 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 901 0068 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 902 006c 003093E5 		ldr	r3, [r3]
+ 903 0070 000053E3 		cmp	r3, #0
+ 904 0074 1B00001A 		bne	.L43
+ 649:../src/renesas/application/r_bcd_lcd.c ****         {
+ 650:../src/renesas/application/r_bcd_lcd.c ****             R_RVAPI_GraphChangeSurfaceVDC(VDC_CHANNEL_0, VDC_LAYER_ID_2_RD, graphics2_buffer[0]);
+ 905              		.loc 1 650 0
+ 906 0078 002000E3 		movw	r2, #:lower16:.LANCHOR5
+ 907 007c 002040E3 		movt	r2, #:upper16:.LANCHOR5
+ 908 0080 0210A0E3 		mov	r1, #2
+ 909 0084 0000A0E3 		mov	r0, #0
+ 910 0088 FEFFFFEB 		bl	R_RVAPI_GraphChangeSurfaceVDC
+ 911              	.LVL44:
+ 651:../src/renesas/application/r_bcd_lcd.c ****             layer2_buffer_id = 1;
+ 912              		.loc 1 651 0
+ 913 008c 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 914 0090 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 915 0094 0120A0E3 		mov	r2, #1
+ 916 0098 002083E5 		str	r2, [r3]
+ 917              	.L44:
+ 652:../src/renesas/application/r_bcd_lcd.c ****         }
+ 653:../src/renesas/application/r_bcd_lcd.c ****         else
+ 654:../src/renesas/application/r_bcd_lcd.c ****         {
+ 655:../src/renesas/application/r_bcd_lcd.c ****             R_RVAPI_GraphChangeSurfaceVDC(VDC_CHANNEL_0, VDC_LAYER_ID_2_RD, graphics2_buffer[1]);
+ 656:../src/renesas/application/r_bcd_lcd.c ****             layer2_buffer_id = 0;
+ 657:../src/renesas/application/r_bcd_lcd.c ****         }
+ 658:../src/renesas/application/r_bcd_lcd.c ****         DrawSwapBuffer(VDC_LAYER_ID_2_RD);
+ 918              		.loc 1 658 0
+ 919 009c 0200A0E3 		mov	r0, #2
+ 920 00a0 FEFFFFEB 		bl	DrawSwapBuffer
+ 921              	.LVL45:
+ 922              	.L42:
+ 659:../src/renesas/application/r_bcd_lcd.c ****     }
+ 660:../src/renesas/application/r_bcd_lcd.c ****     Req_Layer1_Swap = 0;
+ 923              		.loc 1 660 0
+ 924 00a4 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 925 00a8 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 926 00ac 0020A0E3 		mov	r2, #0
+ 927 00b0 002083E5 		str	r2, [r3]
+ 661:../src/renesas/application/r_bcd_lcd.c ****     Req_Layer2_Swap = 0;
+ 928              		.loc 1 661 0
+ 929 00b4 003000E3 		movw	r3, #:lower16:.LANCHOR3
+ 930 00b8 003040E3 		movt	r3, #:upper16:.LANCHOR3
+ 931 00bc 002083E5 		str	r2, [r3]
+ 932 00c0 1080BDE8 		pop	{r4, pc}
+ 933              	.L41:
+ 640:../src/renesas/application/r_bcd_lcd.c ****             Layer1_buffer_id = 0;
+ 934              		.loc 1 640 0
+ 935 00c4 40209FE5 		ldr	r2, .L46
+ 936 00c8 0110A0E3 		mov	r1, #1
+ 937 00cc 0000A0E3 		mov	r0, #0
+ 938 00d0 FEFFFFEB 		bl	R_RVAPI_GraphChangeSurfaceVDC
+ 939              	.LVL46:
+ 641:../src/renesas/application/r_bcd_lcd.c ****         }
+ 940              		.loc 1 641 0
+ 941 00d4 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 942 00d8 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 943 00dc 0020A0E3 		mov	r2, #0
+ 944 00e0 002083E5 		str	r2, [r3]
+ 945 00e4 D9FFFFEA 		b	.L40
+ 946              	.L43:
+ 655:../src/renesas/application/r_bcd_lcd.c ****             layer2_buffer_id = 0;
+ 947              		.loc 1 655 0
+ 948 00e8 20209FE5 		ldr	r2, .L46+4
+ 949 00ec 0210A0E3 		mov	r1, #2
+ 950 00f0 0000A0E3 		mov	r0, #0
+ 951 00f4 FEFFFFEB 		bl	R_RVAPI_GraphChangeSurfaceVDC
+ 952              	.LVL47:
+ 656:../src/renesas/application/r_bcd_lcd.c ****         }
+ 953              		.loc 1 656 0
+ 954 00f8 003000E3 		movw	r3, #:lower16:.LANCHOR4
+ 955 00fc 003040E3 		movt	r3, #:upper16:.LANCHOR4
+ 956 0100 0020A0E3 		mov	r2, #0
+ 957 0104 002083E5 		str	r2, [r3]
+ 958 0108 E3FFFFEA 		b	.L44
+ 959              	.L47:
+ 960              		.align	2
+ 961              	.L46:
+ 962 010c 00B00400 		.word	.LANCHOR2+307200
+ 963 0110 00580200 		.word	.LANCHOR5+153600
+ 964              		.cfi_endproc
+ 965              	.LFE10:
+ 967              		.section	.text.IntCallbackFunc,"ax",%progbits
+ 968              		.align	2
+ 969              		.syntax unified
+ 970              		.arm
+ 971              		.fpu neon
+ 973              	IntCallbackFunc:
+ 974              	.LFB3:
+ 137:../src/renesas/application/r_bcd_lcd.c ****     if( int_type == VDC_INT_TYPE_VLINE )
+ 975              		.loc 1 137 0
+ 976              		.cfi_startproc
+ 977              		@ args = 0, pretend = 0, frame = 0
+ 978              		@ frame_needed = 0, uses_anonymous_args = 0
+ 979              	.LVL48:
+ 980 0000 10402DE9 		push	{r4, lr}
+ 981              		.cfi_def_cfa_offset 8
+ 982              		.cfi_offset 4, -8
+ 983              		.cfi_offset 14, -4
+ 984 0004 0040A0E1 		mov	r4, r0
+ 138:../src/renesas/application/r_bcd_lcd.c ****     {
+ 985              		.loc 1 138 0
+ 986 0008 030050E3 		cmp	r0, #3
+ 987 000c 0C00000A 		beq	.L52
+ 988              	.LVL49:
+ 989              	.L49:
+ 144:../src/renesas/application/r_bcd_lcd.c ****     {
+ 990              		.loc 1 144 0
+ 991 0010 010054E3 		cmp	r4, #1
+ 992 0014 1080BD18 		popne	{r4, pc}
+ 146:../src/renesas/application/r_bcd_lcd.c ****         {
+ 993              		.loc 1 146 0
+ 994 0018 003000E3 		movw	r3, #:lower16:.LANCHOR12
+ 995 001c 003040E3 		movt	r3, #:upper16:.LANCHOR12
+ 996 0020 003093E5 		ldr	r3, [r3]
+ 997 0024 000053E3 		cmp	r3, #0
+ 998 0028 1080BDD8 		pople	{r4, pc}
+ 148:../src/renesas/application/r_bcd_lcd.c ****         }
+ 999              		.loc 1 148 0
+ 1000 002c 003000E3 		movw	r3, #:lower16:.LANCHOR12
+ 1001 0030 003040E3 		movt	r3, #:upper16:.LANCHOR12
+ 1002 0034 002093E5 		ldr	r2, [r3]
+ 1003 0038 012042E2 		sub	r2, r2, #1
+ 1004 003c 002083E5 		str	r2, [r3]
+ 1005 0040 1080BDE8 		pop	{r4, pc}
+ 1006              	.LVL50:
+ 1007              	.L52:
+ 141:../src/renesas/application/r_bcd_lcd.c ****     }
+ 1008              		.loc 1 141 0
+ 1009 0044 FEFFFFEB 		bl	R_BCD_LcdVSync
+ 1010              	.LVL51:
+ 1011 0048 F0FFFFEA 		b	.L49
+ 1012              		.cfi_endproc
+ 1013              	.LFE3:
+ 1015              		.section	.text.R_BCD_LcdWriteLine,"ax",%progbits
+ 1016              		.align	2
+ 1017              		.global	R_BCD_LcdWriteLine
+ 1018              		.syntax unified
+ 1019              		.arm
+ 1020              		.fpu neon
+ 1022              	R_BCD_LcdWriteLine:
+ 1023              	.LFB11:
+ 662:../src/renesas/application/r_bcd_lcd.c **** } /* End of function R_BCD_LcdVSync() */
+ 663:../src/renesas/application/r_bcd_lcd.c **** 
+ 664:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 665:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdWriteLine
+ 666:../src/renesas/application/r_bcd_lcd.c **** * Description  : Draw a line in the overlap buffer
+ 667:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : x1
+ 668:../src/renesas/application/r_bcd_lcd.c **** *              :   X coordinate of the start point of the line
+ 669:../src/renesas/application/r_bcd_lcd.c **** *              : y1
+ 670:../src/renesas/application/r_bcd_lcd.c **** *              :   Y coordinate of the start point of the line
+ 671:../src/renesas/application/r_bcd_lcd.c **** *              : x2
+ 672:../src/renesas/application/r_bcd_lcd.c **** *              :   X coordinate of the end point of the line
+ 673:../src/renesas/application/r_bcd_lcd.c **** *              : y2
+ 674:../src/renesas/application/r_bcd_lcd.c **** *              :   Y coordinate of the end point of the line
+ 675:../src/renesas/application/r_bcd_lcd.c **** *              : color
+ 676:../src/renesas/application/r_bcd_lcd.c **** *              :   Line color
+ 677:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 678:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 679:../src/renesas/application/r_bcd_lcd.c **** void R_BCD_LcdWriteLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint8_t color)
+ 680:../src/renesas/application/r_bcd_lcd.c **** {
+ 1024              		.loc 1 680 0
+ 1025              		.cfi_startproc
+ 1026              		@ args = 4, pretend = 0, frame = 0
+ 1027              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1028              	.LVL52:
+ 1029 0000 04E02DE5 		str	lr, [sp, #-4]!
+ 1030              		.cfi_def_cfa_offset 4
+ 1031              		.cfi_offset 14, -4
+ 1032 0004 0CD04DE2 		sub	sp, sp, #12
+ 1033              		.cfi_def_cfa_offset 16
+ 681:../src/renesas/application/r_bcd_lcd.c ****     DrawLine( VDC_LAYER_ID_2_RD, x1, y1, x2, y2, color );
+ 1034              		.loc 1 681 0
+ 1035 0008 10C0DDE5 		ldrb	ip, [sp, #16]	@ zero_extendqisi2
+ 1036 000c 04C08DE5 		str	ip, [sp, #4]
+ 1037 0010 00308DE5 		str	r3, [sp]
+ 1038 0014 0230A0E1 		mov	r3, r2
+ 1039              	.LVL53:
+ 1040 0018 0120A0E1 		mov	r2, r1
+ 1041              	.LVL54:
+ 1042 001c 0010A0E1 		mov	r1, r0
+ 1043              	.LVL55:
+ 1044 0020 0200A0E3 		mov	r0, #2
+ 1045              	.LVL56:
+ 1046 0024 FEFFFFEB 		bl	DrawLine
+ 1047              	.LVL57:
+ 682:../src/renesas/application/r_bcd_lcd.c **** 
+ 683:../src/renesas/application/r_bcd_lcd.c ****     return;
+ 684:../src/renesas/application/r_bcd_lcd.c **** } /* End of function R_BCD_LcdWriteLine() */
+ 1048              		.loc 1 684 0
+ 1049 0028 0CD08DE2 		add	sp, sp, #12
+ 1050              		.cfi_def_cfa_offset 4
+ 1051              		@ sp needed
+ 1052 002c 04F09DE4 		ldr	pc, [sp], #4
+ 1053              		.cfi_endproc
+ 1054              	.LFE11:
+ 1056              		.section	.text.R_BCD_LcdWriteChar,"ax",%progbits
+ 1057              		.align	2
+ 1058              		.global	R_BCD_LcdWriteChar
+ 1059              		.syntax unified
+ 1060              		.arm
+ 1061              		.fpu neon
+ 1063              	R_BCD_LcdWriteChar:
+ 1064              	.LFB12:
+ 685:../src/renesas/application/r_bcd_lcd.c **** 
+ 686:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 687:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdWriteChar
+ 688:../src/renesas/application/r_bcd_lcd.c **** * Description  : Display character in overlap buffer
+ 689:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : code
+ 690:../src/renesas/application/r_bcd_lcd.c **** *              :   Code to be displayed
+ 691:../src/renesas/application/r_bcd_lcd.c **** *              : x
+ 692:../src/renesas/application/r_bcd_lcd.c **** *              :   X coordinate to display character
+ 693:../src/renesas/application/r_bcd_lcd.c **** *              : y
+ 694:../src/renesas/application/r_bcd_lcd.c **** *              :   Y coordinate to display character
+ 695:../src/renesas/application/r_bcd_lcd.c **** *              : color
+ 696:../src/renesas/application/r_bcd_lcd.c **** *              :   character color
+ 697:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 698:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 699:../src/renesas/application/r_bcd_lcd.c **** void R_BCD_LcdWriteChar(uint8_t code, uint32_t x, uint32_t y, uint8_t color) 
+ 700:../src/renesas/application/r_bcd_lcd.c **** {
+ 1065              		.loc 1 700 0
+ 1066              		.cfi_startproc
+ 1067              		@ args = 0, pretend = 0, frame = 8
+ 1068              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1069              	.LVL58:
+ 1070 0000 F04F2DE9 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 1071              		.cfi_def_cfa_offset 36
+ 1072              		.cfi_offset 4, -36
+ 1073              		.cfi_offset 5, -32
+ 1074              		.cfi_offset 6, -28
+ 1075              		.cfi_offset 7, -24
+ 1076              		.cfi_offset 8, -20
+ 1077              		.cfi_offset 9, -16
+ 1078              		.cfi_offset 10, -12
+ 1079              		.cfi_offset 11, -8
+ 1080              		.cfi_offset 14, -4
+ 1081 0004 0CD04DE2 		sub	sp, sp, #12
+ 1082              		.cfi_def_cfa_offset 48
+ 1083 0008 04008DE5 		str	r0, [sp, #4]
+ 1084 000c 01B0A0E1 		mov	fp, r1
+ 1085 0010 02A0A0E1 		mov	r10, r2
+ 1086 0014 00308DE5 		str	r3, [sp]
+ 1087              	.LVL59:
+ 701:../src/renesas/application/r_bcd_lcd.c ****     int32_t height;
+ 702:../src/renesas/application/r_bcd_lcd.c ****     int32_t width;
+ 703:../src/renesas/application/r_bcd_lcd.c ****     uint8_t font;
+ 704:../src/renesas/application/r_bcd_lcd.c **** 
+ 705:../src/renesas/application/r_bcd_lcd.c ****     int32_t width_offset;
+ 706:../src/renesas/application/r_bcd_lcd.c ****     int32_t check_bit;
+ 707:../src/renesas/application/r_bcd_lcd.c ****     for (height = 0; height < R_BCD_FONTDATA_HEIGHT; height++)
+ 1088              		.loc 1 707 0
+ 1089 0018 0070A0E3 		mov	r7, #0
+ 1090 001c 1A0000EA 		b	.L56
+ 1091              	.LVL60:
+ 1092              	.L58:
+ 708:../src/renesas/application/r_bcd_lcd.c ****     {
+ 709:../src/renesas/application/r_bcd_lcd.c ****         check_bit = 7;
+ 710:../src/renesas/application/r_bcd_lcd.c ****         width_offset = 0;
+ 711:../src/renesas/application/r_bcd_lcd.c ****         font = font_array[code-0x20][height][width_offset++];
+ 712:../src/renesas/application/r_bcd_lcd.c ****         for (width = 0; width < R_BCD_FONTDATA_WIDTH; width++)
+ 713:../src/renesas/application/r_bcd_lcd.c ****         {
+ 714:../src/renesas/application/r_bcd_lcd.c ****             if ((font & (0x1 << (check_bit--))) != 0)
+ 715:../src/renesas/application/r_bcd_lcd.c ****             {
+ 716:../src/renesas/application/r_bcd_lcd.c ****                 DrawPoint( VDC_LAYER_ID_2_RD, (width + x), (height + y) , color );
+ 717:../src/renesas/application/r_bcd_lcd.c ****             }
+ 718:../src/renesas/application/r_bcd_lcd.c ****             if (check_bit < 0)
+ 1093              		.loc 1 718 0
+ 1094 0020 000055E3 		cmp	r5, #0
+ 1095 0024 0D0000BA 		blt	.L63
+ 1096              	.LVL61:
+ 1097              	.L59:
+ 712:../src/renesas/application/r_bcd_lcd.c ****         {
+ 1098              		.loc 1 712 0 discriminator 2
+ 1099 0028 014084E2 		add	r4, r4, #1
+ 1100              	.LVL62:
+ 1101 002c 0530A0E1 		mov	r3, r5
+ 1102              	.LVL63:
+ 1103              	.L57:
+ 712:../src/renesas/application/r_bcd_lcd.c ****         {
+ 1104              		.loc 1 712 0 is_stmt 0 discriminator 1
+ 1105 0030 0B0054E3 		cmp	r4, #11
+ 1106 0034 130000CA 		bgt	.L64
+ 714:../src/renesas/application/r_bcd_lcd.c ****             {
+ 1107              		.loc 1 714 0 is_stmt 1
+ 1108 0038 015043E2 		sub	r5, r3, #1
+ 1109              	.LVL64:
+ 1110 003c 5633A0E1 		asr	r3, r6, r3
+ 1111 0040 010013E3 		tst	r3, #1
+ 1112 0044 F5FFFF0A 		beq	.L58
+ 716:../src/renesas/application/r_bcd_lcd.c ****             }
+ 1113              		.loc 1 716 0
+ 1114 0048 00309DE5 		ldr	r3, [sp]
+ 1115 004c 0A2087E0 		add	r2, r7, r10
+ 1116 0050 0B1084E0 		add	r1, r4, fp
+ 1117 0054 0200A0E3 		mov	r0, #2
+ 1118 0058 FEFFFFEB 		bl	DrawPoint
+ 1119              	.LVL65:
+ 1120 005c EFFFFFEA 		b	.L58
+ 1121              	.L63:
+ 1122              	.LVL66:
+ 719:../src/renesas/application/r_bcd_lcd.c ****             {
+ 720:../src/renesas/application/r_bcd_lcd.c ****                 check_bit = 7;
+ 721:../src/renesas/application/r_bcd_lcd.c ****                 font = font_array[code-0x20][height][width_offset++];
+ 1123              		.loc 1 721 0
+ 1124 0060 003000E3 		movw	r3, #:lower16:font_array
+ 1125 0064 003040E3 		movt	r3, #:upper16:font_array
+ 1126 0068 891089E0 		add	r1, r9, r9, lsl #1
+ 1127 006c 8121A0E1 		lsl	r2, r1, #3
+ 1128 0070 072082E0 		add	r2, r2, r7
+ 1129 0074 823083E0 		add	r3, r3, r2, lsl #1
+ 1130 0078 0860D3E7 		ldrb	r6, [r3, r8]	@ zero_extendqisi2
+ 1131              	.LVL67:
+ 1132 007c 018088E2 		add	r8, r8, #1
+ 1133              	.LVL68:
+ 720:../src/renesas/application/r_bcd_lcd.c ****                 font = font_array[code-0x20][height][width_offset++];
+ 1134              		.loc 1 720 0
+ 1135 0080 0750A0E3 		mov	r5, #7
+ 1136 0084 E7FFFFEA 		b	.L59
+ 1137              	.LVL69:
+ 1138              	.L64:
+ 707:../src/renesas/application/r_bcd_lcd.c ****     {
+ 1139              		.loc 1 707 0 discriminator 2
+ 1140 0088 017087E2 		add	r7, r7, #1
+ 1141              	.LVL70:
+ 1142              	.L56:
+ 707:../src/renesas/application/r_bcd_lcd.c ****     {
+ 1143              		.loc 1 707 0 is_stmt 0 discriminator 1
+ 1144 008c 170057E3 		cmp	r7, #23
+ 1145 0090 0B0000CA 		bgt	.L65
+ 1146              	.LVL71:
+ 711:../src/renesas/application/r_bcd_lcd.c ****         for (width = 0; width < R_BCD_FONTDATA_WIDTH; width++)
+ 1147              		.loc 1 711 0 is_stmt 1
+ 1148 0094 04309DE5 		ldr	r3, [sp, #4]
+ 1149 0098 209043E2 		sub	r9, r3, #32
+ 1150              	.LVL72:
+ 1151 009c 002000E3 		movw	r2, #:lower16:font_array
+ 1152 00a0 002040E3 		movt	r2, #:upper16:font_array
+ 1153 00a4 891089E0 		add	r1, r9, r9, lsl #1
+ 1154 00a8 8131A0E1 		lsl	r3, r1, #3
+ 1155 00ac 073083E0 		add	r3, r3, r7
+ 1156 00b0 8360D2E7 		ldrb	r6, [r2, r3, lsl #1]	@ zero_extendqisi2
+ 1157              	.LVL73:
+ 709:../src/renesas/application/r_bcd_lcd.c ****         width_offset = 0;
+ 1158              		.loc 1 709 0
+ 1159 00b4 0730A0E3 		mov	r3, #7
+ 711:../src/renesas/application/r_bcd_lcd.c ****         for (width = 0; width < R_BCD_FONTDATA_WIDTH; width++)
+ 1160              		.loc 1 711 0
+ 1161 00b8 0180A0E3 		mov	r8, #1
+ 712:../src/renesas/application/r_bcd_lcd.c ****         {
+ 1162              		.loc 1 712 0
+ 1163 00bc 0040A0E3 		mov	r4, #0
+ 1164 00c0 DAFFFFEA 		b	.L57
+ 1165              	.LVL74:
+ 1166              	.L65:
+ 722:../src/renesas/application/r_bcd_lcd.c ****             }
+ 723:../src/renesas/application/r_bcd_lcd.c ****         }
+ 724:../src/renesas/application/r_bcd_lcd.c ****     }
+ 725:../src/renesas/application/r_bcd_lcd.c **** 
+ 726:../src/renesas/application/r_bcd_lcd.c ****     return;
+ 727:../src/renesas/application/r_bcd_lcd.c **** } /* End of function R_BCD_LcdWriteChar() */
+ 1167              		.loc 1 727 0
+ 1168 00c4 0CD08DE2 		add	sp, sp, #12
+ 1169              		.cfi_def_cfa_offset 36
+ 1170              		@ sp needed
+ 1171 00c8 F08FBDE8 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 1172              		.cfi_endproc
+ 1173              	.LFE12:
+ 1175              		.section	.text.R_BCD_LcdWriteString,"ax",%progbits
+ 1176              		.align	2
+ 1177              		.global	R_BCD_LcdWriteString
+ 1178              		.syntax unified
+ 1179              		.arm
+ 1180              		.fpu neon
+ 1182              	R_BCD_LcdWriteString:
+ 1183              	.LFB13:
+ 728:../src/renesas/application/r_bcd_lcd.c **** 
+ 729:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 730:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdWriteString
+ 731:../src/renesas/application/r_bcd_lcd.c **** * Description  : Display character string in overlap buffer
+ 732:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : pcode
+ 733:../src/renesas/application/r_bcd_lcd.c **** *              :   A pointer to the character string to be displayed
+ 734:../src/renesas/application/r_bcd_lcd.c **** *              : x
+ 735:../src/renesas/application/r_bcd_lcd.c **** *              :   X coordinate to display character string
+ 736:../src/renesas/application/r_bcd_lcd.c **** *              : y
+ 737:../src/renesas/application/r_bcd_lcd.c **** *              :   Y coordinate to display character string
+ 738:../src/renesas/application/r_bcd_lcd.c **** *              : color
+ 739:../src/renesas/application/r_bcd_lcd.c **** *              :   character string color
+ 740:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 741:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 742:../src/renesas/application/r_bcd_lcd.c **** void R_BCD_LcdWriteString(uint8_t *pcode, uint32_t x, uint32_t y, uint8_t color)
+ 743:../src/renesas/application/r_bcd_lcd.c **** {
+ 1184              		.loc 1 743 0
+ 1185              		.cfi_startproc
+ 1186              		@ args = 0, pretend = 0, frame = 0
+ 1187              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1188              	.LVL75:
+ 1189 0000 F0472DE9 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 1190              		.cfi_def_cfa_offset 32
+ 1191              		.cfi_offset 4, -32
+ 1192              		.cfi_offset 5, -28
+ 1193              		.cfi_offset 6, -24
+ 1194              		.cfi_offset 7, -20
+ 1195              		.cfi_offset 8, -16
+ 1196              		.cfi_offset 9, -12
+ 1197              		.cfi_offset 10, -8
+ 1198              		.cfi_offset 14, -4
+ 1199 0004 0050A0E1 		mov	r5, r0
+ 1200 0008 01A0A0E1 		mov	r10, r1
+ 1201 000c 0290A0E1 		mov	r9, r2
+ 1202 0010 0380A0E1 		mov	r8, r3
+ 744:../src/renesas/application/r_bcd_lcd.c ****     int i; 
+ 745:../src/renesas/application/r_bcd_lcd.c ****     int len; 
+ 746:../src/renesas/application/r_bcd_lcd.c **** 
+ 747:../src/renesas/application/r_bcd_lcd.c ****     len = strlen(pcode);
+ 1203              		.loc 1 747 0
+ 1204 0014 FEFFFFEB 		bl	strlen
+ 1205              	.LVL76:
+ 1206 0018 0070A0E1 		mov	r7, r0
+ 1207              	.LVL77:
+ 748:../src/renesas/application/r_bcd_lcd.c **** 
+ 749:../src/renesas/application/r_bcd_lcd.c ****     for (i = 0; i < len; i++)
+ 1208              		.loc 1 749 0
+ 1209 001c 0040A0E3 		mov	r4, #0
+ 1210 0020 090000EA 		b	.L67
+ 1211              	.LVL78:
+ 1212              	.L68:
+ 750:../src/renesas/application/r_bcd_lcd.c ****     {
+ 751:../src/renesas/application/r_bcd_lcd.c ****         R_BCD_LcdWriteChar(*pcode++, (x + (i * R_BCD_FONTDATA_WIDTH)), y, color);
+ 1213              		.loc 1 751 0 discriminator 3
+ 1214 0024 016085E2 		add	r6, r5, #1
+ 1215              	.LVL79:
+ 1216 0028 843084E0 		add	r3, r4, r4, lsl #1
+ 1217 002c 0311A0E1 		lsl	r1, r3, #2
+ 1218 0030 0830A0E1 		mov	r3, r8
+ 1219 0034 0920A0E1 		mov	r2, r9
+ 1220 0038 0A1081E0 		add	r1, r1, r10
+ 1221 003c 0000D5E5 		ldrb	r0, [r5]	@ zero_extendqisi2
+ 1222 0040 FEFFFFEB 		bl	R_BCD_LcdWriteChar
+ 1223              	.LVL80:
+ 749:../src/renesas/application/r_bcd_lcd.c ****     {
+ 1224              		.loc 1 749 0 discriminator 3
+ 1225 0044 014084E2 		add	r4, r4, #1
+ 1226              	.LVL81:
+ 1227              		.loc 1 751 0 discriminator 3
+ 1228 0048 0650A0E1 		mov	r5, r6
+ 1229              	.LVL82:
+ 1230              	.L67:
+ 749:../src/renesas/application/r_bcd_lcd.c ****     {
+ 1231              		.loc 1 749 0 discriminator 1
+ 1232 004c 070054E1 		cmp	r4, r7
+ 1233 0050 F3FFFFBA 		blt	.L68
+ 752:../src/renesas/application/r_bcd_lcd.c ****     }
+ 753:../src/renesas/application/r_bcd_lcd.c **** 
+ 754:../src/renesas/application/r_bcd_lcd.c ****     return;
+ 755:../src/renesas/application/r_bcd_lcd.c **** } /* End of function R_BCD_LcdWriteString() */
+ 1234              		.loc 1 755 0
+ 1235 0054 F087BDE8 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 1236              		.cfi_endproc
+ 1237              	.LFE13:
+ 1239              		.section	.text.R_BCD_LcdClearGraphicsBuffer,"ax",%progbits
+ 1240              		.align	2
+ 1241              		.global	R_BCD_LcdClearGraphicsBuffer
+ 1242              		.syntax unified
+ 1243              		.arm
+ 1244              		.fpu neon
+ 1246              	R_BCD_LcdClearGraphicsBuffer:
+ 1247              	.LFB14:
+ 756:../src/renesas/application/r_bcd_lcd.c **** 
+ 757:../src/renesas/application/r_bcd_lcd.c **** /******************************************************************************
+ 758:../src/renesas/application/r_bcd_lcd.c **** * Function Name: R_BCD_LcdClearGraphicsBuffer
+ 759:../src/renesas/application/r_bcd_lcd.c **** * Description  : Clear overlap buffer
+ 760:../src/renesas/application/r_bcd_lcd.c **** * Arguments    : -
+ 761:../src/renesas/application/r_bcd_lcd.c **** * Return Value : -
+ 762:../src/renesas/application/r_bcd_lcd.c **** ******************************************************************************/
+ 763:../src/renesas/application/r_bcd_lcd.c **** void R_BCD_LcdClearGraphicsBuffer(void)
+ 764:../src/renesas/application/r_bcd_lcd.c **** {
+ 1248              		.loc 1 764 0
+ 1249              		.cfi_startproc
+ 1250              		@ args = 0, pretend = 0, frame = 0
+ 1251              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1252 0000 10402DE9 		push	{r4, lr}
+ 1253              		.cfi_def_cfa_offset 8
+ 1254              		.cfi_offset 4, -8
+ 1255              		.cfi_offset 14, -4
+ 765:../src/renesas/application/r_bcd_lcd.c ****     /* Cast to an appropriate type */
+ 766:../src/renesas/application/r_bcd_lcd.c ****     memset(R_BCD_LcdGetOLVramAddress(), (int)0xffffffff, (GRAPHICS2_BUFFER_STRIDE * LAYER2_DISP_ARE
+ 1256              		.loc 1 766 0
+ 1257 0004 FEFFFFEB 		bl	R_BCD_LcdGetOLVramAddress
+ 1258              	.LVL83:
+ 1259 0008 962BA0E3 		mov	r2, #153600
+ 1260 000c 0010E0E3 		mvn	r1, #0
+ 1261 0010 FEFFFFEB 		bl	memset
+ 1262              	.LVL84:
+ 1263 0014 1080BDE8 		pop	{r4, pc}
+ 1264              		.cfi_endproc
+ 1265              	.LFE14:
+ 1267              		.section	.bss.Layer1_buffer_id,"aw",%nobits
+ 1268              		.align	2
+ 1269              		.set	.LANCHOR1,. + 0
+ 1272              	Layer1_buffer_id:
+ 1273 0000 00000000 		.space	4
+ 1274              		.section	.bss.Req_Layer1_Swap,"aw",%nobits
+ 1275              		.align	2
+ 1276              		.set	.LANCHOR0,. + 0
+ 1279              	Req_Layer1_Swap:
+ 1280 0000 00000000 		.space	4
+ 1281              		.section	.bss.Req_Layer2_Swap,"aw",%nobits
+ 1282              		.align	2
+ 1283              		.set	.LANCHOR3,. + 0
+ 1286              	Req_Layer2_Swap:
+ 1287 0000 00000000 		.space	4
+ 1288              		.section	.bss.layer2_buffer_id,"aw",%nobits
+ 1289              		.align	2
+ 1290              		.set	.LANCHOR4,. + 0
+ 1293              	layer2_buffer_id:
+ 1294 0000 00000000 		.space	4
+ 1295              		.section	.bss.vsync_count,"aw",%nobits
+ 1296              		.align	2
+ 1297              		.set	.LANCHOR12,. + 0
+ 1300              	vsync_count:
+ 1301 0000 00000000 		.space	4
+ 1302              		.section	.rodata.gam_b_gain.71101,"a",%progbits
+ 1303              		.align	2
+ 1304              		.set	.LANCHOR9,. + 0
+ 1307              	gam_b_gain.71101:
+ 1308 0000 0004     		.short	1024
+ 1309 0002 0004     		.short	1024
+ 1310 0004 0004     		.short	1024
+ 1311 0006 0004     		.short	1024
+ 1312 0008 0004     		.short	1024
+ 1313 000a 0004     		.short	1024
+ 1314 000c 0004     		.short	1024
+ 1315 000e 0004     		.short	1024
+ 1316 0010 0004     		.short	1024
+ 1317 0012 0004     		.short	1024
+ 1318 0014 0004     		.short	1024
+ 1319 0016 0004     		.short	1024
+ 1320 0018 0004     		.short	1024
+ 1321 001a 0004     		.short	1024
+ 1322 001c 0004     		.short	1024
+ 1323 001e 0004     		.short	1024
+ 1324 0020 0004     		.short	1024
+ 1325 0022 0004     		.short	1024
+ 1326 0024 0004     		.short	1024
+ 1327 0026 0004     		.short	1024
+ 1328 0028 0004     		.short	1024
+ 1329 002a 0004     		.short	1024
+ 1330 002c 0004     		.short	1024
+ 1331 002e 0004     		.short	1024
+ 1332 0030 0004     		.short	1024
+ 1333 0032 0004     		.short	1024
+ 1334 0034 0004     		.short	1024
+ 1335 0036 0004     		.short	1024
+ 1336 0038 0004     		.short	1024
+ 1337 003a 0004     		.short	1024
+ 1338 003c 0004     		.short	1024
+ 1339 003e 0004     		.short	1024
+ 1340              		.section	.rodata.gam_b_th.71102,"a",%progbits
+ 1341              		.align	2
+ 1342              		.set	.LANCHOR8,. + 0
+ 1345              	gam_b_th.71102:
+ 1346 0000 08       		.byte	8
+ 1347 0001 10       		.byte	16
+ 1348 0002 18       		.byte	24
+ 1349 0003 20       		.byte	32
+ 1350 0004 28       		.byte	40
+ 1351 0005 30       		.byte	48
+ 1352 0006 38       		.byte	56
+ 1353 0007 40       		.byte	64
+ 1354 0008 48       		.byte	72
+ 1355 0009 50       		.byte	80
+ 1356 000a 58       		.byte	88
+ 1357 000b 60       		.byte	96
+ 1358 000c 68       		.byte	104
+ 1359 000d 70       		.byte	112
+ 1360 000e 78       		.byte	120
+ 1361 000f 80       		.byte	-128
+ 1362 0010 88       		.byte	-120
+ 1363 0011 90       		.byte	-112
+ 1364 0012 98       		.byte	-104
+ 1365 0013 A0       		.byte	-96
+ 1366 0014 A8       		.byte	-88
+ 1367 0015 B0       		.byte	-80
+ 1368 0016 B8       		.byte	-72
+ 1369 0017 C0       		.byte	-64
+ 1370 0018 C8       		.byte	-56
+ 1371 0019 D0       		.byte	-48
+ 1372 001a D8       		.byte	-40
+ 1373 001b E0       		.byte	-32
+ 1374 001c E8       		.byte	-24
+ 1375 001d F0       		.byte	-16
+ 1376 001e F8       		.byte	-8
+ 1377              		.section	.rodata.gam_g_gain.71099,"a",%progbits
+ 1378              		.align	2
+ 1379              		.set	.LANCHOR11,. + 0
+ 1382              	gam_g_gain.71099:
+ 1383 0000 0004     		.short	1024
+ 1384 0002 0004     		.short	1024
+ 1385 0004 0004     		.short	1024
+ 1386 0006 0004     		.short	1024
+ 1387 0008 0004     		.short	1024
+ 1388 000a 0004     		.short	1024
+ 1389 000c 0004     		.short	1024
+ 1390 000e 0004     		.short	1024
+ 1391 0010 0004     		.short	1024
+ 1392 0012 0004     		.short	1024
+ 1393 0014 0004     		.short	1024
+ 1394 0016 0004     		.short	1024
+ 1395 0018 0004     		.short	1024
+ 1396 001a 0004     		.short	1024
+ 1397 001c 0004     		.short	1024
+ 1398 001e 0004     		.short	1024
+ 1399 0020 0004     		.short	1024
+ 1400 0022 0004     		.short	1024
+ 1401 0024 0004     		.short	1024
+ 1402 0026 0004     		.short	1024
+ 1403 0028 0004     		.short	1024
+ 1404 002a 0004     		.short	1024
+ 1405 002c 0004     		.short	1024
+ 1406 002e 0004     		.short	1024
+ 1407 0030 0004     		.short	1024
+ 1408 0032 0004     		.short	1024
+ 1409 0034 0004     		.short	1024
+ 1410 0036 0004     		.short	1024
+ 1411 0038 0004     		.short	1024
+ 1412 003a 0004     		.short	1024
+ 1413 003c 0004     		.short	1024
+ 1414 003e 0004     		.short	1024
+ 1415              		.section	.rodata.gam_g_th.71100,"a",%progbits
+ 1416              		.align	2
+ 1417              		.set	.LANCHOR10,. + 0
+ 1420              	gam_g_th.71100:
+ 1421 0000 08       		.byte	8
+ 1422 0001 10       		.byte	16
+ 1423 0002 18       		.byte	24
+ 1424 0003 20       		.byte	32
+ 1425 0004 28       		.byte	40
+ 1426 0005 30       		.byte	48
+ 1427 0006 38       		.byte	56
+ 1428 0007 40       		.byte	64
+ 1429 0008 48       		.byte	72
+ 1430 0009 50       		.byte	80
+ 1431 000a 58       		.byte	88
+ 1432 000b 60       		.byte	96
+ 1433 000c 68       		.byte	104
+ 1434 000d 70       		.byte	112
+ 1435 000e 78       		.byte	120
+ 1436 000f 80       		.byte	-128
+ 1437 0010 88       		.byte	-120
+ 1438 0011 90       		.byte	-112
+ 1439 0012 98       		.byte	-104
+ 1440 0013 A0       		.byte	-96
+ 1441 0014 A8       		.byte	-88
+ 1442 0015 B0       		.byte	-80
+ 1443 0016 B8       		.byte	-72
+ 1444 0017 C0       		.byte	-64
+ 1445 0018 C8       		.byte	-56
+ 1446 0019 D0       		.byte	-48
+ 1447 001a D8       		.byte	-40
+ 1448 001b E0       		.byte	-32
+ 1449 001c E8       		.byte	-24
+ 1450 001d F0       		.byte	-16
+ 1451 001e F8       		.byte	-8
+ 1452              		.section	.rodata.gam_r_gain.71103,"a",%progbits
+ 1453              		.align	2
+ 1454              		.set	.LANCHOR7,. + 0
+ 1457              	gam_r_gain.71103:
+ 1458 0000 0004     		.short	1024
+ 1459 0002 0004     		.short	1024
+ 1460 0004 0004     		.short	1024
+ 1461 0006 0004     		.short	1024
+ 1462 0008 0004     		.short	1024
+ 1463 000a 0004     		.short	1024
+ 1464 000c 0004     		.short	1024
+ 1465 000e 0004     		.short	1024
+ 1466 0010 0004     		.short	1024
+ 1467 0012 0004     		.short	1024
+ 1468 0014 0004     		.short	1024
+ 1469 0016 0004     		.short	1024
+ 1470 0018 0004     		.short	1024
+ 1471 001a 0004     		.short	1024
+ 1472 001c 0004     		.short	1024
+ 1473 001e 0004     		.short	1024
+ 1474 0020 0004     		.short	1024
+ 1475 0022 0004     		.short	1024
+ 1476 0024 0004     		.short	1024
+ 1477 0026 0004     		.short	1024
+ 1478 0028 0004     		.short	1024
+ 1479 002a 0004     		.short	1024
+ 1480 002c 0004     		.short	1024
+ 1481 002e 0004     		.short	1024
+ 1482 0030 0004     		.short	1024
+ 1483 0032 0004     		.short	1024
+ 1484 0034 0004     		.short	1024
+ 1485 0036 0004     		.short	1024
+ 1486 0038 0004     		.short	1024
+ 1487 003a 0004     		.short	1024
+ 1488 003c 0004     		.short	1024
+ 1489 003e 0004     		.short	1024
+ 1490              		.section	.rodata.gam_r_th.71104,"a",%progbits
+ 1491              		.align	2
+ 1492              		.set	.LANCHOR6,. + 0
+ 1495              	gam_r_th.71104:
+ 1496 0000 08       		.byte	8
+ 1497 0001 10       		.byte	16
+ 1498 0002 18       		.byte	24
+ 1499 0003 20       		.byte	32
+ 1500 0004 28       		.byte	40
+ 1501 0005 30       		.byte	48
+ 1502 0006 38       		.byte	56
+ 1503 0007 40       		.byte	64
+ 1504 0008 48       		.byte	72
+ 1505 0009 50       		.byte	80
+ 1506 000a 58       		.byte	88
+ 1507 000b 60       		.byte	96
+ 1508 000c 68       		.byte	104
+ 1509 000d 70       		.byte	112
+ 1510 000e 78       		.byte	120
+ 1511 000f 80       		.byte	-128
+ 1512 0010 88       		.byte	-120
+ 1513 0011 90       		.byte	-112
+ 1514 0012 98       		.byte	-104
+ 1515 0013 A0       		.byte	-96
+ 1516 0014 A8       		.byte	-88
+ 1517 0015 B0       		.byte	-80
+ 1518 0016 B8       		.byte	-72
+ 1519 0017 C0       		.byte	-64
+ 1520 0018 C8       		.byte	-56
+ 1521 0019 D0       		.byte	-48
+ 1522 001a D8       		.byte	-40
+ 1523 001b E0       		.byte	-32
+ 1524 001c E8       		.byte	-24
+ 1525 001d F0       		.byte	-16
+ 1526 001e F8       		.byte	-8
+ 1527              		.section	Graphics_RAM,"aw",%progbits
+ 1528              		.align	2
+ 1529              		.set	.LANCHOR5,. + 0
+ 1532              	graphics2_buffer:
+ 1533 0000 00000000 		.space	307200
+ 1533      00000000 
+ 1533      00000000 
+ 1533      00000000 
+ 1533      00000000 
+ 1534              		.section	Video_RAM,"aw",%progbits
+ 1535              		.align	2
+ 1536              		.set	.LANCHOR2,. + 0
+ 1539              	video_buffer:
+ 1540 0000 00000000 		.space	614400
+ 1540      00000000 
+ 1540      00000000 
+ 1540      00000000 
+ 1540      00000000 
+ 1541              		.text
+ 1542              	.Letext0:
+ 1543              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1544              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1545              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1546              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 1547              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1548              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1549              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 1550              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_driv
+ 1551              		.file 10 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_dri
+ 1552              		.file 11 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+ 1553              		.file 12 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/src/renesas/app
+ 1554              		.file 13 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/src/renesas/app
+ 1555              		.file 14 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\includ
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_bcd_lcd.c
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:17     .text.R_BCD_LcdGetVramAddress:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:23     .text.R_BCD_LcdGetVramAddress:00000000 R_BCD_LcdGetVramAddress
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1276   .bss.Req_Layer1_Swap:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1269   .bss.Layer1_buffer_id:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1536   Video_RAM:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:65     .text.R_BCD_LcdGetOLVramAddress:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:71     .text.R_BCD_LcdGetOLVramAddress:00000000 R_BCD_LcdGetOLVramAddress
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1283   .bss.Req_Layer2_Swap:00000000 .LANCHOR3
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1290   .bss.layer2_buffer_id:00000000 .LANCHOR4
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1529   Graphics_RAM:00000000 .LANCHOR5
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:112    .text.r_display_init:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:118    .text.r_display_init:00000000 r_display_init
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:247    .text.r_image_quality_adjustment:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:253    .text.r_image_quality_adjustment:00000000 r_image_quality_adjustment
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1342   .rodata.gam_b_th.71102:00000000 .LANCHOR8
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1304   .rodata.gam_b_gain.71101:00000000 .LANCHOR9
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1417   .rodata.gam_g_th.71100:00000000 .LANCHOR10
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1379   .rodata.gam_g_gain.71099:00000000 .LANCHOR11
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1492   .rodata.gam_r_th.71104:00000000 .LANCHOR6
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1454   .rodata.gam_r_gain.71103:00000000 .LANCHOR7
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:347    .text.R_BCD_LcdInit:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:353    .text.R_BCD_LcdInit:00000000 R_BCD_LcdInit
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:973    .text.IntCallbackFunc:00000000 IntCallbackFunc
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:653    .text.r_video_quality_adjustment:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:659    .text.r_video_quality_adjustment:00000000 r_video_quality_adjustment
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:806    .text.R_BCD_LcdSwapVideoBuffer:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:812    .text.R_BCD_LcdSwapVideoBuffer:00000000 R_BCD_LcdSwapVideoBuffer
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:829    .text.R_BCD_LcdSwapGraphicsBuffer:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:835    .text.R_BCD_LcdSwapGraphicsBuffer:00000000 R_BCD_LcdSwapGraphicsBuffer
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:852    .text.R_BCD_LcdVSync:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:858    .text.R_BCD_LcdVSync:00000000 R_BCD_LcdVSync
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:962    .text.R_BCD_LcdVSync:0000010c $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:968    .text.IntCallbackFunc:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1297   .bss.vsync_count:00000000 .LANCHOR12
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1016   .text.R_BCD_LcdWriteLine:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1022   .text.R_BCD_LcdWriteLine:00000000 R_BCD_LcdWriteLine
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1057   .text.R_BCD_LcdWriteChar:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1063   .text.R_BCD_LcdWriteChar:00000000 R_BCD_LcdWriteChar
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1176   .text.R_BCD_LcdWriteString:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1182   .text.R_BCD_LcdWriteString:00000000 R_BCD_LcdWriteString
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1240   .text.R_BCD_LcdClearGraphicsBuffer:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1246   .text.R_BCD_LcdClearGraphicsBuffer:00000000 R_BCD_LcdClearGraphicsBuffer
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1268   .bss.Layer1_buffer_id:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1272   .bss.Layer1_buffer_id:00000000 Layer1_buffer_id
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1275   .bss.Req_Layer1_Swap:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1279   .bss.Req_Layer1_Swap:00000000 Req_Layer1_Swap
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1282   .bss.Req_Layer2_Swap:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1286   .bss.Req_Layer2_Swap:00000000 Req_Layer2_Swap
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1289   .bss.layer2_buffer_id:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1293   .bss.layer2_buffer_id:00000000 layer2_buffer_id
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1296   .bss.vsync_count:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1300   .bss.vsync_count:00000000 vsync_count
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1303   .rodata.gam_b_gain.71101:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1307   .rodata.gam_b_gain.71101:00000000 gam_b_gain.71101
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1341   .rodata.gam_b_th.71102:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1345   .rodata.gam_b_th.71102:00000000 gam_b_th.71102
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1378   .rodata.gam_g_gain.71099:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1382   .rodata.gam_g_gain.71099:00000000 gam_g_gain.71099
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1416   .rodata.gam_g_th.71100:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1420   .rodata.gam_g_th.71100:00000000 gam_g_th.71100
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1453   .rodata.gam_r_gain.71103:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1457   .rodata.gam_r_gain.71103:00000000 gam_r_gain.71103
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1491   .rodata.gam_r_th.71104:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1495   .rodata.gam_r_th.71104:00000000 gam_r_th.71104
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1528   Graphics_RAM:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1532   Graphics_RAM:00000000 graphics2_buffer
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1535   Video_RAM:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\ccxmAD3n.s:1539   Video_RAM:00000000 video_buffer
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.newlib.h.21.59901f4bf241ab46c63694665baa7297
+                           .group:00000000 wm4.features.h.22.5cdadbb3efe495d1c9e38350b8c376c7
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.string.h.15.dab3980bf35408a4c507182805e2de3a
+                           .group:00000000 wm4.stddef.h.161.19e15733342b50ead2919490b095303e
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_vdc_user.h.32.3f3db05b07a24f5c3abdea3809348418
+                           .group:00000000 wm4.r_vdc.h.31.7a8e28d4a80bfb6c6b4be0ab3890da8f
+                           .group:00000000 wm4.r_rvapi_vdc.h.56.5c61db780dd0e78fd0dc60ae6029256c
+                           .group:00000000 wm4.lcd_panel.h.26.cfd49f6dd05d6df5af6d47c4aaf8cc7c
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.pc_monitor.h.34.fc88e61cec09137cad293cc83a71b4c6
+                           .group:00000000 wm4.lcd_dvi_clk.h.35.2dd43fb2e8a72cc7891955ab1f922395
+                           .group:00000000 wm4.lcd_dvi_ch0.h.31.f2586765dd40124a9674c5f555669783
+                           .group:00000000 wm4.r_image_config.h.30.2c8f2ccb3050c9b243c97f22ffa7b3c9
+                           .group:00000000 wm4.stdio.h.27.3fc80220048df77954e38daec3bb9670
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.30.bbece7fa40993a78092dcc5805132560
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.8188691c2279eac7a223caa50f6694b9
+                           .group:00000000 wm4.draw.h.34.3b63c627b5e51ee31fb2cfec889e2237
+                           .group:00000000 wm4.r_bcd_lcd.h.41.ce6a99971b1283e39bca71bcb618de62
+                           .group:00000000 wm4.fontdata.h.31.ac4f3f39590b5b5c51e6c3a09e1631db
+
+UNDEFINED SYMBOLS
+R_RVAPI_InitializeVDC
+R_RVAPI_DispControlConfigVDC
+R_RVAPI_DispCalibrationVDC
+R_RVAPI_DispGammaVDC
+DrawInit
+DrawRectFill
+R_RVAPI_InterruptEnableVDC
+R_RVAPI_GraphCreateSurfaceVDC
+VDC_LcdPortSetting
+R_RVAPI_DispPortSettingVDC
+R_RVAPI_VideoCalibrationVDC
+R_RVAPI_VideoSharpnessLtiVDC
+R_RVAPI_GraphChangeSurfaceVDC
+DrawSwapBuffer
+DrawLine
+DrawPoint
+font_array
+strlen
+memset

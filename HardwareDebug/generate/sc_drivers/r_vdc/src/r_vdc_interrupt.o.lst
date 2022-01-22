@@ -1,0 +1,1608 @@
+   1              		.cpu cortex-a9
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.file	"r_vdc_interrupt.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.VDC_Ch0_s0_vi_vsync_ISR,"ax",%progbits
+  17              		.align	2
+  18              		.syntax unified
+  19              		.arm
+  20              		.fpu neon
+  22              	VDC_Ch0_s0_vi_vsync_ISR:
+  23              	.LFB3:
+  24              		.file 1 "../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c"
+   1:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************************************
+   2:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * DISCLAIMER
+   3:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * This software is supplied by Renesas Electronics Corporation and is only intended for use with R
+   4:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * other uses are authorized. This software is owned by Renesas Electronics Corporation and is prot
+   5:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * applicable laws, including copyright laws.
+   6:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING
+   7:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * THIS SOFTWARE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+   8:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAI
+   9:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * EXTENT PERMITTED NOT PROHIBITED BY LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS A
+  10:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * SHALL BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY R
+  11:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * THIS SOFTWARE, EVEN IF RENESAS OR ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DA
+  12:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * Renesas reserves the right, without notice, to make changes to this software and to discontinue 
+  13:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * this software. By using this software, you agree to the additional terms and conditions found by
+  14:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * following link:
+  15:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * http://www.renesas.com/disclaimer
+  16:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *
+  17:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * Copyright (C) 2019 Renesas Electronics Corporation. All rights reserved.
+  18:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  **************************************************************************************************
+  19:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+  20:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * File Name :   r_vdc_interrupt.c
+  21:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @file         r_vdc_interrupt.c
+  22:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @version      1.12
+  23:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief        RZ/A2M VDC driver interrupt related processing
+  24:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  ******************************************************************************/
+  25:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  26:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /******************************************************************************
+  27:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** Includes   <System Includes> , "Project Includes"
+  28:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** ******************************************************************************/
+  29:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #include    "r_vdc.h"
+  30:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #include    "r_vdc_user.h"
+  31:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #include    "r_vdc_register.h"
+  32:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  33:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  34:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /******************************************************************************
+  35:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** Macro definitions
+  36:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** ******************************************************************************/
+  37:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_S0_VI_VSYNC    ((uint32_t)0x00000001u)
+  38:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_S0_LO_VSYNC    ((uint32_t)0x00000010u)
+  39:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_S0_VSYNCERR    ((uint32_t)0x00000100u)
+  40:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_VLINE          ((uint32_t)0x00001000u)
+  41:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_S0_VFIELD      ((uint32_t)0x00010000u)
+  42:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_IV1_VBUFERR    ((uint32_t)0x00100000u)
+  43:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_IV3_VBUFERR    ((uint32_t)0x01000000u)
+  44:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_IV5_VBUFERR    ((uint32_t)0x10000000u)
+  45:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_IV6_VBUFERR    ((uint32_t)0x00000001u)
+  46:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_BIT_S0_WLINE       ((uint32_t)0x00000010u)
+  47:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  48:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_GR_UPDATE_P_VEN_BIT    ((uint32_t)0x00000010u)
+  49:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_SCL0_UPDATE_VEN_A_BIT  ((uint32_t)0x00000001u)
+  50:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  51:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /* Valid bit range */
+  52:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #define VDC_INT_RANGE_0X000007FF   (0x000007FFu)
+  53:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /******************************************************************************
+  54:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** Typedef definitions
+  55:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** ******************************************************************************/
+  56:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  57:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /******************************************************************************
+  58:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** Private global variables and functions
+  59:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** ******************************************************************************/
+  60:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_vi_vsync_ISR(const uint32_t int_sense);
+  61:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_lo_vsync_ISR(const uint32_t int_sense);
+  62:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_vsyncerr_ISR(const uint32_t int_sense);
+  63:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_vline_ISR(const uint32_t int_sense);
+  64:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_vfield_ISR(const uint32_t int_sense);
+  65:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv1_vbuferr_ISR(const uint32_t int_sense);
+  66:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv3_vbuferr_ISR(const uint32_t int_sense);
+  67:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv5_vbuferr_ISR(const uint32_t int_sense);
+  68:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv6_vbuferr_ISR(const uint32_t int_sense);
+  69:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_wline_ISR(const uint32_t int_sense);
+  70:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  71:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /*! List of the callback function pointers */
+  72:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void (*vdc_int_callback[VDC_INT_TYPE_NUM])(vdc_int_type_t int_type);
+  73:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+  74:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+  75:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          R_VDC_GetISR
+  76:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       Interrupt service routine acquisition processing
+  77:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *
+  78:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *              Description:<br>
+  79:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *              This function returns the function pointer to the specified interrupt service routi
+  80:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *              It returns a '0' if the channel specified in ch or the interrupt type specified in 
+  81:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *              is found invalid.
+  82:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   ch                      : Channel
+  83:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *                                        - VDC_CHANNEL_0
+  84:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   type                    : VDC interrupt type
+  85:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      VDC Interrupt service routine
+  86:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+  87:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** void (*R_VDC_GetISR   
+  88:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             (const vdc_channel_t ch, const vdc_int_type_t type))(const uint32_t int_sense)
+  89:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+  90:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     static void (* const isr_table[VDC_INT_TYPE_NUM])(const uint32_t int_sense) =
+  91:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+  92:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_s0_vi_vsync_ISR,
+  93:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_s0_lo_vsync_ISR,
+  94:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_s0_vsyncerr_ISR,
+  95:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_vline_ISR,
+  96:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_s0_vfield_ISR,
+  97:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_iv1_vbuferr_ISR,
+  98:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_iv3_vbuferr_ISR,
+  99:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_iv5_vbuferr_ISR,
+ 100:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_iv6_vbuferr_ISR,
+ 101:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         &VDC_Ch0_s0_wline_ISR
+ 102:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     };
+ 103:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 104:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 105:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     void (* isr_function)(const uint32_t int_sense);
+ 106:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 107:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     isr_function = isr_table[type];
+ 108:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 109:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #ifdef  R_VDC_CHECK_PARAMETERS
+ 110:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Channel and interrupt type */
+ 111:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if ((ch >= VDC_CHANNEL_NUM) || (type >= VDC_INT_TYPE_NUM))
+ 112:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 113:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         isr_function = 0;
+ 114:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 115:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** #endif  /* R_VDC_CHECK_PARAMETERS */
+ 116:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 117:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     return isr_function;
+ 118:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function R_VDC_GetISR() */
+ 119:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 120:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 121:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Int_Disable
+ 122:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       Disables all VDC interrupts
+ 123:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   void
+ 124:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 125:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 126:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** void VDC_Int_Disable (void) 
+ 127:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 128:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     const vdc_regaddr_system_ctrl_t  * system_ctrl; 
+ 129:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int32_t                             int_type;
+ 130:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 131:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     system_ctrl = &vdc_regaddr_system_ctrl;
+ 132:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 133:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     for (int_type = 0; int_type < VDC_INT_TYPE_NUM; int_type++)
+ 134:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 135:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         vdc_int_callback[int_type] = 0;
+ 136:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 137:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 138:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Interrupt output off */
+ 139:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     *(system_ctrl->syscnt_int4) = 0u;
+ 140:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     *(system_ctrl->syscnt_int5) = 0u;
+ 141:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 142:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Int_Disable() */
+ 143:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 144:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 145:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Int_SetInterrupt
+ 146:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       Enables/disables the specified VDC interrupt
+ 147:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   param                   : Interrupt callback setup parameter
+ 148:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 149:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 150:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** void VDC_Int_SetInterrupt 
+ 151:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         (const vdc_int_t * const param)
+ 152:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 153:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t     * int_clhd_reg;
+ 154:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t     * int_onoff_reg;
+ 155:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t     * linenum_reg;
+ 156:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint16_t     * linenum16_reg;
+ 157:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t     * linenum_update_reg;
+ 158:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t                mask_bit;
+ 159:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t                reg_data;
+ 160:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     static const uint32_t   interrupt_bit_table[VDC_INT_TYPE_NUM] =
+ 161:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 162:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 163:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_S0_VI_VSYNC,
+ 164:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 165:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 166:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_S0_LO_VSYNC,
+ 167:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 168:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 169:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_S0_VSYNCERR,
+ 170:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 171:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 172:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_VLINE,
+ 173:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 174:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 175:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_S0_VFIELD,
+ 176:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 177:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 178:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_IV1_VBUFERR,
+ 179:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 180:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 181:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_IV3_VBUFERR,
+ 182:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 183:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 184:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_IV5_VBUFERR,
+ 185:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 186:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 187:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_IV6_VBUFERR,
+ 188:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 189:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Cast to an appropriate type */
+ 190:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         VDC_INT_BIT_S0_WLINE
+ 191:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     };
+ 192:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 193:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (param->type < VDC_INT_TYPE_IV6_VBUFERR)
+ 194:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 195:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* INT0: VDC_INT_TYPE_S0_VI_VSYNC ~ INT7: VDC_INT_TYPE_IV5_VBUFERR */
+ 196:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+ 197:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 198:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 199:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     else
+ 200:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 201:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* INT8: VDC_INT_TYPE_IV6_VBUFERR ~ INT9: VDC_INT_TYPE_S0_WLINE */
+ 202:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int2;
+ 203:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int5;
+ 204:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 205:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     mask_bit = interrupt_bit_table[param->type];
+ 206:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 207:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Interrupt callback function pointer */
+ 208:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     vdc_int_callback[param->type] = param->callback;
+ 209:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 210:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (param->callback != 0)
+ 211:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 212:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* ON */
+ 213:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (((*int_onoff_reg) & mask_bit) == 0u)
+ 214:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 215:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* OFF to ON */
+ 216:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             (*int_onoff_reg) |= mask_bit;
+ 217:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             reg_data        = *int_onoff_reg;
+ 218:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             *int_clhd_reg   = reg_data;
+ 219:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 220:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 221:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (param->type == VDC_INT_TYPE_VLINE)
+ 222:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 223:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* Specified line signal for panel output in graphics 3 */
+ 224:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             linenum_reg         = vdc_regaddr_img_synthesizer[VDC_GR_TYPE_GR3].gr_clut;
+ 225:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             linenum_update_reg  = vdc_regaddr_img_synthesizer[VDC_GR_TYPE_GR3].gr_update;
+ 226:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 227:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* Cast to an appropriate type */
+ 228:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             (*linenum_reg)        &= (uint32_t)~VDC_INT_RANGE_0X000007FF;
+ 229:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 230:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* Cast to an appropriate type */
+ 231:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             (*linenum_reg)        |= (uint32_t)param->line_num;
+ 232:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 233:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* Cast to an appropriate type */
+ 234:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             (*linenum_update_reg) |= VDC_GR_UPDATE_P_VEN_BIT;
+ 235:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 236:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         else if (param->type == VDC_INT_TYPE_S0_WLINE)
+ 237:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 238:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* Write specification line signal input to scaling-down control block in scaler 0 */
+ 239:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             linenum16_reg       = vdc_regaddr_scaler.scl0_int;
+ 240:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             linenum_update_reg  = vdc_regaddr_scaler.scl0_update;
+ 241:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             *linenum16_reg       = param->line_num;
+ 242:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 243:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* Cast to an appropriate type */
+ 244:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             (*linenum_update_reg) |= VDC_SCL0_UPDATE_VEN_A_BIT;
+ 245:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 246:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         else
+ 247:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 248:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             /* DO NOTHING */
+ 249:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             ;
+ 250:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 251:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 252:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     else
+ 253:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 254:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* OFF */
+ 255:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         (*int_onoff_reg) &= (uint32_t)~mask_bit;
+ 256:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         reg_data        = *int_onoff_reg;
+ 257:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg   = reg_data;
+ 258:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 259:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 260:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Int_SetInterrupt() */
+ 261:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 262:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 263:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_s0_vi_vsync_ISR
+ 264:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC S0_VI_VSYNC interrupt service routine
+ 265:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 266:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 267:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 268:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_vi_vsync_ISR (const uint32_t int_sense) 
+ 269:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+  25              		.loc 1 269 0
+  26              		.cfi_startproc
+  27              		@ args = 0, pretend = 0, frame = 0
+  28              		@ frame_needed = 0, uses_anonymous_args = 0
+  29              	.LVL0:
+  30 0000 70402DE9 		push	{r4, r5, r6, lr}
+  31              		.cfi_def_cfa_offset 16
+  32              		.cfi_offset 4, -16
+  33              		.cfi_offset 5, -12
+  34              		.cfi_offset 6, -8
+  35              		.cfi_offset 14, -4
+ 270:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 271:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 272:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 273:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 274:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 275:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 276:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 277:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+  36              		.loc 1 277 0
+  37 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+  38 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+  39 000c 005093E5 		ldr	r5, [r3]
+  40              	.LVL1:
+ 278:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+  41              		.loc 1 278 0
+  42 0010 083093E5 		ldr	r3, [r3, #8]
+  43              	.LVL2:
+ 279:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+  44              		.loc 1 279 0
+  45 0014 004093E5 		ldr	r4, [r3]
+  46              	.LVL3:
+ 280:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 281:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 282:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_S0_VI_VSYNC) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_S0_VI_VSYNC
+  47              		.loc 1 282 0
+  48 0018 010014E3 		tst	r4, #1
+  49 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+  50              		.loc 1 282 0 is_stmt 0 discriminator 1
+  51 0020 003095E5 		ldr	r3, [r5]
+  52              	.LVL4:
+  53 0024 010013E3 		tst	r3, #1
+  54 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 283:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 284:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 285:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         (*int_clhd_reg) = IntState & (~VDC_INT_BIT_S0_VI_VSYNC);
+  55              		.loc 1 285 0 is_stmt 1
+  56 002c 0130C4E3 		bic	r3, r4, #1
+  57 0030 003085E5 		str	r3, [r5]
+ 286:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 287:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_S0_VI_VSYNC] != 0)
+  58              		.loc 1 287 0
+  59 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+  60 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+  61 003c 003093E5 		ldr	r3, [r3]
+  62 0040 000053E3 		cmp	r3, #0
+  63 0044 0100000A 		beq	.L3
+ 288:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 289:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_S0_VI_VSYNC](VDC_INT_TYPE_S0_VI_VSYNC);
+  64              		.loc 1 289 0
+  65 0048 0000A0E3 		mov	r0, #0
+  66              	.LVL5:
+  67 004c 33FF2FE1 		blx	r3
+  68              	.LVL6:
+  69              	.L3:
+ 290:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 291:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 292:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 293:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+  70              		.loc 1 293 0
+  71 0050 004085E5 		str	r4, [r5]
+  72 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+  73              		.cfi_endproc
+  74              	.LFE3:
+  76              		.section	.text.VDC_Ch0_s0_lo_vsync_ISR,"ax",%progbits
+  77              		.align	2
+  78              		.syntax unified
+  79              		.arm
+  80              		.fpu neon
+  82              	VDC_Ch0_s0_lo_vsync_ISR:
+  83              	.LFB4:
+ 294:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 295:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_s0_vi_vsync_ISR() */
+ 296:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 297:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 298:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_s0_lo_vsync_ISR
+ 299:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC S0_LO_VSYNC interrupt service routine
+ 300:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 301:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 302:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 303:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_lo_vsync_ISR (const uint32_t int_sense) 
+ 304:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+  84              		.loc 1 304 0
+  85              		.cfi_startproc
+  86              		@ args = 0, pretend = 0, frame = 0
+  87              		@ frame_needed = 0, uses_anonymous_args = 0
+  88              	.LVL7:
+  89 0000 70402DE9 		push	{r4, r5, r6, lr}
+  90              		.cfi_def_cfa_offset 16
+  91              		.cfi_offset 4, -16
+  92              		.cfi_offset 5, -12
+  93              		.cfi_offset 6, -8
+  94              		.cfi_offset 14, -4
+ 305:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 306:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 307:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 308:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 309:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 310:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 311:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 312:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+  95              		.loc 1 312 0
+  96 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+  97 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+  98 000c 005093E5 		ldr	r5, [r3]
+  99              	.LVL8:
+ 313:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 100              		.loc 1 313 0
+ 101 0010 083093E5 		ldr	r3, [r3, #8]
+ 102              	.LVL9:
+ 314:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 103              		.loc 1 314 0
+ 104 0014 004093E5 		ldr	r4, [r3]
+ 105              	.LVL10:
+ 315:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 316:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 317:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_S0_LO_VSYNC) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_S0_LO_VSYNC
+ 106              		.loc 1 317 0
+ 107 0018 100014E3 		tst	r4, #16
+ 108 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 109              		.loc 1 317 0 is_stmt 0 discriminator 1
+ 110 0020 003095E5 		ldr	r3, [r5]
+ 111              	.LVL11:
+ 112 0024 100013E3 		tst	r3, #16
+ 113 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 318:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 319:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 320:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         (*int_clhd_reg) = IntState & (~VDC_INT_BIT_S0_LO_VSYNC);
+ 114              		.loc 1 320 0 is_stmt 1
+ 115 002c 1030C4E3 		bic	r3, r4, #16
+ 116 0030 003085E5 		str	r3, [r5]
+ 321:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 322:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_S0_LO_VSYNC] != 0)
+ 117              		.loc 1 322 0
+ 118 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 119 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 120 003c 043093E5 		ldr	r3, [r3, #4]
+ 121 0040 000053E3 		cmp	r3, #0
+ 122 0044 0100000A 		beq	.L7
+ 323:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 324:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_S0_LO_VSYNC](VDC_INT_TYPE_S0_LO_VSYNC);
+ 123              		.loc 1 324 0
+ 124 0048 0100A0E3 		mov	r0, #1
+ 125              	.LVL12:
+ 126 004c 33FF2FE1 		blx	r3
+ 127              	.LVL13:
+ 128              	.L7:
+ 325:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 326:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 327:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 328:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 129              		.loc 1 328 0
+ 130 0050 004085E5 		str	r4, [r5]
+ 131 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 132              		.cfi_endproc
+ 133              	.LFE4:
+ 135              		.section	.text.VDC_Ch0_s0_vsyncerr_ISR,"ax",%progbits
+ 136              		.align	2
+ 137              		.syntax unified
+ 138              		.arm
+ 139              		.fpu neon
+ 141              	VDC_Ch0_s0_vsyncerr_ISR:
+ 142              	.LFB5:
+ 329:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 330:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_s0_lo_vsync_ISR() */
+ 331:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 332:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 333:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_s0_vsyncerr_ISR
+ 334:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC S0_VSYNCERR interrupt service routine
+ 335:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 336:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 337:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 338:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_vsyncerr_ISR (const uint32_t int_sense) 
+ 339:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 143              		.loc 1 339 0
+ 144              		.cfi_startproc
+ 145              		@ args = 0, pretend = 0, frame = 0
+ 146              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147              	.LVL14:
+ 148 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 149              		.cfi_def_cfa_offset 16
+ 150              		.cfi_offset 4, -16
+ 151              		.cfi_offset 5, -12
+ 152              		.cfi_offset 6, -8
+ 153              		.cfi_offset 14, -4
+ 340:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 341:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 342:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 343:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 344:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 345:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 346:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 347:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+ 154              		.loc 1 347 0
+ 155 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 156 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 157 000c 005093E5 		ldr	r5, [r3]
+ 158              	.LVL15:
+ 348:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 159              		.loc 1 348 0
+ 160 0010 083093E5 		ldr	r3, [r3, #8]
+ 161              	.LVL16:
+ 349:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 162              		.loc 1 349 0
+ 163 0014 004093E5 		ldr	r4, [r3]
+ 164              	.LVL17:
+ 350:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 351:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 352:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_S0_VSYNCERR) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_S0_VSYNCERR
+ 165              		.loc 1 352 0
+ 166 0018 010C14E3 		tst	r4, #256
+ 167 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 168              		.loc 1 352 0 is_stmt 0 discriminator 1
+ 169 0020 003095E5 		ldr	r3, [r5]
+ 170              	.LVL18:
+ 171 0024 010C13E3 		tst	r3, #256
+ 172 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 353:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 354:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 355:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         (*int_clhd_reg) = IntState & (~VDC_INT_BIT_S0_VSYNCERR);
+ 173              		.loc 1 355 0 is_stmt 1
+ 174 002c 013CC4E3 		bic	r3, r4, #256
+ 175 0030 003085E5 		str	r3, [r5]
+ 356:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 357:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_S0_VSYNCERR] != 0)
+ 176              		.loc 1 357 0
+ 177 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 178 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 179 003c 083093E5 		ldr	r3, [r3, #8]
+ 180 0040 000053E3 		cmp	r3, #0
+ 181 0044 0100000A 		beq	.L11
+ 358:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 359:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_S0_VSYNCERR](VDC_INT_TYPE_S0_VSYNCERR);
+ 182              		.loc 1 359 0
+ 183 0048 0200A0E3 		mov	r0, #2
+ 184              	.LVL19:
+ 185 004c 33FF2FE1 		blx	r3
+ 186              	.LVL20:
+ 187              	.L11:
+ 360:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 361:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 362:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 363:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 188              		.loc 1 363 0
+ 189 0050 004085E5 		str	r4, [r5]
+ 190 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 191              		.cfi_endproc
+ 192              	.LFE5:
+ 194              		.section	.text.VDC_Ch0_vline_ISR,"ax",%progbits
+ 195              		.align	2
+ 196              		.syntax unified
+ 197              		.arm
+ 198              		.fpu neon
+ 200              	VDC_Ch0_vline_ISR:
+ 201              	.LFB6:
+ 364:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 365:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_s0_vsyncerr_ISR() */
+ 366:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 367:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 368:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_vline_ISR
+ 369:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC VLINE interrupt service routine
+ 370:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 371:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 372:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 373:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_vline_ISR (const uint32_t int_sense) 
+ 374:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 202              		.loc 1 374 0
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 206              	.LVL21:
+ 207 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 208              		.cfi_def_cfa_offset 16
+ 209              		.cfi_offset 4, -16
+ 210              		.cfi_offset 5, -12
+ 211              		.cfi_offset 6, -8
+ 212              		.cfi_offset 14, -4
+ 375:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 376:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 377:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 378:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 379:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 380:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 381:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 382:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+ 213              		.loc 1 382 0
+ 214 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 215 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 216 000c 005093E5 		ldr	r5, [r3]
+ 217              	.LVL22:
+ 383:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 218              		.loc 1 383 0
+ 219 0010 083093E5 		ldr	r3, [r3, #8]
+ 220              	.LVL23:
+ 384:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 221              		.loc 1 384 0
+ 222 0014 004093E5 		ldr	r4, [r3]
+ 223              	.LVL24:
+ 385:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 386:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 387:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_VLINE) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_VLINE) != 0u))
+ 224              		.loc 1 387 0
+ 225 0018 010A14E3 		tst	r4, #4096
+ 226 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 227              		.loc 1 387 0 is_stmt 0 discriminator 1
+ 228 0020 003095E5 		ldr	r3, [r5]
+ 229              	.LVL25:
+ 230 0024 010A13E3 		tst	r3, #4096
+ 231 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 388:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 389:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 390:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState & (~VDC_INT_BIT_VLINE);
+ 232              		.loc 1 390 0 is_stmt 1
+ 233 002c 013AC4E3 		bic	r3, r4, #4096
+ 234 0030 003085E5 		str	r3, [r5]
+ 391:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 392:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_VLINE] != 0)
+ 235              		.loc 1 392 0
+ 236 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 237 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 238 003c 0C3093E5 		ldr	r3, [r3, #12]
+ 239 0040 000053E3 		cmp	r3, #0
+ 240 0044 0100000A 		beq	.L15
+ 393:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 394:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_VLINE](VDC_INT_TYPE_VLINE);
+ 241              		.loc 1 394 0
+ 242 0048 0300A0E3 		mov	r0, #3
+ 243              	.LVL26:
+ 244 004c 33FF2FE1 		blx	r3
+ 245              	.LVL27:
+ 246              	.L15:
+ 395:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 396:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 397:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 398:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 247              		.loc 1 398 0
+ 248 0050 004085E5 		str	r4, [r5]
+ 249 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 250              		.cfi_endproc
+ 251              	.LFE6:
+ 253              		.section	.text.VDC_Ch0_s0_vfield_ISR,"ax",%progbits
+ 254              		.align	2
+ 255              		.syntax unified
+ 256              		.arm
+ 257              		.fpu neon
+ 259              	VDC_Ch0_s0_vfield_ISR:
+ 260              	.LFB7:
+ 399:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 400:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_vline_ISR() */
+ 401:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 402:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 403:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_s0_vfield_ISR
+ 404:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC S0_VFIELD interrupt service routine
+ 405:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 406:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 407:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 408:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_vfield_ISR (const uint32_t int_sense) 
+ 409:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 261              		.loc 1 409 0
+ 262              		.cfi_startproc
+ 263              		@ args = 0, pretend = 0, frame = 0
+ 264              		@ frame_needed = 0, uses_anonymous_args = 0
+ 265              	.LVL28:
+ 266 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 267              		.cfi_def_cfa_offset 16
+ 268              		.cfi_offset 4, -16
+ 269              		.cfi_offset 5, -12
+ 270              		.cfi_offset 6, -8
+ 271              		.cfi_offset 14, -4
+ 410:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 411:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 412:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 413:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 414:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 415:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 416:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 417:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+ 272              		.loc 1 417 0
+ 273 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 274 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 275 000c 005093E5 		ldr	r5, [r3]
+ 276              	.LVL29:
+ 418:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 277              		.loc 1 418 0
+ 278 0010 083093E5 		ldr	r3, [r3, #8]
+ 279              	.LVL30:
+ 419:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 280              		.loc 1 419 0
+ 281 0014 004093E5 		ldr	r4, [r3]
+ 282              	.LVL31:
+ 420:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 421:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 422:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_S0_VFIELD) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_S0_VFIELD) !=
+ 283              		.loc 1 422 0
+ 284 0018 010814E3 		tst	r4, #65536
+ 285 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 286              		.loc 1 422 0 is_stmt 0 discriminator 1
+ 287 0020 003095E5 		ldr	r3, [r5]
+ 288              	.LVL32:
+ 289 0024 010813E3 		tst	r3, #65536
+ 290 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 423:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 424:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 425:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState & (~VDC_INT_BIT_S0_VFIELD);
+ 291              		.loc 1 425 0 is_stmt 1
+ 292 002c 0138C4E3 		bic	r3, r4, #65536
+ 293 0030 003085E5 		str	r3, [r5]
+ 426:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 427:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_S0_VFIELD] != 0)
+ 294              		.loc 1 427 0
+ 295 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 296 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 297 003c 103093E5 		ldr	r3, [r3, #16]
+ 298 0040 000053E3 		cmp	r3, #0
+ 299 0044 0100000A 		beq	.L19
+ 428:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 429:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_S0_VFIELD](VDC_INT_TYPE_S0_VFIELD);
+ 300              		.loc 1 429 0
+ 301 0048 0400A0E3 		mov	r0, #4
+ 302              	.LVL33:
+ 303 004c 33FF2FE1 		blx	r3
+ 304              	.LVL34:
+ 305              	.L19:
+ 430:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 431:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 432:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 433:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 306              		.loc 1 433 0
+ 307 0050 004085E5 		str	r4, [r5]
+ 308 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 309              		.cfi_endproc
+ 310              	.LFE7:
+ 312              		.section	.text.VDC_Ch0_iv1_vbuferr_ISR,"ax",%progbits
+ 313              		.align	2
+ 314              		.syntax unified
+ 315              		.arm
+ 316              		.fpu neon
+ 318              	VDC_Ch0_iv1_vbuferr_ISR:
+ 319              	.LFB8:
+ 434:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 435:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_s0_vfield_ISR() */
+ 436:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 437:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 438:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_iv1_vbuferr_ISR
+ 439:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC IV1_VBUFERR interrupt service routine
+ 440:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 441:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 442:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 443:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv1_vbuferr_ISR (const uint32_t int_sense) 
+ 444:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 320              		.loc 1 444 0
+ 321              		.cfi_startproc
+ 322              		@ args = 0, pretend = 0, frame = 0
+ 323              		@ frame_needed = 0, uses_anonymous_args = 0
+ 324              	.LVL35:
+ 325 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 326              		.cfi_def_cfa_offset 16
+ 327              		.cfi_offset 4, -16
+ 328              		.cfi_offset 5, -12
+ 329              		.cfi_offset 6, -8
+ 330              		.cfi_offset 14, -4
+ 445:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 446:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 447:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 448:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 449:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 450:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 451:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 452:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+ 331              		.loc 1 452 0
+ 332 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 333 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 334 000c 005093E5 		ldr	r5, [r3]
+ 335              	.LVL36:
+ 453:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 336              		.loc 1 453 0
+ 337 0010 083093E5 		ldr	r3, [r3, #8]
+ 338              	.LVL37:
+ 454:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 339              		.loc 1 454 0
+ 340 0014 004093E5 		ldr	r4, [r3]
+ 341              	.LVL38:
+ 455:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 456:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 457:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_IV1_VBUFERR) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_IV1_VBUFERR
+ 342              		.loc 1 457 0
+ 343 0018 010614E3 		tst	r4, #1048576
+ 344 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 345              		.loc 1 457 0 is_stmt 0 discriminator 1
+ 346 0020 003095E5 		ldr	r3, [r5]
+ 347              	.LVL39:
+ 348 0024 010613E3 		tst	r3, #1048576
+ 349 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 458:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 459:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 460:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState & (~VDC_INT_BIT_IV1_VBUFERR);
+ 350              		.loc 1 460 0 is_stmt 1
+ 351 002c 0136C4E3 		bic	r3, r4, #1048576
+ 352 0030 003085E5 		str	r3, [r5]
+ 461:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 462:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_IV1_VBUFERR] != 0)
+ 353              		.loc 1 462 0
+ 354 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 355 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 356 003c 143093E5 		ldr	r3, [r3, #20]
+ 357 0040 000053E3 		cmp	r3, #0
+ 358 0044 0100000A 		beq	.L23
+ 463:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 464:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_IV1_VBUFERR](VDC_INT_TYPE_IV1_VBUFERR);
+ 359              		.loc 1 464 0
+ 360 0048 0500A0E3 		mov	r0, #5
+ 361              	.LVL40:
+ 362 004c 33FF2FE1 		blx	r3
+ 363              	.LVL41:
+ 364              	.L23:
+ 465:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 466:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 467:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 468:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 365              		.loc 1 468 0
+ 366 0050 004085E5 		str	r4, [r5]
+ 367 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 368              		.cfi_endproc
+ 369              	.LFE8:
+ 371              		.section	.text.VDC_Ch0_iv3_vbuferr_ISR,"ax",%progbits
+ 372              		.align	2
+ 373              		.syntax unified
+ 374              		.arm
+ 375              		.fpu neon
+ 377              	VDC_Ch0_iv3_vbuferr_ISR:
+ 378              	.LFB9:
+ 469:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 470:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_iv1_vbuferr_ISR() */
+ 471:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 472:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 473:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_iv3_vbuferr_ISR
+ 474:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC IV3_VBUFERR interrupt service routine
+ 475:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 476:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 477:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 478:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv3_vbuferr_ISR (const uint32_t int_sense) 
+ 479:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 379              		.loc 1 479 0
+ 380              		.cfi_startproc
+ 381              		@ args = 0, pretend = 0, frame = 0
+ 382              		@ frame_needed = 0, uses_anonymous_args = 0
+ 383              	.LVL42:
+ 384 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 385              		.cfi_def_cfa_offset 16
+ 386              		.cfi_offset 4, -16
+ 387              		.cfi_offset 5, -12
+ 388              		.cfi_offset 6, -8
+ 389              		.cfi_offset 14, -4
+ 480:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 481:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 482:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 483:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 484:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 485:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 486:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 487:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+ 390              		.loc 1 487 0
+ 391 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 392 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 393 000c 005093E5 		ldr	r5, [r3]
+ 394              	.LVL43:
+ 488:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 395              		.loc 1 488 0
+ 396 0010 083093E5 		ldr	r3, [r3, #8]
+ 397              	.LVL44:
+ 489:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 398              		.loc 1 489 0
+ 399 0014 004093E5 		ldr	r4, [r3]
+ 400              	.LVL45:
+ 490:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 491:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 492:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_IV3_VBUFERR) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_IV3_VBUFERR
+ 401              		.loc 1 492 0
+ 402 0018 010414E3 		tst	r4, #16777216
+ 403 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 404              		.loc 1 492 0 is_stmt 0 discriminator 1
+ 405 0020 003095E5 		ldr	r3, [r5]
+ 406              	.LVL46:
+ 407 0024 010413E3 		tst	r3, #16777216
+ 408 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 493:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 494:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 495:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState & (~VDC_INT_BIT_IV3_VBUFERR);
+ 409              		.loc 1 495 0 is_stmt 1
+ 410 002c 0134C4E3 		bic	r3, r4, #16777216
+ 411 0030 003085E5 		str	r3, [r5]
+ 496:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 497:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_IV3_VBUFERR] != 0)
+ 412              		.loc 1 497 0
+ 413 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 414 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 415 003c 183093E5 		ldr	r3, [r3, #24]
+ 416 0040 000053E3 		cmp	r3, #0
+ 417 0044 0100000A 		beq	.L27
+ 498:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 499:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_IV3_VBUFERR](VDC_INT_TYPE_IV3_VBUFERR);
+ 418              		.loc 1 499 0
+ 419 0048 0600A0E3 		mov	r0, #6
+ 420              	.LVL47:
+ 421 004c 33FF2FE1 		blx	r3
+ 422              	.LVL48:
+ 423              	.L27:
+ 500:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 501:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 502:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 503:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 424              		.loc 1 503 0
+ 425 0050 004085E5 		str	r4, [r5]
+ 426 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 427              		.cfi_endproc
+ 428              	.LFE9:
+ 430              		.section	.text.VDC_Ch0_iv5_vbuferr_ISR,"ax",%progbits
+ 431              		.align	2
+ 432              		.syntax unified
+ 433              		.arm
+ 434              		.fpu neon
+ 436              	VDC_Ch0_iv5_vbuferr_ISR:
+ 437              	.LFB10:
+ 504:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 505:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_iv3_vbuferr_ISR() */
+ 506:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 507:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 508:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_iv5_vbuferr_ISR
+ 509:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC IV5_VBUFERR interrupt service routine
+ 510:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 511:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 512:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 513:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv5_vbuferr_ISR (const uint32_t int_sense) 
+ 514:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 438              		.loc 1 514 0
+ 439              		.cfi_startproc
+ 440              		@ args = 0, pretend = 0, frame = 0
+ 441              		@ frame_needed = 0, uses_anonymous_args = 0
+ 442              	.LVL49:
+ 443 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 444              		.cfi_def_cfa_offset 16
+ 445              		.cfi_offset 4, -16
+ 446              		.cfi_offset 5, -12
+ 447              		.cfi_offset 6, -8
+ 448              		.cfi_offset 14, -4
+ 515:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 516:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 517:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 518:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 519:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 520:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 521:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 522:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int1;
+ 449              		.loc 1 522 0
+ 450 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 451 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 452 000c 005093E5 		ldr	r5, [r3]
+ 453              	.LVL50:
+ 523:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 454              		.loc 1 523 0
+ 455 0010 083093E5 		ldr	r3, [r3, #8]
+ 456              	.LVL51:
+ 524:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 457              		.loc 1 524 0
+ 458 0014 004093E5 		ldr	r4, [r3]
+ 459              	.LVL52:
+ 525:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 526:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 527:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_IV5_VBUFERR) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_IV5_VBUFERR
+ 460              		.loc 1 527 0
+ 461 0018 010214E3 		tst	r4, #268435456
+ 462 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 463              		.loc 1 527 0 is_stmt 0 discriminator 1
+ 464 0020 003095E5 		ldr	r3, [r5]
+ 465              	.LVL53:
+ 466 0024 010213E3 		tst	r3, #268435456
+ 467 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 528:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 529:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 530:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState & (~VDC_INT_BIT_IV5_VBUFERR);
+ 468              		.loc 1 530 0 is_stmt 1
+ 469 002c 0132C4E3 		bic	r3, r4, #268435456
+ 470 0030 003085E5 		str	r3, [r5]
+ 531:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 532:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_IV5_VBUFERR] != 0)
+ 471              		.loc 1 532 0
+ 472 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 473 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 474 003c 1C3093E5 		ldr	r3, [r3, #28]
+ 475 0040 000053E3 		cmp	r3, #0
+ 476 0044 0100000A 		beq	.L31
+ 533:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 534:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_IV5_VBUFERR](VDC_INT_TYPE_IV5_VBUFERR);
+ 477              		.loc 1 534 0
+ 478 0048 0700A0E3 		mov	r0, #7
+ 479              	.LVL54:
+ 480 004c 33FF2FE1 		blx	r3
+ 481              	.LVL55:
+ 482              	.L31:
+ 535:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 536:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 537:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 538:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 483              		.loc 1 538 0
+ 484 0050 004085E5 		str	r4, [r5]
+ 485 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 486              		.cfi_endproc
+ 487              	.LFE10:
+ 489              		.section	.text.VDC_Ch0_iv6_vbuferr_ISR,"ax",%progbits
+ 490              		.align	2
+ 491              		.syntax unified
+ 492              		.arm
+ 493              		.fpu neon
+ 495              	VDC_Ch0_iv6_vbuferr_ISR:
+ 496              	.LFB11:
+ 539:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 540:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_iv5_vbuferr_ISR() */
+ 541:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 542:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 543:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_iv6_vbuferr_ISR
+ 544:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC IV6_VBUFERR interrupt service routine
+ 545:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 546:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 547:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 548:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_iv6_vbuferr_ISR (const uint32_t int_sense) 
+ 549:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 497              		.loc 1 549 0
+ 498              		.cfi_startproc
+ 499              		@ args = 0, pretend = 0, frame = 0
+ 500              		@ frame_needed = 0, uses_anonymous_args = 0
+ 501              	.LVL56:
+ 502 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 503              		.cfi_def_cfa_offset 16
+ 504              		.cfi_offset 4, -16
+ 505              		.cfi_offset 5, -12
+ 506              		.cfi_offset 6, -8
+ 507              		.cfi_offset 14, -4
+ 550:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 551:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 552:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 553:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 554:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 555:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 556:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 557:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int2;
+ 508              		.loc 1 557 0
+ 509 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 510 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 511 000c 045093E5 		ldr	r5, [r3, #4]
+ 512              	.LVL57:
+ 558:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int5;
+ 513              		.loc 1 558 0
+ 514 0010 0C3093E5 		ldr	r3, [r3, #12]
+ 515              	.LVL58:
+ 559:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 516              		.loc 1 559 0
+ 517 0014 004093E5 		ldr	r4, [r3]
+ 518              	.LVL59:
+ 560:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 561:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 562:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_IV6_VBUFERR) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_IV6_VBUFERR
+ 519              		.loc 1 562 0
+ 520 0018 010014E3 		tst	r4, #1
+ 521 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 522              		.loc 1 562 0 is_stmt 0 discriminator 1
+ 523 0020 003095E5 		ldr	r3, [r5]
+ 524              	.LVL60:
+ 525 0024 010013E3 		tst	r3, #1
+ 526 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 563:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 564:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 565:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState & (~VDC_INT_BIT_IV6_VBUFERR);
+ 527              		.loc 1 565 0 is_stmt 1
+ 528 002c 0130C4E3 		bic	r3, r4, #1
+ 529 0030 003085E5 		str	r3, [r5]
+ 566:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 567:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_IV6_VBUFERR] != 0)
+ 530              		.loc 1 567 0
+ 531 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 532 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 533 003c 203093E5 		ldr	r3, [r3, #32]
+ 534 0040 000053E3 		cmp	r3, #0
+ 535 0044 0100000A 		beq	.L35
+ 568:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 569:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_IV6_VBUFERR](VDC_INT_TYPE_IV6_VBUFERR);
+ 536              		.loc 1 569 0
+ 537 0048 0800A0E3 		mov	r0, #8
+ 538              	.LVL61:
+ 539 004c 33FF2FE1 		blx	r3
+ 540              	.LVL62:
+ 541              	.L35:
+ 570:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 571:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 572:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 573:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 542              		.loc 1 573 0
+ 543 0050 004085E5 		str	r4, [r5]
+ 544 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 545              		.cfi_endproc
+ 546              	.LFE11:
+ 548              		.section	.text.VDC_Ch0_s0_wline_ISR,"ax",%progbits
+ 549              		.align	2
+ 550              		.syntax unified
+ 551              		.arm
+ 552              		.fpu neon
+ 554              	VDC_Ch0_s0_wline_ISR:
+ 555              	.LFB12:
+ 574:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 575:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function VDC_Ch0_iv6_vbuferr_ISR() */
+ 576:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 577:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** /**************************************************************************//**
+ 578:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @fn          VDC_Ch0_s0_wline_ISR
+ 579:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @brief       VDC S0_WLINE interrupt service routine
+ 580:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @param[in]   int_sense
+ 581:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  * @retval      None
+ 582:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****  *****************************************************************************/
+ 583:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** static void VDC_Ch0_s0_wline_ISR (const uint32_t int_sense) 
+ 584:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** {
+ 556              		.loc 1 584 0
+ 557              		.cfi_startproc
+ 558              		@ args = 0, pretend = 0, frame = 0
+ 559              		@ frame_needed = 0, uses_anonymous_args = 0
+ 560              	.LVL63:
+ 561 0000 70402DE9 		push	{r4, r5, r6, lr}
+ 562              		.cfi_def_cfa_offset 16
+ 563              		.cfi_offset 4, -16
+ 564              		.cfi_offset 5, -12
+ 565              		.cfi_offset 6, -8
+ 566              		.cfi_offset 14, -4
+ 585:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     uint32_t            IntState;
+ 586:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_clhd_reg;
+ 587:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t * int_onoff_reg;
+ 588:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 589:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 590:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     UNUSED_PARAM(int_sense);
+ 591:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 592:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_clhd_reg  = vdc_regaddr_system_ctrl.syscnt_int2;
+ 567              		.loc 1 592 0
+ 568 0004 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 569 0008 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 570 000c 045093E5 		ldr	r5, [r3, #4]
+ 571              	.LVL64:
+ 593:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int5;
+ 572              		.loc 1 593 0
+ 573 0010 0C3093E5 		ldr	r3, [r3, #12]
+ 574              	.LVL65:
+ 594:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     IntState      = *int_onoff_reg;
+ 575              		.loc 1 594 0
+ 576 0014 004093E5 		ldr	r4, [r3]
+ 577              	.LVL66:
+ 595:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 596:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     /* Cast to an appropriate type */
+ 597:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     if (((IntState & VDC_INT_BIT_S0_WLINE) != 0u) && (((*int_clhd_reg) & VDC_INT_BIT_S0_WLINE) != 0
+ 578              		.loc 1 597 0
+ 579 0018 100014E3 		tst	r4, #16
+ 580 001c 7080BD08 		popeq	{r4, r5, r6, pc}
+ 581              		.loc 1 597 0 is_stmt 0 discriminator 1
+ 582 0020 003095E5 		ldr	r3, [r5]
+ 583              	.LVL67:
+ 584 0024 100013E3 		tst	r3, #16
+ 585 0028 7080BD08 		popeq	{r4, r5, r6, pc}
+ 598:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 599:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Clear */
+ 600:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState & (~VDC_INT_BIT_S0_WLINE);
+ 586              		.loc 1 600 0 is_stmt 1
+ 587 002c 1030C4E3 		bic	r3, r4, #16
+ 588 0030 003085E5 		str	r3, [r5]
+ 601:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 602:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         if (vdc_int_callback[VDC_INT_TYPE_S0_WLINE] != 0)
+ 589              		.loc 1 602 0
+ 590 0034 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 591 0038 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 592 003c 243093E5 		ldr	r3, [r3, #36]
+ 593 0040 000053E3 		cmp	r3, #0
+ 594 0044 0100000A 		beq	.L39
+ 603:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 604:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             vdc_int_callback[VDC_INT_TYPE_S0_WLINE](VDC_INT_TYPE_S0_WLINE);
+ 595              		.loc 1 604 0
+ 596 0048 0900A0E3 		mov	r0, #9
+ 597              	.LVL68:
+ 598 004c 33FF2FE1 		blx	r3
+ 599              	.LVL69:
+ 600              	.L39:
+ 605:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 606:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 607:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         /* Set */
+ 608:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg = IntState;
+ 601              		.loc 1 608 0
+ 602 0050 004085E5 		str	r4, [r5]
+ 603 0054 7080BDE8 		pop	{r4, r5, r6, pc}
+ 604              		.cfi_endproc
+ 605              	.LFE12:
+ 607              		.section	.text.R_VDC_GetISR,"ax",%progbits
+ 608              		.align	2
+ 609              		.global	R_VDC_GetISR
+ 610              		.syntax unified
+ 611              		.arm
+ 612              		.fpu neon
+ 614              	R_VDC_GetISR:
+ 615              	.LFB0:
+  89:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     static void (* const isr_table[VDC_INT_TYPE_NUM])(const uint32_t int_sense) =
+ 616              		.loc 1 89 0
+ 617              		.cfi_startproc
+ 618              		@ args = 0, pretend = 0, frame = 0
+ 619              		@ frame_needed = 0, uses_anonymous_args = 0
+ 620              		@ link register save eliminated.
+ 621              	.LVL70:
+ 107:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 622              		.loc 1 107 0
+ 623 0000 003000E3 		movw	r3, #:lower16:.LANCHOR1
+ 624 0004 003040E3 		movt	r3, #:upper16:.LANCHOR1
+ 625 0008 013193E7 		ldr	r3, [r3, r1, lsl #2]
+ 626              	.LVL71:
+ 111:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 627              		.loc 1 111 0
+ 628 000c 090051E3 		cmp	r1, #9
+ 629 0010 00005093 		cmpls	r0, #0
+ 630 0014 0100001A 		bne	.L44
+ 631              	.LVL72:
+ 632              	.L41:
+ 118:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 633              		.loc 1 118 0
+ 634 0018 0300A0E1 		mov	r0, r3
+ 635              	.LVL73:
+ 636 001c 1EFF2FE1 		bx	lr
+ 637              	.LVL74:
+ 638              	.L44:
+ 113:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 639              		.loc 1 113 0
+ 640 0020 0030A0E3 		mov	r3, #0
+ 641              	.LVL75:
+ 117:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** }   /* End of function R_VDC_GetISR() */
+ 642              		.loc 1 117 0
+ 643 0024 FBFFFFEA 		b	.L41
+ 644              		.cfi_endproc
+ 645              	.LFE0:
+ 647              		.section	.text.VDC_Int_Disable,"ax",%progbits
+ 648              		.align	2
+ 649              		.global	VDC_Int_Disable
+ 650              		.syntax unified
+ 651              		.arm
+ 652              		.fpu neon
+ 654              	VDC_Int_Disable:
+ 655              	.LFB1:
+ 127:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     const vdc_regaddr_system_ctrl_t  * system_ctrl; 
+ 656              		.loc 1 127 0
+ 657              		.cfi_startproc
+ 658              		@ args = 0, pretend = 0, frame = 0
+ 659              		@ frame_needed = 0, uses_anonymous_args = 0
+ 660              		@ link register save eliminated.
+ 661              	.LVL76:
+ 133:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 662              		.loc 1 133 0
+ 663 0000 0030A0E3 		mov	r3, #0
+ 664 0004 040000EA 		b	.L46
+ 665              	.LVL77:
+ 666              	.L47:
+ 135:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 667              		.loc 1 135 0 discriminator 3
+ 668 0008 002000E3 		movw	r2, #:lower16:.LANCHOR0
+ 669 000c 002040E3 		movt	r2, #:upper16:.LANCHOR0
+ 670 0010 0010A0E3 		mov	r1, #0
+ 671 0014 031182E7 		str	r1, [r2, r3, lsl #2]
+ 133:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 672              		.loc 1 133 0 discriminator 3
+ 673 0018 013083E2 		add	r3, r3, #1
+ 674              	.LVL78:
+ 675              	.L46:
+ 133:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 676              		.loc 1 133 0 is_stmt 0 discriminator 1
+ 677 001c 090053E3 		cmp	r3, #9
+ 678 0020 F8FFFFDA 		ble	.L47
+ 139:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     *(system_ctrl->syscnt_int5) = 0u;
+ 679              		.loc 1 139 0 is_stmt 1
+ 680 0024 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 681              	.LVL79:
+ 682 0028 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 683 002c 081093E5 		ldr	r1, [r3, #8]
+ 684 0030 0020A0E3 		mov	r2, #0
+ 685 0034 002081E5 		str	r2, [r1]
+ 140:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 686              		.loc 1 140 0
+ 687 0038 0C3093E5 		ldr	r3, [r3, #12]
+ 688 003c 002083E5 		str	r2, [r3]
+ 689 0040 1EFF2FE1 		bx	lr
+ 690              		.cfi_endproc
+ 691              	.LFE1:
+ 693              		.section	.text.VDC_Int_SetInterrupt,"ax",%progbits
+ 694              		.align	2
+ 695              		.global	VDC_Int_SetInterrupt
+ 696              		.syntax unified
+ 697              		.arm
+ 698              		.fpu neon
+ 700              	VDC_Int_SetInterrupt:
+ 701              	.LFB2:
+ 152:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     volatile uint32_t     * int_clhd_reg;
+ 702              		.loc 1 152 0
+ 703              		.cfi_startproc
+ 704              		@ args = 0, pretend = 0, frame = 0
+ 705              		@ frame_needed = 0, uses_anonymous_args = 0
+ 706              	.LVL80:
+ 707 0000 10402DE9 		push	{r4, lr}
+ 708              		.cfi_def_cfa_offset 8
+ 709              		.cfi_offset 4, -8
+ 710              		.cfi_offset 14, -4
+ 193:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 711              		.loc 1 193 0
+ 712 0004 0020D0E5 		ldrb	r2, [r0]	@ zero_extendqisi2
+ 713 0008 070052E3 		cmp	r2, #7
+ 714 000c 2300008A 		bhi	.L49
+ 196:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int4;
+ 715              		.loc 1 196 0
+ 716 0010 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 717 0014 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 718 0018 004093E5 		ldr	r4, [r3]
+ 719              	.LVL81:
+ 197:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 720              		.loc 1 197 0
+ 721 001c 081093E5 		ldr	r1, [r3, #8]
+ 722              	.LVL82:
+ 723              	.L50:
+ 205:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 724              		.loc 1 205 0
+ 725 0020 003000E3 		movw	r3, #:lower16:.LANCHOR2
+ 726 0024 003040E3 		movt	r3, #:upper16:.LANCHOR2
+ 727 0028 02C193E7 		ldr	ip, [r3, r2, lsl #2]
+ 728              	.LVL83:
+ 208:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 729              		.loc 1 208 0
+ 730 002c 04E090E5 		ldr	lr, [r0, #4]
+ 731 0030 003000E3 		movw	r3, #:lower16:.LANCHOR0
+ 732 0034 003040E3 		movt	r3, #:upper16:.LANCHOR0
+ 733 0038 02E183E7 		str	lr, [r3, r2, lsl #2]
+ 210:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     {
+ 734              		.loc 1 210 0
+ 735 003c 00005EE3 		cmp	lr, #0
+ 736 0040 2B00000A 		beq	.L51
+ 213:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 737              		.loc 1 213 0
+ 738 0044 003091E5 		ldr	r3, [r1]
+ 739 0048 03001CE1 		tst	ip, r3
+ 740 004c 0400001A 		bne	.L52
+ 216:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             reg_data        = *int_onoff_reg;
+ 741              		.loc 1 216 0
+ 742 0050 003091E5 		ldr	r3, [r1]
+ 743 0054 03C08CE1 		orr	ip, ip, r3
+ 744              	.LVL84:
+ 745 0058 00C081E5 		str	ip, [r1]
+ 217:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             *int_clhd_reg   = reg_data;
+ 746              		.loc 1 217 0
+ 747 005c 003091E5 		ldr	r3, [r1]
+ 748              	.LVL85:
+ 218:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 749              		.loc 1 218 0
+ 750 0060 003084E5 		str	r3, [r4]
+ 751              	.LVL86:
+ 752              	.L52:
+ 221:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 753              		.loc 1 221 0
+ 754 0064 0030D0E5 		ldrb	r3, [r0]	@ zero_extendqisi2
+ 755 0068 030053E3 		cmp	r3, #3
+ 756 006c 1000000A 		beq	.L56
+ 236:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         {
+ 757              		.loc 1 236 0
+ 758 0070 090053E3 		cmp	r3, #9
+ 759 0074 1080BD18 		popne	{r4, pc}
+ 239:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             linenum_update_reg  = vdc_regaddr_scaler.scl0_update;
+ 760              		.loc 1 239 0
+ 761 0078 003000E3 		movw	r3, #:lower16:vdc_regaddr_scaler
+ 762 007c 003040E3 		movt	r3, #:upper16:vdc_regaddr_scaler
+ 763 0080 281093E5 		ldr	r1, [r3, #40]
+ 764              	.LVL87:
+ 240:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             *linenum16_reg       = param->line_num;
+ 765              		.loc 1 240 0
+ 766 0084 002093E5 		ldr	r2, [r3]
+ 767              	.LVL88:
+ 241:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 768              		.loc 1 241 0
+ 769 0088 B830D0E1 		ldrh	r3, [r0, #8]
+ 770 008c B030C1E1 		strh	r3, [r1]	@ movhi
+ 244:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 771              		.loc 1 244 0
+ 772 0090 003092E5 		ldr	r3, [r2]
+ 773 0094 013083E3 		orr	r3, r3, #1
+ 774 0098 003082E5 		str	r3, [r2]
+ 775 009c 1080BDE8 		pop	{r4, pc}
+ 776              	.LVL89:
+ 777              	.L49:
+ 202:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         int_onoff_reg = vdc_regaddr_system_ctrl.syscnt_int5;
+ 778              		.loc 1 202 0
+ 779 00a0 003000E3 		movw	r3, #:lower16:vdc_regaddr_system_ctrl
+ 780 00a4 003040E3 		movt	r3, #:upper16:vdc_regaddr_system_ctrl
+ 781 00a8 044093E5 		ldr	r4, [r3, #4]
+ 782              	.LVL90:
+ 203:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 783              		.loc 1 203 0
+ 784 00ac 0C1093E5 		ldr	r1, [r3, #12]
+ 785              	.LVL91:
+ 786 00b0 DAFFFFEA 		b	.L50
+ 787              	.LVL92:
+ 788              	.L56:
+ 224:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****             linenum_update_reg  = vdc_regaddr_img_synthesizer[VDC_GR_TYPE_GR3].gr_update;
+ 789              		.loc 1 224 0
+ 790 00b4 003000E3 		movw	r3, #:lower16:vdc_regaddr_img_synthesizer
+ 791 00b8 003040E3 		movt	r3, #:upper16:vdc_regaddr_img_synthesizer
+ 792 00bc 002193E5 		ldr	r2, [r3, #256]
+ 793              	.LVL93:
+ 225:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 794              		.loc 1 225 0
+ 795 00c0 B01093E5 		ldr	r1, [r3, #176]
+ 796              	.LVL94:
+ 228:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 797              		.loc 1 228 0
+ 798 00c4 003092E5 		ldr	r3, [r2]
+ 799 00c8 7F3EC3E3 		bic	r3, r3, #2032
+ 800 00cc 0F30C3E3 		bic	r3, r3, #15
+ 801 00d0 003082E5 		str	r3, [r2]
+ 231:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c **** 
+ 802              		.loc 1 231 0
+ 803 00d4 003092E5 		ldr	r3, [r2]
+ 804 00d8 B800D0E1 		ldrh	r0, [r0, #8]
+ 805              	.LVL95:
+ 806 00dc 003083E1 		orr	r3, r3, r0
+ 807 00e0 003082E5 		str	r3, [r2]
+ 234:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         }
+ 808              		.loc 1 234 0
+ 809 00e4 003091E5 		ldr	r3, [r1]
+ 810 00e8 103083E3 		orr	r3, r3, #16
+ 811 00ec 003081E5 		str	r3, [r1]
+ 812 00f0 1080BDE8 		pop	{r4, pc}
+ 813              	.LVL96:
+ 814              	.L51:
+ 255:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         reg_data        = *int_onoff_reg;
+ 815              		.loc 1 255 0
+ 816 00f4 003091E5 		ldr	r3, [r1]
+ 817 00f8 0CC0C3E1 		bic	ip, r3, ip
+ 818              	.LVL97:
+ 819 00fc 00C081E5 		str	ip, [r1]
+ 256:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****         *int_clhd_reg   = reg_data;
+ 820              		.loc 1 256 0
+ 821 0100 003091E5 		ldr	r3, [r1]
+ 822              	.LVL98:
+ 257:../generate/sc_drivers/r_vdc/src/r_vdc_interrupt.c ****     }
+ 823              		.loc 1 257 0
+ 824 0104 003084E5 		str	r3, [r4]
+ 825 0108 1080BDE8 		pop	{r4, pc}
+ 826              		.cfi_endproc
+ 827              	.LFE2:
+ 829              		.section	.bss.vdc_int_callback,"aw",%nobits
+ 830              		.align	2
+ 831              		.set	.LANCHOR0,. + 0
+ 834              	vdc_int_callback:
+ 835 0000 00000000 		.space	40
+ 835      00000000 
+ 835      00000000 
+ 835      00000000 
+ 835      00000000 
+ 836              		.section	.rodata.interrupt_bit_table.69663,"a",%progbits
+ 837              		.align	2
+ 838              		.set	.LANCHOR2,. + 0
+ 841              	interrupt_bit_table.69663:
+ 842 0000 01000000 		.word	1
+ 843 0004 10000000 		.word	16
+ 844 0008 00010000 		.word	256
+ 845 000c 00100000 		.word	4096
+ 846 0010 00000100 		.word	65536
+ 847 0014 00001000 		.word	1048576
+ 848 0018 00000001 		.word	16777216
+ 849 001c 00000010 		.word	268435456
+ 850 0020 01000000 		.word	1
+ 851 0024 10000000 		.word	16
+ 852              		.section	.rodata.isr_table.69642,"a",%progbits
+ 853              		.align	2
+ 854              		.set	.LANCHOR1,. + 0
+ 857              	isr_table.69642:
+ 858 0000 00000000 		.word	VDC_Ch0_s0_vi_vsync_ISR
+ 859 0004 00000000 		.word	VDC_Ch0_s0_lo_vsync_ISR
+ 860 0008 00000000 		.word	VDC_Ch0_s0_vsyncerr_ISR
+ 861 000c 00000000 		.word	VDC_Ch0_vline_ISR
+ 862 0010 00000000 		.word	VDC_Ch0_s0_vfield_ISR
+ 863 0014 00000000 		.word	VDC_Ch0_iv1_vbuferr_ISR
+ 864 0018 00000000 		.word	VDC_Ch0_iv3_vbuferr_ISR
+ 865 001c 00000000 		.word	VDC_Ch0_iv5_vbuferr_ISR
+ 866 0020 00000000 		.word	VDC_Ch0_iv6_vbuferr_ISR
+ 867 0024 00000000 		.word	VDC_Ch0_s0_wline_ISR
+ 868              		.text
+ 869              	.Letext0:
+ 870              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 871              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 872              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 873              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 874              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\lib\\gcc\\arm-none-eab
+ 875              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 876              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\6 2017-q2-update\\arm-none-eabi\\include
+ 877              		.file 9 "C:/Users/rj7356s/e2-new/workspace/rza2m_drp_dynamic_sample2_freertos_gcc/generate/sc_driv
+ 878              		.file 10 "../generate/sc_drivers/r_vdc/src/r_vdc_register.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 r_vdc_interrupt.c
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:17     .text.VDC_Ch0_s0_vi_vsync_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:22     .text.VDC_Ch0_s0_vi_vsync_ISR:00000000 VDC_Ch0_s0_vi_vsync_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:831    .bss.vdc_int_callback:00000000 .LANCHOR0
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:77     .text.VDC_Ch0_s0_lo_vsync_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:82     .text.VDC_Ch0_s0_lo_vsync_ISR:00000000 VDC_Ch0_s0_lo_vsync_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:136    .text.VDC_Ch0_s0_vsyncerr_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:141    .text.VDC_Ch0_s0_vsyncerr_ISR:00000000 VDC_Ch0_s0_vsyncerr_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:195    .text.VDC_Ch0_vline_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:200    .text.VDC_Ch0_vline_ISR:00000000 VDC_Ch0_vline_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:254    .text.VDC_Ch0_s0_vfield_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:259    .text.VDC_Ch0_s0_vfield_ISR:00000000 VDC_Ch0_s0_vfield_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:313    .text.VDC_Ch0_iv1_vbuferr_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:318    .text.VDC_Ch0_iv1_vbuferr_ISR:00000000 VDC_Ch0_iv1_vbuferr_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:372    .text.VDC_Ch0_iv3_vbuferr_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:377    .text.VDC_Ch0_iv3_vbuferr_ISR:00000000 VDC_Ch0_iv3_vbuferr_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:431    .text.VDC_Ch0_iv5_vbuferr_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:436    .text.VDC_Ch0_iv5_vbuferr_ISR:00000000 VDC_Ch0_iv5_vbuferr_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:490    .text.VDC_Ch0_iv6_vbuferr_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:495    .text.VDC_Ch0_iv6_vbuferr_ISR:00000000 VDC_Ch0_iv6_vbuferr_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:549    .text.VDC_Ch0_s0_wline_ISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:554    .text.VDC_Ch0_s0_wline_ISR:00000000 VDC_Ch0_s0_wline_ISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:608    .text.R_VDC_GetISR:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:614    .text.R_VDC_GetISR:00000000 R_VDC_GetISR
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:854    .rodata.isr_table.69642:00000000 .LANCHOR1
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:648    .text.VDC_Int_Disable:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:654    .text.VDC_Int_Disable:00000000 VDC_Int_Disable
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:694    .text.VDC_Int_SetInterrupt:00000000 $a
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:700    .text.VDC_Int_SetInterrupt:00000000 VDC_Int_SetInterrupt
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:838    .rodata.interrupt_bit_table.69663:00000000 .LANCHOR2
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:830    .bss.vdc_int_callback:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:834    .bss.vdc_int_callback:00000000 vdc_int_callback
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:837    .rodata.interrupt_bit_table.69663:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:841    .rodata.interrupt_bit_table.69663:00000000 interrupt_bit_table.69663
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:853    .rodata.isr_table.69642:00000000 $d
+C:\Users\rj7356s\AppData\Local\Temp\cczuP0yX.s:857    .rodata.isr_table.69642:00000000 isr_table.69642
+                     .debug_frame:00000010 $d
+                           .group:00000000 wm4.0.14fc17be114e5a2cba0959c511ea2aaf
+                           .group:00000000 wm4.stddef.h.39.a38874c8f8a57e66301090908ec2a69f
+                           .group:00000000 wm4._newlib_version.h.4.3572908597b70d672d181fc7fc501c19
+                           .group:00000000 wm4.features.h.33.d97f2d646536517df901beeb5b9993f5
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.newlib.h.8.5f2124c7e712be65f83b91ff86a0b1c1
+                           .group:00000000 wm4.config.h.219.65a553ab5bef5482f0d7880b0d33015e
+                           .group:00000000 wm4._ansi.h.23.9f8fcfa20193763fcf364fb91705c94b
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.161.5349cb105733e8777bfb0cf53c4e3f34
+                           .group:00000000 wm4._types.h.183.c226d164ceca1f2ecb9ae9360c54a098
+                           .group:00000000 wm4.reent.h.17.23b059516345f8f5abfa01ddc379570f
+                           .group:00000000 wm4.cdefs.h.47.e658329a094974ebad41b40c60502de7
+                           .group:00000000 wm4.math.h.13.adb102f7bd7860b1f241e149d6914a1e
+                           .group:00000000 wm4.r_typedefs.h.38.e90d9de5300d9ae020e5db8c5af88b3e
+                           .group:00000000 wm4.adc_iodefine.h.29.14c6f50dce37432a7d004e4b1ce33da7
+                           .group:00000000 wm4.bsc_iodefine.h.29.9281d1f3639266933964d6d0c2d42c4f
+                           .group:00000000 wm4.ceu_iodefine.h.29.2a669d0b46fdde030a50db9e3c307fbf
+                           .group:00000000 wm4.cpg_iodefine.h.29.d6fdc9cb4798723afd88b251d64c2ce2
+                           .group:00000000 wm4.csi2link_iodefine.h.29.221c4531636a409f24d307b16341ada8
+                           .group:00000000 wm4.dmac_iodefine.h.29.578fccc2cc1da886ec95a029bf874f01
+                           .group:00000000 wm4.drpk_iodefine.h.29.580eb8588a2b2d43d2726fbe791e513f
+                           .group:00000000 wm4.drw_iodefine.h.29.df30f4a4a34a79f6a86c4df91353dffe
+                           .group:00000000 wm4.edmac_iodefine.h.29.33e8759349004a722f42f5429c1353f6
+                           .group:00000000 wm4.eptpc_iodefine.h.29.74d8f9fab0f5549b56097fb9e937dde8
+                           .group:00000000 wm4.etherc_iodefine.h.29.14602750383a574f1c21f994ad33a366
+                           .group:00000000 wm4.gpio_iodefine.h.29.3d0b021c56839cee4ae5149903684e4b
+                           .group:00000000 wm4.gpt_iodefine.h.29.557ead75d7b0585b898d3898b64c7f87
+                           .group:00000000 wm4.hyper_iodefine.h.29.000caadbb74d881e97db55b39b432154
+                           .group:00000000 wm4.imr_iodefine.h.29.77c022f017e711c4d51cc0145db1dad3
+                           .group:00000000 wm4.intc_iodefine.h.29.b68f5799a35a7495d63b4cd458e1ba57
+                           .group:00000000 wm4.irda_iodefine.h.29.37e67bd2005173d68a74d1cc937d8444
+                           .group:00000000 wm4.jcu_iodefine.h.29.3aca452908962e7a7ccf26164751feda
+                           .group:00000000 wm4.lvds_iodefine.h.29.c11cbe1900e5209c8dcc76c2336c16bc
+                           .group:00000000 wm4.mtu_iodefine.h.29.5498fb974bb53caf05aa143c2deec781
+                           .group:00000000 wm4.nandc_iodefine.h.29.e0b343306750f017ee86e169ad98efe9
+                           .group:00000000 wm4.octa_iodefine.h.29.4cb0d62e4b9633e173858000dc1c626c
+                           .group:00000000 wm4.ostm_iodefine.h.29.6914f7e330a1cf0008b34219adcdfed4
+                           .group:00000000 wm4.pl_iodefine.h.29.abbb6d725aed990aa8343242bfe31416
+                           .group:00000000 wm4.pmg_iodefine.h.29.8bcfbc4771a6f9b7dd4d6f504427219e
+                           .group:00000000 wm4.poeg_iodefine.h.29.0d8e258d10986260cbc70cfb8c0ef273
+                           .group:00000000 wm4.poe_iodefine.h.29.fe74e55e7b6b4afbe3596c74ba035e98
+                           .group:00000000 wm4.prr_iodefine.h.29.c1f15576f7a27b9c83aa3b40f5b2f988
+                           .group:00000000 wm4.ptpedmac_iodefine.h.29.cd24a93374ce35cebc41e26889d619ef
+                           .group:00000000 wm4.rcanfd_iodefine.h.29.532dd48b82fcb61d63538aba4b6f1289
+                           .group:00000000 wm4.rcan_iodefine.h.29.a47a89db1b35c12b54af48fa1956acba
+                           .group:00000000 wm4.riic_iodefine.h.29.f96943d49800d297612c4af3bba5c943
+                           .group:00000000 wm4.rspi_iodefine.h.29.7efa041fe34a7d27db66a7b337879dfe
+                           .group:00000000 wm4.rtc_iodefine.h.29.6dc76be5ca3df69cecb5a81d06cc46b5
+                           .group:00000000 wm4.scifa_iodefine.h.29.b04ccd664d71baaf31c75761c45b9c4d
+                           .group:00000000 wm4.scim_iodefine.h.29.87d0760abf94446b00d826c797bf0ff2
+                           .group:00000000 wm4.sdmmc_iodefine.h.29.e67e9815445e8057a3262d1566bea0db
+                           .group:00000000 wm4.spdif_iodefine.h.29.59f5d70150fa200a4d8ee50be1ee34c8
+                           .group:00000000 wm4.spibsc_iodefine.h.29.f4930f8b8da1140200204513a363c76f
+                           .group:00000000 wm4.sprite_iodefine.h.29.55796d1fa083a2457fea4ece974a192e
+                           .group:00000000 wm4.ssif_iodefine.h.29.054ec6d95f487f631f16aee39c85c47a
+                           .group:00000000 wm4.usb_iodefine.h.29.6dc44ea388ba227e8fdcfb33c315887b
+                           .group:00000000 wm4.vdc_iodefine.h.29.db282ded1f052d8567fbbd3b61ce8f7a
+                           .group:00000000 wm4.vin_iodefine.h.29.9b392e5601347d53e64be3272934e170
+                           .group:00000000 wm4.wdt_iodefine.h.29.ed07bb44b797072f8c28b41c64fdca30
+                           .group:00000000 wm4.r_vdc_user.h.32.3f3db05b07a24f5c3abdea3809348418
+                           .group:00000000 wm4.r_vdc.h.31.7a8e28d4a80bfb6c6b4be0ab3890da8f
+                           .group:00000000 wm4.r_vdc_register.h.32.76d2530dc3b12780409c9b9c662462be
+
+UNDEFINED SYMBOLS
+vdc_regaddr_system_ctrl
+vdc_regaddr_scaler
+vdc_regaddr_img_synthesizer
