@@ -27,5 +27,5 @@ Please note that only specific versions of python packages are allowed to use in
 
 ## C codes - e2 studio (Project Structure Renesas)
 
-This project structure folder was taken as-is from [simple application package](https://www.renesas.com/us/en/software-tool/rza2m-freertos-software-package) of Renesas. The image processing pieline is realised in the file 'rza2m_drp_dynamic_sample2_freertos_gcc/src/renesas/application/r_bcd_main.c'. 
+This project structure folder was taken as-is from [simple application package](https://www.renesas.com/us/en/software-tool/rza2m-freertos-software-package) of Renesas. The image processing pieline is realised in the file 'rza2m_drp_dynamic_sample2_freertos_gcc/src/renesas/application/r_bcd_main.c'. Some functionalities/operations which were not used are commented out.
 
