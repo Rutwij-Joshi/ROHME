@@ -1,7 +1,7 @@
 # Recognition of Offline Handwritten Mathematical Expressions
 
 
-'Recognition of Offline Handwritten Mathematical Expressions using embedded-AI Technology' is a master thesis project done by Rutwij Joshi at FH Aachen University. 
+['Recognition of Offline Handwritten Mathematical Expressions using embedded-AI Technology'](https://fh-aachen.sciebo.de/s/jNOczFxckSlPldI) is a master thesis project done by Mr. Rutwij Joshi at FH Aachen University. 
 
 
 ## Dataset
